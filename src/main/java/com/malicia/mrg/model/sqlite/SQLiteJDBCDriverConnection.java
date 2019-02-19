@@ -1,4 +1,4 @@
-package com.malicia.mrg.sqlite;
+package com.malicia.mrg.model.sqlite;
 
 import java.sql.*;
 /**

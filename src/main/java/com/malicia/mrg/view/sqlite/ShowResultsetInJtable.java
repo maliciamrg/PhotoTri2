@@ -1,4 +1,6 @@
-package com.malicia.mrg.sqlite;
+package com.malicia.mrg.view.sqlite;
+
+import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,7 +16,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import static com.malicia.mrg.photo.exifreader.ExifReader.printImageTags;
+import static com.malicia.mrg.model.photo.exifreader.ExifReader.printImageTags;
+
 
 public class ShowResultsetInJtable {
     private final String bigTitle;
@@ -83,20 +86,25 @@ public class ShowResultsetInJtable {
             String cheminImage = String.valueOf(value);
 
             try {
-                Imgtmp = ImageIO.read(new File(cheminImage));
-                if (Imgtmp == null ) {
-                    label.setIcon(null);
-                    table.setRowHeight(row, table.getRowHeight());
-                }else {
-                    ImageIcon icon = new ImageIcon(getScaledImages(Imgtmp, FIT));
-
-                    if (icon.getImageLoadStatus() == java.awt.MediaTracker.COMPLETE) {
-                        label.setIcon(icon);
-                        table.setRowHeight(row, icon.getIconHeight());
-                    } else {
+                File f = new File(cheminImage);
+                if(f.exists() && !f.isDirectory()) {
+                    Imgtmp = ImageIO.read(f);
+                    if (Imgtmp == null) {
                         label.setIcon(null);
                         table.setRowHeight(row, table.getRowHeight());
+                    } else {
+                        ImageIcon icon = new ImageIcon(getScaledImages(Imgtmp, FIT));
+
+                        if (icon.getImageLoadStatus() == java.awt.MediaTracker.COMPLETE) {
+                            label.setIcon(icon);
+                            table.setRowHeight(row, icon.getIconHeight());
+                        } else {
+                            label.setIcon(null);
+                            table.setRowHeight(row, table.getRowHeight());
+                        }
+                        label.setText(""); // on efface le texte
                     }
+                } else {
                     label.setText(""); // on efface le texte
                 }
             } catch (IOException e) {
@@ -104,13 +112,12 @@ public class ShowResultsetInJtable {
             }
 
 
+
             return component;
         }
     }
 
     public final static class ExifCellRenderer extends DefaultTableCellRenderer {
-
-        private BufferedImage Imgtmp;
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
