@@ -1,9 +1,7 @@
 package com.malicia.mrg.view.sqlite;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
+import static com.malicia.mrg.model.photo.exifreader.ExifReader.printOriDateTime;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -15,7 +13,10 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import static com.malicia.mrg.model.photo.exifreader.ExifReader.printOriDateTime;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 
 public class ShowResultsetInJtable {
@@ -28,16 +29,15 @@ public class ShowResultsetInJtable {
     private final String bigTitle;
     private final String title;
 
-    final static int
-            FIT  = 0,
-            FILL = 1;
+    static final int FIT  = 0;
+    static final int FILL = 1;
 
     public ShowResultsetInJtable(String bigTitle, String title) {
         this.bigTitle = bigTitle;
         this.title = title;
     }
 
-    public JTable invoke(int ExitMode , ResultSet rs ) throws SQLException {
+    public JTable invoke(int exitMode , ResultSet rs ) throws SQLException {
 
 
         JFrame frame = new JFrame(bigTitle);
@@ -46,7 +46,6 @@ public class ShowResultsetInJtable {
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
 
-        //table.setDefaultRenderer(BufferedImage.class, new ImageRenderer());
         for(int i=0; i< table.getColumnCount(); i++){
             if (table.getColumnName(i).compareTo("loadimage") == 0){
                 table.getColumnModel().getColumn(i).setCellRenderer(new ImageCellRenderer());
@@ -56,9 +55,6 @@ public class ShowResultsetInJtable {
             }
         }
 
-//        DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)table.getDefaultRenderer(String.class);
-//        renderer.setHorizontalAlignment(JLabel.CENTER);
-
         JLabel lblHeading = new JLabel(title);
         lblHeading.setFont(new Font("Arial",Font.TRUETYPE_FONT,24));
 
@@ -67,16 +63,14 @@ public class ShowResultsetInJtable {
         frame.getContentPane().add(lblHeading,BorderLayout.PAGE_START);
         frame.getContentPane().add(scrollPane,BorderLayout.CENTER);
 
-        frame.setDefaultCloseOperation(ExitMode);
+        frame.setDefaultCloseOperation(exitMode);
         frame.setSize(1024, 500);
         frame.setVisible(true);
 
         return table;
     }
 
-    public final static class ImageCellRenderer extends DefaultTableCellRenderer {
-
-        private BufferedImage Imgtmp;
+    public static final class ImageCellRenderer extends DefaultTableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
@@ -91,12 +85,12 @@ public class ShowResultsetInJtable {
             try {
                 File f = new File(cheminImage);
                 if(f.exists() && !f.isDirectory()) {
-                    Imgtmp = ImageIO.read(f);
-                    if (Imgtmp == null) {
+                    BufferedImage imgtmp = ImageIO.read(f);
+                    if (imgtmp == null) {
                         label.setIcon(null);
                         table.setRowHeight(row, table.getRowHeight());
                     } else {
-                        ImageIcon icon = new ImageIcon(getScaledImages(Imgtmp, FIT));
+                        ImageIcon icon = new ImageIcon(getScaledImages(imgtmp, FIT));
 
                         if (icon.getImageLoadStatus() == java.awt.MediaTracker.COMPLETE) {
                             label.setIcon(icon);
@@ -118,9 +112,44 @@ public class ShowResultsetInJtable {
 
             return component;
         }
+
+
+        private static BufferedImage getScaledImages(BufferedImage in, int type)
+        {
+            final int WIDTH = 240;
+            final int HEIGHT = 240;
+
+
+            BufferedImage out = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = out.createGraphics();
+            g2.setColor(Color.white);
+            g2.fillRect(0, 0, WIDTH, HEIGHT);
+            double width  = in.getWidth();
+            double height = in.getHeight();
+            double xScale = WIDTH  / width;
+            double yScale = HEIGHT / height;
+            double scale = 1.0;
+            switch(type)
+            {
+                case FIT:
+                    scale = Math.min(xScale, yScale);  // scale to fit
+                    break;
+                case FILL:
+                    scale = Math.max(xScale, yScale);  // scale to fill
+            }
+            double x = (WIDTH - width * scale)/2;
+            double y = (HEIGHT - height * scale)/2;
+            AffineTransform at = AffineTransform.getTranslateInstance(x, y);
+            at.scale(scale, scale);
+            g2.drawRenderedImage(in, at);
+            g2.dispose();
+
+            return out;
+        }
+
     }
 
-    public final static class ExifCellRenderer extends DefaultTableCellRenderer {
+    public static final class ExifCellRenderer extends DefaultTableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(JTable table,
@@ -138,38 +167,7 @@ public class ShowResultsetInJtable {
         }
     }
 
-    private static BufferedImage getScaledImages(BufferedImage in, int type)
-    {
-        int WIDTH = 240;
-        int HEIGHT = 240;
 
-
-        BufferedImage out = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = out.createGraphics();
-        g2.setColor(Color.white);
-        g2.fillRect(0, 0, WIDTH, HEIGHT);
-        double width  = in.getWidth();
-        double height = in.getHeight();
-        double xScale = WIDTH  / width;
-        double yScale = HEIGHT / height;
-        double scale = 1.0;
-        switch(type)
-        {
-            case FIT:
-                scale = Math.min(xScale, yScale);  // scale to fit
-                break;
-            case FILL:
-                scale = Math.max(xScale, yScale);  // scale to fill
-        }
-        double x = (WIDTH - width * scale)/2;
-        double y = (HEIGHT - height * scale)/2;
-        AffineTransform at = AffineTransform.getTranslateInstance(x, y);
-        at.scale(scale, scale);
-        g2.drawRenderedImage(in, at);
-        g2.dispose();
-
-        return out;
-    }
 
     private DefaultTableModel buildTableModel(ResultSet rs )
             throws SQLException {
@@ -177,16 +175,16 @@ public class ShowResultsetInJtable {
         ResultSetMetaData metaData = rs.getMetaData();
 
         // names of columns
-        Vector<String> columnNames = new Vector<String>();
+        Vector<String> columnNames = new Vector<>();
         int columnCount = metaData.getColumnCount();
         for (int column = 1; column <= columnCount; column++) {
             columnNames.add(metaData.getColumnName(column));
         }
 
         // data of the table
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (rs.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
 
                 vector.add(rs.getObject(columnIndex));

@@ -6,7 +6,11 @@ import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 
 public class RequeteSql {
 
-    public static void SqlCreateAndAlimentionTable(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
+    private RequeteSql() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static void sqlCreateAndAlimentionTable(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
 //
         SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE Repertory AS  " +
@@ -50,8 +54,8 @@ public class RequeteSql {
                 ";");
     }
 
-    private static void ListeExifNew(String repertoirePhoto) {
-        SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
+    public static ResultSet listeExifNew(String repertoirePhoto) {
+        return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
                 "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
                 "Adobe_images.fileWidth, Adobe_images.orientation, AgHarvestedExifMetadata.aperture, AgInternedExifCameraModel.value, " +
                 "AgHarvestedExifMetadata.dateDay, AgHarvestedExifMetadata.dateMonth, AgHarvestedExifMetadata.dateYear, AgHarvestedExifMetadata.flashFired, " +
@@ -80,7 +84,7 @@ public class RequeteSql {
 
     }
 
-    public static ResultSet  SelectionRepertoire() {
+    public static ResultSet selectionRepertoire() {
         return SQLiteJDBCDriverConnection.select("SELECT a.dest  " +
                 ", count(*) as nb " +
                 "FROM SelectionRepertoire a " +

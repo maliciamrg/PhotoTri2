@@ -26,45 +26,49 @@ public class CreateJtable {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    public static JTable CreateJTableSelectionRepertoire(final String BIGTITLE_JTABLE, final ResultSet rs) {
+    private CreateJtable() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static JTable createJTableSelectionRepertoire(final String BIGTITLE_JTABLE, final ResultSet rs) {
 
 
 
-        JTable ListeSelectionRepertoire = null;
+        JTable listeSelectionRepertoire = null;
         try {
-            ListeSelectionRepertoire = new ShowResultsetInJtable( BIGTITLE_JTABLE, "Selection Repertoire").invoke(JFrame.EXIT_ON_CLOSE,rs);
+            listeSelectionRepertoire = new ShowResultsetInJtable( BIGTITLE_JTABLE, "Selection Repertoire").invoke(JFrame.EXIT_ON_CLOSE,rs);
         } catch (SQLException e) {
             LOGGER.severe( e.getMessage());
         }
 
-        final JTable finalListeSelectionRepertoire = ListeSelectionRepertoire;
-        ListeSelectionRepertoire.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        final JTable finalListeSelectionRepertoire = listeSelectionRepertoire;
+        listeSelectionRepertoire.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting() && finalListeSelectionRepertoire.getSelectedRow() != -1) {
 
-                    ListeNewFromOneRepertoire(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
-                    JTable tableForOneRepertoire = CreateJtableForOneRepertoire(  BIGTITLE_JTABLE, rs);
+                    listeNewFromOneRepertoire(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
+                    createJtableForOneRepertoire(  BIGTITLE_JTABLE, rs);
 
                 }
-//                    System.out.println(event.toString());
-//                    System.out.println(ListeSelectionRepertoire.getValueAt(ListeSelectionRepertoire.getSelectedRow(), 0).toString());
+                LOGGER.info(event.toString());
+                LOGGER.info(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
             }
         });
 
-        return ListeSelectionRepertoire;
+        return listeSelectionRepertoire;
 
     }
 
-    private static JTable CreateJtableForOneRepertoire(String BIGTITLE_JTABLE , ResultSet rs) {
+    private static JTable createJtableForOneRepertoire(String bigtitleJtable , ResultSet rs) {
 
-        JTable ListeForOneRepertoire = null;
+        JTable listeForOneRepertoire = null;
         try {
-            ListeForOneRepertoire = new ShowResultsetInJtable(BIGTITLE_JTABLE,"Liste @new -> !repertoire") .invoke(JFrame.DISPOSE_ON_CLOSE , rs );
+            listeForOneRepertoire = new ShowResultsetInJtable(bigtitleJtable,"Liste @new -> !repertoire") .invoke(WindowConstants.DISPOSE_ON_CLOSE , rs );
         } catch (SQLException e) {
             LOGGER.severe( e.getMessage());
         }
 
-        final JTable finalListeForOneRepertoire = ListeForOneRepertoire;
+        final JTable finalListeForOneRepertoire = listeForOneRepertoire;
 
         final JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem viewItem = new JMenuItem("View");
@@ -78,16 +82,16 @@ public class CreateJtable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 playElement(finalListeForOneRepertoire.getValueAt( finalListeForOneRepertoire.getSelectedRow(), 0).toString());
-//                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose viewItem");
+                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose viewItem");
             }
         });
         unmatchItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ((DefaultTableModel) finalListeForOneRepertoire.getModel()).removeRow(finalListeForOneRepertoire.getSelectedRow());
-//                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose unmatchItem");
+                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose unmatchItem");
             }
-        });;
+        });
         opendestItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,9 +101,11 @@ public class CreateJtable {
         deleteItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new File(finalListeForOneRepertoire.getValueAt( finalListeForOneRepertoire.getSelectedRow(), 0).toString()).delete();
+                if (!new File(finalListeForOneRepertoire.getValueAt( finalListeForOneRepertoire.getSelectedRow(), 0).toString()).delete()) {
+                    LOGGER.info("deleté =" + finalListeForOneRepertoire.getValueAt( finalListeForOneRepertoire.getSelectedRow(), 0).toString() );
+                }
                 ((DefaultTableModel) finalListeForOneRepertoire.getModel()).removeRow(finalListeForOneRepertoire.getSelectedRow());
-//                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose deleteItem");
+                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose deleteItem");
             }
         });
         moveItem.addActionListener(new ActionListener() {
@@ -112,7 +118,7 @@ public class CreateJtable {
                     JOptionPane.showMessageDialog(finalListeForOneRepertoire, "File is failed to move!");
                 }
                 ((DefaultTableModel) finalListeForOneRepertoire.getModel()).removeRow(finalListeForOneRepertoire.getSelectedRow());
-//                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose moveItem");
+                JOptionPane.showMessageDialog(finalListeForOneRepertoire, "Right-click performed on table and choose moveItem");
             }
         });
         moveallItem.addActionListener(new ActionListener() {
@@ -157,13 +163,13 @@ public class CreateJtable {
             }
         });
 
-        ListeForOneRepertoire.setComponentPopupMenu(popupMenu);
+        listeForOneRepertoire.setComponentPopupMenu(popupMenu);
 
-        return ListeForOneRepertoire;
+        return listeForOneRepertoire;
 
     }
 
-    private static void ListeNewFromOneRepertoire(String Dest) {
+    private static void listeNewFromOneRepertoire(String dest) {
         SQLiteJDBCDriverConnection.select("SELECT distinct  " +
                 " a.absolutePath || b.pathFromRoot || b.originalFilename , " +
                 " a.absolutePath || b.pathFromRoot || b.originalFilename as loadimage , " +
@@ -172,12 +178,12 @@ public class CreateJtable {
                 "FROM Repertory a  " +
                 "inner join NewPhoto b  " +
                 "on b.captureTime between a.mint and a.maxt " +
-                "WHERE a.absolutePath || a.pathFromRoot = \"" + Dest + "\" " +
+                "WHERE a.absolutePath || a.pathFromRoot = \"" + dest + "\" " +
                 "order by  a.absolutePath , a.pathFromRoot " +
                 " ;");
     }
 
-    private static void ListeGroupNewPhoto(String tempsAdherence, String urltexte, String BIGTITLE_JTABLE) {
+    private static void listeGroupNewPhoto(String tempsAdherence, String bigtitleJtable) {
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS GroupNewPhoto;  " );
 
         SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE GroupNewPhoto AS  " +
@@ -226,19 +232,9 @@ public class CreateJtable {
                     " * FROM GroupNewPhoto a  " +
                     ";");
 
-            new ShowResultsetInJtable( BIGTITLE_JTABLE,"group @new") .invoke(JFrame.EXIT_ON_CLOSE , rs);
+            new ShowResultsetInJtable( bigtitleJtable,"group @new") .invoke(JFrame.EXIT_ON_CLOSE , rs);
 
         } catch (SQLException e) {
-            LOGGER.severe( e.getMessage());
-        }
-    }
-
-    @FXML
-    static void openFolder(String urltexte) {
-        Desktop desktop = Desktop.getDesktop();
-        try {
-            desktop.open(new File(urltexte) );
-        } catch (IOException e) {
             LOGGER.severe( e.getMessage());
         }
     }

@@ -2,10 +2,7 @@ package com.malicia.mrg;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -13,51 +10,49 @@ import java.util.logging.SimpleFormatter;
 
 public class MyLogger {
 
-    static private FileHandler fileTxt;
-    static private SimpleFormatter formatterTxt;
+    private MyLogger() {
+        throw new IllegalStateException("Utility class");
+    }
 
-    static private FileHandler fileHTML;
-    static private Formatter formatterHTML;
-
-    static public void setup(Level Level_INFO) {
+    public static void setup(Level levelinfo) {
 
         // get the global logger to configure it
-        Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        LOGGER.setLevel(Level_INFO);
+        Logger lOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        lOGGER.setLevel(levelinfo);
 
         InputStream stream = MyLogger.class.getClassLoader().getResourceAsStream("logging.properties");
         try {
             LogManager.getLogManager().readConfiguration(stream);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            lOGGER.severe( e.getMessage());
         }
 
         try {
-            fileTxt = new FileHandler("Logging.txt");
-            fileHTML = new FileHandler("Logging.html");
+            FileHandler fileTxt = new FileHandler("Logging.txt");
+            FileHandler fileHTML = new FileHandler("Logging.html");
 
             // create a TXT formatter
-            formatterTxt = new SimpleFormatter();
+            SimpleFormatter formatterTxt = new SimpleFormatter();
             fileTxt.setFormatter(formatterTxt);
-            LOGGER.addHandler(fileTxt);
+            lOGGER.addHandler(fileTxt);
 
             // create an HTML formatter
-            formatterHTML = new MyHtmlFormatter();
+            MyHtmlFormatter formatterHTML = new MyHtmlFormatter();
             fileHTML.setFormatter(formatterHTML);
-            LOGGER.addHandler(fileHTML);
+            lOGGER.addHandler(fileHTML);
         } catch (IOException e) {
-            e.printStackTrace();
+            lOGGER.severe( e.getMessage());
         }
 
 
-        LOGGER.severe("severe");
-        LOGGER.warning("warning");
-        LOGGER.info("info");
-        LOGGER.config("config");
-        LOGGER.fine("fine");
-        LOGGER.finer("finer");
-        LOGGER.finest("finest");
+        lOGGER.severe( "---==[ severe  ]==---");
+        lOGGER.warning("---==[ warning ]==---");
+        lOGGER.info(   "---==[  info   ]==---");
+        lOGGER.config( "---==[ config  ]==---");
+        lOGGER.fine(   "---==[  fine   ]==---");
+        lOGGER.finer(  "---==[  finer  ]==---");
+        lOGGER.finest( "---==[ finest  ]==---");
 
     }
 }

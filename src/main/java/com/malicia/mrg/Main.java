@@ -19,7 +19,6 @@ public class Main {
     }
 
     public static final String BIGTITLE_JTABLE = "auto match (New 2 repertoire photo) from lrcat";
-    public static final PropertiesParameters p = new PropertiesParameters();
 
     public static void main(String[] args) {
 
@@ -27,12 +26,15 @@ public class Main {
 
         LOGGER.info("Start") ;
 
-        SQLiteJDBCDriverConnection.connect(p.CatalogLrcat);
+        PropertiesParameters.initPropertiesParameters();
+
+        SQLiteJDBCDriverConnection.connect(PropertiesParameters.getCatalogLrcat());
 
 
-        RequeteSql.SqlCreateAndAlimentionTable(p.PasRepertoirePhoto, p.TempsAdherence,p.RepertoireNew);
+        RequeteSql.sqlCreateAndAlimentionTable(PropertiesParameters.getPasRepertoirePhoto(), PropertiesParameters.getTempsAdherence(),PropertiesParameters.getRepertoireNew());
 
-        CreateJtable.CreateJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.SelectionRepertoire());
+        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
+        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.listeExifNew(""));
 
     }
 
