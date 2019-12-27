@@ -59,11 +59,11 @@ public class RequeteSql {
         SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE NewPhoto AS  " +
                 "select  " +
                 " strftime('%s', e.captureTime) as captureTime , " +
-                " aiecm.value as CameraModel " +
+                " aiecm.value as CameraModel ," +
                 " b.pathFromRoot ," +
                 " c.absolutePath , " +
                 " a.originalFilename ," +
-                " e.captureTime as captureTimeOrig , " +
+                " e.captureTime as captureTimeOrig " +
                 "from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
                 "on a.folder = b.id_local  " +

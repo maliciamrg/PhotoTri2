@@ -27,6 +27,7 @@ public class CreateJtable {
     }
 
     private CreateJtable() {
+
         throw new IllegalStateException("Utility class");
     }
 

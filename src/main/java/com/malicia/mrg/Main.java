@@ -35,7 +35,7 @@ public class Main {
 
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
-        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.listeExifNew(""));
+        //CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.listeExifNew(""));
 
     }
 
