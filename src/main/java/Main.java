@@ -1,12 +1,11 @@
+package com.malicia.mrg;
+
+import java.io.IOException;
+
 import com.malicia.mrg.model.PropertiesParameters;
 import com.malicia.mrg.model.RequeteSql;
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 import com.malicia.mrg.view.CreateJtable;
-import javafx.fxml.FXML;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Main {
 
@@ -24,6 +23,7 @@ public class Main {
 
         sql = new SQLiteJDBCDriverConnection();
         sql.connect(p.CatalogLrcat);
+
 
         RequeteSql.SqlCreateAndAlimentionTable(p.PasRepertoirePhoto, p.TempsAdherence,p.RepertoireNew, sql);
         RequeteSql.SelectionRepertoire(sql);
