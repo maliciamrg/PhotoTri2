@@ -17,8 +17,15 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class CreateJtable {
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
     public static JTable CreateJTableSelectionRepertoire(final String BIGTITLE_JTABLE, final ResultSet rs) {
 
 
@@ -27,7 +34,7 @@ public class CreateJtable {
         try {
             ListeSelectionRepertoire = new ShowResultsetInJtable( BIGTITLE_JTABLE, "Selection Repertoire").invoke(JFrame.EXIT_ON_CLOSE,rs);
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
 
         final JTable finalListeSelectionRepertoire = ListeSelectionRepertoire;
@@ -54,7 +61,7 @@ public class CreateJtable {
         try {
             ListeForOneRepertoire = new ShowResultsetInJtable(BIGTITLE_JTABLE,"Liste @new -> !repertoire") .invoke(JFrame.DISPOSE_ON_CLOSE , rs );
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
 
         final JTable finalListeForOneRepertoire = ListeForOneRepertoire;
@@ -222,7 +229,7 @@ public class CreateJtable {
             new ShowResultsetInJtable( BIGTITLE_JTABLE,"group @new") .invoke(JFrame.EXIT_ON_CLOSE , rs);
 
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
     }
 
@@ -232,7 +239,7 @@ public class CreateJtable {
         try {
             desktop.open(new File(urltexte) );
         } catch (IOException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
     }
 
@@ -242,7 +249,7 @@ public class CreateJtable {
         try {
             desktop.open(new File(urltexte) );
         } catch (IOException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
     }
 }

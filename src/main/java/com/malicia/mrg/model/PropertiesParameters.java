@@ -4,8 +4,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class PropertiesParameters {
+
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
 
     public String RepertoireNew = "";
     public String PasRepertoirePhoto = "";
@@ -13,7 +20,6 @@ public class PropertiesParameters {
     public String CatalogLrcat = "";
 
     public PropertiesParameters() {
-
         FileReader reader = null;
         try {
 
@@ -28,7 +34,7 @@ public class PropertiesParameters {
             CatalogLrcat = properties.getProperty("CatalogLrcat");
 
         } catch (IOException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
 
     }

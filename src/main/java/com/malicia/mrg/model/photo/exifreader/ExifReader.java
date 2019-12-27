@@ -2,6 +2,7 @@ package com.malicia.mrg.model.photo.exifreader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -11,6 +12,12 @@ import com.drew.metadata.Tag;
 
 public class ExifReader
 {
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
     private ExifReader() {
         throw new IllegalStateException("Utility class");
     }
@@ -30,7 +37,7 @@ public class ExifReader
                 }
             }
         } catch (ImageProcessingException | IOException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
         return "";
     }

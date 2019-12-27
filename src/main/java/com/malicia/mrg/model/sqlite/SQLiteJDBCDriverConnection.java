@@ -1,11 +1,19 @@
 package com.malicia.mrg.model.sqlite;
 
 import java.sql.*;
+import java.util.logging.Logger;
+
 /**
  *
  * @author sqlitetutorial.net
  */
 public class SQLiteJDBCDriverConnection {
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
     public static Connection conn;
 
     /**
@@ -19,10 +27,10 @@ public class SQLiteJDBCDriverConnection {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            logger.log("Connection to SQLite has been established.");
+            LOGGER.info("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
-            logger.log(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -32,7 +40,7 @@ public class SQLiteJDBCDriverConnection {
                     conn.close();
                 }
             } catch (SQLException ex) {
-                logger.log(ex.getMessage());
+                LOGGER.severe(ex.getMessage());
         }
     }
 
@@ -49,7 +57,7 @@ public class SQLiteJDBCDriverConnection {
             return stmt.executeUpdate(sql);
 
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe(e.getMessage());
         }
         return 0;
     }
@@ -64,12 +72,12 @@ public class SQLiteJDBCDriverConnection {
         try {
             stmt = conn.createStatement();
 
-            logger.log(sql);
+            LOGGER.info(sql);
 
             return stmt.execute(sql);
 
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe( e.getMessage());
         }
         return false;
     }
@@ -84,12 +92,12 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt  = null;
         try {
             stmt = conn.createStatement();
-            logger.log(sql);
+            LOGGER.info(sql);
             return stmt.executeQuery(sql);
 
 
         } catch (SQLException e) {
-            logger.log("context" , e);
+            LOGGER.severe(e.getMessage());
         }
         return null;
     }

@@ -13,11 +13,18 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import static com.malicia.mrg.model.photo.exifreader.ExifReader.printOriDateTime;
 
 
 public class ShowResultsetInJtable {
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
     private final String bigTitle;
     private final String title;
 
@@ -104,7 +111,7 @@ public class ShowResultsetInJtable {
                     label.setText(""); // on efface le texte
                 }
             } catch (IOException e) {
-                logger.log("context" , e);
+                LOGGER.severe( e.getMessage());
             }
 
 
