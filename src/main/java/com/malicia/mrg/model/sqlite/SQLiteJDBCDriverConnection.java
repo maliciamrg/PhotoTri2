@@ -7,7 +7,6 @@ import java.sql.*;
  */
 public class SQLiteJDBCDriverConnection {
     public static Connection conn;
-    public ResultSet rs;
 
     /**
      * Connect to a sample database
@@ -20,19 +19,20 @@ public class SQLiteJDBCDriverConnection {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
+            logger.log("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(e.getMessage());
         }
     }
+
     public static void disconnect() {
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+                logger.log(ex.getMessage());
         }
     }
 
@@ -46,12 +46,10 @@ public class SQLiteJDBCDriverConnection {
         try {
             stmt = conn.createStatement();
 
-            int ret = stmt.executeUpdate(sql);
-
-            return ret;
+            return stmt.executeUpdate(sql);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
         return 0;
     }
@@ -59,20 +57,19 @@ public class SQLiteJDBCDriverConnection {
     /**
      * select all rows in the warehouses table
      */
-    public boolean execute(String sql ){
+    public static boolean execute(String sql){
 
 
         Statement stmt  = null;
         try {
             stmt = conn.createStatement();
 
-            System.out.println(sql);
+            logger.log(sql);
 
-            boolean ret = stmt.execute(sql);
-            return ret;
+            return stmt.execute(sql);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
         return false;
     }
@@ -81,18 +78,19 @@ public class SQLiteJDBCDriverConnection {
     /**
      * select all rows in the warehouses table
      */
-    public void select(String sql ){
+    public static ResultSet select(String sql){
 
 
         Statement stmt  = null;
         try {
             stmt = conn.createStatement();
-            System.out.println(sql);
-            rs= stmt.executeQuery(sql);
+            logger.log(sql);
+            return stmt.executeQuery(sql);
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
+        return null;
     }
 }

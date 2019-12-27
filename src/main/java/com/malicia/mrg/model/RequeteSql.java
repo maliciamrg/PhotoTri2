@@ -1,13 +1,15 @@
 package com.malicia.mrg.model;
 
+import java.sql.ResultSet;
+
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 
 public class RequeteSql {
 
-    public static void SqlCreateAndAlimentionTable(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew, SQLiteJDBCDriverConnection sql) {
-        sql.execute("DROP TABLE IF EXISTS Repertory;  ");
+    public static void SqlCreateAndAlimentionTable(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
 //
-        sql.execute("CREATE TEMPORARY TABLE Repertory AS  " +
+        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE Repertory AS  " +
                 "select e.captureTime as ortime ,  strftime('%s', DATETIME( e.captureTime,\"-"+ tempsAdherence +"\")) as mint , strftime('%s', DATETIME(e.captureTime,\"+"+ tempsAdherence +"\")) as maxt , c.absolutePath , b.pathFromRoot   " +
                 " from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
@@ -19,9 +21,9 @@ public class RequeteSql {
                 "Where  b.pathFromRoot not like \"%" + pasRepertoirePhoto + "%\" " +
                 " ;");
 
-        sql.execute("DROP TABLE IF EXISTS NewPhoto;  " );
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS NewPhoto;  " );
 
-        sql.execute( "CREATE TEMPORARY TABLE NewPhoto AS  " +
+        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE NewPhoto AS  " +
                 "select  strftime('%s', e.captureTime) as captureTime , c.absolutePath , b.pathFromRoot ,a.originalFilename ,e.captureTime as captureTimeOrig , aiecm.value as CameraModel " +
                 "from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
@@ -36,9 +38,9 @@ public class RequeteSql {
                 "ON ahem.cameraModelRef = aiecm.id_local " +
                 "Where b.pathFromRoot like \"%" + repertoireNew + "%" + "\";  ");
 
-        sql.execute("DROP TABLE IF EXISTS SelectionRepertoire;  " );
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS SelectionRepertoire;  " );
 
-        sql.execute( "CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
+        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
                 "SELECT distinct  " +
                 " b.pathFromRoot || b.originalFilename as src , " +
                 " a.absolutePath || a.pathFromRoot as dest " +
@@ -48,8 +50,8 @@ public class RequeteSql {
                 ";");
     }
 
-    private static void ListeExifNew(String repertoirePhoto, SQLiteJDBCDriverConnection sql) {
-        sql.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
+    private static void ListeExifNew(String repertoirePhoto) {
+        SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
                 "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
                 "Adobe_images.fileWidth, Adobe_images.orientation, AgHarvestedExifMetadata.aperture, AgInternedExifCameraModel.value, " +
                 "AgHarvestedExifMetadata.dateDay, AgHarvestedExifMetadata.dateMonth, AgHarvestedExifMetadata.dateYear, AgHarvestedExifMetadata.flashFired, " +
@@ -78,8 +80,8 @@ public class RequeteSql {
 
     }
 
-    public static void SelectionRepertoire(SQLiteJDBCDriverConnection sql) {
-        sql.select("SELECT a.dest  " +
+    public static ResultSet  SelectionRepertoire() {
+        return SQLiteJDBCDriverConnection.select("SELECT a.dest  " +
                 ", count(*) as nb " +
                 "FROM SelectionRepertoire a " +
                 "group by  a.dest " +

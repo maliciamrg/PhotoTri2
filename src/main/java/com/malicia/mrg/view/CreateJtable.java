@@ -15,18 +15,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CreateJtable {
-    public static JTable CreateJTableSelectionRepertoire(final SQLiteJDBCDriverConnection sql, final String BIGTITLE_JTABLE) {
+    public static JTable CreateJTableSelectionRepertoire(final String BIGTITLE_JTABLE, final ResultSet rs) {
 
 
 
         JTable ListeSelectionRepertoire = null;
         try {
-            ListeSelectionRepertoire = new ShowResultsetInJtable(sql, BIGTITLE_JTABLE, "Selection Repertoire").invoke(JFrame.EXIT_ON_CLOSE);
+            ListeSelectionRepertoire = new ShowResultsetInJtable( BIGTITLE_JTABLE, "Selection Repertoire").invoke(JFrame.EXIT_ON_CLOSE,rs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
 
         final JTable finalListeSelectionRepertoire = ListeSelectionRepertoire;
@@ -34,8 +35,8 @@ public class CreateJtable {
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting() && finalListeSelectionRepertoire.getSelectedRow() != -1) {
 
-                    ListeNewFromOneRepertoire(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString(), sql);
-                    JTable tableForOneRepertoire = CreateJtableForOneRepertoire( sql, BIGTITLE_JTABLE);
+                    ListeNewFromOneRepertoire(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
+                    JTable tableForOneRepertoire = CreateJtableForOneRepertoire(  BIGTITLE_JTABLE, rs);
 
                 }
 //                    System.out.println(event.toString());
@@ -47,13 +48,13 @@ public class CreateJtable {
 
     }
 
-    private static JTable CreateJtableForOneRepertoire(SQLiteJDBCDriverConnection sql, String BIGTITLE_JTABLE) {
+    private static JTable CreateJtableForOneRepertoire(String BIGTITLE_JTABLE , ResultSet rs) {
 
         JTable ListeForOneRepertoire = null;
         try {
-            ListeForOneRepertoire = new ShowResultsetInJtable(sql,BIGTITLE_JTABLE,"Liste @new -> !repertoire") .invoke(JFrame.DISPOSE_ON_CLOSE);
+            ListeForOneRepertoire = new ShowResultsetInJtable(BIGTITLE_JTABLE,"Liste @new -> !repertoire") .invoke(JFrame.DISPOSE_ON_CLOSE , rs );
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
 
         final JTable finalListeForOneRepertoire = ListeForOneRepertoire;
@@ -155,8 +156,8 @@ public class CreateJtable {
 
     }
 
-    private static void ListeNewFromOneRepertoire(String Dest, SQLiteJDBCDriverConnection sql) {
-        sql.select("SELECT distinct  " +
+    private static void ListeNewFromOneRepertoire(String Dest) {
+        SQLiteJDBCDriverConnection.select("SELECT distinct  " +
                 " a.absolutePath || b.pathFromRoot || b.originalFilename , " +
                 " a.absolutePath || b.pathFromRoot || b.originalFilename as loadimage , " +
                 " a.absolutePath || a.pathFromRoot as dest , " +
@@ -169,17 +170,17 @@ public class CreateJtable {
                 " ;");
     }
 
-    private static void ListeGroupNewPhoto(String tempsAdherence, SQLiteJDBCDriverConnection sql, String urltexte, String BIGTITLE_JTABLE) {
-        sql.execute("DROP TABLE IF EXISTS GroupNewPhoto;  " );
+    private static void ListeGroupNewPhoto(String tempsAdherence, String urltexte, String BIGTITLE_JTABLE) {
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS GroupNewPhoto;  " );
 
-        sql.execute( "CREATE TEMPORARY TABLE GroupNewPhoto AS  " +
+        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE GroupNewPhoto AS  " +
                 "select a.* , '0' as numeroGroup  , strftime('%s', DATETIME( a.captureTimeOrig,\"+"+ tempsAdherence +"\")) as captureTimeAdherence " +
                 "from NewPhoto a  " +
                 "order by a.CameraModel , a.capturetime ; ");
 
         try {
 
-            sql.select("SELECT distinct  " +
+            ResultSet rs = SQLiteJDBCDriverConnection.select("SELECT distinct  " +
                     " * FROM GroupNewPhoto a  " +
                     ";");
 
@@ -189,10 +190,10 @@ public class CreateJtable {
             long captureTimePrevious = 0;
             long captureTimeAdherencePrevious = 0;
             long numeroGroupPrevious = 0;
-            while (sql.rs.next()) {
+            while (rs.next()) {
 
-                captureTime = sql.rs.getLong("captureTime");
-                captureTimeAdherence =sql.rs.getLong("captureTimeAdherence");
+                captureTime = rs.getLong("captureTime");
+                captureTimeAdherence =rs.getLong("captureTimeAdherence");
 
                 if (captureTimePrevious < captureTime && captureTime < captureTimeAdherencePrevious ){
                     numeroGroup = numeroGroupPrevious;
@@ -201,11 +202,11 @@ public class CreateJtable {
                     numeroGroup++;
                 }
 
-                sql.execute("UPDATE GroupNewPhoto  " +
+                SQLiteJDBCDriverConnection.execute("UPDATE GroupNewPhoto  " +
                         " set numeroGroup = \"" + numeroGroup + "\"  " +
-                        " where absolutePath = \"" + sql.rs.getString("absolutePath") + "\"  " +
-                        "and pathFromRoot = \"" + sql.rs.getString("pathFromRoot") + "\"  " +
-                        "and originalFilename = \"" + sql.rs.getString("originalFilename") + "\"  " +
+                        " where absolutePath = \"" + rs.getString("absolutePath") + "\"  " +
+                        "and pathFromRoot = \"" + rs.getString("pathFromRoot") + "\"  " +
+                        "and originalFilename = \"" + rs.getString("originalFilename") + "\"  " +
                         " ");
 
                 captureTimePrevious=captureTime;
@@ -214,14 +215,14 @@ public class CreateJtable {
 
             }
 
-            sql.select("SELECT distinct  " +
+            SQLiteJDBCDriverConnection.select("SELECT distinct  " +
                     " * FROM GroupNewPhoto a  " +
                     ";");
 
-            new ShowResultsetInJtable( sql, BIGTITLE_JTABLE,"group @new") .invoke(JFrame.EXIT_ON_CLOSE);
+            new ShowResultsetInJtable( BIGTITLE_JTABLE,"group @new") .invoke(JFrame.EXIT_ON_CLOSE , rs);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
     }
 
@@ -231,7 +232,7 @@ public class CreateJtable {
         try {
             desktop.open(new File(urltexte) );
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
     }
 
@@ -241,7 +242,7 @@ public class CreateJtable {
         try {
             desktop.open(new File(urltexte) );
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log("context" , e);
         }
     }
 }

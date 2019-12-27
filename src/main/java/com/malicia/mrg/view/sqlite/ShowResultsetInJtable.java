@@ -1,7 +1,5 @@
 package com.malicia.mrg.view.sqlite;
 
-import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,30 +14,28 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import static com.malicia.mrg.model.photo.exifreader.ExifReader.printImageTags;
+import static com.malicia.mrg.model.photo.exifreader.ExifReader.printOriDateTime;
 
 
 public class ShowResultsetInJtable {
     private final String bigTitle;
     private final String title;
-    private SQLiteJDBCDriverConnection sql;
 
     final static int
             FIT  = 0,
             FILL = 1;
 
-    public ShowResultsetInJtable(SQLiteJDBCDriverConnection sql, String bigTitle, String title) {
-        this.sql = sql;
+    public ShowResultsetInJtable(String bigTitle, String title) {
         this.bigTitle = bigTitle;
         this.title = title;
     }
 
-    public JTable invoke(int ExitMode) throws SQLException {
+    public JTable invoke(int ExitMode , ResultSet rs ) throws SQLException {
 
 
         JFrame frame = new JFrame(bigTitle);
 
-        JTable table = new JTable(buildTableModel(sql.rs));
+        JTable table = new JTable(buildTableModel(rs));
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
 
@@ -108,7 +104,7 @@ public class ShowResultsetInJtable {
                     label.setText(""); // on efface le texte
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log("context" , e);
             }
 
 
@@ -129,7 +125,7 @@ public class ShowResultsetInJtable {
             JLabel label = (JLabel)component;
             String cheminImage = String.valueOf(value);
 
-            label.setText(printImageTags(cheminImage));
+            label.setText(printOriDateTime(cheminImage));
 
             return component;
         }
@@ -200,21 +196,5 @@ public class ShowResultsetInJtable {
 
 }
 
-//class ImageRenderer extends DefaultTableCellRenderer
-//{
-//    public Component getTableCellRendererComponent(JTable table,
-//                                                   Object value,
-//                                                   boolean isSelected,
-//                                                   boolean hasFocus,
-//                                                   int row, int column)
-//    {
-//        super.getTableCellRendererComponent(table, value, isSelected,
-//                hasFocus, row, column);
-//        setIcon(new ImageIcon((BufferedImage)value));
-//        setHorizontalAlignment(JLabel.CENTER);
-//        setText("");
-//        return this;
-//    }
-//}
 
 
