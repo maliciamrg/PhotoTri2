@@ -31,9 +31,10 @@ public class Main {
         SQLiteJDBCDriverConnection.connect(PropertiesParameters.getCatalogLrcat());
 
 
-        RequeteSql.sqlCreateAndAlimentionTable(PropertiesParameters.getPasRepertoirePhoto(), PropertiesParameters.getTempsAdherence(),PropertiesParameters.getRepertoireNew());
+        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(PropertiesParameters.getPasRepertoirePhoto(), PropertiesParameters.getTempsAdherence(),PropertiesParameters.getRepertoireNew());
 
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
+
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.listeExifNew(""));
 
     }
