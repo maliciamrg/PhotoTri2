@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="PhotoTri2" target="7" />
+      <module name="PhotoTri2" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

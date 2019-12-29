@@ -8,7 +8,9 @@ import com.malicia.mrg.view.CreateJtable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,18 +41,28 @@ public class Main {
 
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
-        movetoNewGroup();
+        if (movetoNewGroup(true)){
+            movetoNewGroup(false);
+        }else {
+            LOGGER.info("movetoNewGroup KO, nothig nmove" );
+        }
     }
 
-    private static void movetoNewGroup() {
+    private static boolean movetoNewGroup(boolean dryRun) {
+
+        Hashtable dReturnEle = new Hashtable();
 
         ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdherance(PropertiesParameters.getTempsAdherence(), PropertiesParameters.getRepertoireNew());
 
-        GrpPhoto gp  = new GrpPhoto();
-        List<GrpPhoto> ggp  = new ArrayList();
+        GrpPhoto gp = new GrpPhoto();
 
+        List<GrpPhoto> ggp = new ArrayList();
+
+        int nbrow = 0;
+        int nbele = 0;
         try {
-            int nbrow = 0;
+            nbrow = 0;
+            boolean first = true;;
             while (rs.next()) {
 
 
@@ -62,12 +74,15 @@ public class Main {
                 String src = rs.getString("src");
                 String dest = rs.getString("dest");
 
-                //if (captureTime != null ) {
+                if (first ) {
+                    gp.addfirst(CameraModel, captureTime, mint, maxt, src, dest + PropertiesParameters.getRepertoireNew() + "/");
+                }else {
                     if (!gp.add(CameraModel, captureTime, mint, maxt, src)) {
                         ggp.add(gp);
                         gp = new GrpPhoto();
-                        gp.addfirst(CameraModel, captureTime, mint, maxt, src,dest +PropertiesParameters.getRepertoireNew()+"/" );
+                        gp.addfirst(CameraModel, captureTime, mint, maxt, src, dest + PropertiesParameters.getRepertoireNew() + "/");
                     }
+                }
                 //}
 //                LOGGER.info("\tCameraModel: " + CameraModel +
 //                        ", captureTime: " + captureTime +
@@ -75,28 +90,48 @@ public class Main {
 
 
                 nbrow = rs.getRow();
-
+                first =false;
             }
             ggp.add(gp);
             LOGGER.info("Nb row => " + nbrow);
 
 
             LOGGER.info("Printing result...");
-            Double nbele = 0d;
+
+            nbele = 0;
+
             for (int i = 0; i < ggp.size(); i++) {
                 GrpPhoto gptemp = ggp.get(i);
-                LOGGER.info(gptemp.toString());
-                gptemp.groupAndMouveEle();
-                nbele = nbele + gptemp.getnbele();
+//                LOGGER.info(gptemp.toString());
+                mergeHashtable (dReturnEle , gptemp.groupAndMouveEle(dryRun));
             }
 
 
-            LOGGER.info("Nb row lues=> " + nbrow);
-            LOGGER.info("Nb row grp => " + nbele);
+//            LOGGER.info("Nb row lues=> " + nbrow);
+//            LOGGER.info("Nb row grp => " + nbele);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        LOGGER.info(dReturnEle.toString());
+        nbele = (int) dReturnEle.get(GrpPhoto.OK_MOVE_DO) + (int) dReturnEle.get(GrpPhoto.OK_MOVE_SAME) + (int) dReturnEle.get(GrpPhoto.OK_MOVE_DRY_RUN);
+        return (nbrow == nbele);
+    }
+
+    private static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
+        Set<String> keys = groupAndMouveEle.keySet();
+        for(String key: keys){
+            if (dReturnEle.containsKey(key)) {
+                int val = (int)dReturnEle.get(key) + (int)groupAndMouveEle.get(key);
+                dReturnEle.put(key,val);
+            } else {
+                dReturnEle.put(key,groupAndMouveEle.get(key));
+            }
+
+//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
+        }
+
     }
 
 
