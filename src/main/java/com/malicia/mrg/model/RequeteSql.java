@@ -1,8 +1,8 @@
 package com.malicia.mrg.model;
 
-import java.sql.ResultSet;
-
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
+
+import java.sql.ResultSet;
 
 public class RequeteSql {
 
@@ -97,30 +97,28 @@ public class RequeteSql {
                 ";");
     }
 
-    public static void sqlGroupGrouplessByPlageAdherance(String tempsAdherence, String repertoireNew) {
-
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS GroupNewPhoto;  " );
+    public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence, String repertoireNew) {
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
         // et calcul la plage d'aherance (+- tempsAdherence)
         //
         // GroupNewPhoto
         //      captureTime (in seconds)
+        //      mint (adherence min) (in seconds)
+        //      maxt (adherence max) (in seconds)
         //      CameraModel
-        //      pathFromRoot
-        //      absolutePath
-        //      originalFilename
+        //      src (groupeless)
+        //      dest (groupe)
         //      captureTimeOrig
-        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE NewPhoto AS  " +
+        return SQLiteJDBCDriverConnection.select(
                 "select  " +
                 " strftime('%s', e.captureTime) as captureTime , " +
                 " strftime('%s', DATETIME( e.captureTime,\"-"+ tempsAdherence +"\")) as mint , " +
                 " strftime('%s', DATETIME(e.captureTime,\"+"+ tempsAdherence +"\")) as maxt , " +
-                " aiecm.value as CameraModel " +
-                " b.pathFromRoot ," +
-                " c.absolutePath , " +
-                " a.originalFilename ," +
-                " e.captureTime as captureTimeOrig , " +
+                " aiecm.value as CameraModel , " +
+                " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                " c.absolutePath  as dest , " +
+                " e.captureTime as captureTimeOrig " +
                 "from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
                 "on a.folder = b.id_local  " +
@@ -132,26 +130,9 @@ public class RequeteSql {
                 "ON e.id_local = ahem.image " +
                 "LEFT JOIN AgInternedExifCameraModel aiecm " +
                 "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where b.pathFromRoot like \"%" + repertoireNew + "%" + "\";  ");
+                "Where b.pathFromRoot like \"" + repertoireNew + "%" + "\"" +
+                        " Order by CameraModel , captureTime ;  ");
 
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS SelectionRepertoire;  " );
-
-        //Extraction les combinansons
-        // photo groupless dans la plages d'adherence
-        // et meme CameraModel
-        //
-        // SelectionRepertoire
-        //      src (groupeless)
-        //      dest (groupe possible)
-        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
-                "SELECT distinct  " +
-                " b.pathFromRoot || b.originalFilename as src , " +
-                " a.absolutePath || a.pathFromRoot as dest " +
-                "FROM Repertory a  " +
-                "inner join NewPhoto b  " +
-                "on b.captureTime between a.mint and a.maxt " +
-                "  and b.CameraModel = a.CameraModel " +
-                ";");
     }
 
     public static ResultSet listeExifNew(String repertoirePhoto) {
