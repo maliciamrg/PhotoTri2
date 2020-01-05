@@ -3,6 +3,8 @@ package com.malicia.mrg.model;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -19,6 +21,16 @@ public class PropertiesParameters {
     private static String pasRepertoirePhoto = "";
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
+
+    public static List<String> getKidsModelList() {
+        return kidsModelList;
+    }
+
+    public static void setKidsModelList(List<String> kidsModelList) {
+        PropertiesParameters.kidsModelList = kidsModelList;
+    }
+
+    private static List<String> kidsModelList ;
 
     public static String getRepertoireNew() {
         return repertoireNew;
@@ -78,8 +90,7 @@ public class PropertiesParameters {
         setTempsAdherence(properties.getProperty("TempsAdherence"));
         setCatalogLrcat(properties.getProperty("CatalogLrcat"));
         setDryrun(properties.getProperty("dryRun","true").compareTo("true")==0);
-
-
+        setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
     }
 
 

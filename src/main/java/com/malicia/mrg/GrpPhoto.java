@@ -18,18 +18,48 @@ public class GrpPhoto {
     public static final String OK_MOVE_SAME = "OKMoveSame";
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
+
+    public String getCameraModelGrp() {
+        return cameraModelGrp;
+    }
+
     private String cameraModelGrp ="";
     private long mintGrp;
     private long maxtGrp;
+
+    public List<String> getEle() {
+        return ele;
+    }
+
     private List<String> ele = new ArrayList<>();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
+
+    public String getAbsolutePath() {
+        return absolutePath;
+    }
+
+    public void setAbsolutePath(String absolutePath) {
+        this.absolutePath = absolutePath;
+    }
+
     private String absolutePath;
     private String pathFromRootComumn;
     private String pathFromRoot;
+    private String ForceGroup ="";
+
+    public void setForceGroup(String forceGroup) {
+        ForceGroup = forceGroup;
+    }
 
 
     public GrpPhoto() {
 
+    }
+
+    public GrpPhoto(String forceGroup, String AbsolutePath,String pathfromrootcomumn) {
+        ForceGroup=forceGroup;
+        absolutePath=AbsolutePath;
+        pathFromRootComumn=pathfromrootcomumn;
     }
 
     @Override
@@ -147,14 +177,27 @@ public class GrpPhoto {
     }
 
     private String getNomRepetrtoire() {
+        if (ForceGroup.compareTo("")!=0) {
+            return (ForceGroup + "__" + cameraModelGrp );
+        } else {
+            Date datemin = new Date(mintGrp * 1000);
+            String datemintFormat = simpleDateFormat.format(datemin);
+            if (datemintFormat.compareTo("031231_230921")==0) {
+                int a = 1;
+            }
+            
+            Date datemaxt = new Date(maxtGrp * 1000);
+            String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
-        Date datemin = new Date(mintGrp*1000);
-        String datemintFormat = simpleDateFormat.format(datemin);
+            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
+        }
+    }
 
-        Date datemaxt = new Date(maxtGrp*1000);
-        String datemaxtFormat = simpleDateFormat.format(datemaxt);
+    public void add(List<String> eleIn) {
+        ele.addAll(eleIn);
+    }
 
-        return (datemintFormat+"__"+String.format("%04d", getnbele())+"__"+cameraModelGrp+"__"+datemaxtFormat);
-
+    public boolean dateNull() {
+        return (mintGrp==-2082848400);
     }
 }

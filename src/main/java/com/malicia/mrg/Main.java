@@ -38,16 +38,48 @@ public class Main {
 
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
-        List<GrpPhoto> groupDePhoto = regroupeByNewGroup();
-        if (movetoNewGroup(true,groupDePhoto)){
-            movetoNewGroup(PropertiesParameters.getDryRun(),groupDePhoto);
+        List<GrpPhoto> groupDePhoto = regroupeByNewGroup(PropertiesParameters.getKidsModelList());
+        List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto,PropertiesParameters.getKidsModelList(),PropertiesParameters.getRepertoireNew());
+        if (movetoNewGroup(true,groupDePhotoExecpt)){
+            movetoNewGroup(PropertiesParameters.getDryRun(),groupDePhotoExecpt);
 //            movetoNewGroup(false,groupDePhoto);
         }else {
             LOGGER.info("movetoNewGroup KO, nothig nmove" );
         }
     }
 
-    private static  List<GrpPhoto> regroupeByNewGroup() {
+    private static List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList, String repertoireNew) {
+        List<GrpPhoto> excptgdp = new ArrayList();
+        GrpPhoto Bazaz = new GrpPhoto( "@Bazar",groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
+        GrpPhoto NoDate = new GrpPhoto("@NoDate", groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
+        GrpPhoto Kidz = new GrpPhoto("@Kidz", groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
+
+
+        Iterator<GrpPhoto> groupDePhotoIterator = groupDePhoto.iterator();
+
+        while (groupDePhotoIterator.hasNext()) {
+            GrpPhoto gdp = groupDePhotoIterator.next();
+            if (KidsModelList.contains(gdp.getCameraModelGrp())) {
+                Kidz.add(gdp.getEle());
+            } else {
+                if (gdp.getnbele() <= 5) {
+                    Bazaz.add(gdp.getEle());
+                } else {
+                    if (gdp.dateNull()){
+                        NoDate.add(gdp.getEle());
+                    } else {
+                        excptgdp.add(gdp) ;
+                    }
+                }
+            }
+        }
+        excptgdp.add(Bazaz);
+        excptgdp.add(NoDate);
+        excptgdp.add(Kidz);
+        return excptgdp;
+    }
+
+    private static  List<GrpPhoto> regroupeByNewGroup(List<String> kidsModelList) {
 
 //            constitution des groupe
 
@@ -65,6 +97,9 @@ public class Main {
 
                 // Now we can fetch the data by column name, save and use them!
                 String CameraModel = rs.getString("CameraModel");
+                if (!kidsModelList.contains(CameraModel)){
+                    CameraModel = "__";
+                };
                 long captureTime = rs.getLong("captureTime");
                 long mint = rs.getLong("mint");
                 long maxt = rs.getLong("maxt");

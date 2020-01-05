@@ -131,7 +131,8 @@ public class RequeteSql {
                 "LEFT JOIN AgInternedExifCameraModel aiecm " +
                 "ON ahem.cameraModelRef = aiecm.id_local " +
                 "Where b.pathFromRoot like \"" + repertoireNew + "%" + "\"" +
-                        " Order by CameraModel , captureTime ;  ");
+//                        " Order by CameraModel , captureTime ;  ");
+                        " Order by captureTime ;  ");
 
     }
 
