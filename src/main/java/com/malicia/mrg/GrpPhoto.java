@@ -18,23 +18,18 @@ public class GrpPhoto {
     public static final String OK_MOVE_SAME = "OKMoveSame";
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
-    private final Hashtable displayReturn;
     private String cameraModelGrp ="";
     private long mintGrp;
     private long maxtGrp;
     private List<String> ele = new ArrayList<>();
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
-    private String repDest;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
+    private String absolutePath;
+    private String pathFromRootComumn;
+    private String pathFromRoot;
+
 
     public GrpPhoto() {
-        displayReturn = new Hashtable();
-        displayReturn.put(DEST_NULL,0);
-        displayReturn.put(DEST_NOT_EXIST,0);
-        displayReturn.put(SRC_NOT_EXIST,0);
-        displayReturn.put(ERR_IN_MOVE,0);
-        displayReturn.put(OK_MOVE_SAME,0);
-        displayReturn.put(OK_MOVE_DRY_RUN,0);
-        displayReturn.put(OK_MOVE_DO,0);
+
     }
 
     @Override
@@ -81,11 +76,12 @@ public class GrpPhoto {
         return true;
     }
 
-    public void addfirst(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String destination) {
+    public void addfirst(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
         mintGrp=mint;
         maxtGrp=maxt;
         cameraModelGrp = cameraModel;
-        repDest = destination;
+        absolutePath = absolutepath;
+        pathFromRootComumn=pathfromrootcomumn;
         ele.add(elesrc);
     }
 
@@ -95,18 +91,28 @@ public class GrpPhoto {
 
     public Hashtable groupAndMouveEle(boolean dryRun) {
 
-
-        if (repDest == null){
+        Hashtable displayReturn = new Hashtable();
+        displayReturn.put(DEST_NULL,0);
+        displayReturn.put(DEST_NOT_EXIST,0);
+        displayReturn.put(SRC_NOT_EXIST,0);
+        displayReturn.put(ERR_IN_MOVE,0);
+        displayReturn.put(OK_MOVE_SAME,0);
+        displayReturn.put(OK_MOVE_DRY_RUN,0);
+        displayReturn.put(OK_MOVE_DO,0);
+        
+        if (absolutePath == null){
             displayReturn.put(DEST_NULL,(Integer) displayReturn.get(DEST_NULL)+1);
             return displayReturn;
         }
-        File directoryrepDest = new File(repDest);
+        File directoryrepDest = new File(absolutePath+pathFromRootComumn);
         if (! directoryrepDest.exists()){
             displayReturn.put(DEST_NOT_EXIST,(Integer) displayReturn.get(DEST_NOT_EXIST)+1);
             return displayReturn;
         }
 
-        String directoryName = repDest + getNomRepetrtoire();
+        pathFromRoot = pathFromRootComumn + getNomRepetrtoire();
+
+        String directoryName = absolutePath +pathFromRoot;
         File directory = new File(directoryName);
         if (! directory.exists()){
             if (!dryRun) {
@@ -148,7 +154,7 @@ public class GrpPhoto {
         Date datemaxt = new Date(maxtGrp*1000);
         String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
-        return (datemintFormat+"__"+datemaxtFormat+"__"+String.format("%04d", getnbele())+"__"+cameraModelGrp);
+        return (datemintFormat+"__"+String.format("%04d", getnbele())+"__"+cameraModelGrp+"__"+datemaxtFormat);
 
     }
 }

@@ -7,10 +7,7 @@ import com.malicia.mrg.view.CreateJtable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,16 +38,18 @@ public class Main {
 
         CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
-        if (movetoNewGroup(true)){
-            movetoNewGroup(false);
+        List<GrpPhoto> groupDePhoto = regroupeByNewGroup();
+        if (movetoNewGroup(true,groupDePhoto)){
+            movetoNewGroup(PropertiesParameters.getDryRun(),groupDePhoto);
+//            movetoNewGroup(false,groupDePhoto);
         }else {
             LOGGER.info("movetoNewGroup KO, nothig nmove" );
         }
     }
 
-    private static boolean movetoNewGroup(boolean dryRun) {
+    private static  List<GrpPhoto> regroupeByNewGroup() {
 
-        Hashtable dReturnEle = new Hashtable();
+//            constitution des groupe
 
         ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdherance(PropertiesParameters.getTempsAdherence(), PropertiesParameters.getRepertoireNew());
 
@@ -58,11 +57,9 @@ public class Main {
 
         List<GrpPhoto> ggp = new ArrayList();
 
-        int nbrow = 0;
-        int nbele = 0;
         try {
-            nbrow = 0;
-            boolean first = true;;
+            boolean first = true;
+
             while (rs.next()) {
 
 
@@ -72,15 +69,15 @@ public class Main {
                 long mint = rs.getLong("mint");
                 long maxt = rs.getLong("maxt");
                 String src = rs.getString("src");
-                String dest = rs.getString("dest");
+                String absolutePath = rs.getString("absolutePath");
 
-                if (first ) {
-                    gp.addfirst(CameraModel, captureTime, mint, maxt, src, dest + PropertiesParameters.getRepertoireNew() + "/");
-                }else {
+                if (first) {
+                    gp.addfirst(CameraModel, captureTime, mint, maxt, src, absolutePath, PropertiesParameters.getRepertoireNew() + "/");
+                } else {
                     if (!gp.add(CameraModel, captureTime, mint, maxt, src)) {
                         ggp.add(gp);
                         gp = new GrpPhoto();
-                        gp.addfirst(CameraModel, captureTime, mint, maxt, src, dest + PropertiesParameters.getRepertoireNew() + "/");
+                        gp.addfirst(CameraModel, captureTime, mint, maxt, src, absolutePath, PropertiesParameters.getRepertoireNew() + "/");
                     }
                 }
                 //}
@@ -89,22 +86,9 @@ public class Main {
 //                        ", src : " + src);
 
 
-                nbrow = rs.getRow();
-                first =false;
+                first = false;
             }
             ggp.add(gp);
-            LOGGER.info("Nb row => " + nbrow);
-
-
-            LOGGER.info("Printing result...");
-
-            nbele = 0;
-
-            for (int i = 0; i < ggp.size(); i++) {
-                GrpPhoto gptemp = ggp.get(i);
-//                LOGGER.info(gptemp.toString());
-                mergeHashtable (dReturnEle , gptemp.groupAndMouveEle(dryRun));
-            }
 
 
 //            LOGGER.info("Nb row lues=> " + nbrow);
@@ -114,10 +98,34 @@ public class Main {
             e.printStackTrace();
         }
 
-        LOGGER.info(dReturnEle.toString());
-        nbele = (int) dReturnEle.get(GrpPhoto.OK_MOVE_DO) + (int) dReturnEle.get(GrpPhoto.OK_MOVE_SAME) + (int) dReturnEle.get(GrpPhoto.OK_MOVE_DRY_RUN);
+        return ggp;
+    }
+
+    private static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
+//       Execution du deplacement
+
+        LOGGER.info("Printing result...");
+        int nbele = 0;
+
+        Hashtable codeRetourAction = new Hashtable();
+
+        int nbrow = 0;
+        for (int i = 0; i < ggp.size(); i++) {
+            GrpPhoto gptemp = ggp.get(i);
+            nbrow += gptemp.getnbele();
+            if (dryRun) {
+                LOGGER.info(gptemp.toString());
+            }
+            mergeHashtable (codeRetourAction , gptemp.groupAndMouveEle(dryRun));
+        }
+
+
+
+        LOGGER.info((dryRun?"dryRun =>":"") +  codeRetourAction.toString());
+        nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
         return (nbrow == nbele);
     }
+
 
     private static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
         Set<String> keys = groupAndMouveEle.keySet();

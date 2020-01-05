@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 public class PropertiesParameters {
 
     private static final Logger LOGGER;
+    private static boolean dryrun = true;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -76,8 +77,18 @@ public class PropertiesParameters {
         setPasRepertoirePhoto(properties.getProperty("PasRepertoirePhoto"));
         setTempsAdherence(properties.getProperty("TempsAdherence"));
         setCatalogLrcat(properties.getProperty("CatalogLrcat"));
+        setDryrun(properties.getProperty("dryRun","true").compareTo("true")==0);
 
 
+    }
+
+
+    public static boolean getDryRun() {
+        return PropertiesParameters.dryrun ;
+    }
+
+    public static void setDryrun(boolean dryrun) {
+        PropertiesParameters.dryrun = dryrun;
     }
 
 

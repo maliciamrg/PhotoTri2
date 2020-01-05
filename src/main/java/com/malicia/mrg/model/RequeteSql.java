@@ -117,7 +117,7 @@ public class RequeteSql {
                 " strftime('%s', DATETIME(e.captureTime,\"+"+ tempsAdherence +"\")) as maxt , " +
                 " aiecm.value as CameraModel , " +
                 " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
-                " c.absolutePath  as dest , " +
+                " c.absolutePath  as absolutePath , " +
                 " e.captureTime as captureTimeOrig " +
                 "from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
