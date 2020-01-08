@@ -18,6 +18,7 @@ public class GrpPhoto {
     public static final String OK_MOVE_SAME = "OKMoveSame";
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
+    public static final String LISTE_ERREUR = "ListeErreur" ;
 
     public String getCameraModelGrp() {
         return cameraModelGrp;
@@ -129,14 +130,17 @@ public class GrpPhoto {
         displayReturn.put(OK_MOVE_SAME,0);
         displayReturn.put(OK_MOVE_DRY_RUN,0);
         displayReturn.put(OK_MOVE_DO,0);
-        
+        ArrayList<String> listeErreur = new ArrayList<String>();
+
         if (absolutePath == null){
             displayReturn.put(DEST_NULL,(Integer) displayReturn.get(DEST_NULL)+1);
+            listeErreur.add("DEST_NULL:absolutePath is null");
             return displayReturn;
         }
         File directoryrepDest = new File(absolutePath+pathFromRootComumn);
         if (! directoryrepDest.exists()){
             displayReturn.put(DEST_NOT_EXIST,(Integer) displayReturn.get(DEST_NOT_EXIST)+1);
+            listeErreur.add("DEST_NOT_EXIST:"+directoryrepDest.toString());
             return displayReturn;
         }
 
@@ -158,6 +162,7 @@ public class GrpPhoto {
             }else{
                 if (! source.exists()){
                     displayReturn.put(SRC_NOT_EXIST,(Integer) displayReturn.get(SRC_NOT_EXIST)+1);
+                    listeErreur.add("SRC_NOT_EXIST:"+source.toString());
                 }else{
                     if (dryRun) {
                         displayReturn.put(OK_MOVE_DRY_RUN,(Integer) displayReturn.get(OK_MOVE_DRY_RUN)+1);
@@ -167,12 +172,14 @@ public class GrpPhoto {
                             displayReturn.put(OK_MOVE_DO,(Integer) displayReturn.get(OK_MOVE_DO)+1);
                         } catch (IOException e) {
                             displayReturn.put(ERR_IN_MOVE,(Integer) displayReturn.get(ERR_IN_MOVE)+1);
+                            listeErreur.add("ERR_IN_MOVE:"+source.toString()+"=>"+destination.toString());
                             e.printStackTrace();
                         }
                     }
                 }
             }
         }
+        displayReturn.put(LISTE_ERREUR,listeErreur);
         return displayReturn;
     }
 

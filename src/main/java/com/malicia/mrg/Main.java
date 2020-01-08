@@ -159,10 +159,10 @@ public class Main {
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
             nbrow += gptemp.getnbele();
-            if (dryRun) {
-                LOGGER.info(gptemp.toString());
-            }
-            mergeHashtable (codeRetourAction , gptemp.groupAndMouveEle(dryRun));
+            Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
+            LOGGER.info("GrpPhoto:"+gptemp.toString());
+            LOGGER.info(" hashRet:"+hashRet.toString());
+            mergeHashtable (codeRetourAction ,hashRet);
         }
 
 
@@ -176,14 +176,15 @@ public class Main {
     private static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
         Set<String> keys = groupAndMouveEle.keySet();
         for(String key: keys){
-            if (dReturnEle.containsKey(key)) {
-                int val = (int)dReturnEle.get(key) + (int)groupAndMouveEle.get(key);
-                dReturnEle.put(key,val);
-            } else {
-                dReturnEle.put(key,groupAndMouveEle.get(key));
-            }
-
+            if (key.compareTo(GrpPhoto.LISTE_ERREUR )!=0) {
+                if (dReturnEle.containsKey(key)) {
+                    int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
+                    dReturnEle.put(key, val);
+                } else {
+                    dReturnEle.put(key, groupAndMouveEle.get(key));
+                }
 //            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
+            }
         }
 
     }
