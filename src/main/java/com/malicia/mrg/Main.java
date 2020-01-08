@@ -47,14 +47,16 @@ public class Main {
             LOGGER.info("movetoNewGroup KO, nothig nmove");
         }
 
-        File directory = new File(groupDePhoto.get(1).getAbsolutePath() + PropertiesParameters.getRepertoireNew() + "/");
-        deleteEmptyDir(directory);
-        int nbdel=0;
-        do {
-            nbdel = RequeteSql.sqlDeleteRepertory();
-            LOGGER.info("logical delete:" + String.format("%04d", nbdel));
+        if (!PropertiesParameters.getDryRun()) {
+            File directory = new File(groupDePhoto.get(1).getAbsolutePath() + PropertiesParameters.getRepertoireNew() + "/");
+            deleteEmptyDir(directory);
+            int nbdel = 0;
+            do {
+                nbdel = RequeteSql.sqlDeleteRepertory();
+                LOGGER.info("logical delete:" + String.format("%04d", nbdel));
+            }
+            while (nbdel > 0);
         }
-        while (nbdel > 0);
     }
 
     private static List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList, String repertoireNew) {
