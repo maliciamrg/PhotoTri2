@@ -25,8 +25,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        MyLogger.setup(Level.INFO);
-
+        MyLogger.setup();
         LOGGER.info("Start");
 
         PropertiesParameters.initPropertiesParameters();
@@ -53,7 +52,7 @@ public class Main {
             int nbdel = 0;
             do {
                 nbdel = RequeteSql.sqlDeleteRepertory();
-                LOGGER.info("logical delete:" + String.format("%04d", nbdel));
+                LOGGER.fine("logical delete:" + String.format("%04d", nbdel));
             }
             while (nbdel > 0);
         }
@@ -150,7 +149,7 @@ public class Main {
     private static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
 //       Execution du deplacement
 
-        LOGGER.info("Printing result...");
+        LOGGER.fine("Printing result...");
         int nbele = 0;
 
         Hashtable codeRetourAction = new Hashtable();
@@ -160,8 +159,8 @@ public class Main {
             GrpPhoto gptemp = ggp.get(i);
             nbrow += gptemp.getnbele();
             Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
-            LOGGER.info("GrpPhoto:"+gptemp.toString());
-            LOGGER.info(" hashRet:"+hashRet.toString());
+            LOGGER.finer("GrpPhoto:"+gptemp.toString());
+            LOGGER.finer(" hashRet:"+hashRet.toString());
             mergeHashtable (codeRetourAction ,hashRet);
         }
 
@@ -200,7 +199,7 @@ public class Main {
 
             if (success) {
                 // The directory is now empty directory free so delete it
-                LOGGER.info("delete repertory:" + dir.toString());
+                LOGGER.fine("delete repertory:" + dir.toString());
                 returnVal = dir.delete();
 
             }

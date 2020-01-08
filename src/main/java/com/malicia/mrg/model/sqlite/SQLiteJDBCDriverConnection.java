@@ -27,7 +27,7 @@ public class SQLiteJDBCDriverConnection {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            LOGGER.info("Connection to SQLite has been established.");
+            LOGGER.finer("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
             LOGGER.severe(e.getMessage());
@@ -72,7 +72,7 @@ public class SQLiteJDBCDriverConnection {
         try {
             stmt = conn.createStatement();
 
-            LOGGER.info(sql);
+            LOGGER.finest(sql);
 
             return stmt.execute(sql);
 
@@ -92,7 +92,7 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt  = null;
         try {
             stmt = conn.createStatement();
-            LOGGER.info(sql);
+            LOGGER.finest(sql);
             return stmt.executeQuery(sql);
 
 

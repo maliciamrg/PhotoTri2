@@ -51,8 +51,8 @@ public class CreateJtable {
                     createJtableForOneRepertoire(  BIGTITLE_JTABLE, rs);
 
                 }
-                LOGGER.info(event.toString());
-                LOGGER.info(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
+                LOGGER.finer(event.toString());
+                LOGGER.finer(finalListeSelectionRepertoire.getValueAt(finalListeSelectionRepertoire.getSelectedRow(), 0).toString());
             }
         });
 
