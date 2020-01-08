@@ -3,8 +3,8 @@ package com.malicia.mrg;
 import com.malicia.mrg.model.PropertiesParameters;
 import com.malicia.mrg.model.RequeteSql;
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
-import com.malicia.mrg.view.CreateJtable;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -27,25 +27,34 @@ public class Main {
 
         MyLogger.setup(Level.INFO);
 
-        LOGGER.info("Start") ;
+        LOGGER.info("Start");
 
         PropertiesParameters.initPropertiesParameters();
 
         SQLiteJDBCDriverConnection.connect(PropertiesParameters.getCatalogLrcat());
 
 
-        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(PropertiesParameters.getPasRepertoirePhoto(), PropertiesParameters.getTempsAdherence(),PropertiesParameters.getRepertoireNew());
+        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(PropertiesParameters.getPasRepertoirePhoto(), PropertiesParameters.getTempsAdherence(), PropertiesParameters.getRepertoireNew());
 
-        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
+//        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
         List<GrpPhoto> groupDePhoto = regroupeByNewGroup(PropertiesParameters.getKidsModelList());
-        List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto,PropertiesParameters.getKidsModelList(),PropertiesParameters.getRepertoireNew());
-        if (movetoNewGroup(true,groupDePhotoExecpt)){
-            movetoNewGroup(PropertiesParameters.getDryRun(),groupDePhotoExecpt);
+        List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, PropertiesParameters.getKidsModelList(), PropertiesParameters.getRepertoireNew());
+        if (movetoNewGroup(true, groupDePhotoExecpt)) {
+            movetoNewGroup(PropertiesParameters.getDryRun(), groupDePhotoExecpt);
 //            movetoNewGroup(false,groupDePhoto);
-        }else {
-            LOGGER.info("movetoNewGroup KO, nothig nmove" );
+        } else {
+            LOGGER.info("movetoNewGroup KO, nothig nmove");
         }
+
+        File directory = new File(groupDePhoto.get(1).getAbsolutePath() + PropertiesParameters.getRepertoireNew() + "/");
+        deleteEmptyDir(directory);
+        int nbdel=0;
+        do {
+            nbdel = RequeteSql.sqlDeleteRepertory();
+            LOGGER.info("logical delete:" + String.format("%04d", nbdel));
+        }
+        while (nbdel > 0);
     }
 
     private static List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList, String repertoireNew) {
@@ -175,6 +184,28 @@ public class Main {
 //            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
         }
 
+    }
+
+    public static boolean deleteEmptyDir(File dir) {
+        boolean returnVal = false;
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            boolean success = true;
+            for (int i = 0; i < children.length; i++){
+                success &= deleteEmptyDir(new File(dir, children[i]));
+            }
+
+            if (success) {
+                // The directory is now empty directory free so delete it
+                LOGGER.info("delete repertory:" + dir.toString());
+                returnVal = dir.delete();
+
+            }
+
+        } else {
+            returnVal = false;
+        }
+        return returnVal;
     }
 
 

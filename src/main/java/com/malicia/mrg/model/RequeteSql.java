@@ -2,7 +2,9 @@ package com.malicia.mrg.model;
 
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class RequeteSql {
 
@@ -95,6 +97,47 @@ public class RequeteSql {
                 "on b.captureTime between a.mint and a.maxt " +
                 "  and b.CameraModel = a.CameraModel " +
                 ";");
+    }
+
+    public static int sqlDeleteRepertory() {
+
+        //compte le nombre de photo presente dans la base poour le repertoire
+
+        boolean ret = SQLiteJDBCDriverConnection.execute(
+                "  DROP TABLE IF EXISTS Repertory;  " +
+                        " DROP TABLE IF EXISTS RepertoryAdelete; " +
+                        " CREATE TEMPORARY TABLE Repertory AS " +
+                        " select  b.pathFromRoot " +
+                        " from AgLibraryFolder b " +
+                        " left join AgLibraryFile a  " +
+                        " on a.folder = b.id_local " +
+                        " where a.folder is  NULL " +
+                        " and  b.pathFromRoot <> \"\" " +
+                        " group by  b.pathFromRoot ; " +
+                        " CREATE TEMPORARY TABLE RepertoryAdelete AS " +
+                        " select r.pathFromRoot  " +
+                        " from  Repertory r " +
+                        " inner join AgLibraryFolder b " +
+                        " on b.pathFromRoot like r.pathFromRoot || \"%\" " +
+                        " group by r.pathFromRoot " +
+                        " having count(b.pathFromRoot)  = 1 ; ");
+
+        if (ret) {
+            String sql = " delete from AgLibraryFolder  " +
+                    " where pathFromRoot in ( " +
+                    " select * from RepertoryAdelete " +
+                    " ); ";
+            PreparedStatement pstmt = null;
+            try {
+                pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
+                return pstmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }else{
+            return 0;
+        }
+        return 0;
     }
 
     public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence, String repertoireNew) {
