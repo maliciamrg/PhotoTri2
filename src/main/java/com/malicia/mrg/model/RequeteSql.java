@@ -140,7 +140,7 @@ public class RequeteSql {
         return 0;
     }
 
-    public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence, String repertoireNew) {
+    public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence) {
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
         // et calcul la plage d'aherance (+- tempsAdherence)
@@ -173,7 +173,7 @@ public class RequeteSql {
                 "ON e.id_local = ahem.image " +
                 "LEFT JOIN AgInternedExifCameraModel aiecm " +
                 "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where b.pathFromRoot like \"" + repertoireNew + "%" + "\"" +
+                "Where b.pathFromRoot like \"" + PropertiesParameters.getRepertoireNew() + "%" + "\"" +
 //                        " Order by CameraModel , captureTime ;  ");
                         " Order by captureTime ;  ");
 

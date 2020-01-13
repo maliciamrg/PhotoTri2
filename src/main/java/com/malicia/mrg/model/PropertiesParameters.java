@@ -22,6 +22,16 @@ public class PropertiesParameters {
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
 
+    public static String getBazar() {
+        return Bazar;
+    }
+
+    public static void setBazar(String bazar) {
+        Bazar = bazar;
+    }
+
+    private static String Bazar = "";
+
     public static List<String> getKidsModelList() {
         return kidsModelList;
     }
@@ -91,6 +101,7 @@ public class PropertiesParameters {
         setCatalogLrcat(properties.getProperty("CatalogLrcat"));
         setDryrun(properties.getProperty("dryRun","true").compareTo("true")==0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
+        setBazar(properties.getProperty("repBazar"));
     }
 
 

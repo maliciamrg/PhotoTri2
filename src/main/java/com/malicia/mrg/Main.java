@@ -8,7 +8,6 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -38,7 +37,7 @@ public class Main {
 //        CreateJtable.createJTableSelectionRepertoire(BIGTITLE_JTABLE,RequeteSql.selectionRepertoire());
 
         List<GrpPhoto> groupDePhoto = regroupeByNewGroup(PropertiesParameters.getKidsModelList());
-        List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, PropertiesParameters.getKidsModelList(), PropertiesParameters.getRepertoireNew());
+        List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, PropertiesParameters.getKidsModelList());
         if (movetoNewGroup(true, groupDePhotoExecpt)) {
             movetoNewGroup(PropertiesParameters.getDryRun(), groupDePhotoExecpt);
 //            movetoNewGroup(false,groupDePhoto);
@@ -58,11 +57,11 @@ public class Main {
         }
     }
 
-    private static List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList, String repertoireNew) {
+    private static List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList) {
         List<GrpPhoto> excptgdp = new ArrayList();
-        GrpPhoto Bazaz = new GrpPhoto( "@Bazar",groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
-        GrpPhoto NoDate = new GrpPhoto("@NoDate", groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
-        GrpPhoto Kidz = new GrpPhoto("@Kidz", groupDePhoto.get(1).getAbsolutePath(),repertoireNew+ "/");
+        GrpPhoto Bazaz = new GrpPhoto( PropertiesParameters.getBazar(),groupDePhoto.get(1).getAbsolutePath(), PropertiesParameters.getRepertoireNew()+ "/");
+        GrpPhoto NoDate = new GrpPhoto("@NoDate", groupDePhoto.get(1).getAbsolutePath(), PropertiesParameters.getRepertoireNew()+ "/");
+        GrpPhoto Kidz = new GrpPhoto("@Kidz", groupDePhoto.get(1).getAbsolutePath(), PropertiesParameters.getRepertoireNew()+ "/");
 
 
         Iterator<GrpPhoto> groupDePhotoIterator = groupDePhoto.iterator();
@@ -93,7 +92,7 @@ public class Main {
 
 //            constitution des groupe
 
-        ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdherance(PropertiesParameters.getTempsAdherence(), PropertiesParameters.getRepertoireNew());
+        ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdherance(PropertiesParameters.getTempsAdherence());
 
         GrpPhoto gp = new GrpPhoto();
 

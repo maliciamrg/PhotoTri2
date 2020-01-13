@@ -20,6 +20,33 @@ public class GrpPhoto {
     public static final String OK_MOVE_DO = "OKMoveDo";
     public static final String LISTE_ERREUR = "ListeErreur" ;
 
+    private void setTypeEvenement() {
+//        anniversaire mariage fête vacances ski etc ...
+        this.typeEvenement = "typeEvenement";
+    }
+
+    private void setEmplacement() {
+//        ville de prise de vue
+        this.emplacement = "emplacement";
+    }
+
+    private void setPersonnes() {
+//        liste de personnes separré par des _
+        this.personnes = "personnes";
+    }
+
+    private void setTypeSceancesPhoto() {
+//        Events 10-15 j
+//        Holidays 20-30 sem
+//        Shooting 03-05 j
+        this.typeSceancesPhoto = "typeSéancesPhoto";
+    }
+
+    private String typeEvenement ="";
+    private String emplacement="";
+    private String personnes="";
+    private String typeSceancesPhoto="";
+
     public String getCameraModelGrp() {
         return cameraModelGrp;
     }
@@ -34,6 +61,7 @@ public class GrpPhoto {
 
     private List<String> ele = new ArrayList<>();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
+    private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
     public String getAbsolutePath() {
         return absolutePath;
@@ -196,7 +224,13 @@ public class GrpPhoto {
             Date datemaxt = new Date(maxtGrp * 1000);
             String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
-            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
+//            YYYY-MM-DD_EVENTS_LIEUX_PERSONNES
+            if (typeEvenement.compareTo("")==0) {setTypeEvenement();}
+            if (emplacement.compareTo("")==0) {setEmplacement();}
+            if (personnes.compareTo("")==0) {setPersonnes();}
+            if (typeSceancesPhoto.compareTo("")==0) {setTypeSceancesPhoto();}
+            return (repDateFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "   " +  cameraModelGrp) + "_" +  typeSceancesPhoto;
+//            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
         }
     }
 
