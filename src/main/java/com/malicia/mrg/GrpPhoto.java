@@ -1,5 +1,6 @@
 package com.malicia.mrg;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +20,8 @@ public class GrpPhoto {
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
     public static final String LISTE_ERREUR = "ListeErreur" ;
+    private JFrame f;
+    private JFrame f2;
 
     private void setTypeEvenement() {
 //        anniversaire mariage fête vacances ski etc ...
@@ -216,20 +219,17 @@ public class GrpPhoto {
             return (ForceGroup + "__" + cameraModelGrp );
         } else {
             Date datemin = new Date(mintGrp * 1000);
-            String datemintFormat = simpleDateFormat.format(datemin);
-            if (datemintFormat.compareTo("031231_230921")==0) {
-                int a = 1;
-            }
-            
+            String datemintFormat = repDateFormat.format(datemin);
+
             Date datemaxt = new Date(maxtGrp * 1000);
             String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
-//            YYYY-MM-DD_EVENTS_LIEUX_PERSONNES
+//       YYYY-MM-DD_EVENTS_LIEUX_PERSONNES
             if (typeEvenement.compareTo("")==0) {setTypeEvenement();}
             if (emplacement.compareTo("")==0) {setEmplacement();}
             if (personnes.compareTo("")==0) {setPersonnes();}
             if (typeSceancesPhoto.compareTo("")==0) {setTypeSceancesPhoto();}
-            return (repDateFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "   " +  cameraModelGrp) + "_" +  typeSceancesPhoto;
+            return (datemintFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "   " +  cameraModelGrp) + "_" +  typeSceancesPhoto;
 //            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
         }
     }
@@ -241,4 +241,6 @@ public class GrpPhoto {
     public boolean dateNull() {
         return (mintGrp==-2082848400);
     }
+
+
 }

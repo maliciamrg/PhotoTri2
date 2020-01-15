@@ -218,5 +218,17 @@ public class RequeteSql {
     }
 
 
-
+    public static String getabsolutePathFirst() {
+        ResultSet rs = SQLiteJDBCDriverConnection.select("select absolutePath " +
+                "from AgLibraryRootFolder " +
+                ";");
+        try {
+            while (rs.next()){
+                    return rs.getString("absolutePath");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
