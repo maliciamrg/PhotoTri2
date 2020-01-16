@@ -23,6 +23,12 @@
             <artifactId>com.liferay.org.apache.commons.fileupload</artifactId>
             <version>6.2.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

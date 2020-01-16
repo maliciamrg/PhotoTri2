@@ -4,6 +4,7 @@ import com.malicia.mrg.model.PropertiesParameters;
 import com.malicia.mrg.model.RequeteSql;
 import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
 import com.malicia.mrg.view.app;
+import com.malicia.mrg.view.testMain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +12,8 @@ import java.io.File;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -61,6 +62,8 @@ public class Main {
 
     private static void GenerateGui() {
 
+        testMain gui = new testMain();
+testMain.main(null);
 //        napp.setImageOne(new JLabel(getImageiconResized("D:\\50_Phototheque\\!!Legacy\\&Antony Travaux\\&Antony Travaux 2008\\2008.06.01_20.14.02____001-3-3-1.png")));
 //        f2.setContentPane(napp.getPanelMain());
 //
