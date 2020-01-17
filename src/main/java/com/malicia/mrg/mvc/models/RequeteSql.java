@@ -1,6 +1,6 @@
-package com.malicia.mrg.model;
+package com.malicia.mrg.mvc.models;
 
-import com.malicia.mrg.model.sqlite.SQLiteJDBCDriverConnection;
+import com.malicia.mrg.Context;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -173,7 +173,7 @@ public class RequeteSql {
                 "ON e.id_local = ahem.image " +
                 "LEFT JOIN AgInternedExifCameraModel aiecm " +
                 "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where b.pathFromRoot like \"" + PropertiesParameters.getRepertoireNew() + "%" + "\"" +
+                "Where b.pathFromRoot like \"" + Context.getRepertoireNew() + "%" + "\"" +
 //                        " Order by CameraModel , captureTime ;  ");
                         " Order by captureTime ;  ");
 

@@ -1,14 +1,34 @@
-package com.malicia.mrg.model;
+package com.malicia.mrg;
+
+import com.malicia.mrg.mvc.models.RequeteSql;
+import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class PropertiesParameters {
+public class Context {
+    private final static Context instance = new Context();
+
+    public static String getAbsolutePathFirst() {
+        return absolutePathFirst;
+    }
+
+    public static void setAbsolutePathFirst(String absolutePathFirst) {
+        Context.absolutePathFirst = absolutePathFirst;
+    }
+
+    private static String absolutePathFirst;
+
+    public static Context getInstance() {
+        return instance;
+    }
 
     private static final Logger LOGGER;
     private static boolean dryrun = true;
@@ -37,7 +57,7 @@ public class PropertiesParameters {
     }
 
     public static void setKidsModelList(List<String> kidsModelList) {
-        PropertiesParameters.kidsModelList = kidsModelList;
+        Context.kidsModelList = kidsModelList;
     }
 
     private static List<String> kidsModelList ;
@@ -47,7 +67,7 @@ public class PropertiesParameters {
     }
 
     public static void setRepertoireNew(String repertoireNew) {
-        PropertiesParameters.repertoireNew = repertoireNew;
+        Context.repertoireNew = repertoireNew;
     }
 
     public static String getPasRepertoirePhoto() {
@@ -55,7 +75,7 @@ public class PropertiesParameters {
     }
 
     public static void setPasRepertoirePhoto(String pasRepertoirePhoto) {
-        PropertiesParameters.pasRepertoirePhoto = pasRepertoirePhoto;
+        Context.pasRepertoirePhoto = pasRepertoirePhoto;
     }
 
     public static String getTempsAdherence() {
@@ -63,7 +83,7 @@ public class PropertiesParameters {
     }
 
     public static void setTempsAdherence(String tempsAdherence) {
-        PropertiesParameters.tempsAdherence = tempsAdherence;
+        Context.tempsAdherence = tempsAdherence;
     }
 
     public static String getCatalogLrcat() {
@@ -71,12 +91,7 @@ public class PropertiesParameters {
     }
 
     public static void setCatalogLrcat(String catalogLrcat) {
-        PropertiesParameters.catalogLrcat = catalogLrcat;
-    }
-
-
-    private PropertiesParameters() {
-        throw new IllegalStateException("Utility class");
+        Context.catalogLrcat = catalogLrcat;
     }
 
     public static void initPropertiesParameters()  {
@@ -106,12 +121,40 @@ public class PropertiesParameters {
 
 
     public static boolean getDryRun() {
-        return PropertiesParameters.dryrun ;
+        return Context.dryrun ;
     }
 
     public static void setDryrun(boolean dryrun) {
-        PropertiesParameters.dryrun = dryrun;
+        Context.dryrun = dryrun;
     }
 
 
+    public static void setup() {
+
+        // get the global logger to configure it
+        Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
+        InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
+        try {
+            LogManager.getLogManager().readConfiguration(stream);
+        } catch (IOException e) {
+            LOGGER.severe( e.getMessage());
+        }
+
+        LOGGER.severe( "---==[ severe  ]==---");
+        LOGGER.warning("---==[ warning ]==---");
+        LOGGER.info(   "---==[  info   ]==---");
+        LOGGER.config( "---==[ config  ]==---");
+        LOGGER.fine(   "---==[  fine   ]==---");
+        LOGGER.finer(  "---==[  finer  ]==---");
+        LOGGER.finest( "---==[ finest  ]==---");
+
+        SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
+
+        LOGGER.info("Start");
+
+        Context.initPropertiesParameters();
+
+        Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
+    }
 }

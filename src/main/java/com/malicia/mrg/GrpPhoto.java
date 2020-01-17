@@ -1,6 +1,5 @@
 package com.malicia.mrg;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,8 +19,7 @@ public class GrpPhoto {
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
     public static final String LISTE_ERREUR = "ListeErreur" ;
-    private JFrame f;
-    private JFrame f2;
+
 
     private void setTypeEvenement() {
 //        anniversaire mariage fête vacances ski etc ...
@@ -84,7 +82,7 @@ public class GrpPhoto {
     }
 
 
-    public GrpPhoto() {
+    public  GrpPhoto() {
 
     }
 

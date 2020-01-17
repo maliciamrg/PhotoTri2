@@ -1,4 +1,4 @@
-package com.malicia.mrg.model.sqlite;
+package com.malicia.mrg.mvc.models;
 
 import java.sql.*;
 import java.util.logging.Logger;
