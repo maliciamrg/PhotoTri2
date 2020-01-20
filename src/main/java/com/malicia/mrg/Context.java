@@ -149,11 +149,11 @@ public class Context {
         LOGGER.finer(  "---==[  finer  ]==---");
         LOGGER.finest( "---==[ finest  ]==---");
 
-        SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
-
         LOGGER.info("Start");
 
         Context.initPropertiesParameters();
+
+        SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
 
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
     }

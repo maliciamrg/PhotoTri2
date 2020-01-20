@@ -1,19 +1,11 @@
 package com.malicia.mrg;
 
-import com.malicia.mrg.mvc.models.RequeteSql;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.*;
 import java.util.logging.Logger;
 
 public class Main extends Application {

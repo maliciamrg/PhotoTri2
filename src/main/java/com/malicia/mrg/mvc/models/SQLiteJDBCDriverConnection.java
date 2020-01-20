@@ -20,6 +20,7 @@ public class SQLiteJDBCDriverConnection {
      * Connect to a sample database
      */
     public static void connect(String sqlliteDatabase) {
+        LOGGER.info("connect to database : "+sqlliteDatabase);
         conn = null;
         try {
             // db parameters
