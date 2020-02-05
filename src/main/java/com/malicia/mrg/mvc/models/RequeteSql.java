@@ -5,11 +5,18 @@ import com.malicia.mrg.app.Context;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class RequeteSql {
 
     private RequeteSql() {
         throw new IllegalStateException("Utility class");
+    }
+
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
     public static void sqlCombineAllGrouplessInGroupByPlageAdherance(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
@@ -230,5 +237,9 @@ public class RequeteSql {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static void updateRepertoryName(String id_local, String rootFolder, String repertoiredest) {
+        LOGGER.info("updateRepertoryName");
     }
 }

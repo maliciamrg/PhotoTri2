@@ -128,12 +128,7 @@ public class mainFrameController {
                 "\n");
 
     }
-    public static void renommerUnRepertoire(String repertoiresource , String repertoiredest) {
-        LOGGER.info("renommerUnRepertoire");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-renomme un repertoire (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
-    }
+
     public static void archiveUnRepertoireRejet(String repertoireRejet) {
         LOGGER.info("archiveUnRepertoireRejet");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -234,6 +229,19 @@ public class mainFrameController {
         }
     }
 
+    public static void renommerUnRepertoire(String repertoiresource , String repertoiredest,String id_local , String rootFolder) {
+        LOGGER.info("do:renommerUnRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-renomme un repertoire (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+        File directory = new File(repertoiresource);
+        File directorydest = new File(repertoiredest);
+        if (directory.isDirectory()) {
+            directory.renameTo(directorydest);
+            RequeteSql.updateRepertoryName(id_local,rootFolder,repertoiredest);
+        }
+
+    }
     private static boolean boucleDeleteRepertoirePhysique(File dir) {
         boolean returnVal = false;
         if (dir.isDirectory()) {
