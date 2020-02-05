@@ -1,5 +1,7 @@
 package com.malicia.mrg;
 
+import com.malicia.mrg.app.Context;
+import com.malicia.mrg.photo.GrpPhoto;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

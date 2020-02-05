@@ -1,9 +1,8 @@
 package com.malicia.mrg.mvc.controllers;
 
-import com.malicia.mrg.Context;
-import com.malicia.mrg.GrpPhoto;
+import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
-import javafx.event.ActionEvent;
+import com.malicia.mrg.photo.GrpPhoto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,26 +21,226 @@ public class mainFrameController {
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
-    private static void delEmptyDirectory() {
+
+
+    public static void regrouperNewParAdherence() {
+        LOGGER.info("regrouperNewParAdherence");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-Regrouper toute les photo/video par date +-adherence dans des repertoires");
+        LOGGER.info("-pour faciliter le classement (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectFichierLigthroom() {
+        LOGGER.info("selectFichierLigthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectLeRepertoireRootduFichierLigthroom() {
+        LOGGER.info("selectLeRepertoireRootduFichierLigthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le repertoire root sur lequelle les actions seront baser ");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectLeRepertoirePhysiqueNew() {
+        LOGGER.info("selectLeRepertoirePhysiqueNew");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le repertoire ou sont les photo new");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectPatternDesRepertoirePhotoTrier() {
+        LOGGER.info("selectPatternDesRepertoirePhotoTrier");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le pattern pour selectionner les repertoires eligibles");
+        LOGGER.info("-a l'appelation RepertoirePhotoTrier");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    private static void purgeRepertoireVide() {
+        LOGGER.info("purgeRepertoireVide");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-purge les repertoires vide baser sur le root  (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void deplaceUnePhoto(String photo , String repertoiredest) {
+        LOGGER.info("deplaceUnePhoto");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-deplace une photo dans le repertoire (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("new_repertoire\n" +
+                "basename_file\n" +
+                "\n" +
+                "rqt_rootFolder\n" +
+                "max_id_local\n" +
+                "max_id_global\n" +
+                "\n" +
+                "\n" +
+                "select id_local , absolutePath\n" +
+                "from  \"main\".\"AgLibraryRootFolder\" \n" +
+                "\n" +
+                "premier ligne => rqt_rootFolder\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "select * from \n" +
+                "(SELECT tbl_name FROM sqlite_master\n" +
+                "WHERE type = 'table'\n" +
+                "and sql like \"%id_global%\")\n" +
+                "\n" +
+                "boucle pour trouver le plus grand id_global\n" +
+                "select max(id_global) from \n" +
+                "tbl_name\n" +
+                "\n" +
+                "sortie => max_id_global\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "select * from \n" +
+                "(SELECT tbl_name FROM sqlite_master\n" +
+                "WHERE type = 'table'\n" +
+                "and sql like \"%id_local%\")\n" +
+                "\n" +
+                "boucle pour trouver le plus grand id_local\n" +
+                "select max(id_local) from \n" +
+                "tbl_name\n" +
+                "\n" +
+                "sortie => max_id_local\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "INSERT INTO \"main\".\"AgLibraryFolder\" \n" +
+                "(\"id_local\", \n" +
+                "\"id_global\", \n" +
+                "\"pathFromRoot\", \n" +
+                "\"rootFolder\") \n" +
+                "VALUES (\n" +
+                "max_id_local+1, \n" +
+                "max_id_global+1, \n" +
+                "new_repertoire, \n" +
+                "rqt_rootFolder);\n" +
+                "\n" +
+                "update \"main\".\"AgLibraryFile\" \n" +
+                "set folder =  max_id_local+1\n" +
+                "where \"baseName\" = basename_file;\n" +
+                "\n" +
+                "\n");
+
+    }
+    public static void renommerUnRepertoire(String repertoiresource , String repertoiredest) {
+        LOGGER.info("renommerUnRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-renomme un repertoire (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void archiveUnRepertoireRejet(String repertoireRejet) {
+        LOGGER.info("archiveUnRepertoireRejet");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-archive les photos du repertoire rejet dans un zip dans le repertoire rejet");
+        LOGGER.info("-extrait le catalog LRCAT de ligthroom et l'ajoute au zip");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void desarchiveUnRepertoireRejet(String repertoireRejet) {
+        LOGGER.info("desarchiveUnRepertoireRejet");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-dezip les photos de l'archive rejet");
+        LOGGER.info("-dezip le catalog LRCAT rejet dans le catalog ligthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectScriptDeSauvegarde() {
+        LOGGER.info("selectScriptDeSauvegarde");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-editer le script de sauvegarde");
+        LOGGER.info("- +sauvegarde config ligthroom");
+        LOGGER.info("- +sauvegarde bibliotheque");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void applicationDeLaComandeDeSauvegarde() {
+        LOGGER.info("applicationDeLaSolutionDeSauvegarde");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-execute sur le system la commande de copy sauvegarde");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    private static void sugerrerDesRepertoirePourLeBazar() {
+        LOGGER.info("sugerrerDesRepertoirePourLeBazar");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-pour chaque elmement du bazar sugerrer 3 repertoires possible");
+        LOGGER.info("-Pour chaque photo dans le bazar");
+        LOGGER.info("-Retrouver dans TOUTE LA BIBLIOTHÈQUE hors bazar");
+        LOGGER.info("-4 photos de 4 répertoire différent dans la plage d'adhérence");
+        LOGGER.info("-Puis choisir si la photo doit aller dans un de c'est répertoire ou rester dans le bazar");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    private static void sugerrerNomDeRepertoire(String repertoire) {
+        LOGGER.info("sugerrerNomDeRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-Pour tous le repertoireRejet");
+        LOGGER.info("-Faire une pop up avec 4 photo du groupe avec 3 input");
+        LOGGER.info("-Lieux");
+        LOGGER.info("-Évents");
+        LOGGER.info("-Personnes");
+        LOGGER.info("-Pour constituer un nom de répertoire conforme");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectLimiteurParTypeRepertoire() {
+        LOGGER.info("selectLimiteurParTypeRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-editer les limiteur par type de repertoire");
+        LOGGER.info("-[NomRepetoire][Nb][Periode]");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void verifierLimiteur() {
+        LOGGER.info("verifierLimiteur");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-pour chaque RepertoirePhotoTrier verifier si le limiteur est atteint");
+        LOGGER.info("-editiion du resultat dans un fichier txt et affichage fichier txt ");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void selectMotCleDeConstitutiionRepertoirePhotoTrier() {
+        LOGGER.info("selectMotCleDeConstitutiionRepertoirePhotoTrier");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-editer les mot cle cnstitutant les nom des RepertoirePhotoTrier");
+        LOGGER.info("-[1Events][2Lieux][3Personne]");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void renommerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
+        LOGGER.info("renommerLesPhotosEnFonctiionDuNomDuRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-renommer les photos du RepertoirePhotoTrier en fonction du nom de " );
+        LOGGER.info("-RepertoirePhotoTrier en ajoutant un numero sequentiel (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+    public static void taggerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
+        LOGGER.info("taggerLesPhotosEnFonctiionDuNomDuRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-tagger les photos du RepertoirePhotoTrier en fonction du nom de " );
+        LOGGER.info("-RepertoirePhotoTrier en ajoutant un numero sequentiel");
+        LOGGER.info("---------------------------------------------------------------------------");
+    }
+
+    public static void deleteEmptyDirectory() {
+        LOGGER.info("do:deleteEmptyDirectory");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-suprimmer tout les repertoires vide (physique et logique)" );
+        LOGGER.info("---------------------------------------------------------------------------");
         if (!Context.getDryRun()) {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
-            deleteEmptyDir(directory);
-            int nbdel = 0;
-            do {
-                nbdel = RequeteSql.sqlDeleteRepertory();
-                LOGGER.fine("logical delete:" + String.format("%04d", nbdel));
-            }
-            while (nbdel > 0);
+            boucleDeleteRepertoirePhysique(directory);
+            boucleDeleteRepertoireLogique();
         }
     }
 
-    public static boolean deleteEmptyDir(File dir) {
+    private static boolean boucleDeleteRepertoirePhysique(File dir) {
         boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
             boolean success = true;
             for (int i = 0; i < children.length; i++){
-                success &= deleteEmptyDir(new File(dir, children[i]));
+                success &= boucleDeleteRepertoirePhysique(new File(dir, children[i]));
             }
 
             if (success) {
@@ -56,6 +255,17 @@ public class mainFrameController {
         }
         return returnVal;
     }
+
+    private static void boucleDeleteRepertoireLogique() {
+        int nbdel = 0;
+        do {
+            nbdel = RequeteSql.sqlDeleteRepertory();
+            LOGGER.fine("logical delete:" + String.format("%04d", nbdel));
+        }
+        while (nbdel > 0);
+    }
+
+
 
     private static ImageIcon getImageiconResized(URL imagesJpg) {
         LOGGER.finest(imagesJpg.toString());
@@ -216,7 +426,4 @@ public class mainFrameController {
 
     }
 
-    public void testAction(ActionEvent event){
-        System.out.println("coucou");
-    }
 }

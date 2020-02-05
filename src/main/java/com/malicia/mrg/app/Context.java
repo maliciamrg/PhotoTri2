@@ -1,5 +1,6 @@
-package com.malicia.mrg;
+package com.malicia.mrg.app;
 
+import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 

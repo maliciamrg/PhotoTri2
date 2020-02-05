@@ -1,6 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
-import com.malicia.mrg.Context;
+import com.malicia.mrg.app.Context;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

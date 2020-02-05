@@ -1,4 +1,4 @@
-package com.malicia.mrg;
+package com.malicia.mrg.photo;
 
 import java.io.File;
 import java.io.IOException;
