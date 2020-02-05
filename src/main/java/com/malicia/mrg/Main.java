@@ -1,6 +1,7 @@
 package com.malicia.mrg;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.controllers.mainFrameController;
 import com.malicia.mrg.photo.GrpPhoto;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,8 +19,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        Parent root = FXMLLoader.load(GrpPhoto.class.getClassLoader().getResource("com/malicia/mrg/mvc/views/mainFrame.fxml"));
+        FXMLLoader loader = new FXMLLoader(GrpPhoto.class.getClassLoader().getResource("com/malicia/mrg/mvc/views/mainFrame.fxml"));
+        Parent root = (Parent)loader.load();
+        mainFrameController controller = (mainFrameController)loader.getController();
+        Context.setController(controller);
+        Context.setPrimaryStage(primaryStage);
         primaryStage.setTitle("testte");
         primaryStage.setScene(new Scene(root,300,275));
         primaryStage.show();

@@ -1,8 +1,11 @@
 package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
+import com.malicia.mrg.mvc.controllers.mainFrameController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,6 +19,35 @@ import java.util.logging.Logger;
 
 public class Context {
     private final static Context instance = new Context();
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static void setPrimaryStage(Stage primaryStage) {
+        Context.primaryStage = primaryStage;
+    }
+
+    private static Stage primaryStage;
+    public static mainFrameController getController() {
+        return controller;
+    }
+
+    public static void setController(mainFrameController controller) {
+        Context.controller = controller;
+    }
+
+    public static mainFrameController controller;
+    public static String getBaseDir() {
+        return baseDir;
+    }
+
+    public static void setBaseDir(String baseDir) {
+        Context.baseDir = baseDir;
+    }
+
+    private Parent root;
+    private static String baseDir;
 
     public static String getAbsolutePathFirst() {
         return absolutePathFirst;
@@ -118,6 +150,7 @@ public class Context {
         setDryrun(properties.getProperty("dryRun","true").compareTo("true")==0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setBazar(properties.getProperty("repBazar"));
+        setBaseDir(properties.getProperty("BaseDir"));
     }
 
 
@@ -158,4 +191,10 @@ public class Context {
 
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
     }
+
+    public static void savePropertiesParameters() {
+        LOGGER.info("savePropertiesParameters");
+    }
+
+
 }

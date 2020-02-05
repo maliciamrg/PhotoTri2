@@ -3,6 +3,7 @@ package com.malicia.mrg.mvc.controllers;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.GrpPhoto;
+import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,13 +31,7 @@ public class mainFrameController {
         LOGGER.info("-pour faciliter le classement (physique et logique)");
         LOGGER.info("---------------------------------------------------------------------------");
     }
-    public static void selectFichierLigthroom() {
-        LOGGER.info("selectFichierLigthroom");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
-        LOGGER.info("-modifier et sauvegarde dans le properties");
-        LOGGER.info("---------------------------------------------------------------------------");
-    }
+
     public static void selectLeRepertoireRootduFichierLigthroom() {
         LOGGER.info("selectLeRepertoireRootduFichierLigthroom");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -217,7 +212,23 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    public static void deleteEmptyDirectory() {
+    public void selectFichierLigthroom() {
+        LOGGER.info("do:selectFichierLigthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+        //Create a file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
+        if (file != null) {
+            LOGGER.info("selectedFile:"+file.getAbsolutePath());
+            Context.setCatalogLrcat(file.getAbsolutePath());
+        }
+        Context.savePropertiesParameters();
+    }
+    public void deleteEmptyDirectory() {
         LOGGER.info("do:deleteEmptyDirectory");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-suprimmer tout les repertoires vide (physique et logique)" );
@@ -229,7 +240,7 @@ public class mainFrameController {
         }
     }
 
-    public static void renommerUnRepertoire(String repertoiresource , String repertoiredest,String id_local , String rootFolder) {
+    public void renommerUnRepertoire(String repertoiresource , String repertoiredest,String id_local , String rootFolder) {
         LOGGER.info("do:renommerUnRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-renomme un repertoire (physique et logique)");
