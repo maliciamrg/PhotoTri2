@@ -450,7 +450,7 @@ public class mainFrameController {
     }
 
     private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
-        LOGGER.info("selectLeRepertoireRootduFichierLigthroom");
+        LOGGER.info("do:selectLeRepertoireRootduFichierLigthroom");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-selecttioner le repertoire root sur lequelle les actions seront baser ");
         LOGGER.info("-modifier et sauvegarde dans le properties");
