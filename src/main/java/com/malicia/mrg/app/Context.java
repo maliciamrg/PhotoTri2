@@ -4,7 +4,6 @@ import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.controllers.mainFrameController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -19,6 +18,31 @@ import java.util.logging.Logger;
 
 public class Context {
     private final static Context instance = new Context();
+    private static final Logger LOGGER;
+    private static mainFrameController controller;
+    private static String root;
+    private static Stage primaryStage;
+    private static String baseDir;
+    private static String absolutePathFirst;
+    private static boolean dryrun = true;
+    private static String repertoireNew = "";
+    private static String pasRepertoirePhoto = "";
+    private static String tempsAdherence = "";
+    private static String catalogLrcat = "";
+    private static String Bazar = "";
+    private static List<String> kidsModelList;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public static String getRoot() {
+        return root;
+    }
+
+    public static void setRoot(String root) {
+        Context.root = root;
+    }
 
     public static Stage getPrimaryStage() {
         return primaryStage;
@@ -28,7 +52,6 @@ public class Context {
         Context.primaryStage = primaryStage;
     }
 
-    private static Stage primaryStage;
     public static mainFrameController getController() {
         return controller;
     }
@@ -37,7 +60,6 @@ public class Context {
         Context.controller = controller;
     }
 
-    public static mainFrameController controller;
     public static String getBaseDir() {
         return baseDir;
     }
@@ -45,9 +67,6 @@ public class Context {
     public static void setBaseDir(String baseDir) {
         Context.baseDir = baseDir;
     }
-
-    private Parent root;
-    private static String baseDir;
 
     public static String getAbsolutePathFirst() {
         return absolutePathFirst;
@@ -57,23 +76,9 @@ public class Context {
         Context.absolutePathFirst = absolutePathFirst;
     }
 
-    private static String absolutePathFirst;
-
     public static Context getInstance() {
         return instance;
     }
-
-    private static final Logger LOGGER;
-    private static boolean dryrun = true;
-
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
-
-    private static String repertoireNew = "";
-    private static String pasRepertoirePhoto = "";
-    private static String tempsAdherence = "";
-    private static String catalogLrcat = "";
 
     public static String getBazar() {
         return Bazar;
@@ -83,8 +88,6 @@ public class Context {
         Bazar = bazar;
     }
 
-    private static String Bazar = "";
-
     public static List<String> getKidsModelList() {
         return kidsModelList;
     }
@@ -93,10 +96,8 @@ public class Context {
         Context.kidsModelList = kidsModelList;
     }
 
-    private static List<String> kidsModelList ;
-
     public static String getRepertoireNew() {
-        return repertoireNew;
+        return Context.repertoireNew;
     }
 
     public static void setRepertoireNew(String repertoireNew) {
@@ -104,7 +105,7 @@ public class Context {
     }
 
     public static String getPasRepertoirePhoto() {
-        return pasRepertoirePhoto;
+        return Context.pasRepertoirePhoto;
     }
 
     public static void setPasRepertoirePhoto(String pasRepertoirePhoto) {
@@ -119,49 +120,13 @@ public class Context {
         Context.tempsAdherence = tempsAdherence;
     }
 
-    public static String getCatalogLrcat() {
-        return catalogLrcat;
-    }
-
-    public static void setCatalogLrcat(String catalogLrcat) {
-        Context.catalogLrcat = catalogLrcat;
-    }
-
-    public static void initPropertiesParameters()  {
-        FileReader reader = null;
-
-        try {
-            reader = new FileReader("resource/config.properties");
-        } catch (FileNotFoundException e) {
-            LOGGER.severe( e.getMessage());
-        }
-
-        Properties properties = new Properties();
-        try {
-            properties.load(reader);
-        } catch (IOException e) {
-            LOGGER.severe( e.getMessage());
-        }
-
-        setRepertoireNew( properties.getProperty("RepertoireNew"));
-        setPasRepertoirePhoto(properties.getProperty("PasRepertoirePhoto"));
-        setTempsAdherence(properties.getProperty("TempsAdherence"));
-        setCatalogLrcat(properties.getProperty("CatalogLrcat"));
-        setDryrun(properties.getProperty("dryRun","true").compareTo("true")==0);
-        setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
-        setBazar(properties.getProperty("repBazar"));
-        setBaseDir(properties.getProperty("BaseDir"));
-    }
-
-
     public static boolean getDryRun() {
-        return Context.dryrun ;
+        return Context.dryrun;
     }
 
-    public static void setDryrun(boolean dryrun) {
-        Context.dryrun = dryrun;
+    public static void setDryRun(boolean dryRun) {
+        Context.dryrun = dryRun;
     }
-
 
     public static void setup() {
 
@@ -172,16 +137,16 @@ public class Context {
         try {
             LogManager.getLogManager().readConfiguration(stream);
         } catch (IOException e) {
-            LOGGER.severe( e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
 
-        LOGGER.severe( "---==[ severe  ]==---");
+        LOGGER.severe("---==[ severe  ]==---");
         LOGGER.warning("---==[ warning ]==---");
-        LOGGER.info(   "---==[  info   ]==---");
-        LOGGER.config( "---==[ config  ]==---");
-        LOGGER.fine(   "---==[  fine   ]==---");
-        LOGGER.finer(  "---==[  finer  ]==---");
-        LOGGER.finest( "---==[ finest  ]==---");
+        LOGGER.info("---==[  info   ]==---");
+        LOGGER.config("---==[ config  ]==---");
+        LOGGER.fine("---==[  fine   ]==---");
+        LOGGER.finer("---==[  finer  ]==---");
+        LOGGER.finest("---==[ finest  ]==---");
 
         LOGGER.info("Start");
 
@@ -191,6 +156,41 @@ public class Context {
 
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
     }
+
+    public static void initPropertiesParameters() {
+        FileReader reader = null;
+
+        try {
+            reader = new FileReader("resource/config.properties");
+        } catch (FileNotFoundException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        Properties properties = new Properties();
+        try {
+            properties.load(reader);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        setRepertoireNew(properties.getProperty("RepertoireNew"));
+        setPasRepertoirePhoto(properties.getProperty("PasRepertoirePhoto"));
+        setTempsAdherence(properties.getProperty("TempsAdherence"));
+        setCatalogLrcat(properties.getProperty("CatalogLrcat"));
+        setDryRun(properties.getProperty("dryRun", "true").compareTo("true") == 0);
+        setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
+        setBazar(properties.getProperty("repBazar"));
+        setBaseDir(properties.getProperty("BaseDir"));
+    }
+
+    public static String getCatalogLrcat() {
+        return catalogLrcat;
+    }
+
+    public static void setCatalogLrcat(String catalogLrcat) {
+        Context.catalogLrcat = catalogLrcat;
+    }
+
 
     public static void savePropertiesParameters() {
         LOGGER.info("savePropertiesParameters");

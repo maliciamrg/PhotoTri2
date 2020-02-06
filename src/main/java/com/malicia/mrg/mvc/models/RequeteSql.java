@@ -242,4 +242,8 @@ public class RequeteSql {
     public static void updateRepertoryName(String id_local, String rootFolder, String repertoiredest) {
         LOGGER.info("updateRepertoryName");
     }
+
+    public static ResultSet sqlGetAllRoot() {
+        return SQLiteJDBCDriverConnection.select("select name , absolutePath from AgLibraryRootFolder ;");
+    }
 }

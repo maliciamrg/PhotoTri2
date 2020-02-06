@@ -3,6 +3,10 @@ package com.malicia.mrg.mvc.controllers;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.GrpPhoto;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
@@ -23,6 +27,13 @@ public class mainFrameController {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    Map<String, String> abspath = new HashMap<String, String>();
+    @FXML
+    private ChoiceBox rootSelected;
+
+    public mainFrameController() {
+        LOGGER.info("mainFrameController");
+    }
 
     public static void regrouperNewParAdherence() {
         LOGGER.info("regrouperNewParAdherence");
@@ -32,20 +43,23 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    public static void selectLeRepertoireRootduFichierLigthroom() {
-        LOGGER.info("selectLeRepertoireRootduFichierLigthroom");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-selecttioner le repertoire root sur lequelle les actions seront baser ");
-        LOGGER.info("-modifier et sauvegarde dans le properties");
-        LOGGER.info("---------------------------------------------------------------------------");
-    }
     public static void selectLeRepertoirePhysiqueNew() {
         LOGGER.info("selectLeRepertoirePhysiqueNew");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-selecttioner le repertoire ou sont les photo new");
         LOGGER.info("-modifier et sauvegarde dans le properties");
         LOGGER.info("---------------------------------------------------------------------------");
+        //Create a file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
+        if (file != null) {
+            LOGGER.info("selectedFile:" + file.getAbsolutePath());
+            Context.setRepertoireNew(file.getAbsolutePath());
+        }
+        Context.savePropertiesParameters();
     }
+
     public static void selectPatternDesRepertoirePhotoTrier() {
         LOGGER.info("selectPatternDesRepertoirePhotoTrier");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -53,13 +67,15 @@ public class mainFrameController {
         LOGGER.info("-a l'appelation RepertoirePhotoTrier");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     private static void purgeRepertoireVide() {
         LOGGER.info("purgeRepertoireVide");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-purge les repertoires vide baser sur le root  (physique et logique)");
         LOGGER.info("---------------------------------------------------------------------------");
     }
-    public static void deplaceUnePhoto(String photo , String repertoiredest) {
+
+    public static void deplaceUnePhoto(String photo, String repertoiredest) {
         LOGGER.info("deplaceUnePhoto");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-deplace une photo dans le repertoire (physique et logique)");
@@ -131,6 +147,7 @@ public class mainFrameController {
         LOGGER.info("-extrait le catalog LRCAT de ligthroom et l'ajoute au zip");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void desarchiveUnRepertoireRejet(String repertoireRejet) {
         LOGGER.info("desarchiveUnRepertoireRejet");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -138,6 +155,7 @@ public class mainFrameController {
         LOGGER.info("-dezip le catalog LRCAT rejet dans le catalog ligthroom");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void selectScriptDeSauvegarde() {
         LOGGER.info("selectScriptDeSauvegarde");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -147,12 +165,14 @@ public class mainFrameController {
         LOGGER.info("-modifier et sauvegarde dans le properties");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void applicationDeLaComandeDeSauvegarde() {
         LOGGER.info("applicationDeLaSolutionDeSauvegarde");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-execute sur le system la commande de copy sauvegarde");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     private static void sugerrerDesRepertoirePourLeBazar() {
         LOGGER.info("sugerrerDesRepertoirePourLeBazar");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -163,6 +183,7 @@ public class mainFrameController {
         LOGGER.info("-Puis choisir si la photo doit aller dans un de c'est répertoire ou rester dans le bazar");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     private static void sugerrerNomDeRepertoire(String repertoire) {
         LOGGER.info("sugerrerNomDeRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -174,6 +195,7 @@ public class mainFrameController {
         LOGGER.info("-Pour constituer un nom de répertoire conforme");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void selectLimiteurParTypeRepertoire() {
         LOGGER.info("selectLimiteurParTypeRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -182,6 +204,7 @@ public class mainFrameController {
         LOGGER.info("-modifier et sauvegarde dans le properties");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void verifierLimiteur() {
         LOGGER.info("verifierLimiteur");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -189,6 +212,7 @@ public class mainFrameController {
         LOGGER.info("-editiion du resultat dans un fichier txt et affichage fichier txt ");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void selectMotCleDeConstitutiionRepertoirePhotoTrier() {
         LOGGER.info("selectMotCleDeConstitutiionRepertoirePhotoTrier");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -197,68 +221,29 @@ public class mainFrameController {
         LOGGER.info("-modifier et sauvegarde dans le properties");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void renommerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
         LOGGER.info("renommerLesPhotosEnFonctiionDuNomDuRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-renommer les photos du RepertoirePhotoTrier en fonction du nom de " );
+        LOGGER.info("-renommer les photos du RepertoirePhotoTrier en fonction du nom de ");
         LOGGER.info("-RepertoirePhotoTrier en ajoutant un numero sequentiel (physique et logique)");
         LOGGER.info("---------------------------------------------------------------------------");
     }
+
     public static void taggerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
         LOGGER.info("taggerLesPhotosEnFonctiionDuNomDuRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-tagger les photos du RepertoirePhotoTrier en fonction du nom de " );
+        LOGGER.info("-tagger les photos du RepertoirePhotoTrier en fonction du nom de ");
         LOGGER.info("-RepertoirePhotoTrier en ajoutant un numero sequentiel");
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    public void selectFichierLigthroom() {
-        LOGGER.info("do:selectFichierLigthroom");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
-        LOGGER.info("-modifier et sauvegarde dans le properties");
-        LOGGER.info("---------------------------------------------------------------------------");
-        //Create a file chooser
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
-        if (file != null) {
-            LOGGER.info("selectedFile:"+file.getAbsolutePath());
-            Context.setCatalogLrcat(file.getAbsolutePath());
-        }
-        Context.savePropertiesParameters();
-    }
-    public void deleteEmptyDirectory() {
-        LOGGER.info("do:deleteEmptyDirectory");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-suprimmer tout les repertoires vide (physique et logique)" );
-        LOGGER.info("---------------------------------------------------------------------------");
-        if (!Context.getDryRun()) {
-            File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
-            boucleDeleteRepertoirePhysique(directory);
-            boucleDeleteRepertoireLogique();
-        }
-    }
-
-    public void renommerUnRepertoire(String repertoiresource , String repertoiredest,String id_local , String rootFolder) {
-        LOGGER.info("do:renommerUnRepertoire");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-renomme un repertoire (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
-        File directory = new File(repertoiresource);
-        File directorydest = new File(repertoiredest);
-        if (directory.isDirectory()) {
-            directory.renameTo(directorydest);
-            RequeteSql.updateRepertoryName(id_local,rootFolder,repertoiredest);
-        }
-
-    }
     private static boolean boucleDeleteRepertoirePhysique(File dir) {
         boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
             boolean success = true;
-            for (int i = 0; i < children.length; i++){
+            for (int i = 0; i < children.length; i++) {
                 success &= boucleDeleteRepertoirePhysique(new File(dir, children[i]));
             }
 
@@ -283,8 +268,6 @@ public class mainFrameController {
         }
         while (nbdel > 0);
     }
-
-
 
     private static ImageIcon getImageiconResized(URL imagesJpg) {
         LOGGER.finest(imagesJpg.toString());
@@ -315,37 +298,6 @@ public class mainFrameController {
         }
     }
 
-    private static java.util.List<GrpPhoto> exceptNewGroup(java.util.List<GrpPhoto> groupDePhoto, java.util.List<String> KidsModelList) {
-        java.util.List<GrpPhoto> excptgdp = new ArrayList();
-        GrpPhoto Bazaz = new GrpPhoto( Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew()+ "/");
-        GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew()+ "/");
-        GrpPhoto Kidz = new GrpPhoto("@Kidz", Context.getAbsolutePathFirst(), Context.getRepertoireNew()+ "/");
-
-
-        Iterator<GrpPhoto> groupDePhotoIterator = groupDePhoto.iterator();
-
-        while (groupDePhotoIterator.hasNext()) {
-            GrpPhoto gdp = groupDePhotoIterator.next();
-            if (KidsModelList.contains(gdp.getCameraModelGrp())) {
-                Kidz.add(gdp.getEle());
-            } else {
-                if (gdp.getnbele() <= 5) {
-                    Bazaz.add(gdp.getEle());
-                } else {
-                    if (gdp.dateNull()){
-                        NoDate.add(gdp.getEle());
-                    } else {
-                        excptgdp.add(gdp) ;
-                    }
-                }
-            }
-        }
-        excptgdp.add(Bazaz);
-        excptgdp.add(NoDate);
-        excptgdp.add(Kidz);
-        return excptgdp;
-    }
-
     private static java.util.List<GrpPhoto> regroupeByNewGroup(java.util.List<String> kidsModelList) {
 
 //            constitution des groupe
@@ -364,9 +316,9 @@ public class mainFrameController {
 
                 // Now we can fetch the data by column name, save and use them!
                 String CameraModel = rs.getString("CameraModel");
-                if (!kidsModelList.contains(CameraModel)){
+                if (!kidsModelList.contains(CameraModel)) {
                     CameraModel = " ";
-                };
+                }
                 long captureTime = rs.getLong("captureTime");
                 long mint = rs.getLong("mint");
                 long maxt = rs.getLong("maxt");
@@ -403,6 +355,37 @@ public class mainFrameController {
         return ggp;
     }
 
+    private static java.util.List<GrpPhoto> exceptNewGroup(java.util.List<GrpPhoto> groupDePhoto, java.util.List<String> KidsModelList) {
+        java.util.List<GrpPhoto> excptgdp = new ArrayList();
+        GrpPhoto Bazaz = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto Kidz = new GrpPhoto("@Kidz", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+
+
+        Iterator<GrpPhoto> groupDePhotoIterator = groupDePhoto.iterator();
+
+        while (groupDePhotoIterator.hasNext()) {
+            GrpPhoto gdp = groupDePhotoIterator.next();
+            if (KidsModelList.contains(gdp.getCameraModelGrp())) {
+                Kidz.add(gdp.getEle());
+            } else {
+                if (gdp.getnbele() <= 5) {
+                    Bazaz.add(gdp.getEle());
+                } else {
+                    if (gdp.dateNull()) {
+                        NoDate.add(gdp.getEle());
+                    } else {
+                        excptgdp.add(gdp);
+                    }
+                }
+            }
+        }
+        excptgdp.add(Bazaz);
+        excptgdp.add(NoDate);
+        excptgdp.add(Kidz);
+        return excptgdp;
+    }
+
     private static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
 //       Execution du deplacement
 
@@ -417,22 +400,21 @@ public class mainFrameController {
             nbrow += gptemp.getnbele();
 
             Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
-            LOGGER.finer("GrpPhoto:"+gptemp.toString());
-            LOGGER.finer(" hashRet:"+hashRet.toString());
-            mergeHashtable (codeRetourAction ,hashRet);
+            LOGGER.finer("GrpPhoto:" + gptemp.toString());
+            LOGGER.finer(" hashRet:" + hashRet.toString());
+            mergeHashtable(codeRetourAction, hashRet);
         }
 
 
-
-        LOGGER.info((dryRun?"dryRun =>":"") +  codeRetourAction.toString());
+        LOGGER.info((dryRun ? "dryRun =>" : "") + codeRetourAction.toString());
         nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
         return (nbrow == nbele);
     }
 
     private static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
         Set<String> keys = groupAndMouveEle.keySet();
-        for(String key: keys){
-            if (key.compareTo(GrpPhoto.LISTE_ERREUR )!=0) {
+        for (String key : keys) {
+            if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
                 if (dReturnEle.containsKey(key)) {
                     int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
                     dReturnEle.put(key, val);
@@ -441,6 +423,82 @@ public class mainFrameController {
                 }
 //            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
             }
+        }
+
+    }
+
+    @FXML
+    public void initialize() {
+        LOGGER.info("initialize");
+        ResultSet rs = RequeteSql.sqlGetAllRoot();
+        try {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                abspath.put(name, rs.getString("absolutePath"));
+                rootSelected.getItems().add(name);
+            }
+            rootSelected.setValue(rootSelected.getItems().get(0));
+            rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
+        LOGGER.info("selectLeRepertoireRootduFichierLigthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le repertoire root sur lequelle les actions seront baser ");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("abspath.get(rootName)" + abspath.get(rootName));
+        Context.setRoot(abspath.get(rootName));
+        Context.savePropertiesParameters();
+    }
+
+    public void selectFichierLigthroom() {
+        LOGGER.info("do:selectFichierLigthroom");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
+        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("---------------------------------------------------------------------------");
+        //Create a file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
+        if (file != null) {
+            LOGGER.info("selectedFile:" + file.getAbsolutePath());
+            Context.setCatalogLrcat(file.getAbsolutePath());
+        }
+        Context.savePropertiesParameters();
+    }
+
+    public void deleteEmptyDirectory() {
+        LOGGER.info("do:deleteEmptyDirectory");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-suprimmer tout les repertoires vide (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+        if (!Context.getDryRun()) {
+            File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
+            boucleDeleteRepertoirePhysique(directory);
+            boucleDeleteRepertoireLogique();
+        }
+    }
+
+    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String id_local, String rootFolder) {
+        LOGGER.info("do:renommerUnRepertoire");
+        LOGGER.info("---------------------------------------------------------------------------");
+        LOGGER.info("-renomme un repertoire (physique et logique)");
+        LOGGER.info("---------------------------------------------------------------------------");
+        File directory = new File(repertoiresource);
+        File directorydest = new File(repertoiredest);
+        if (directory.isDirectory()) {
+            directory.renameTo(directorydest);
+            RequeteSql.updateRepertoryName(id_local, rootFolder, repertoiredest);
         }
 
     }
