@@ -1,0 +1,45 @@
+
+†squid:S4165Î"gRemove this useless assignment; "returnVal" already holds the assigned value along all execution paths.(²íÌ8¡ìË¥….
+Ÿsquid:S11865"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(µØØ8Ü•Ì§….
+vsquid:S00117Î"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾š—”ûÿÿÿÿ8¡ìË¥….
+€squid:S2629ÿ"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(§š–ùüÿÿÿÿ8¡ìË¥….
+vsquid:S00117¯"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ–“øÿÿÿÿ8¡ìË¥….
+Zsquid:S1172¢";Remove this unused method parameter "RepertoirePhotoTrier".(¹ñ“8¡ìË¥….
+[
+squid:S899ü"=Do something with the "boolean" value returned by "renameTo".(ıÜóÁ8¡ìË¥….
+jsquid:CommentedOutCodeLineš"<This block of commented-out lines of code should be removed.(ßó—8¡ìË¥….
+{squid:S2629È"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(ç—ùè8¡ìË¥….
+usquid:S1149ş"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(à¿· 8¡ìË¥….
+_squid:S1172¯";Remove this unused method parameter "RepertoirePhotoTrier".(ñ–“øÿÿÿÿ8¡ìË¥….
+zsquid:S1149÷"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(á„üÿÿÿÿ8¡ìË¥….
+osquid:CommentedOutCodeLineÿ"<This block of commented-out lines of code should be removed.(üÆ±øÿÿÿÿ8¡ìË¥….
+msquid:S001005"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µØØ8®ÇÍ§….
+€squid:S2629…"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(ÇĞ«÷øÿÿÿÿ8¡ìË¥….
+squid:S1319"zThe type of the "groupAndMouveEle" object should be an interface such as "Map" rather than the implementation "Hashtable".(ç‰—ûşÿÿÿÿ8§üŞ§….
+˜squid:S1319"tThe type of the "dReturnEle" object should be an interface such as "Map" rather than the implementation "Hashtable".(ç‰—ûşÿÿÿÿ8§üŞ§….
+Zsquid:S1172¯"6Remove this unused method parameter "repertoireRejet".(ÔØñ‹şÿÿÿÿ8¡ìË¥….
+qsquid:S00117Ï"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÒıÒº8¡ìË¥….
+±squid:S1192?"Define a constant instead of duplicating this literal "---------------------------------------------------------------------------" 38 times.(‘“˜¦ıÿÿÿÿ8Ü•Ì§….
+Usquid:S1172î"1Remove this unused method parameter "repertoire".(¬Š½ùÿÿÿÿ8¡ìË¥….
+qsquid:S00117Í"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÍÌÓ½8¡ìË¥….
+zsquid:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(ç‰—ûşÿÿÿÿ8¡ìË¥….
+Dsquid:S1172i"&Remove these unused method parameters.(ëåÛï8¡ìË¥….
+osquid:CommentedOutCodeLine¯"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ùåÉ¿.
+Gsquid:S1148µ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8¡ìË¥….
+vsquid:S2293$"YReplace the type specification in this constructor call with the diamond operator ("<>").(ŒÎµ8ªŸ•À.
+qsquid:S00117Ë"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼„•™8»Û¾.
+jsquid:CommentedOutCodeLine²"<This block of commented-out lines of code should be removed.(‘õ 8¡ìË¥….
+vsquid:S00117ô"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(§ş‡öÿÿÿÿÿ8¡ìË¥….
+lsquid:S00101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(¤“ì´8ùåÉ¿.
+qsquid:S00117¢"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹ñ“8¡ìË¥….
+Gsquid:S1148¾"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8¡ìË¥….
+zsquid:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(ç‰—ûşÿÿÿÿ8¡ìË¥….
+Usquid:S1172¼"6Remove this unused method parameter "repertoireRejet".(×ÕÜÒ8¡ìË¥….
+hsquid:S4042É"IUse "java.nio.Files#delete" here for better messages on error conditions.(—Ş…¯8¡ìË¥….
+vsquid:S00117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôìîûÿÿÿÿ8¡ìË¥….
+squid:S1192Í"kDefine a constant instead of duplicating this literal "-modifier et sauvegarde dans le properties" 5 times.(Ô±Ì¹úÿÿÿÿ8¡ìË¥….
+{squid:S2629Ú"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(¾á×È8¡ìË¥….
+Esquid:S1075æ"&Remove this hard-coded path-delimiter.(”é‘—8¡ìË¥….
+Csquid:S2629æ"$Invoke method(s) only conditionally.(ÈÒıˆ8¡ìË¥….
+osquid:CommentedOutCodeLineº"<This block of commented-out lines of code should be removed.(ÑÑÚ±şÿÿÿÿ8¡ìË¥….
+€squid:S2629€"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(—¡òúøÿÿÿÿ8¡ìË¥….

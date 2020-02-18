@@ -6,10 +6,7 @@ import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -17,7 +14,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Context {
-    private final static Context instance = new Context();
+    private static final Context instance = new Context();
     private static final Logger LOGGER;
     private static mainFrameController controller;
     private static String root;
@@ -29,9 +26,12 @@ public class Context {
     private static String pasRepertoirePhoto = "";
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
-    private static String Bazar = "";
+    private static String bazar = "";
     private static List<String> kidsModelList;
 
+    /**
+     *
+     */
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
@@ -81,11 +81,11 @@ public class Context {
     }
 
     public static String getBazar() {
-        return Bazar;
+        return bazar;
     }
 
     public static void setBazar(String bazar) {
-        Bazar = bazar;
+        Context.bazar = bazar;
     }
 
     public static List<String> getKidsModelList() {
@@ -130,9 +130,6 @@ public class Context {
 
     public static void setup() {
 
-        // get the global logger to configure it
-        Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
         InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
         try {
             LogManager.getLogManager().readConfiguration(stream);
@@ -157,11 +154,12 @@ public class Context {
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
     }
 
+
     public static void initPropertiesParameters() {
         FileReader reader = null;
 
         try {
-            reader = new FileReader("resource/config.properties");
+            reader = new FileReader(Main.class.getClassLoader().getResource("config.properties").getFile());
         } catch (FileNotFoundException e) {
             LOGGER.severe(e.getMessage());
         }

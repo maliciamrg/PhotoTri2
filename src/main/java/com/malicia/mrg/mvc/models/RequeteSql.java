@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+/**
+ * The type Requete sql.
+ */
 public class RequeteSql {
 
     private RequeteSql() {
@@ -19,6 +22,13 @@ public class RequeteSql {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    /**
+     * Sql combine all groupless in group by plage adherance.
+     *
+     * @param pasRepertoirePhoto the pas repertoire photo
+     * @param tempsAdherence     the temps adherence
+     * @param repertoireNew      the repertoire new
+     */
     public static void sqlCombineAllGrouplessInGroupByPlageAdherance(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
 //
@@ -34,8 +44,8 @@ public class RequeteSql {
         //      CameraModel
         SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE Repertory AS  " +
                 "select " +
-                " strftime('%s', DATETIME( e.captureTime,\"-"+ tempsAdherence +"\")) as mint , " +
-                " strftime('%s', DATETIME(e.captureTime,\"+"+ tempsAdherence +"\")) as maxt , " +
+                " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
                 " b.pathFromRoot , " +
                 " c.absolutePath , " +
                 " e.captureTime as captureTimeOrig , " +
@@ -54,7 +64,7 @@ public class RequeteSql {
                 "Where  b.pathFromRoot not like \"%" + pasRepertoirePhoto + "%\" " +
                 " ;");
 
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS NewPhoto;  " );
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS NewPhoto;  ");
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
         //
@@ -65,7 +75,7 @@ public class RequeteSql {
         //      absolutePath
         //      originalFilename
         //      captureTimeOrig
-        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE NewPhoto AS  " +
+        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE NewPhoto AS  " +
                 "select  " +
                 " strftime('%s', e.captureTime) as captureTime , " +
                 " aiecm.value as CameraModel ," +
@@ -86,7 +96,7 @@ public class RequeteSql {
                 "ON ahem.cameraModelRef = aiecm.id_local " +
                 "Where b.pathFromRoot like \"%" + repertoireNew + "%" + "\";  ");
 
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS SelectionRepertoire;  " );
+        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS SelectionRepertoire;  ");
 
         //Extraction les combinansons
         // photo groupless dans la plages d'adherence
@@ -95,7 +105,7 @@ public class RequeteSql {
         // SelectionRepertoire
         //      src (groupeless)
         //      dest (groupe possible)
-        SQLiteJDBCDriverConnection.execute( "CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
+        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
                 "SELECT distinct  " +
                 " b.pathFromRoot || b.originalFilename as src , " +
                 " a.absolutePath || a.pathFromRoot as dest " +
@@ -106,6 +116,11 @@ public class RequeteSql {
                 ";");
     }
 
+    /**
+     * Sql delete repertory int.
+     *
+     * @return the int
+     */
     public static int sqlDeleteRepertory() {
 
         //compte le nombre de photo presente dans la base poour le repertoire
@@ -141,12 +156,18 @@ public class RequeteSql {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             return 0;
         }
         return 0;
     }
 
+    /**
+     * Sql group groupless by plage adherance result set.
+     *
+     * @param tempsAdherence the temps adherence
+     * @return the result set
+     */
     public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence) {
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
@@ -162,30 +183,36 @@ public class RequeteSql {
         //      captureTimeOrig
         return SQLiteJDBCDriverConnection.select(
                 "select  " +
-                " strftime('%s', e.captureTime) as captureTime , " +
-                " strftime('%s', DATETIME( e.captureTime,\"-"+ tempsAdherence +"\")) as mint , " +
-                " strftime('%s', DATETIME(e.captureTime,\"+"+ tempsAdherence +"\")) as maxt , " +
-                " aiecm.value as CameraModel , " +
-                " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
-                " c.absolutePath  as absolutePath , " +
-                " e.captureTime as captureTimeOrig " +
-                "from AgLibraryFile a  " +
-                "inner join AgLibraryFolder b  " +
-                "on a.folder = b.id_local  " +
-                "inner join AgLibraryRootFolder c  " +
-                "on b.rootFolder = c.id_local  " +
-                "inner join Adobe_images e  " +
-                "on a.id_local = e.rootFile  " +
-                "LEFT JOIN AgHarvestedExifMetadata ahem " +
-                "ON e.id_local = ahem.image " +
-                "LEFT JOIN AgInternedExifCameraModel aiecm " +
-                "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where b.pathFromRoot like \"" + Context.getRepertoireNew() + "%" + "\"" +
+                        " strftime('%s', e.captureTime) as captureTime , " +
+                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
+                        " aiecm.value as CameraModel , " +
+                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath  as absolutePath , " +
+                        " e.captureTime as captureTimeOrig " +
+                        "from AgLibraryFile a  " +
+                        "inner join AgLibraryFolder b  " +
+                        "on a.folder = b.id_local  " +
+                        "inner join AgLibraryRootFolder c  " +
+                        "on b.rootFolder = c.id_local  " +
+                        "inner join Adobe_images e  " +
+                        "on a.id_local = e.rootFile  " +
+                        "LEFT JOIN AgHarvestedExifMetadata ahem " +
+                        "ON e.id_local = ahem.image " +
+                        "LEFT JOIN AgInternedExifCameraModel aiecm " +
+                        "ON ahem.cameraModelRef = aiecm.id_local " +
+                        "Where b.pathFromRoot like \"" + Context.getRepertoireNew() + "%" + "\"" +
 //                        " Order by CameraModel , captureTime ;  ");
                         " Order by captureTime ;  ");
 
     }
 
+    /**
+     * Liste exif new result set.
+     *
+     * @param repertoirePhoto the repertoire photo
+     * @return the result set
+     */
     public static ResultSet listeExifNew(String repertoirePhoto) {
         return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
                 "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
@@ -216,6 +243,11 @@ public class RequeteSql {
 
     }
 
+    /**
+     * Selection repertoire result set.
+     *
+     * @return the result set
+     */
     public static ResultSet selectionRepertoire() {
         return SQLiteJDBCDriverConnection.select("SELECT a.dest  " +
                 ", count(*) as nb " +
@@ -225,13 +257,18 @@ public class RequeteSql {
     }
 
 
+    /**
+     * Gets path first.
+     *
+     * @return the path first
+     */
     public static String getabsolutePathFirst() {
         ResultSet rs = SQLiteJDBCDriverConnection.select("select absolutePath " +
                 "from AgLibraryRootFolder " +
                 ";");
         try {
-            while (rs.next()){
-                    return rs.getString("absolutePath");
+            while (rs.next()) {
+                return rs.getString("absolutePath");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -239,10 +276,31 @@ public class RequeteSql {
         return "";
     }
 
-    public static void updateRepertoryName(String id_local, String rootFolder, String repertoiredest) {
-        LOGGER.info("updateRepertoryName");
+    /**
+     * Update repertory name.
+     *  @param id_local       the id local
+     * @param newpathfromroot     the root folder
+     */
+    public static void updateRepertoryName(String id_local, String newpathfromroot) throws SQLException {
+        String sql = " Update AgLibraryFolder " +
+                " set pathFromRoot = ? " +
+                " where id_local = ? " +
+                " ; ";
+
+        PreparedStatement pstmt = null;
+
+        pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
+        pstmt.setString(1,newpathfromroot);
+        pstmt.setString(2,id_local);
+        pstmt.executeUpdate();
+
     }
 
+    /**
+     * Sql get all root result set.
+     *
+     * @return the result set
+     */
     public static ResultSet sqlGetAllRoot() {
         return SQLiteJDBCDriverConnection.select("select name , absolutePath from AgLibraryRootFolder ;");
     }

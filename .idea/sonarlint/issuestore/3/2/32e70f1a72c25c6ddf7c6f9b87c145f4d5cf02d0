@@ -1,0 +1,17 @@
+
+qsquid:S00117ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾îŸË8é’ä¯.
+ssquid:S11920"\Define a constant instead of duplicating this literal "inner join Adobe_images e  " 3 times.(·»†ì
+usquid:S1192,"_Define a constant instead of duplicating this literal "inner join AgLibraryFolder b  " 3 times.(Ÿˆ”'
+~squid:S11922"hDefine a constant instead of duplicating this literal "LEFT JOIN AgHarvestedExifMetadata ahem " 3 times.(òÍåh
+squid:S1192."cDefine a constant instead of duplicating this literal "inner join AgLibraryRootFolder c  " 3 times.(àô¥øÿÿÿÿ
+wsquid:S1192-"[Define a constant instead of duplicating this literal "on a.folder = b.id_local  " 3 times.(¸ˆº¿úÿÿÿÿ
+…squid:S11925"iDefine a constant instead of duplicating this literal "ON ahem.cameraModelRef = aiecm.id_local " 3 times.(ÄˆÄæúÿÿÿÿ
+Gsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ë×¤ø-
+‡squid:S11924"kDefine a constant instead of duplicating this literal "LEFT JOIN AgInternedExifCameraModel aiecm " 3 times.(ª‚×Ÿøÿÿÿÿ
+tsquid:S11921"]Define a constant instead of duplicating this literal "on a.id_local = e.rootFile  " 3 times.(¼€¯
+Gsquid:S1148í"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ğ°ú-
+nsquid:S2095‹"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Íğú‡8¼ó…ü-
+{squid:S1192/"_Define a constant instead of duplicating this literal "on b.rootFolder = c.id_local  " 3 times.(áššœıÿÿÿÿ
+Esquid:S1172ò"&Remove these unused method parameters.(¾îŸË8¬çä¯.
+isquid:CommentedOutCodeLine¸"<This block of commented-out lines of code should be removed.(š›¹8Ú »¾÷-
+xsquid:S11923"\Define a constant instead of duplicating this literal "ON e.id_local = ahem.image " 3 times.(ÊĞåÏüÿÿÿÿ

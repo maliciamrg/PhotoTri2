@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * The type Main frame controller.
+ */
 public class mainFrameController {
 
     private static final Logger LOGGER;
@@ -27,27 +30,39 @@ public class mainFrameController {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    Map<String, String> abspath = new HashMap<String, String>();
+    /**
+     * The Absolute path.
+     */
+    Map<String, String> absolutePath = new HashMap<String, String>();
     @FXML
     private ChoiceBox rootSelected;
 
+    /**
+     * Instantiates a new Main frame controller.
+     */
     public mainFrameController() {
         LOGGER.info("mainFrameController");
     }
 
-    public static void regrouperNewParAdherence() {
-        LOGGER.info("regrouperNewParAdherence");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-Regrouper toute les photo/video par date +-adherence dans des repertoires");
-        LOGGER.info("-pour faciliter le classement (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
+    /**
+     * Regrouper new par adherence.
+     * <p>
+     * Regrouper toute les photo/vidéo par date +-adhérence dans des répertoires
+     * pour faciliter le classement (physique et logique)
+     */
+    public static void regrouperNetParAdhérences() {
     }
 
+    /**
+     * Select le repertoire physique new.
+     * sélectionner le répertoire ou sont les photo new
+     * modifier et sauvegarde dans le properties
+     */
     public static void selectLeRepertoirePhysiqueNew() {
         LOGGER.info("selectLeRepertoirePhysiqueNew");
         LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-selecttioner le repertoire ou sont les photo new");
-        LOGGER.info("-modifier et sauvegarde dans le properties");
+        LOGGER.info("-");
+        LOGGER.info("-");
         LOGGER.info("---------------------------------------------------------------------------");
         //Create a file chooser
         FileChooser fileChooser = new FileChooser();
@@ -60,6 +75,9 @@ public class mainFrameController {
         Context.savePropertiesParameters();
     }
 
+    /**
+     * Select pattern des repertoire photo trier.
+     */
     public static void selectPatternDesRepertoirePhotoTrier() {
         LOGGER.info("selectPatternDesRepertoirePhotoTrier");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -68,13 +86,22 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    private static void purgeRepertoireVide() {
+    /**
+     * Purge repertoire vide.
+     */
+    public static void purgeRepertoireVide() {
         LOGGER.info("purgeRepertoireVide");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-purge les repertoires vide baser sur le root  (physique et logique)");
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Deplace une photo.
+     *
+     * @param photo          the photo
+     * @param repertoiredest the repertoiredest
+     */
     public static void deplaceUnePhoto(String photo, String repertoiredest) {
         LOGGER.info("deplaceUnePhoto");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -140,6 +167,11 @@ public class mainFrameController {
 
     }
 
+    /**
+     * Archive un repertoire rejet.
+     *
+     * @param repertoireRejet the repertoire rejet
+     */
     public static void archiveUnRepertoireRejet(String repertoireRejet) {
         LOGGER.info("archiveUnRepertoireRejet");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -148,6 +180,11 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Desarchive un repertoire rejet.
+     *
+     * @param repertoireRejet the repertoire rejet
+     */
     public static void desarchiveUnRepertoireRejet(String repertoireRejet) {
         LOGGER.info("desarchiveUnRepertoireRejet");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -156,6 +193,9 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Select script de sauvegarde.
+     */
     public static void selectScriptDeSauvegarde() {
         LOGGER.info("selectScriptDeSauvegarde");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -166,6 +206,9 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Application de la comande de sauvegarde.
+     */
     public static void applicationDeLaComandeDeSauvegarde() {
         LOGGER.info("applicationDeLaSolutionDeSauvegarde");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -173,7 +216,10 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    private static void sugerrerDesRepertoirePourLeBazar() {
+    /**
+     * Sugerrer des repertoire pour le bazar.
+     */
+    public static void sugerrerDesRepertoirePourLeBazar() {
         LOGGER.info("sugerrerDesRepertoirePourLeBazar");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-pour chaque elmement du bazar sugerrer 3 repertoires possible");
@@ -184,7 +230,12 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    private static void sugerrerNomDeRepertoire(String repertoire) {
+    /**
+     * Sugerrer nom de repertoire.
+     *
+     * @param repertoire the repertoire
+     */
+    public static void sugerrerNomDeRepertoire(String repertoire) {
         LOGGER.info("sugerrerNomDeRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-Pour tous le repertoireRejet");
@@ -196,6 +247,9 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Select limiteur par type repertoire.
+     */
     public static void selectLimiteurParTypeRepertoire() {
         LOGGER.info("selectLimiteurParTypeRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -205,6 +259,9 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Verifier limiteur.
+     */
     public static void verifierLimiteur() {
         LOGGER.info("verifierLimiteur");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -213,6 +270,9 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Select mot cle de constitutiion repertoire photo trier.
+     */
     public static void selectMotCleDeConstitutiionRepertoirePhotoTrier() {
         LOGGER.info("selectMotCleDeConstitutiionRepertoirePhotoTrier");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -222,6 +282,11 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Renommer les photos en fonctiion du nom du repertoire.
+     *
+     * @param RepertoirePhotoTrier the repertoire photo trier
+     */
     public static void renommerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
         LOGGER.info("renommerLesPhotosEnFonctiionDuNomDuRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -230,6 +295,11 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
+    /**
+     * Tagger les photos en fonctiion du nom du repertoire.
+     *
+     * @param RepertoirePhotoTrier the repertoire photo trier
+     */
     public static void taggerLesPhotosEnFonctiionDuNomDuRepertoire(String RepertoirePhotoTrier) {
         LOGGER.info("taggerLesPhotosEnFonctiionDuNomDuRepertoire");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -238,13 +308,19 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
     }
 
-    private static boolean boucleDeleteRepertoirePhysique(File dir) {
+    /**
+     * Boucle supression repertoire physique boolean.
+     *
+     * @param dir the dir
+     * @return the boolean
+     */
+    public static boolean boucleSupressionRepertoirePhysique(File dir) {
         boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
             boolean success = true;
             for (int i = 0; i < children.length; i++) {
-                success &= boucleDeleteRepertoirePhysique(new File(dir, children[i]));
+                success &= boucleSupressionRepertoirePhysique(new File(dir, children[i]));
             }
 
             if (success) {
@@ -260,16 +336,29 @@ public class mainFrameController {
         return returnVal;
     }
 
-    private static void boucleDeleteRepertoireLogique() {
+    /**
+     * Boucle delete repertoire logique.
+     * @return
+     */
+    public static int boucleDeleteRepertoireLogique() {
         int nbdel = 0;
+        int nbdeltotal = 0;
         do {
             nbdel = RequeteSql.sqlDeleteRepertory();
             LOGGER.fine("logical delete:" + String.format("%04d", nbdel));
+            nbdeltotal += nbdel;
         }
         while (nbdel > 0);
+        return nbdeltotal;
     }
 
-    private static ImageIcon getImageiconResized(URL imagesJpg) {
+    /**
+     * Gets imageicon resized.
+     *
+     * @param imagesJpg the images jpg
+     * @return the imageicon resized
+     */
+    public static ImageIcon getImageiconResized(URL imagesJpg) {
         LOGGER.finest(imagesJpg.toString());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //this is your screen size
         ImageIcon imageIcon = new ImageIcon(imagesJpg); //imports the image
@@ -285,7 +374,10 @@ public class mainFrameController {
         return imageIcon2;
     }
 
-    private static void moveNewToGrpPhotos() {
+    /**
+     * Move new to grp photos.
+     */
+    public static void moveNewToGrpPhotos() {
         RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getPasRepertoirePhoto(), Context.getTempsAdherence(), Context.getRepertoireNew());
 
         java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
@@ -298,7 +390,13 @@ public class mainFrameController {
         }
     }
 
-    private static java.util.List<GrpPhoto> regroupeByNewGroup(java.util.List<String> kidsModelList) {
+    /**
+     * Regroupe by new group java . util . list.
+     *
+     * @param kidsModelList the kids model list
+     * @return the java . util . list
+     */
+    public static java.util.List<GrpPhoto> regroupeByNewGroup(List<String> kidsModelList) {
 
 //            constitution des groupe
 
@@ -355,7 +453,14 @@ public class mainFrameController {
         return ggp;
     }
 
-    private static java.util.List<GrpPhoto> exceptNewGroup(java.util.List<GrpPhoto> groupDePhoto, java.util.List<String> KidsModelList) {
+    /**
+     * Except new group java . util . list.
+     *
+     * @param groupDePhoto  the group de photo
+     * @param KidsModelList the kids model list
+     * @return the java . util . list
+     */
+    public static java.util.List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList) {
         java.util.List<GrpPhoto> excptgdp = new ArrayList();
         GrpPhoto Bazaz = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
         GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
@@ -386,7 +491,14 @@ public class mainFrameController {
         return excptgdp;
     }
 
-    private static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
+    /**
+     * Moveto new group boolean.
+     *
+     * @param dryRun the dry run
+     * @param ggp    the ggp
+     * @return the boolean
+     */
+    public static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
 //       Execution du deplacement
 
         LOGGER.fine("Printing result...");
@@ -411,7 +523,13 @@ public class mainFrameController {
         return (nbrow == nbele);
     }
 
-    private static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
+    /**
+     * Merge hashtable.
+     *
+     * @param dReturnEle       the d return ele
+     * @param groupAndMouveEle the group and mouve ele
+     */
+    public static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
         Set<String> keys = groupAndMouveEle.keySet();
         for (String key : keys) {
             if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
@@ -427,6 +545,9 @@ public class mainFrameController {
 
     }
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
         LOGGER.info("initialize");
@@ -434,7 +555,7 @@ public class mainFrameController {
         try {
             while (rs.next()) {
                 String name = rs.getString("name");
-                abspath.put(name, rs.getString("absolutePath"));
+                absolutePath.put(name, rs.getString("absolutePath"));
                 rootSelected.getItems().add(name);
             }
             rootSelected.setValue(rootSelected.getItems().get(0));
@@ -449,17 +570,25 @@ public class mainFrameController {
         }
     }
 
-    private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
+    /**
+     * Select le repertoire rootdu fichier ligthroom.
+     *
+     * @param rootName the root name
+     */
+    public void selectLeRepertoireRootduFichierLigthroom(String rootName) {
         LOGGER.info("do:selectLeRepertoireRootduFichierLigthroom");
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("-selecttioner le repertoire root sur lequelle les actions seront baser ");
         LOGGER.info("-modifier et sauvegarde dans le properties");
         LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("abspath.get(rootName)" + abspath.get(rootName));
-        Context.setRoot(abspath.get(rootName));
+        LOGGER.info("absolutePath.get(rootName)" + absolutePath.get(rootName));
+        Context.setRoot(absolutePath.get(rootName));
         Context.savePropertiesParameters();
     }
 
+    /**
+     * Select fichier ligthroom.
+     */
     public void selectFichierLigthroom() {
         LOGGER.info("do:selectFichierLigthroom");
         LOGGER.info("---------------------------------------------------------------------------");
@@ -477,30 +606,55 @@ public class mainFrameController {
         Context.savePropertiesParameters();
     }
 
-    public void deleteEmptyDirectory() {
-        LOGGER.info("do:deleteEmptyDirectory");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-suprimmer tout les repertoires vide (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
+    /**
+     * Delete empty directory.
+     *
+     * suprimmer tout les repertoires vide (physique et logique)
+     * @return
+     */
+    public int deleteEmptyDirectory() {
         if (!Context.getDryRun()) {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
-            boucleDeleteRepertoirePhysique(directory);
-            boucleDeleteRepertoireLogique();
+            boucleSupressionRepertoirePhysique(directory);
+            int ndDelTotal = boucleDeleteRepertoireLogique();
+            LOGGER.info("logical delete all :" + String.format("%04d", ndDelTotal));
+            return  1 + ndDelTotal;
         }
+        return 0;
     }
 
-    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String id_local, String rootFolder) {
-        LOGGER.info("do:renommerUnRepertoire");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-renomme un repertoire (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
+    /**
+     * Renommer un repertoire.
+     *
+     * renomme un repertoire (physique et logique)
+     *
+     * @param repertoiresource the repertoiresource
+     * @param repertoiredest   the repertoiredest
+     * @param id_local         the id local
+     * @param rootFolder       the root folder
+     */
+    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String id_local, String rootFolder) throws SQLException {
         File directory = new File(repertoiresource);
         File directorydest = new File(repertoiredest);
         if (directory.isDirectory()) {
             directory.renameTo(directorydest);
-            RequeteSql.updateRepertoryName(id_local, rootFolder, repertoiredest);
+            RequeteSql.updateRepertoryName(id_local, composeRelativeRep(rootFolder, repertoiredest));
         }
 
     }
+
+    /**
+     * Compose le nom de repertoire relative au rootfolder
+     *
+     * soustrait le rootfolde rau nom de repertoire pour maj dans la table libraryFolder
+     *
+     * @param rootFolder
+     * @param repertoiredest
+     * @return
+     */
+    public String composeRelativeRep(String rootFolder, String repertoiredest) {
+        return repertoiredest.replace(rootFolder,"");
+    }
+
 
 }

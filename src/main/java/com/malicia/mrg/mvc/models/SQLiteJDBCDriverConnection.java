@@ -94,12 +94,41 @@ public class SQLiteJDBCDriverConnection {
         try {
             stmt = conn.createStatement();
             LOGGER.finest(sql);
-            return stmt.executeQuery(sql);
+
+            // forcage display du resultset
+            ResultSet resultSet = stmt.executeQuery(sql);
+            display_resultset(resultSet);
+
+            return  stmt.executeQuery(sql);
 
 
         } catch (SQLException e) {
             LOGGER.severe(e.getMessage());
         }
         return null;
+    }
+
+    private static void display_resultset(ResultSet resultSet) throws SQLException {
+        ResultSet resultSetAff = resultSet;
+
+        ResultSetMetaData rsmd = resultSetAff.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+
+        String colname = " + ";
+        for (int i = 1; i <= columnsNumber; i++) {
+            colname += String.format("%-20s" , rsmd.getColumnName(i)) + " + " ;
+            ;
+        }
+        LOGGER.finest(colname);
+
+
+        while (resultSetAff.next()) {
+            String columnValue = " + ";
+            for (int i = 1; i <= columnsNumber; i++) {
+                columnValue += String.format("%-20s" ,  resultSetAff.getString(i)) + " + " ;
+            }
+            LOGGER.finest(columnValue );
+        }
+
     }
 }
