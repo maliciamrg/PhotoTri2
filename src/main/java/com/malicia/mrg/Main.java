@@ -24,8 +24,8 @@ public class Main extends Application {
         mainFrameController controller = (mainFrameController)loader.getController();
         Context.setController(controller);
         Context.setPrimaryStage(primaryStage);
-        primaryStage.setTitle("testte");
-        primaryStage.setScene(new Scene(root,300,275));
+        primaryStage.setTitle("Photo Tri2");
+        primaryStage.setScene(new Scene(root,800,500));
         primaryStage.show();
     }
 

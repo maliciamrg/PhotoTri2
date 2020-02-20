@@ -47,9 +47,9 @@ public class mainFrameControllerTest {
         }
     }
 
-    @Test
-    public void testDeleteEmptyDirectory() {
-        assertTrue(controller.deleteEmptyDirectory()>0);
-    }
+//    @Test
+//    public void testDeleteEmptyDirectory() {
+//        assertTrue(controller.deleteEmptyDirectory()>0);
+//    }
 
 }

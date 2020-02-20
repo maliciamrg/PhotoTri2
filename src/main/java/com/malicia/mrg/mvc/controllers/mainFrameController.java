@@ -6,12 +6,17 @@ import com.malicia.mrg.photo.GrpPhoto;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +41,18 @@ public class mainFrameController {
     Map<String, String> absolutePath = new HashMap<String, String>();
     @FXML
     private ChoiceBox rootSelected;
+
+    @FXML
+    private Label databaselrcat;
+    @FXML
+    private Label lbPasRepertoirePhoto;
+    @FXML
+    private Label lbTempsAdherence;
+    @FXML
+    private Label lbRepertoireNew;
+    @FXML
+    private CheckBox chkDryRun;
+
 
     /**
      * Instantiates a new Main frame controller.
@@ -72,7 +89,7 @@ public class mainFrameController {
             LOGGER.info("selectedFile:" + file.getAbsolutePath());
             Context.setRepertoireNew(file.getAbsolutePath());
         }
-        Context.savePropertiesParameters();
+        Context.savePropertiesParameters(Context.currentContext);
     }
 
     /**
@@ -309,6 +326,13 @@ public class mainFrameController {
     }
 
     /**
+     * Change dry run.
+     */
+    public void ChangeDryRun() {
+        Context.setDryRun(!Context.getDryRun());
+        Context.getController().initialize();
+    }
+    /**
      * Boucle supression repertoire physique boolean.
      *
      * @param dir the dir
@@ -338,6 +362,7 @@ public class mainFrameController {
 
     /**
      * Boucle delete repertoire logique.
+     *
      * @return
      */
     public static int boucleDeleteRepertoireLogique() {
@@ -377,12 +402,13 @@ public class mainFrameController {
     /**
      * Move new to grp photos.
      */
-    public static void moveNewToGrpPhotos() {
-        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getPasRepertoirePhoto(), Context.getTempsAdherence(), Context.getRepertoireNew());
+    public void movenewtogrpphotos() {
+        LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
+        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
 
         java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
         java.util.List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, Context.getKidsModelList());
-        if (movetoNewGroup(true, groupDePhotoExecpt)) {
+        if (movetoNewGroup(true, groupDePhotoExecpt) && !Context.getDryRun()) {
             movetoNewGroup(Context.getDryRun(), groupDePhotoExecpt);
 //            movetoNewGroup(false,groupDePhoto);
         } else {
@@ -506,6 +532,7 @@ public class mainFrameController {
 
         Hashtable codeRetourAction = new Hashtable();
 
+        LOGGER.info((dryRun ? "dryRun =>" : "") + "Nb Groupe Crée " + ggp.size());
         int nbrow = 0;
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
@@ -514,7 +541,11 @@ public class mainFrameController {
             Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
             LOGGER.finer("GrpPhoto:" + gptemp.toString());
             LOGGER.finer(" hashRet:" + hashRet.toString());
+            if (gptemp.getNomRepetrtoire().compareTo("@Bazar__")==0) {
+                LOGGER.info((dryRun ? "dryRun =>" : "") + "Bazar Detail:" + hashRet.toString());
+            }
             mergeHashtable(codeRetourAction, hashRet);
+
         }
 
 
@@ -551,7 +582,15 @@ public class mainFrameController {
     @FXML
     public void initialize() {
         LOGGER.info("initialize");
+
+        databaselrcat.setText(Context.getCatalogLrcat());
+        lbTempsAdherence.setText("Temps d'adherence : " + Context.getTempsAdherence());
+        lbRepertoireNew.setText("Pattern du Repertoire New : " + Context.getRepertoireNew());
+        chkDryRun.setSelected(Context.getDryRun());
+
         ResultSet rs = RequeteSql.sqlGetAllRoot();
+        rootSelected.getSelectionModel().clearSelection();
+        rootSelected.getItems().clear();
         try {
             while (rs.next()) {
                 String name = rs.getString("name");
@@ -562,11 +601,17 @@ public class mainFrameController {
             rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                    if ((Integer)number2 >= 0){
+                        selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                    }
                 }
             });
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        if (Context.getPrimaryStage() != null) {
+            Context.getPrimaryStage().sizeToScene();
         }
     }
 
@@ -583,18 +628,31 @@ public class mainFrameController {
         LOGGER.info("---------------------------------------------------------------------------");
         LOGGER.info("absolutePath.get(rootName)" + absolutePath.get(rootName));
         Context.setRoot(absolutePath.get(rootName));
-        Context.savePropertiesParameters();
+        Context.savePropertiesParameters(Context.currentContext);
+    }
+
+    /**
+     * Abouturl.
+     */
+    public void abouturl() {
+        try {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Select fichier ligthroom.
+     * <p>
+     * selecttioner le fichier lrcat a traiter
+     * modifier et sauvegarde dans le properties
      */
     public void selectFichierLigthroom() {
-        LOGGER.info("do:selectFichierLigthroom");
-        LOGGER.info("---------------------------------------------------------------------------");
-        LOGGER.info("-selecttioner le fichier lrcat a traiter ");
-        LOGGER.info("-modifier et sauvegarde dans le properties");
-        LOGGER.info("---------------------------------------------------------------------------");
         //Create a file chooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -603,29 +661,32 @@ public class mainFrameController {
             LOGGER.info("selectedFile:" + file.getAbsolutePath());
             Context.setCatalogLrcat(file.getAbsolutePath());
         }
-        Context.savePropertiesParameters();
+        Context.savePropertiesParameters(Context.currentContext);
+        Context.getController().initialize();
     }
 
     /**
      * Delete empty directory.
-     *
+     * <p>
      * suprimmer tout les repertoires vide (physique et logique)
+     *
      * @return
      */
     public int deleteEmptyDirectory() {
+        LOGGER.info("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
         if (!Context.getDryRun()) {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
             boucleSupressionRepertoirePhysique(directory);
             int ndDelTotal = boucleDeleteRepertoireLogique();
             LOGGER.info("logical delete all :" + String.format("%04d", ndDelTotal));
-            return  1 + ndDelTotal;
+            return 1 + ndDelTotal;
         }
         return 0;
     }
 
     /**
      * Renommer un repertoire.
-     *
+     * <p>
      * renomme un repertoire (physique et logique)
      *
      * @param repertoiresource the repertoiresource
@@ -645,7 +706,7 @@ public class mainFrameController {
 
     /**
      * Compose le nom de repertoire relative au rootfolder
-     *
+     * <p>
      * soustrait le rootfolde rau nom de repertoire pour maj dans la table libraryFolder
      *
      * @param rootFolder
@@ -653,7 +714,7 @@ public class mainFrameController {
      * @return
      */
     public String composeRelativeRep(String rootFolder, String repertoiredest) {
-        return repertoiredest.replace(rootFolder,"");
+        return repertoiredest.replace(rootFolder, "");
     }
 
 

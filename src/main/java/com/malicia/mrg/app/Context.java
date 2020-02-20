@@ -13,9 +13,16 @@ import java.util.Properties;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class Context {
+/**
+ * The type Context.
+ */
+public class Context implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static final Context instance = new Context();
     private static final Logger LOGGER;
+    public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
     private static mainFrameController controller;
     private static String root;
     private static Stage primaryStage;
@@ -23,11 +30,21 @@ public class Context {
     private static String absolutePathFirst;
     private static boolean dryrun = true;
     private static String repertoireNew = "";
-    private static String pasRepertoirePhoto = "";
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
+
+    public static String getUrlgitwiki() {
+        return urlgitwiki;
+    }
+
+    public static void setUrlgitwiki(String urlgitwiki) {
+        Context.urlgitwiki = urlgitwiki;
+    }
+
+    private static String urlgitwiki = "";
     private static String bazar = "";
     private static List<String> kidsModelList;
+    public static Context currentContext;
 
     /**
      *
@@ -36,99 +53,200 @@ public class Context {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    /**
+     * Gets root.
+     *
+     * @return the root
+     */
     public static String getRoot() {
         return root;
     }
 
+    /**
+     * Sets root.
+     *
+     * @param root the root
+     */
     public static void setRoot(String root) {
         Context.root = root;
     }
 
+    /**
+     * Gets primary stage.
+     *
+     * @return the primary stage
+     */
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * Sets primary stage.
+     *
+     * @param primaryStage the primary stage
+     */
     public static void setPrimaryStage(Stage primaryStage) {
         Context.primaryStage = primaryStage;
     }
 
+    /**
+     * Gets controller.
+     *
+     * @return the controller
+     */
     public static mainFrameController getController() {
         return controller;
     }
 
+    /**
+     * Sets controller.
+     *
+     * @param controller the controller
+     */
     public static void setController(mainFrameController controller) {
         Context.controller = controller;
     }
 
+    /**
+     * Gets base dir.
+     *
+     * @return the base dir
+     */
     public static String getBaseDir() {
         return baseDir;
     }
 
+    /**
+     * Sets base dir.
+     *
+     * @param baseDir the base dir
+     */
     public static void setBaseDir(String baseDir) {
         Context.baseDir = baseDir;
     }
 
+    /**
+     * Gets absolute path first.
+     *
+     * @return the absolute path first
+     */
     public static String getAbsolutePathFirst() {
         return absolutePathFirst;
     }
 
+    /**
+     * Sets absolute path first.
+     *
+     * @param absolutePathFirst the absolute path first
+     */
     public static void setAbsolutePathFirst(String absolutePathFirst) {
         Context.absolutePathFirst = absolutePathFirst;
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static Context getInstance() {
         return instance;
     }
 
+    /**
+     * Gets bazar.
+     *
+     * @return the bazar
+     */
     public static String getBazar() {
         return bazar;
     }
 
+    /**
+     * Sets bazar.
+     *
+     * @param bazar the bazar
+     */
     public static void setBazar(String bazar) {
         Context.bazar = bazar;
     }
 
+    /**
+     * Gets kids model list.
+     *
+     * @return the kids model list
+     */
     public static List<String> getKidsModelList() {
         return kidsModelList;
     }
 
+    /**
+     * Sets kids model list.
+     *
+     * @param kidsModelList the kids model list
+     */
     public static void setKidsModelList(List<String> kidsModelList) {
         Context.kidsModelList = kidsModelList;
     }
 
+    /**
+     * Gets repertoire new.
+     *
+     * @return the repertoire new
+     */
     public static String getRepertoireNew() {
         return Context.repertoireNew;
     }
 
+    /**
+     * Sets repertoire new.
+     *
+     * @param repertoireNew the repertoire new
+     */
     public static void setRepertoireNew(String repertoireNew) {
         Context.repertoireNew = repertoireNew;
     }
 
-    public static String getPasRepertoirePhoto() {
-        return Context.pasRepertoirePhoto;
-    }
-
-    public static void setPasRepertoirePhoto(String pasRepertoirePhoto) {
-        Context.pasRepertoirePhoto = pasRepertoirePhoto;
-    }
-
+    /**
+     * Gets temps adherence.
+     *
+     * @return the temps adherence
+     */
     public static String getTempsAdherence() {
         return tempsAdherence;
     }
 
+    /**
+     * Sets temps adherence.
+     *
+     * @param tempsAdherence the temps adherence
+     */
     public static void setTempsAdherence(String tempsAdherence) {
         Context.tempsAdherence = tempsAdherence;
     }
 
+    /**
+     * Gets dry run.
+     *
+     * @return the dry run
+     */
     public static boolean getDryRun() {
         return Context.dryrun;
     }
 
+    /**
+     * Sets dry run.
+     *
+     * @param dryRun the dry run
+     */
     public static void setDryRun(boolean dryRun) {
         Context.dryrun = dryRun;
     }
 
+    /**
+     * Sets .
+     */
     public static void setup() {
+
 
         InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
         try {
@@ -136,6 +254,7 @@ public class Context {
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
+
 
         LOGGER.severe("---==[ severe  ]==---");
         LOGGER.warning("---==[ warning ]==---");
@@ -147,15 +266,21 @@ public class Context {
 
         LOGGER.info("Start");
 
-        Context.initPropertiesParameters();
+        currentContext=Context.loadPropertiesParameters();
+        if (currentContext == null ) {
+            Context.initPropertiesParameters();
+        }
 
         SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
-
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
     }
 
 
+    /**
+     * Init properties parameters.
+     */
     public static void initPropertiesParameters() {
+        LOGGER.info("initPropertiesParameters");
         FileReader reader = null;
 
         try {
@@ -172,26 +297,84 @@ public class Context {
         }
 
         setRepertoireNew(properties.getProperty("RepertoireNew"));
-        setPasRepertoirePhoto(properties.getProperty("PasRepertoirePhoto"));
         setTempsAdherence(properties.getProperty("TempsAdherence"));
         setCatalogLrcat(properties.getProperty("CatalogLrcat"));
+        setUrlgitwiki(properties.getProperty("urlgitwiki"));
         setDryRun(properties.getProperty("dryRun", "true").compareTo("true") == 0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setBazar(properties.getProperty("repBazar"));
         setBaseDir(properties.getProperty("BaseDir"));
     }
 
+    /**
+     * Gets catalog lrcat.
+     *
+     * @return the catalog lrcat
+     */
     public static String getCatalogLrcat() {
         return catalogLrcat;
     }
 
+    /**
+     * Sets catalog lrcat.
+     *
+     * @param catalogLrcat the catalog lrcat
+     */
     public static void setCatalogLrcat(String catalogLrcat) {
         Context.catalogLrcat = catalogLrcat;
     }
 
 
-    public static void savePropertiesParameters() {
+    /**
+     * Save properties parameters.
+     */
+    public static void savePropertiesParameters(Context ctx) {
         LOGGER.info("savePropertiesParameters");
+        try {
+            FileOutputStream f = new FileOutputStream(new File(CONTEXT_OBJECTS_TXT));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+
+            // Write objects to file
+            o.writeObject(ctx);
+
+            o.close();
+            f.close();
+
+        } catch (FileNotFoundException e) {
+            LOGGER.info("File not found");
+        } catch (IOException e) {
+            LOGGER.info("Error initializing stream");
+        }
+
+    }
+
+
+    /**
+     * Load properties parameters context.
+     *
+     * @return the context
+     */
+    public static Context loadPropertiesParameters() {
+        try {
+            FileInputStream fi = new FileInputStream(new File(CONTEXT_OBJECTS_TXT));
+            ObjectInputStream oi = new ObjectInputStream(fi);
+
+            // Read objects
+            Context ctx = (Context) oi.readObject();
+
+            oi.close();
+            fi.close();
+
+            return ctx;
+        } catch (FileNotFoundException e) {
+            LOGGER.info("File not found");
+        } catch (IOException e) {
+            LOGGER.info("Error initializing stream");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

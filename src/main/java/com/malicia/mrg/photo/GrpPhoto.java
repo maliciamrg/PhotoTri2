@@ -212,7 +212,7 @@ public class GrpPhoto {
         return displayReturn;
     }
 
-    private String getNomRepetrtoire() {
+    public String getNomRepetrtoire() {
         if (ForceGroup.compareTo("")!=0) {
             return (ForceGroup + "__" + cameraModelGrp );
         } else {
@@ -227,7 +227,7 @@ public class GrpPhoto {
             if (emplacement.compareTo("")==0) {setEmplacement();}
             if (personnes.compareTo("")==0) {setPersonnes();}
             if (typeSceancesPhoto.compareTo("")==0) {setTypeSceancesPhoto();}
-            return (datemintFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "   " +  cameraModelGrp) + "_" +  typeSceancesPhoto;
+            return (datemintFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "_" +  typeSceancesPhoto + "   " +  cameraModelGrp).trim();
 //            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
         }
     }
@@ -237,7 +237,7 @@ public class GrpPhoto {
     }
 
     public boolean dateNull() {
-        return (mintGrp==-2082848400);
+        return (mintGrp==-2082848400 || mintGrp==0);
     }
 
 

@@ -25,14 +25,13 @@ public class RequeteSql {
     /**
      * Sql combine all groupless in group by plage adherance.
      *
-     * @param pasRepertoirePhoto the pas repertoire photo
-     * @param tempsAdherence     the temps adherence
-     * @param repertoireNew      the repertoire new
+     * @param tempsAdherence the temps adherence
+     * @param repertoireNew  the repertoire new
      */
-    public static void sqlCombineAllGrouplessInGroupByPlageAdherance(String pasRepertoirePhoto, String tempsAdherence, String repertoireNew) {
+    public static void sqlCombineAllGrouplessInGroupByPlageAdherance( String tempsAdherence, String repertoireNew) {
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
 //
-        //Pour chaque photo qui ne sont pas du repertoire %pasRepertoirePhoto%
+        //Pour chaque photo qui sont dans le repertoire %repertoireNew%
         // calcul la plage d'aherance (+- tempsAdherence)
         //
         // Repertory
@@ -61,7 +60,8 @@ public class RequeteSql {
                 "ON e.id_local = ahem.image " +
                 "LEFT JOIN AgInternedExifCameraModel aiecm " +
                 "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where  b.pathFromRoot not like \"%" + pasRepertoirePhoto + "%\" " +
+                "Where " +
+                " b.pathFromRoot like \"%" + repertoireNew + "%\" " +
                 " ;");
 
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS NewPhoto;  ");
