@@ -2,10 +2,12 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 /**
  * The type Requete sql.
@@ -361,14 +363,13 @@ public class RequeteSql {
                     "delete from AgLibraryFolder " +
                     "where rootfolder = \"" + rootfolder + "\" " +
                     "and " +
-                    "(" +
+                    "( " +
                     "select absolutePath " +
                     "from AgLibraryRootFolder " +
                     "where id_local = \"" + rootfolder + "\" " +
                     "LIMIT 1 " +
-                    ")" +
-                    " || pathFromRoot = \"" + pathasupprimer + "\" " +
-                    "LIMIT 1 " +
+                    ") " +
+                    " || pathFromRoot = \"" + normalizePath(pathasupprimer+"/") + "\" " +
                     "";
 
             return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
@@ -379,12 +380,17 @@ public class RequeteSql {
         return 0;
     }
 
+    private static String normalizePath(String path) {
+        return path.replaceAll("\\\\", "/");
+    }
+
     public static String retrieverootfolder(String path) {
 
         ResultSet result = SQLiteJDBCDriverConnection.select("" +
-                "select id_local" +
-                "from AgLibraryRootFolder" +
-                "where absolutePath || \"_%\" like  \"" + path + "\" ;" +
+                "select id_local " +
+                "from AgLibraryRootFolder " +
+                "where \"" + normalizePath(path) + "\" " +
+                "like absolutePath || \"_%\"  ; " +
                 "");
 
         try {

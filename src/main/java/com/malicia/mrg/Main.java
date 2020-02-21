@@ -22,6 +22,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
         Parent root = (Parent) loader.load();
         mainFrameController controller = (mainFrameController) loader.getController();
+        controller.first();
         Context.setController(controller);
         Context.setPrimaryStage(primaryStage);
         primaryStage.setTitle("Photo Tri2");

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
@@ -22,18 +23,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
-import java.util.logging.Logger;
+
 
 /**
  * The type Main frame controller.
  */
 public class mainFrameController {
 
-    private static final Logger LOGGER;
+    private static final java.util.logging.Logger LOGGER;
     private static int ndDelTotal;
 
     static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
     /**
@@ -52,6 +53,8 @@ public class mainFrameController {
     private Label lbRepertoireNew;
     @FXML
     private CheckBox chkDryRun;
+    @FXML
+    private TextArea userlogInfo;
 
 
     /**
@@ -59,78 +62,6 @@ public class mainFrameController {
      */
     public mainFrameController() {
         LOGGER.info("mainFrameController");
-    }
-
-
-    /**
-     * Initialize.
-     */
-    private void initialize() {
-        LOGGER.info("initialize");
-
-        databaselrcat.setText(Context.getCatalogLrcat());
-        lbTempsAdherence.setText("Temps d'adherence : " + Context.getTempsAdherence());
-        lbRepertoireNew.setText("Pattern du Repertoire New : " + Context.getRepertoireNew());
-        chkDryRun.setSelected(Context.getDryRun());
-
-        ResultSet rs = RequeteSql.sqlGetAllRoot();
-        rootSelected.getSelectionModel().clearSelection();
-        rootSelected.getItems().clear();
-        try {
-            while (rs.next()) {
-                String name = rs.getString("name");
-                absolutePath.put(name, rs.getString("absolutePath"));
-                rootSelected.getItems().add(name);
-            }
-            rootSelected.setValue(rootSelected.getItems().get(0));
-            rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    if ((Integer) number2 >= 0) {
-                        selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
-                    }
-                }
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (Context.getPrimaryStage() != null) {
-            Context.getPrimaryStage().sizeToScene();
-        }
-    }
-
-    /**
-     * Select le repertoire rootdu fichier ligthroom.
-     * <p>
-     * selecttioner le repertoire root sur lequelle les actions seront baser
-     * modifier et sauvegarde dans le properties
-     *
-     * @param rootName the root name
-     */
-    private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
-        LOGGER.info("absolutePath.get(rootName)" + absolutePath.get(rootName));
-        Context.setRoot(absolutePath.get(rootName));
-        Context.savePropertiesParameters(Context.currentContext);
-    }
-
-    /**
-     * Select fichier ligthroom.
-     * <p>
-     * selecttioner le fichier lrcat a traiter
-     * modifier et sauvegarde dans le properties
-     */
-    public void selectFichierLigthroom() {
-        //Create a file chooser
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
-        if (file != null) {
-            LOGGER.info("selectedFile:" + file.getAbsolutePath());
-            Context.setCatalogLrcat(file.getAbsolutePath());
-        }
-        Context.savePropertiesParameters(Context.currentContext);
-        Context.getController().initialize();
     }
 
     /**
@@ -154,7 +85,6 @@ public class mainFrameController {
         }
         Context.savePropertiesParameters(Context.currentContext);
     }
-
 
     /**
      * Deplace une photo.
@@ -228,14 +158,6 @@ public class mainFrameController {
     }
 
     /**
-     * Change dry run.
-     */
-    public void ChangeDryRun() {
-        Context.setDryRun(!Context.getDryRun());
-        Context.getController().initialize();
-    }
-
-    /**
      * Boucle supression repertoire physique boolean.
      *
      * @param dir the dir
@@ -252,7 +174,7 @@ public class mainFrameController {
 
             if (success) {
                 // The directory is now empty directory free so delete it
-                LOGGER.fine("delete repertory:" + dir.toString());
+                LOGGER.info("delete repertory:" + dir.toString());
                 returnVal = actionfichierRepertoire.deleterepertoire(dir);
                 if (returnVal) {
                     ndDelTotal += 1;
@@ -267,30 +189,13 @@ public class mainFrameController {
     }
 
     /**
-     * Boucle delete repertoire logique.
-     *
-     * @return
-     */
-    public static int boucleDeleteRepertoireLogique() {
-        int nbdel = 0;
-        int nbdeltotal = 0;
-        do {
-            nbdel = RequeteSql.sqlDeleteRepertory();
-            LOGGER.info("logical delete:" + String.format("%04d", nbdel));
-            nbdeltotal += nbdel;
-        }
-        while (nbdel > 0);
-        return nbdeltotal;
-    }
-
-    /**
      * Gets imageicon resized.
      *
      * @param imagesJpg the images jpg
      * @return the imageicon resized
      */
     public static ImageIcon getImageiconResized(URL imagesJpg) {
-        LOGGER.finest(imagesJpg.toString());
+        LOGGER.info(imagesJpg.toString());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //this is your screen size
         ImageIcon imageIcon = new ImageIcon(imagesJpg); //imports the image
         imageIcon.getImage().flush();
@@ -303,23 +208,6 @@ public class mainFrameController {
             imageIcon2.getImage().flush();
         }
         return imageIcon2;
-    }
-
-    /**
-     * Move new to grp photos.
-     */
-    public void movenewtogrpphotos() {
-        LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
-//        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
-
-        java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
-        java.util.List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, Context.getKidsModelList());
-        if (movetoNewGroup(true, groupDePhotoExecpt) && !Context.getDryRun()) {
-            movetoNewGroup(Context.getDryRun(), groupDePhotoExecpt);
-//            movetoNewGroup(false,groupDePhoto);
-        } else {
-            LOGGER.info("movetoNewGroup KO, nothig nmove");
-        }
     }
 
     /**
@@ -430,10 +318,10 @@ public class mainFrameController {
      * @param ggp    the ggp
      * @return the boolean
      */
-    public static boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
+    public boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
 //       Execution du deplacement
 
-        LOGGER.fine("Printing result...");
+        LOGGER.info("Printing result...");
         int nbele = 0;
 
         Hashtable codeRetourAction = new Hashtable();
@@ -445,8 +333,8 @@ public class mainFrameController {
             nbrow += gptemp.getnbele();
 
             Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
-            LOGGER.finer("GrpPhoto:" + gptemp.toString());
-            LOGGER.finer(" hashRet:" + hashRet.toString());
+            LOGGER.info("GrpPhoto:" + gptemp.toString());
+            LOGGER.info(" hashRet:" + hashRet.toString());
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
                 LOGGER.info((dryRun ? "dryRun =>" : "") + "Bazar Detail:" + hashRet.toString());
             }
@@ -455,7 +343,7 @@ public class mainFrameController {
         }
 
 
-        LOGGER.info((dryRun ? "dryRun =>" : "") + codeRetourAction.toString());
+        logecrireuserlogInfo((dryRun ? "dryRun =>" : "") + codeRetourAction.toString());
         nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
         return (nbrow == nbele);
     }
@@ -482,6 +370,118 @@ public class mainFrameController {
 
     }
 
+    /**
+     * Initialize.
+     */
+    public void initialize() {
+        LOGGER.info("initialize");
+
+        databaselrcat.setText(Context.getCatalogLrcat());
+        lbTempsAdherence.setText("Temps d'adherence : " + Context.getTempsAdherence());
+        lbRepertoireNew.setText("Pattern du Repertoire New : " + Context.getRepertoireNew());
+        chkDryRun.setSelected(Context.getDryRun());
+
+        if (Context.getPrimaryStage() != null) {
+            Context.getPrimaryStage().sizeToScene();
+        }
+
+    }
+
+    private void initalizerootselection() {
+        ResultSet rs = RequeteSql.sqlGetAllRoot();
+        rootSelected.getSelectionModel().clearSelection();
+        rootSelected.getItems().clear();
+        try {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                absolutePath.put(name, rs.getString("absolutePath"));
+                rootSelected.getItems().add(name);
+            }
+            rootSelected.setValue(rootSelected.getItems().get(0));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Select le repertoire rootdu fichier ligthroom.
+     * <p>
+     * selecttioner le repertoire root sur lequelle les actions seront baser
+     * modifier et sauvegarde dans le properties
+     *
+     * @param rootName the root name
+     */
+    private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
+        logecrireuserlogInfo("absolutePath.get(rootName) : " + absolutePath.get(rootName));
+        Context.setRoot(absolutePath.get(rootName));
+        Context.savePropertiesParameters(Context.currentContext);
+    }
+
+    /**
+     * Select fichier ligthroom.
+     * <p>
+     * selecttioner le fichier lrcat a traiter
+     * modifier et sauvegarde dans le properties
+     */
+    public void selectFichierLigthroom() {
+        //Create a file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
+        if (file != null) {
+            logecrireuserlogInfo("selectedFile:" + file.getAbsolutePath());
+            Context.setCatalogLrcat(file.getAbsolutePath());
+            initalizerootselection();
+        }
+        Context.savePropertiesParameters(Context.currentContext);
+        Context.getController().initialize();
+    }
+
+    /**
+     * Change dry run.
+     */
+    public void ChangeDryRun() {
+        Context.setDryRun(!Context.getDryRun());
+        Context.getController().initialize();
+        logecrireuserlogInfo("ChangeDryRun to " + Context.getDryRun());
+    }
+
+    /**
+     * Boucle delete repertoire logique.
+     */
+    public void deleteRepertoireLogique() {
+        int nbdel = 0;
+        int nbdeltotal = 0;
+        do {
+            nbdel = RequeteSql.sqlDeleteRepertory();
+            nbdeltotal += nbdel;
+        }
+        while (nbdel > 0);
+
+        logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+    }
+
+    private void logecrireuserlogInfo(String msg) {
+        userlogInfo.appendText(msg + "\n");
+        LOGGER.info(msg);
+    }
+
+    /**
+     * Move new to grp photos.
+     */
+    public void movenewtogrpphotos() {
+        LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
+//        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
+
+        java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
+        java.util.List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, Context.getKidsModelList());
+        if (movetoNewGroup(true, groupDePhotoExecpt) && !Context.getDryRun()) {
+            movetoNewGroup(Context.getDryRun(), groupDePhotoExecpt);
+//            movetoNewGroup(false,groupDePhoto);
+        } else {
+            LOGGER.info("movetoNewGroup KO, nothig nmove");
+        }
+    }
 
     /**
      * Abouturl.
@@ -496,6 +496,7 @@ public class mainFrameController {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
 
@@ -503,19 +504,17 @@ public class mainFrameController {
      * Delete empty directory.
      * <p>
      * suprimmer tout les repertoires vide (physique et logique)
-     *
-     * @return
      */
-    public int deleteEmptyDirectory() {
-        LOGGER.info("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
-        if (!Context.getDryRun()) {
+    public void deleteEmptyDirectoryRepertoireNew() {
+        if (Context.getDryRun()) {
+            logecrireuserlogInfo("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
+        } else {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
 
             ndDelTotal = 0;
             boucleSupressionRepertoire(directory);
-            LOGGER.info("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
+            logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
         }
-        return 0;
     }
 
     /**
@@ -551,5 +550,15 @@ public class mainFrameController {
         return repertoiredest.replace(rootFolder, "");
     }
 
-
+    public void first() {
+        initalizerootselection();
+        rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                if ((Integer) number2 >= 0) {
+                    selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                }
+            }
+        });
+    }
 }

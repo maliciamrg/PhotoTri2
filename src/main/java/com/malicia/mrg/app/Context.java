@@ -273,6 +273,7 @@ public class Context implements Serializable {
 
         SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
         Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
+
     }
 
 

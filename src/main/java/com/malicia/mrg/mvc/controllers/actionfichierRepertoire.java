@@ -15,9 +15,9 @@ public class actionfichierRepertoire {
 
     public static boolean deleterepertoire(File dir) {
         boolean ret = true;
-        ret &= dir.delete();
+        ret &= (RequeteSql.sqlDeleteRepertory(RequeteSql.retrieverootfolder(dir.toString()),dir.toString()) > 0);
         if (ret) {
-            ret &= (RequeteSql.sqlDeleteRepertory(RequeteSql.retrieverootfolder(dir.toString()),dir.toString()) > 0);
+            ret &= dir.delete();
         }
         LOGGER.info("delete:" + dir.toString() + " : " + ret);
         return ret;

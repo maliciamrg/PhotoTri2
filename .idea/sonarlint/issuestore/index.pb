@@ -23,8 +23,6 @@ a
 .src/main/java/com/malicia/mrg/app/Context.java,1\9\194946c69ef7e9b9f55bf66ec06eb8559b2a8782
 T
 $.idea/codeStyles/codeStyleConfig.xml,d\d\dd7b3350c29c49497756c7f32c69a3bed18b1cba
-;
-log.0.0.txt,f\c\fc23a7686dfe13bb41403a15cc164235e74f0f9d
 ¦
 v.idea/libraries/Maven__com_liferay_org_apache_commons_fileupload_com_liferay_org_apache_commons_fileupload_6_2_0_1.xml,5\e\5eca1098a5e25da90a327b5a2b708a67d2c0b274
 h
