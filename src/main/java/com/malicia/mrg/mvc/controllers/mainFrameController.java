@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 public class mainFrameController {
 
     private static final Logger LOGGER;
+    private static int ndDelPhyTotal;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -349,6 +350,7 @@ public class mainFrameController {
 
             if (success) {
                 // The directory is now empty directory free so delete it
+                ndDelPhyTotal +=1;
                 LOGGER.fine("delete repertory:" + dir.toString());
                 returnVal = dir.delete();
 
@@ -404,7 +406,7 @@ public class mainFrameController {
      */
     public void movenewtogrpphotos() {
         LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
-        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
+//        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
 
         java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
         java.util.List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, Context.getKidsModelList());
@@ -676,7 +678,11 @@ public class mainFrameController {
         LOGGER.info("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
         if (!Context.getDryRun()) {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
+
+            ndDelPhyTotal = 0;
             boucleSupressionRepertoirePhysique(directory);
+            LOGGER.info("physical delete all from " + directory + " : "  + String.format("%04d", ndDelPhyTotal));
+
             int ndDelTotal = boucleDeleteRepertoireLogique();
             LOGGER.info("logical delete all :" + String.format("%04d", ndDelTotal));
             return 1 + ndDelTotal;

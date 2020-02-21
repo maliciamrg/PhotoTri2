@@ -27,7 +27,6 @@ public class SQLiteJDBCDriverConnection {
             String url = "jdbc:sqlite:"+sqlliteDatabase;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-
             LOGGER.finer("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
@@ -119,7 +118,7 @@ public class SQLiteJDBCDriverConnection {
             colname += String.format("%-20s" , rsmd.getColumnName(i)) + " + " ;
             ;
         }
-        LOGGER.finest(colname);
+        LOGGER.info(colname);
 
 
         while (resultSetAff.next()) {
@@ -127,7 +126,7 @@ public class SQLiteJDBCDriverConnection {
             for (int i = 1; i <= columnsNumber; i++) {
                 columnValue += String.format("%-20s" ,  resultSetAff.getString(i)) + " + " ;
             }
-            LOGGER.finest(columnValue );
+            LOGGER.info(columnValue );
         }
 
     }

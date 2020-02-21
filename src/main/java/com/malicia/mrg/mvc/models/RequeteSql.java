@@ -28,7 +28,7 @@ public class RequeteSql {
      * @param tempsAdherence the temps adherence
      * @param repertoireNew  the repertoire new
      */
-    public static void sqlCombineAllGrouplessInGroupByPlageAdherance( String tempsAdherence, String repertoireNew) {
+    public static void sqlCombineAllGrouplessInGroupByPlageAdherance(String tempsAdherence, String repertoireNew) {
         SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
 //
         //Pour chaque photo qui sont dans le repertoire %repertoireNew%
@@ -125,39 +125,87 @@ public class RequeteSql {
 
         //compte le nombre de photo presente dans la base poour le repertoire
 
-        boolean ret = SQLiteJDBCDriverConnection.execute(
-                "  DROP TABLE IF EXISTS Repertory;  " +
-                        " DROP TABLE IF EXISTS RepertoryAdelete; " +
-                        " CREATE TEMPORARY TABLE Repertory AS " +
-                        " select  b.pathFromRoot " +
-                        " from AgLibraryFolder b " +
-                        " left join AgLibraryFile a  " +
-                        " on a.folder = b.id_local " +
-                        " where a.folder is  NULL " +
-                        " and  b.pathFromRoot <> \"\" " +
-                        " group by  b.pathFromRoot ; " +
-                        " CREATE TEMPORARY TABLE RepertoryAdelete AS " +
-                        " select r.pathFromRoot  " +
-                        " from  Repertory r " +
-                        " inner join AgLibraryFolder b " +
-                        " on b.pathFromRoot like r.pathFromRoot || \"%\" " +
-                        " group by r.pathFromRoot " +
-                        " having count(b.pathFromRoot)  = 1 ; ");
+//        SQLiteJDBCDriverConnection.execute("  DROP TABLE IF EXISTS Repertory;  ");
+//
+//
+//        SQLiteJDBCDriverConnection.execute(" CREATE TEMPORARY TABLE IF NOT EXISTS  Repertory AS " +
+//                " select  b.pathFromRoot " +
+//                " from AgLibraryFolder b " +
+//                " left join AgLibraryFile a  " +
+//                " on a.folder = b.id_local " +
+//                " where a.folder is  NULL " +
+//                " and  b.pathFromRoot <> \"\" " +
+//                " group by  b.pathFromRoot ; ");
+////
+//        SQLiteJDBCDriverConnection.execute("  DROP TABLE IF EXISTS RepertoryAdelete;  ");
+//
+//        SQLiteJDBCDriverConnection.execute(" CREATE TEMPORARY TABLE IF NOT EXISTS RepertoryAdelete AS " +
+//                " select r.pathFromRoot  " +
+//                " from  Repertory r " +
+//                " inner join AgLibraryFolder b " +
+//                " on b.pathFromRoot like r.pathFromRoot || \"%\" " +
+//                " group by r.pathFromRoot " +
+//                " having count(b.pathFromRoot)  = 1 ; ");
 
-        if (ret) {
-            String sql = " delete from AgLibraryFolder  " +
-                    " where pathFromRoot in ( " +
-                    " select * from RepertoryAdelete " +
-                    " ); ";
-            PreparedStatement pstmt = null;
-            try {
+
+//        SQLiteJDBCDriverConnection.execute("  DROP TABLE IF EXISTS Repertory;  ");
+//
+//
+//        SQLiteJDBCDriverConnection.execute(" CREATE TEMPORARY TABLE IF NOT EXISTS  Repertory AS " +
+//                " select  b.pathFromRoot " +
+//                " from AgLibraryFolder b " +
+//                " left join AgLibraryFile a  " +
+//                " on a.folder = b.id_local " +
+//                " where a.folder is  NULL " +
+//                " and  b.pathFromRoot <> \"\" " +
+//                " group by  b.pathFromRoot ; ");
+////
+//        SQLiteJDBCDriverConnection.execute("  DROP TABLE IF EXISTS RepertoryAdelete;  ");
+//
+//        SQLiteJDBCDriverConnection.execute(" CREATE TEMPORARY TABLE IF NOT EXISTS RepertoryAdelete AS " +
+//                " select r.pathFromRoot  " +
+//                " from  Repertory r " +
+//                " inner join AgLibraryFolder b " +
+//                " on b.pathFromRoot like r.pathFromRoot || \"%\" " +
+//                " group by r.pathFromRoot " +
+//                " having count(b.pathFromRoot)  = 1 ; ");
+
+
+        //* appel au select uniquement pour tracer dans la log
+        ResultSet rs = SQLiteJDBCDriverConnection.select(
+                " select b.pathFromRoot " +
+                        "from AgLibraryFolder b " +
+                        "left join AgLibraryFile a " +
+                        "on a.folder = b.id_local " +
+                        "left join AgLibraryFolder c " +
+                        "on c.pathFromRoot like b.pathFromRoot || \"_%\" " +
+                        "where a.folder is  NULL " +
+                        "and  c.pathFromRoot  is  NULL " +
+                        "group by  b.pathFromRoot ;");
+
+        try {
+            if (true) {
+                // rs.close();
+                String sql = " delete from AgLibraryFolder  " +
+                        " where pathFromRoot in ( " +
+                        "select b.pathFromRoot " +
+                        "from AgLibraryFolder b " +
+                        "left join AgLibraryFile a " +
+                        "on a.folder = b.id_local " +
+                        "left join AgLibraryFolder c " +
+                        "on c.pathFromRoot like b.pathFromRoot || \"_%\" " +
+                        "where a.folder is  NULL " +
+                        "and  c.pathFromRoot  is  NULL " +
+                        "group by  b.pathFromRoot " +
+                        " ); ";
+                PreparedStatement pstmt = null;
                 pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
-                return pstmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                int ret = pstmt.executeUpdate();
+                pstmt = null;
+                return ret;
             }
-        } else {
-            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -278,8 +326,9 @@ public class RequeteSql {
 
     /**
      * Update repertory name.
-     *  @param id_local       the id local
-     * @param newpathfromroot     the root folder
+     *
+     * @param id_local        the id local
+     * @param newpathfromroot the root folder
      */
     public static void updateRepertoryName(String id_local, String newpathfromroot) throws SQLException {
         String sql = " Update AgLibraryFolder " +
@@ -290,8 +339,8 @@ public class RequeteSql {
         PreparedStatement pstmt = null;
 
         pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
-        pstmt.setString(1,newpathfromroot);
-        pstmt.setString(2,id_local);
+        pstmt.setString(1, newpathfromroot);
+        pstmt.setString(2, id_local);
         pstmt.executeUpdate();
 
     }

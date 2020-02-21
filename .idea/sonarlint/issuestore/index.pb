@@ -1,14 +1,10 @@
 
-J
-resource/config.properties,5\4\54efb1e7ebf996272c545d4f35798da47c08af66
 W
 'src/main/java/com/malicia/mrg/Main.java,a\2\a2556ade54d22c506bb62f76ae74d735d80105c6
 =
 PhotoTri2.iml,9\8\980e08a06e2d11f57a789a7cc5851531cf60d295
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-K
-resource/logging.properties,6\7\678a581412ea8ac244ff90f15e0764c70dbb63b1
 Q
 !.idea/dictionaries/professorX.xml,5\b\5b4e4ef004ce54bd5d7cc4d267d4db9fa1bbb8f4
 d
@@ -21,11 +17,23 @@ h
 8src/main/java/com/malicia/mrg/mvc/models/RequeteSql.java,3\2\32e70f1a72c25c6ddf7c6f9b87c145f4d5cf02d0
 x
 Hsrc/main/java/com/malicia/mrg/mvc/models/SQLiteJDBCDriverConnection.java,e\5\e5f387de7efd05e75ad0075e2611748f3a28aa1a
-g
-7src/main/views/com/malicia/mrg/mvc/views/mainFrame.fxml,9\d\9d28524c046106ad1921a1f3eace48da11a48952
 a
 1src/main/java/com/malicia/mrg/photo/GrpPhoto.java,7\d\7d2de857347028963fa6c8a053fdf879e93f6833
 ^
 .src/main/java/com/malicia/mrg/app/Context.java,1\9\194946c69ef7e9b9f55bf66ec06eb8559b2a8782
 T
 $.idea/codeStyles/codeStyleConfig.xml,d\d\dd7b3350c29c49497756c7f32c69a3bed18b1cba
+;
+log.0.0.txt,f\c\fc23a7686dfe13bb41403a15cc164235e74f0f9d
+¦
+v.idea/libraries/Maven__com_liferay_org_apache_commons_fileupload_com_liferay_org_apache_commons_fileupload_6_2_0_1.xml,5\e\5eca1098a5e25da90a327b5a2b708a67d2c0b274
+h
+8.idea/libraries/Maven__org_xerial_sqlite_jdbc_3_18_0.xml,6\2\621313aac8f15f88978d58bb01b1158ca029ee91
+T
+$src/main/resources/config.properties,f\a\fac4e92d770a0a6287eaad0e53c4efa350987f47
+U
+%src/main/resources/logging.properties,3\5\3503cdfdb663d3fa01250071ad96270f80e5d6bc
+M
+src/main/views/mainFrame.fxml,1\c\1ce55442350443700f4fef1d3d754dbf285dd182
+z
+Jsrc/test/java/com/malicia/mrg/mvc/controllers/mainFrameControllerTest.java,a\3\a3a528045e5704a37ae201a0c9a8efe9cefd7a67
