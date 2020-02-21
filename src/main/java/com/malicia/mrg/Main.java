@@ -20,12 +20,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
-        Parent root = (Parent)loader.load();
-        mainFrameController controller = (mainFrameController)loader.getController();
+        Parent root = (Parent) loader.load();
+        mainFrameController controller = (mainFrameController) loader.getController();
         Context.setController(controller);
         Context.setPrimaryStage(primaryStage);
         primaryStage.setTitle("Photo Tri2");
-        primaryStage.setScene(new Scene(root,800,500));
+        primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
     }
 
