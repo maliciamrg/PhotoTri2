@@ -35,17 +35,17 @@ public class mainFrameControllerTest {
         assertEquals(actual,expected);
     }
 
-    @Test
-    public void testRenommerUnRepertoire() {
-        try {
-            controller.renommerUnRepertoire("D:/50_Phototheque/!!Legacy/0000_misc/", "D:/50_Phototheque/!!Legacy/0000_misc/" , "45","D:/50_Phototheque/");
-            assertTrue(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println(e.getStackTrace());
-            assertTrue(false);
-        }
-    }
+//    @Test
+//    public void testRenommerUnRepertoire() {
+//        try {
+//            controller.renommerUnRepertoire("D:/50_Phototheque/!!Legacy/0000_misc/", "D:/50_Phototheque/!!Legacy/0000_misc/" , "45","D:/50_Phototheque/");
+//            assertTrue(true);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.out.println(e.getStackTrace());
+//            assertTrue(false);
+//        }
+//    }
 
 //    @Test
 //    public void testDeleteEmptyDirectory() {

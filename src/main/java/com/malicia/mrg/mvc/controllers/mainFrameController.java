@@ -31,7 +31,7 @@ import java.util.*;
 public class mainFrameController {
 
     private static final java.util.logging.Logger LOGGER;
-    private static int ndDelTotal;
+    public static final String DRY_RUN = "dryRun =>";
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
@@ -71,10 +71,10 @@ public class mainFrameController {
      */
     public static void selectLeRepertoirePhysiqueNew() {
         LOGGER.info("selectLeRepertoirePhysiqueNew");
-        LOGGER.info("---------------------------------------------------------------------------");
+
         LOGGER.info("-");
         LOGGER.info("-");
-        LOGGER.info("---------------------------------------------------------------------------");
+
         //Create a file chooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -94,9 +94,9 @@ public class mainFrameController {
      */
     public static void deplaceUnePhoto(String photo, String repertoiredest) {
         LOGGER.info("deplaceUnePhoto");
-        LOGGER.info("---------------------------------------------------------------------------");
+
         LOGGER.info("-deplace une photo dans le repertoire (physique et logique)");
-        LOGGER.info("---------------------------------------------------------------------------");
+
         LOGGER.info("new_repertoire\n" +
                 "basename_file\n" +
                 "\n" +
@@ -163,29 +163,27 @@ public class mainFrameController {
      * @param dir the dir
      * @return the boolean
      */
-    private static boolean boucleSupressionRepertoire(File dir) {
+    private static int boucleSupressionRepertoire(File dir) throws IOException {
         boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            boolean success = true;
+            int success = 0;
             for (int i = 0; i < children.length; i++) {
-                success &= boucleSupressionRepertoire(new File(dir, children[i]));
+                success += boucleSupressionRepertoire(new File(dir, children[i]));
             }
 
-            if (success) {
+            if (success == children.length) {
                 // The directory is now empty directory free so delete it
                 LOGGER.info("delete repertory:" + dir.toString());
-                returnVal = actionfichierRepertoire.deleterepertoire(dir);
+                returnVal = ActionfichierRepertoire.deleterepertoire(dir);
                 if (returnVal) {
-                    ndDelTotal += 1;
+                    return 1;
                 }
 
             }
 
-        } else {
-            returnVal = false;
         }
-        return returnVal;
+        return 0;
     }
 
     /**
@@ -265,27 +263,16 @@ public class mainFrameController {
 
                         grpPhotoEnc = new GrpPhoto();
                         if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
-                            throw new ArithmeticException("Erreur l'ors de l'ajout de l'element au group de photo ");
+                            throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                         }
                     }
 
                 }
-
-                //}
-//                LOGGER.info("\tCameraModel: " + CameraModel +
-//                        ", captureTime: " + captureTime +
-//                        ", src : " + src);
-
-
             }
             listGrpPhoto.add(grpPhotoEnc);
             listGrpPhoto.add(Bazaz);
             listGrpPhoto.add(NoDate);
             listGrpPhoto.add(Kidz);
-
-
-//            LOGGER.info("Nb row lues=> " + nbrow);
-//            LOGGER.info("Nb row grp => " + nbele);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -369,7 +356,7 @@ public class mainFrameController {
 
         Hashtable codeRetourAction = new Hashtable();
 
-        LOGGER.info((dryRun ? "dryRun =>" : "") + "Nb Groupe Crée " + ggp.size());
+        LOGGER.info((dryRun ? DRY_RUN : "") + "Nb Groupe Crée " + ggp.size());
         int nbrow = 0;
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
@@ -379,14 +366,14 @@ public class mainFrameController {
             LOGGER.info("GrpPhoto:" + gptemp.toString());
             LOGGER.info(" hashRet:" + hashRet.toString());
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
-                LOGGER.info((dryRun ? "dryRun =>" : "") + "Bazar Detail:" + hashRet.toString());
+                LOGGER.info((dryRun ? DRY_RUN : "") + "Bazar Detail:" + hashRet.toString());
             }
             mergeHashtable(codeRetourAction, hashRet);
 
         }
 
 
-        logecrireuserlogInfo((dryRun ? "dryRun =>" : "") + codeRetourAction.toString());
+        logecrireuserlogInfo((dryRun ? DRY_RUN : "") + codeRetourAction.toString());
         nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
         return (nbrow == nbele);
     }
@@ -492,12 +479,10 @@ public class mainFrameController {
      */
     public void movenewtogrpphotos() {
         LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
-//        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
 
         java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepNewbyGroup(Context.getKidsModelList());
         if (movetoNewGroup(true, groupDePhoto) && !Context.getDryRun()) {
             movetoNewGroup(Context.getDryRun(), groupDePhoto);
-//            movetoNewGroup(false,groupDePhoto);
         } else {
             LOGGER.info("movetoNewGroup KO, nothig nmove");
         }
@@ -531,8 +516,12 @@ public class mainFrameController {
         } else {
             File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
 
-            ndDelTotal = 0;
-            boucleSupressionRepertoire(directory);
+            int ndDelTotal=0;
+            try {
+                ndDelTotal = boucleSupressionRepertoire(directory);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
         }
     }
@@ -544,15 +533,15 @@ public class mainFrameController {
      *
      * @param repertoiresource the repertoiresource
      * @param repertoiredest   the repertoiredest
-     * @param id_local         the id local
+     * @param idLocal         the id local
      * @param rootFolder       the root folder
      */
-    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String id_local, String rootFolder) throws SQLException {
+    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String idLocal, String rootFolder) throws SQLException {
         File directory = new File(repertoiresource);
         File directorydest = new File(repertoiredest);
         if (directory.isDirectory()) {
             directory.renameTo(directorydest);
-            RequeteSql.updateRepertoryName(id_local, composeRelativeRep(rootFolder, repertoiredest));
+            RequeteSql.updateRepertoryName(idLocal, composeRelativeRep(rootFolder, repertoiredest));
         }
 
     }

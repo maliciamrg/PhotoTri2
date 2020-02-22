@@ -8,15 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.logging.Logger;
-
 public class Main extends Application {
-
-    private static final Logger LOGGER;
-
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
 
     public static void main(String[] args) {
         Context.setup();
