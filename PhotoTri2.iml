@@ -14,6 +14,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
+    <orderEntry type="library" name="Maven: com.liferay.org.apache.commons.fileupload:com.liferay.org.apache.commons.fileupload:6.2.0.1" level="project" />
     <orderEntry type="library" name="Maven: uk.co.caprica:vlcj:3.8.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:3.5.2" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:platform:3.5.2" level="project" />
