@@ -6,4 +6,4 @@ out/
 target/
 log.*.txt
 log.*.txt.*
-/.idea/
+**/.idea/
