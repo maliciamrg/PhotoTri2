@@ -2,26 +2,24 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 
 /**
  * The type Requete sql.
  */
 public class RequeteSql {
 
-    private RequeteSql() {
-        throw new IllegalStateException("Utility class");
-    }
-
     private static final Logger LOGGER;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    private RequeteSql() {
+        throw new IllegalStateException("Utility class");
     }
 
     /**
@@ -369,7 +367,7 @@ public class RequeteSql {
                     "where id_local = \"" + rootfolder + "\" " +
                     "LIMIT 1 " +
                     ") " +
-                    " || pathFromRoot = \"" + normalizePath(pathasupprimer+"/") + "\" " +
+                    " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
                     "";
 
             return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();

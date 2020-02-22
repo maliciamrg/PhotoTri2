@@ -11,8 +11,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
-import jdk.jfr.events.ExceptionThrownEvent;
-import org.omg.CORBA.UserException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -248,7 +246,7 @@ public class mainFrameController {
                 //constitution des groupes forcé
                 if (listkidsModel.contains(CameraModel)) {
                     Kidz.forceadd(CameraModel, mint, maxt, src);
-                } else{
+                } else {
 
 
                     //Constitution des groupes de photo standard
@@ -266,9 +264,9 @@ public class mainFrameController {
                         }
 
                         grpPhotoEnc = new GrpPhoto();
-                        if(!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
+                        if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
                             throw new ArithmeticException("Erreur l'ors de l'ajout de l'element au group de photo ");
-                        };
+                        }
                     }
 
                 }
@@ -335,6 +333,28 @@ public class mainFrameController {
     }
 
     /**
+     * Merge hashtable.
+     *
+     * @param dReturnEle       the d return ele
+     * @param groupAndMouveEle the group and mouve ele
+     */
+    public static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
+        Set<String> keys = groupAndMouveEle.keySet();
+        for (String key : keys) {
+            if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
+                if (dReturnEle.containsKey(key)) {
+                    int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
+                    dReturnEle.put(key, val);
+                } else {
+                    dReturnEle.put(key, groupAndMouveEle.get(key));
+                }
+//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
+            }
+        }
+
+    }
+
+    /**
      * Moveto new group boolean.
      *
      * @param dryRun the dry run
@@ -369,28 +389,6 @@ public class mainFrameController {
         logecrireuserlogInfo((dryRun ? "dryRun =>" : "") + codeRetourAction.toString());
         nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
         return (nbrow == nbele);
-    }
-
-    /**
-     * Merge hashtable.
-     *
-     * @param dReturnEle       the d return ele
-     * @param groupAndMouveEle the group and mouve ele
-     */
-    public static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
-        Set<String> keys = groupAndMouveEle.keySet();
-        for (String key : keys) {
-            if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
-                if (dReturnEle.containsKey(key)) {
-                    int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
-                    dReturnEle.put(key, val);
-                } else {
-                    dReturnEle.put(key, groupAndMouveEle.get(key));
-                }
-//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
-            }
-        }
-
     }
 
     /**

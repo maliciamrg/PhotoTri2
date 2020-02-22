@@ -35,3 +35,20 @@ M
 src/main/views/mainFrame.fxml,1\c\1ce55442350443700f4fef1d3d754dbf285dd182
 z
 Jsrc/test/java/com/malicia/mrg/mvc/controllers/mainFrameControllerTest.java,a\3\a3a528045e5704a37ae201a0c9a8efe9cefd7a67
+s
+C.idea/libraries/Maven__ch_qos_logback_logback_core_1_3_0_alpha5.xml,3\9\39abaea7a7905c02d2162da6cfca24a9d58cbb4d
+‚
+R.idea/libraries/Maven__edu_washington_cs_types_checker_checker_framework_1_7_0.xml,4\f\4f1a3b2fde9e4fd31c97d276a3459d7584ea9a3c
+t
+D.idea/libraries/Maven__org_apache_logging_log4j_log4j_api_2_13_0.xml,2\a\2a0e90aa7c6e3cd852cc2f7fdcdf17fa6ac9a0cf
+u
+E.idea/libraries/Maven__org_apache_logging_log4j_log4j_core_2_13_0.xml,d\c\dce5af649f4b59bea7a980dc80eddbadbf460ff4
+{
+K.idea/libraries/Maven__org_apache_logging_log4j_log4j_slf4j_impl_2_13_0.xml,d\c\dc5aa438230a7f43735dfc3883b1c2eba5a6a1c0
+e
+5.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_25.xml,e\6\e639c26d08947d6df74d6d8ca98a796cafd0830f
+z
+Jsrc/main/java/com/malicia/mrg/mvc/controllers/actionfichierRepertoire.java,f\a\fa6c5399192bdb015425ed0365f84b457372d983
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302

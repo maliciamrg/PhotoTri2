@@ -18,11 +18,11 @@ import java.util.logging.Logger;
  */
 public class Context implements Serializable {
 
+    public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
     private static final long serialVersionUID = 1L;
-
     private static final Context instance = new Context();
     private static final Logger LOGGER;
-    public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
+    public static Context currentContext;
     private static mainFrameController controller;
     private static String root;
     private static Stage primaryStage;
@@ -32,6 +32,16 @@ public class Context implements Serializable {
     private static String repertoireNew = "";
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
+    private static String urlgitwiki = "";
+    private static String bazar = "";
+    private static List<String> kidsModelList;
+
+    /**
+     *
+     */
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
 
     public static String getUrlgitwiki() {
         return urlgitwiki;
@@ -39,18 +49,6 @@ public class Context implements Serializable {
 
     public static void setUrlgitwiki(String urlgitwiki) {
         Context.urlgitwiki = urlgitwiki;
-    }
-
-    private static String urlgitwiki = "";
-    private static String bazar = "";
-    private static List<String> kidsModelList;
-    public static Context currentContext;
-
-    /**
-     *
-     */
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
     /**
@@ -266,8 +264,8 @@ public class Context implements Serializable {
 
         LOGGER.info("Start");
 
-        currentContext=Context.loadPropertiesParameters();
-        if (currentContext == null ) {
+        currentContext = Context.loadPropertiesParameters();
+        if (currentContext == null) {
             Context.initPropertiesParameters();
         }
 

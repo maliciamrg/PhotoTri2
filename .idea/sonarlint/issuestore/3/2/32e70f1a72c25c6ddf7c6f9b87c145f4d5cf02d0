@@ -1,18 +1,36 @@
 
-{squid:S11928"_Define a constant instead of duplicating this literal "on b.rootFolder = c.id_local  " 3 times.(áššœıÿÿÿÿ
-…squid:S1192>"iDefine a constant instead of duplicating this literal "ON ahem.cameraModelRef = aiecm.id_local " 3 times.(ÄˆÄæúÿÿÿÿ
-nsquid:S2095š"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Íğú‡8¼ó…ü-
-squid:S11927"cDefine a constant instead of duplicating this literal "inner join AgLibraryRootFolder c  " 3 times.(àô¥øÿÿÿÿ
-usquid:S11925"_Define a constant instead of duplicating this literal "inner join AgLibraryFolder b  " 3 times.(Ÿˆ”'
-nsquid:S2095¤"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Íğú‡8õ’’ª….
-Hsquid:S1068"*Remove this unused "LOGGER" private field.(×ä¶8›ç©….
-isquid:CommentedOutCodeLineÍ"<This block of commented-out lines of code should be removed.(š›¹8Ú »¾÷-
-xsquid:S1192<"\Define a constant instead of duplicating this literal "ON e.id_local = ahem.image " 3 times.(ÊĞåÏüÿÿÿÿ
-ssquid:S11929"\Define a constant instead of duplicating this literal "inner join Adobe_images e  " 3 times.(·»†ì
-vsquid:S00117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³ï«ëûÿÿÿÿ8é’ä¯.
-tsquid:S1192:"]Define a constant instead of duplicating this literal "on a.id_local = e.rootFile  " 3 times.(¼€¯
-~squid:S1192;"hDefine a constant instead of duplicating this literal "LEFT JOIN AgHarvestedExifMetadata ahem " 3 times.(òÍåh
-‡squid:S1192="kDefine a constant instead of duplicating this literal "LEFT JOIN AgInternedExifCameraModel aiecm " 3 times.(ª‚×Ÿøÿÿÿÿ
-Gsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ë×¤ø-
-wsquid:S11926"[Define a constant instead of duplicating this literal "on a.folder = b.id_local  " 3 times.(¸ˆº¿úÿÿÿÿ
-Gsquid:S1148’"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ğ°ú-
+Gsquid:S1148ú"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ƒğËÌ†.
+…squid:S1192@"iDefine a constant instead of duplicating this literal "ON ahem.cameraModelRef = aiecm.id_local " 3 times.(ÄˆÄæúÿÿÿÿ
+nsquid:S2095Ì"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Íğú‡8¶ğÌ†.
+osquid:CommentedOutCodeLine¥"<This block of commented-out lines of code should be removed.(Ã˜ıèşÿÿÿÿ8ƒğËÌ†.
+xsquid:S1192>"\Define a constant instead of duplicating this literal "ON e.id_local = ahem.image " 3 times.(ÊĞåÏüÿÿÿÿ
+]squid:S1854Î"9Remove this useless assignment to local variable "pstmt".(¬ñ±µıÿÿÿÿ8ƒğËÌ†.
+isquid:CommentedOutCodeLine‚"<This block of commented-out lines of code should be removed.(İ¤ûE8ƒğËÌ†.
+osquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ã˜ıèşÿÿÿÿ8ƒğËÌ†.
+jsquid:CommentedOutCodeLine¾"<This block of commented-out lines of code should be removed.(øê€©8ƒğËÌ†.
+wsquid:S11928"[Define a constant instead of duplicating this literal "on a.folder = b.id_local  " 3 times.(¸ˆº¿úÿÿÿÿ
+nsquid:S2095×"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(Íğú‡8¶ğÌ†.
+~squid:S1192½"ZDefine a constant instead of duplicating this literal "from AgLibraryRootFolder " 3 times.(ş¾•Šúÿÿÿÿ8¶ğÌ†.
+ssquid:S2095÷"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(­÷ šüÿÿÿÿ8¶ğÌ†.
+squid:S11929"cDefine a constant instead of duplicating this literal "inner join AgLibraryRootFolder c  " 3 times.(àô¥øÿÿÿÿ
+jsquid:CommentedOutCodeLineŒ"<This block of commented-out lines of code should be removed.(©·8ƒğËÌ†.
+isquid:CommentedOutCodeLine™"<This block of commented-out lines of code should be removed.(İ¤ûE8ƒğËÌ†.
+Gsquid:S1148Ä"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ğ°ú-
+tsquid:S1192<"]Define a constant instead of duplicating this literal "on a.id_local = e.rootFile  " 3 times.(¼€¯
+Ksquid:S1481±"'Remove this unused "rs" local variable.(úÕ¨àùÿÿÿÿ8ƒğËÌ†.
+usquid:S11927"_Define a constant instead of duplicating this literal "inner join AgLibraryFolder b  " 3 times.(Ÿˆ”'
+~squid:S1192="hDefine a constant instead of duplicating this literal "LEFT JOIN AgHarvestedExifMetadata ahem " 3 times.(òÍåh
+isquid:CommentedOutCodeLineÿ"<This block of commented-out lines of code should be removed.(š›¹8Ú »¾÷-
+‡squid:S1192?"kDefine a constant instead of duplicating this literal "LEFT JOIN AgInternedExifCameraModel aiecm " 3 times.(ª‚×Ÿøÿÿÿÿ
+jsquid:CommentedOutCodeLine­"<This block of commented-out lines of code should be removed.(ÃÂì§8ƒğËÌ†.
+vsquid:S00117Ï"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³ï«ëûÿÿÿÿ8é’ä¯.
+Gsquid:S1148Ò"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8Ë×¤ø-
+jsquid:CommentedOutCodeLine–"<This block of commented-out lines of code should be removed.(ÃÂì§8ƒğËÌ†.
+jsquid:CommentedOutCodeLine£"<This block of commented-out lines of code should be removed.(©·8ƒğËÌ†.
+{squid:S1192:"_Define a constant instead of duplicating this literal "on b.rootFolder = c.id_local  " 3 times.(áššœıÿÿÿÿ
+Hsquid:S1068"*Remove this unused "LOGGER" private field.(×ä¶8›ç©….
+ssquid:S1192;"\Define a constant instead of duplicating this literal "inner join Adobe_images e  " 3 times.(·»†ì
+_squid:UselessImportCheck
+"4Remove this unused import 'java.util.regex.Matcher'.(ëÅ›ã8ÅàÍ†.
+Gsquid:S1148‘"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ƒğËÌ†.
+Zsquid:S1854±"6Remove this useless assignment to local variable "rs".(úÕ¨àùÿÿÿÿ8ƒğËÌ†.

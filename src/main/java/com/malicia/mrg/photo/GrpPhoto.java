@@ -19,7 +19,30 @@ public class GrpPhoto {
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
     public static final String LISTE_ERREUR = "ListeErreur";
+    private String typeEvenement = "";
+    private String emplacement = "";
+    private String personnes = "";
+    private String typeSceancesPhoto = "";
+    private String cameraModelGrp = "";
+    private long mintGrp;
+    private long maxtGrp;
+    private List<String> ele = new ArrayList<>();
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
+    private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+    private String absolutePath;
+    private String pathFromRootComumn;
+    private String pathFromRoot;
+    private String ForceGroup = "";
 
+    public GrpPhoto() {
+
+    }
+
+    public GrpPhoto(String forceGroup, String AbsolutePath, String pathfromrootcomumn) {
+        ForceGroup = forceGroup;
+        absolutePath = AbsolutePath;
+        pathFromRootComumn = pathfromrootcomumn;
+    }
 
     private void setTypeEvenement() {
 //        anniversaire mariage fête vacances ski etc ...
@@ -43,26 +66,13 @@ public class GrpPhoto {
         this.typeSceancesPhoto = "typeSéancesPhoto";
     }
 
-    private String typeEvenement = "";
-    private String emplacement = "";
-    private String personnes = "";
-    private String typeSceancesPhoto = "";
-
     public String getCameraModelGrp() {
         return cameraModelGrp;
     }
 
-    private String cameraModelGrp = "";
-    private long mintGrp;
-    private long maxtGrp;
-
     public List<String> getEle() {
         return ele;
     }
-
-    private List<String> ele = new ArrayList<>();
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
-    private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
     public String getAbsolutePath() {
         return absolutePath;
@@ -72,24 +82,8 @@ public class GrpPhoto {
         this.absolutePath = absolutePath;
     }
 
-    private String absolutePath;
-    private String pathFromRootComumn;
-    private String pathFromRoot;
-    private String ForceGroup = "";
-
     public void setForceGroup(String forceGroup) {
         ForceGroup = forceGroup;
-    }
-
-
-    public GrpPhoto() {
-
-    }
-
-    public GrpPhoto(String forceGroup, String AbsolutePath, String pathfromrootcomumn) {
-        ForceGroup = forceGroup;
-        absolutePath = AbsolutePath;
-        pathFromRootComumn = pathfromrootcomumn;
     }
 
     @Override
@@ -113,10 +107,7 @@ public class GrpPhoto {
     public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
 
         boolean first;
-        first = false;
-        if (absolutePath == null) {
-            first = true;
-        }
+        first = absolutePath == null;
         if (pathFromRootComumn == null) {
             first = true;
         }

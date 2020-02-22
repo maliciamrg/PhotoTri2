@@ -12,16 +12,23 @@ import java.util.logging.Logger;
 
 public class Main extends Application {
 
+    private static final Logger LOGGER;
+
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public static void main(String[] args) {
+        Context.setup();
+        launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
-        Parent root = (Parent) loader.load();
-        mainFrameController controller = (mainFrameController) loader.getController();
+        Parent root = loader.load();
+        mainFrameController controller = loader.getController();
         controller.first();
         Context.setController(controller);
         Context.setPrimaryStage(primaryStage);
@@ -29,14 +36,6 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.show();
     }
-
-
-    public static void main(String[] args) {
-        Context.setup();
-        launch(args);
-    }
-
-    private static final Logger LOGGER;
 
 
 }
