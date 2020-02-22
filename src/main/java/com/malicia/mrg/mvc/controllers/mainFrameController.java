@@ -11,6 +11,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
+import jdk.jfr.events.ExceptionThrownEvent;
+import org.omg.CORBA.UserException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -213,54 +215,75 @@ public class mainFrameController {
     /**
      * Regroupe by new group java . util . list.
      *
-     * @param kidsModelList the kids model list
+     * @param listkidsModel the kids model list
      * @return the java . util . list
      */
-    public static java.util.List<GrpPhoto> regroupeByNewGroup(List<String> kidsModelList) {
+    public static java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) {
 
-//            constitution des groupe
+//            constitution des groupes
 
-        ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdherance(Context.getTempsAdherence());
+        GrpPhoto Bazaz = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto Kidz = new GrpPhoto("@Kidz", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
 
-        GrpPhoto gp = new GrpPhoto();
+        ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdheranceRepNew(Context.getTempsAdherence());
 
-        java.util.List<GrpPhoto> ggp = new ArrayList();
+        GrpPhoto grpPhotoEnc = new GrpPhoto();
+
+        java.util.List<GrpPhoto> listGrpPhoto = new ArrayList();
 
         try {
-            boolean first = true;
 
             while (rs.next()) {
 
 
-                // Now we can fetch the data by column name, save and use them!
+                // Recuperer les info de l'elements
                 String CameraModel = rs.getString("CameraModel");
-                if (!kidsModelList.contains(CameraModel)) {
-                    CameraModel = " ";
-                }
                 long captureTime = rs.getLong("captureTime");
                 long mint = rs.getLong("mint");
                 long maxt = rs.getLong("maxt");
                 String src = rs.getString("src");
                 String absolutePath = rs.getString("absolutePath");
 
-                if (first) {
-                    gp.addfirst(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/");
-                } else {
-                    if (!gp.add(CameraModel, captureTime, mint, maxt, src)) {
-                        ggp.add(gp);
-                        gp = new GrpPhoto();
-                        gp.addfirst(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/");
+                //constitution des groupes forcé
+                if (listkidsModel.contains(CameraModel)) {
+                    Kidz.forceadd(CameraModel, mint, maxt, src);
+                } else{
+
+
+                    //Constitution des groupes de photo standard
+                    if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
+
+                        //regroupement forcé des groupe de photos
+                        if (grpPhotoEnc.getnbele() <= 5) {
+                            Bazaz.add(grpPhotoEnc.getEle());
+                        } else {
+                            if (grpPhotoEnc.dateNull()) {
+                                NoDate.add(grpPhotoEnc.getEle());
+                            } else {
+                                listGrpPhoto.add(grpPhotoEnc);
+                            }
+                        }
+
+                        grpPhotoEnc = new GrpPhoto();
+                        if(!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
+                            throw new ArithmeticException("Erreur l'ors de l'ajout de l'element au group de photo ");
+                        };
                     }
+
                 }
+
                 //}
 //                LOGGER.info("\tCameraModel: " + CameraModel +
 //                        ", captureTime: " + captureTime +
 //                        ", src : " + src);
 
 
-                first = false;
             }
-            ggp.add(gp);
+            listGrpPhoto.add(grpPhotoEnc);
+            listGrpPhoto.add(Bazaz);
+            listGrpPhoto.add(NoDate);
+            listGrpPhoto.add(Kidz);
 
 
 //            LOGGER.info("Nb row lues=> " + nbrow);
@@ -270,7 +293,7 @@ public class mainFrameController {
             e.printStackTrace();
         }
 
-        return ggp;
+        return listGrpPhoto;
     }
 
     /**
@@ -473,10 +496,9 @@ public class mainFrameController {
         LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
 //        RequeteSql.sqlCombineAllGrouplessInGroupByPlageAdherance(Context.getTempsAdherence(), Context.getRepertoireNew());
 
-        java.util.List<GrpPhoto> groupDePhoto = regroupeByNewGroup(Context.getKidsModelList());
-        java.util.List<GrpPhoto> groupDePhotoExecpt = exceptNewGroup(groupDePhoto, Context.getKidsModelList());
-        if (movetoNewGroup(true, groupDePhotoExecpt) && !Context.getDryRun()) {
-            movetoNewGroup(Context.getDryRun(), groupDePhotoExecpt);
+        java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepNewbyGroup(Context.getKidsModelList());
+        if (movetoNewGroup(true, groupDePhoto) && !Context.getDryRun()) {
+            movetoNewGroup(Context.getDryRun(), groupDePhoto);
 //            movetoNewGroup(false,groupDePhoto);
         } else {
             LOGGER.info("movetoNewGroup KO, nothig nmove");

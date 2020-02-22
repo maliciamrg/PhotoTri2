@@ -110,23 +110,44 @@ public class GrpPhoto {
                 '}';
     }
 
-    public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc) {
-        if (cameraModel != null && cameraModelGrp != null) {
-            if (cameraModel.compareTo(cameraModelGrp) != 0) {
-                return false;
-            }
+    public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
+
+        boolean first;
+        first = false;
+        if (absolutePath == null) {
+            first = true;
         }
-        if (mint > 0) {
-            if (mint > maxtGrp) {
-                return false;
-            }
+        if (pathFromRootComumn == null) {
+            first = true;
         }
-        if (maxt > 0) {
-            if (maxt < mintGrp) {
-                return false;
+
+        if (first) {
+            absolutePath = absolutepath;
+            pathFromRootComumn = pathfromrootcomumn;
+        } else {
+            if (cameraModel != null && cameraModelGrp != null) {
+                if (cameraModel.compareTo(cameraModelGrp) != 0) {
+                    return false;
+                }
+            }
+            if (mint > 0) {
+                if (mint > maxtGrp) {
+                    return false;
+                }
+            }
+            if (maxt > 0) {
+                if (maxt < mintGrp) {
+                    return false;
+                }
             }
         }
 
+        forceadd(cameraModel, mint, maxt, elesrc);
+
+        return true;
+    }
+
+    public void forceadd(String cameraModel, long mint, long maxt, String elesrc) {
         //elesrc dans le groupe a conserver
         if (mint < mintGrp) {
             mintGrp = mint;
@@ -137,17 +158,6 @@ public class GrpPhoto {
         if (cameraModel != null) {
             cameraModelGrp = cameraModel;
         }
-        ele.add(elesrc);
-
-        return true;
-    }
-
-    public void addfirst(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
-        mintGrp = mint;
-        maxtGrp = maxt;
-        cameraModelGrp = cameraModel;
-        absolutePath = absolutepath;
-        pathFromRootComumn = pathfromrootcomumn;
         ele.add(elesrc);
     }
 

@@ -218,7 +218,7 @@ public class RequeteSql {
      * @param tempsAdherence the temps adherence
      * @return the result set
      */
-    public static ResultSet sqlGroupGrouplessByPlageAdherance(String tempsAdherence) {
+    public static ResultSet sqlGroupGrouplessByPlageAdheranceRepNew(String tempsAdherence) {
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
         // et calcul la plage d'aherance (+- tempsAdherence)
