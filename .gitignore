@@ -1,7 +1,6 @@
 # file: ~/.gitignore_global
-**/.idea/workspace.xml
-**/.idea/tasks.xml
-**/.idea/sonarlint/
+.DS_Store
+.idea
 # IntelliJ
 out/
 target/
