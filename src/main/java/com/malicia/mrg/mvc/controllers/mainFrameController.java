@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -243,7 +244,7 @@ public class mainFrameController {
 
                 //constitution des groupes forcé
                 if (listkidsModel.contains(CameraModel)) {
-                    Kidz.forceadd(CameraModel, mint, maxt, src);
+                    Kidz.forceadd(null, mint, maxt, src);
                 } else {
 
 
@@ -261,6 +262,7 @@ public class mainFrameController {
                             }
                         }
 
+                        grpPhotoEnc = null;
                         grpPhotoEnc = new GrpPhoto();
                         if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
                             throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
@@ -362,7 +364,7 @@ public class mainFrameController {
             GrpPhoto gptemp = ggp.get(i);
             nbrow += gptemp.getnbele();
 
-            Hashtable hashRet = gptemp.groupAndMouveEle(dryRun);
+            Hashtable hashRet = groupAndMouveEle(gptemp, dryRun);
             LOGGER.info("GrpPhoto:" + gptemp.toString());
             LOGGER.info(" hashRet:" + hashRet.toString());
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
@@ -570,4 +572,68 @@ public class mainFrameController {
             }
         });
     }
+
+    public static Hashtable groupAndMouveEle(GrpPhoto grpPhoto, boolean dryRun) {
+
+        Hashtable displayReturn = new Hashtable();
+        displayReturn.put(GrpPhoto.DEST_NULL, 0);
+        displayReturn.put(GrpPhoto.DEST_NOT_EXIST, 0);
+        displayReturn.put(GrpPhoto.SRC_NOT_EXIST, 0);
+        displayReturn.put(GrpPhoto.ERR_IN_MOVE, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_SAME, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_DO, 0);
+        ArrayList<String> listeErreur = new ArrayList<String>();
+
+        if (grpPhoto.getAbsolutePath() == null) {
+            displayReturn.put(GrpPhoto.DEST_NULL, (Integer) displayReturn.get(GrpPhoto.DEST_NULL) + 1);
+            listeErreur.add("DEST_NULL:absolutePath is null");
+            return displayReturn;
+        }
+        File directoryrepDest = new File(grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn());
+        if (!directoryrepDest.exists()) {
+            displayReturn.put(GrpPhoto.DEST_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.DEST_NOT_EXIST) + 1);
+            listeErreur.add("DEST_NOT_EXIST:" + directoryrepDest.toString());
+            return displayReturn;
+        }
+
+        grpPhoto.setPathFromRoot( grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire());
+
+        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRoot();
+        File directory = new File(directoryName);
+        if (!directory.exists()) {
+            if (!dryRun) {
+                directory.mkdir();
+            }
+        }
+
+        for (int i = 0; i < grpPhoto.getEle().size(); i++) {
+            File source = new File(grpPhoto.getEle().get(i));
+            File destination = new File(directoryName + "/" + source.toPath().getFileName());
+            if (source.toString().compareTo(destination.toString()) == 0) {
+                displayReturn.put(GrpPhoto.OK_MOVE_SAME, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_SAME) + 1);
+            } else {
+                if (!source.exists()) {
+                    displayReturn.put(GrpPhoto.SRC_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.SRC_NOT_EXIST) + 1);
+                    listeErreur.add("SRC_NOT_EXIST:" + source.toString());
+                } else {
+                    if (dryRun) {
+                        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DRY_RUN) + 1);
+                    } else {
+                        try {
+                            Files.move(source.toPath(), destination.toPath());
+                            displayReturn.put(GrpPhoto.OK_MOVE_DO, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DO) + 1);
+                        } catch (IOException e) {
+                            displayReturn.put(GrpPhoto.ERR_IN_MOVE, (Integer) displayReturn.get(GrpPhoto.ERR_IN_MOVE) + 1);
+                            listeErreur.add("ERR_IN_MOVE:" + source.toString() + "=>" + destination.toString());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        displayReturn.put(GrpPhoto.LISTE_ERREUR, listeErreur);
+        return displayReturn;
+    }
+
 }
