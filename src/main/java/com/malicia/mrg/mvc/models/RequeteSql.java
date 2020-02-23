@@ -440,6 +440,36 @@ public class RequeteSql {
         }
         return "";
     }
+
+    public static ResultSet sqlGetAdobeentityIDCounter() {
+        return  SQLiteJDBCDriverConnection.select("" +
+                "select value " +
+                "from Adobe_variablesTable " +
+                "where name =  \"Adobe_entityIDCounter\" " +
+                ";");
+    }
+    public static void sqlSetAdobeentityIDCounter(long nextidlocal) {
+        SQLiteJDBCDriverConnection.select("" +
+                "update Adobe_variablesTable " +
+                "set value = " + nextidlocal + " " +
+                "where name =  \"Adobe_entityIDCounter\" " +
+                ";");
+    }
+
+    public static ResultSet sqlGetAdobestoreProviderID() {
+        return  SQLiteJDBCDriverConnection.select("" +
+                "select value " +
+                "from Adobe_variablesTable " +
+                "where name =  \"Adobe_storeProviderID\" " +
+                ";");
+    }
+    public static void sqlSetAdobestoreProviderID(String nextidlocal) {
+        SQLiteJDBCDriverConnection.select("" +
+                "update Adobe_variablesTable " +
+                "set value = \"" + nextidlocal + "\" " +
+                "where name =  \"Adobe_entityIDCounter\" " +
+                ";");
+    }
 }
 
 

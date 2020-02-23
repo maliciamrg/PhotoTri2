@@ -4,9 +4,9 @@ import com.malicia.mrg.mvc.models.RequeteSql;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +51,8 @@ public class ActionfichierRepertoire {
      */
     public static boolean mkdir(File directory) {
         boolean ret = true;
-        long v = getMaxidlocal();
+        String t = getNextIdGlobal();
+        long v = getNextIdlocal();
         ret &= (RequeteSql.sqlMkdirRepertory(RequeteSql.retrieverootfolder(directory.toString()), directory.toString()) > 0);
         if (ret) {
             directory.mkdir();
@@ -86,25 +87,43 @@ public class ActionfichierRepertoire {
      * tbl_name
      * <p>
      * sortie => max_id_local
+     * <p>
+     * Adobe_variablesTable.Adobe_entityIDCounter
      *
      * @return
      */
-    private static long getMaxidlocal() {
-        ResultSet rs = RequeteSql.sqlGetTableWithIdlocal();
-        long idlocalmax = 0;
+    private static long getNextIdlocal() {
+        long nextidlocal = 0;
         try {
-            while (rs.next()) {
-                long idlocal = RequeteSql.sqlGetMaxIdlocalFromTbl(rs.getString("tbl_name")).getLong(1);
-                if (idlocal > idlocalmax) {
-                    idlocalmax = idlocal;
-                }
-            }
+            long idlocal = RequeteSql.sqlGetAdobeentityIDCounter().getLong(1);
+            nextidlocal = idlocal + 1;
+            RequeteSql.sqlSetAdobeentityIDCounter(nextidlocal);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return nextidlocal;
+    }
 
+    private static String getNextIdGlobal() {
+        String fmtnextidglobal = "";
+        try {
+            String idglobal = RequeteSql.sqlGetAdobestoreProviderID().getString(1);
+            fmtnextidglobal = calculnextidglobalidglobal(idglobal);
 
-        return idlocalmax;
+            RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fmtnextidglobal;
+    }
+
+    private static String calculnextidglobalidglobal(String hexv) {
+        BigInteger decimal = new BigInteger(hexv.substring(0, 8) + hexv.substring(9, 13)
+                + hexv.substring(14, 18) + hexv.substring(19, 23) + hexv.substring(24, 36), 16);
+        decimal = decimal.add(BigInteger.ONE);
+        String hexvp1 = decimal.toString(16).toUpperCase();
+//        String str = Integer.toHexString(decimal+1);
+        return hexvp1.substring(0, 8) + "-" + hexvp1.substring(8, 12) + "-" + hexvp1.substring(12, 16) + "-" + hexvp1.substring(16, 20) + "-" + hexvp1.substring(20, 32);
     }
 
     /**
