@@ -283,43 +283,6 @@ public class mainFrameController {
         return listGrpPhoto;
     }
 
-    /**
-     * Except new group java . util . list.
-     *
-     * @param groupDePhoto  the group de photo
-     * @param KidsModelList the kids model list
-     * @return the java . util . list
-     */
-    public static java.util.List<GrpPhoto> exceptNewGroup(List<GrpPhoto> groupDePhoto, List<String> KidsModelList) {
-        java.util.List<GrpPhoto> excptgdp = new ArrayList();
-        GrpPhoto Bazaz = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto Kidz = new GrpPhoto("@Kidz", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-
-
-        Iterator<GrpPhoto> groupDePhotoIterator = groupDePhoto.iterator();
-
-        while (groupDePhotoIterator.hasNext()) {
-            GrpPhoto gdp = groupDePhotoIterator.next();
-            if (KidsModelList.contains(gdp.getCameraModelGrp())) {
-                Kidz.add(gdp.getEle());
-            } else {
-                if (gdp.getnbele() <= 5) {
-                    Bazaz.add(gdp.getEle());
-                } else {
-                    if (gdp.dateNull()) {
-                        NoDate.add(gdp.getEle());
-                    } else {
-                        excptgdp.add(gdp);
-                    }
-                }
-            }
-        }
-        excptgdp.add(Bazaz);
-        excptgdp.add(NoDate);
-        excptgdp.add(Kidz);
-        return excptgdp;
-    }
 
     /**
      * Merge hashtable.
@@ -548,38 +511,6 @@ public class mainFrameController {
         }
     }
 
-    /**
-     * Renommer un repertoire.
-     * <p>
-     * renomme un repertoire (physique et logique)
-     *
-     * @param repertoiresource the repertoiresource
-     * @param repertoiredest   the repertoiredest
-     * @param idLocal         the id local
-     * @param rootFolder       the root folder
-     */
-    public void renommerUnRepertoire(String repertoiresource, String repertoiredest, String idLocal, String rootFolder) throws SQLException {
-        File directory = new File(repertoiresource);
-        File directorydest = new File(repertoiredest);
-        if (directory.isDirectory()) {
-            directory.renameTo(directorydest);
-            RequeteSql.updateRepertoryName(idLocal, composeRelativeRep(rootFolder, repertoiredest));
-        }
-
-    }
-
-    /**
-     * Compose le nom de repertoire relative au rootfolder
-     * <p>
-     * soustrait le rootfolde rau nom de repertoire pour maj dans la table libraryFolder
-     *
-     * @param rootFolder
-     * @param repertoiredest
-     * @return
-     */
-    public String composeRelativeRep(String rootFolder, String repertoiredest) {
-        return repertoiredest.replace(rootFolder, "");
-    }
 
     public void first() {
         initalizerootselection();

@@ -255,6 +255,24 @@ public class RequeteSql {
 
     }
 
+
+    public static ResultSet sqlGetTableWithIdlocal() {
+        return SQLiteJDBCDriverConnection.select(
+                "select * from \n" +
+                        "(SELECT tbl_name FROM sqlite_master\n" +
+                        "WHERE type = 'table'\n" +
+                        "and sql like \"%id_global%\")" +
+                        ";" );
+    }
+
+    public static ResultSet sqlGetMaxIdlocalFromTbl(String tablename ) {
+        return SQLiteJDBCDriverConnection.select(
+                "select max(id_local) from " +
+                        "\""+tablename+"\" "+
+                        ";" );
+    }
+
+
     /**
      * Liste exif new result set.
      *

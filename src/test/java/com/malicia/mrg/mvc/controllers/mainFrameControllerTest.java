@@ -28,12 +28,12 @@ public class mainFrameControllerTest {
         assertEquals(1, 1);
     }
 
-    @Test
-    public void testComposeRelativeRep() {
-        String expected = controller.composeRelativeRep("D:/50_Phototheque/", "D:/50_Phototheque/!!Legacy/0000_misc/");
-        String actual = "!!Legacy/0000_misc/";
-        assertEquals(actual,expected);
-    }
+//    @Test
+//    public void testComposeRelativeRep() {
+//        String expected = controller.composeRelativeRep("D:/50_Phototheque/", "D:/50_Phototheque/!!Legacy/0000_misc/");
+//        String actual = "!!Legacy/0000_misc/";
+//        assertEquals(actual,expected);
+//    }
 
 //    @Test
 //    public void testRenommerUnRepertoire() {
