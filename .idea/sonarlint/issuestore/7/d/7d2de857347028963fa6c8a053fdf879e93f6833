@@ -1,21 +1,16 @@
 
-}squid:S2293¨"YReplace the type specification in this constructor call with the diamond operator ("<>").(‰þ˜‰ýÿÿÿÿ8ÜçÇ¸ø-
-ksquid:S3986A"HMake sure that Week Year "YYYY" is expected here instead of Year "yyyy".(§§Û´ûÿÿÿÿ8˜­©‡ú-
-psquid:S00117Y"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï‘Èš8ã—Ø¾÷-
-osquid:CommentedOutCodeLineõ"<This block of commented-out lines of code should be removed.(†ÛÅÝýÿÿÿÿ8µ¿²‡ú-
-Lsquid:S1066x"/Merge this if statement with the enclosing one.(ô”ˆh8üí•»÷-
-Gsquid:S1148Ó"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8ô•º¸ø-
-xsquid:S1450M"[Remove the "pathFromRoot" field and declare it as a local variable in the relevant methods.(„ÊË:8Ý§õßõ-
-fsquid:S1854å"BRemove this useless assignment to local variable "datemaxtFormat".(‰Û¦½ùÿÿÿÿ8””±‡ú-
-vsquid:S3776ž"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(þÅÒ¦øÿÿÿÿ8üí•»÷-
-Ssquid:S1066»"/Merge this if statement with the enclosing one.(€âÄëþÿÿÿÿ8ô•º¸ø-
-Vsquid:S1172‘"2Remove this unused method parameter "captureTime".(çÇ½œýÿÿÿÿ8üí•»÷-
-Wsquid:S1481å"3Remove this unused "datemaxtFormat" local variable.(‰Û¦½ùÿÿÿÿ8µ¿²‡ú-
-Lsquid:S1066}"/Merge this if statement with the enclosing one.(¥Û¹8üí•»÷-
-tsquid:S00116N"URename this field "ForceGroup" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µâÝ8üí•»÷-
-Psquid:S1172q"2Remove this unused method parameter "captureTime".(ˆµÿí8üí•»÷-
-Msquid:S1066s"/Merge this if statement with the enclosing one.(²çµ³8üí•»÷-
-“squid:S1319ž"oThe return type of this method should be an interface such as "Map" rather than the implementation "Hashtable".(þÅÒ¦øÿÿÿÿ8üí•»÷-
-zsquid:S1149ž"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(þÅÒ¦øÿÿÿÿ8»Ÿ•õ-
-Esquid:S1075Â"&Remove this hard-coded path-delimiter.(¢·í€8ô•º¸ø-
-usquid:S1149 "VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(¿¥Â8üí•»÷-
+Psquid:S1172}"2Remove this unused method parameter "captureTime".(½ê°8üí•»÷-
+`squid:UselessImportCheck"0Remove this unused import 'java.io.IOException'.(ªº»Úýÿÿÿÿ8ÿËòú†.
+Msquid:S1066”"/Merge this if statement with the enclosing one.(¥Û¹8›žÕã†.
+ksquid:S3986"HMake sure that Week Year "YYYY" is expected here instead of Year "yyyy".(§§Û´ûÿÿÿÿ8˜­©‡ú-
+[squid:UselessImportCheck"0Remove this unused import 'java.nio.file.Files'.(‚ƒü8ÿËòú†.
+Nsquid:S1066Š"/Merge this if statement with the enclosing one.(²çµ³8›žÕã†.
+psquid:S3776}"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(½ê°8›žÕã†.
+psquid:S00117;"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï‘Èš8ã—Ø¾÷-
+Wsquid:S1481¹"3Remove this unused "datemaxtFormat" local variable.(‰Û¦½ùÿÿÿÿ8µ¿²‡ú-
+`squid:UselessImportCheck	"0Remove this unused import 'java.util.Hashtable'.(Œ»ÏÊüÿÿÿÿ8ÿËòú†.
+Msquid:S1066"/Merge this if statement with the enclosing one.(ô”ˆh8›žÕã†.
+Tsquid:UselessImportCheck")Remove this unused import 'java.io.File'.(†Ð¥Å8ÿËòú†.
+tsquid:S001165"URename this field "ForceGroup" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µâÝ8üí•»÷-
+osquid:CommentedOutCodeLineÉ"<This block of commented-out lines of code should be removed.(†ÛÅÝýÿÿÿÿ8µ¿²‡ú-
+fsquid:S1854¹"BRemove this useless assignment to local variable "datemaxtFormat".(‰Û¦½ùÿÿÿÿ8””±‡ú-

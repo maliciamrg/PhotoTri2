@@ -1,12 +1,8 @@
 package com.malicia.mrg.photo;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 public class GrpPhoto {
@@ -30,26 +26,7 @@ public class GrpPhoto {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
     private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
     private String absolutePath;
-
-    public String getPathFromRootComumn() {
-        return pathFromRootComumn;
-    }
-
-    public void setPathFromRootComumn(String pathFromRootComumn) {
-        this.pathFromRootComumn = pathFromRootComumn;
-    }
-
     private String pathFromRootComumn;
-
-    public String getPathFromRoot() {
-        return pathFromRoot;
-    }
-
-    public void setPathFromRoot(String pathFromRoot) {
-        this.pathFromRoot = pathFromRoot;
-    }
-
-    private String pathFromRoot;
     private String ForceGroup = "";
 
     public GrpPhoto() {
@@ -60,6 +37,14 @@ public class GrpPhoto {
         ForceGroup = forceGroup;
         absolutePath = AbsolutePath;
         pathFromRootComumn = pathfromrootcomumn;
+    }
+
+    public String getPathFromRootComumn() {
+        return pathFromRootComumn;
+    }
+
+    public void setPathFromRootComumn(String pathFromRootComumn) {
+        this.pathFromRootComumn = pathFromRootComumn;
     }
 
     private void setTypeEvenement() {
@@ -158,7 +143,7 @@ public class GrpPhoto {
 
     public void forceadd(String cameraModel, long mint, long maxt, String elesrc) {
         //elesrc dans le groupe a conserver
-        if (mint < mintGrp || mintGrp == 0 ) {
+        if (mint < mintGrp || mintGrp == 0) {
             mintGrp = mint;
         }
         if (maxt > maxtGrp) {

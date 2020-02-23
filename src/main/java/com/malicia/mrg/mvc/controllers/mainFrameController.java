@@ -176,7 +176,7 @@ public class mainFrameController {
             if (success == children.length) {
                 // The directory is now empty directory free so delete it
                 LOGGER.info("delete repertory:" + dir.toString());
-                returnVal = ActionfichierRepertoire.deleterepertoire(dir);
+                returnVal = ActionfichierRepertoire.delete_dir(dir);
                 if (returnVal) {
                     return 1;
                 }
@@ -354,30 +354,50 @@ public class mainFrameController {
 //       Execution du deplacement
 
         LOGGER.info("Printing result...");
-        int nbele = 0;
+
+        int nbeleOK = 0;
+        int nbeleAfaire = 0;
 
         Hashtable codeRetourAction = new Hashtable();
 
         LOGGER.info((dryRun ? DRY_RUN : "") + "Nb Groupe Crée " + ggp.size());
-        int nbrow = 0;
+
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
-            nbrow += gptemp.getnbele();
 
-            Hashtable hashRet = groupAndMouveEle(gptemp, dryRun);
+            //Deplacement
+            Hashtable hashRet = moveeletonewgroup(gptemp, dryRun);
+
+            //Display
             LOGGER.info("GrpPhoto:" + gptemp.toString());
             LOGGER.info(" hashRet:" + hashRet.toString());
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
                 LOGGER.info((dryRun ? DRY_RUN : "") + "Bazar Detail:" + hashRet.toString());
             }
+
+            //Cumul des compteurs comparatif
+            nbeleAfaire += gptemp.getnbele();
+            nbeleOK += (int) hashRet.get(GrpPhoto.OK_MOVE_DO) + (int) hashRet.get(GrpPhoto.OK_MOVE_SAME) + (int) hashRet.get(GrpPhoto.OK_MOVE_DRY_RUN);
+
+            //display liste erreur
+            ArrayList<String> listeErreur = (ArrayList<String>) hashRet.get(GrpPhoto.LISTE_ERREUR);
+            if (listeErreur.size()>0) {
+                logecrireuserlogInfo((dryRun ? DRY_RUN : "") + "listeErreur non vide : ReSync Ligthroom ");
+                Iterator<String> iter = listeErreur.iterator();
+                while (iter.hasNext()) {
+                    LOGGER.info("listeErreur : " + iter.next() + " ");
+                }
+            }
+
+            //regrouper les retour de chaque groupe
             mergeHashtable(codeRetourAction, hashRet);
 
         }
 
 
-        logecrireuserlogInfo((dryRun ? DRY_RUN : "") + codeRetourAction.toString());
-        nbele = (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DO) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_SAME) + (int) codeRetourAction.get(GrpPhoto.OK_MOVE_DRY_RUN);
-        return (nbrow == nbele);
+        logecrireuserlogInfo((dryRun ? DRY_RUN : "") + "Nb Groupe " + ggp.size() + " = " + codeRetourAction.toString());
+
+        return (nbeleAfaire == nbeleOK);
     }
 
     /**
@@ -573,7 +593,7 @@ public class mainFrameController {
         });
     }
 
-    public static Hashtable groupAndMouveEle(GrpPhoto grpPhoto, boolean dryRun) {
+    public static Hashtable moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) {
 
         Hashtable displayReturn = new Hashtable();
         displayReturn.put(GrpPhoto.DEST_NULL, 0);
@@ -583,13 +603,17 @@ public class mainFrameController {
         displayReturn.put(GrpPhoto.OK_MOVE_SAME, 0);
         displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, 0);
         displayReturn.put(GrpPhoto.OK_MOVE_DO, 0);
+
         ArrayList<String> listeErreur = new ArrayList<String>();
 
+        // Test de fesabilité
+        //
         if (grpPhoto.getAbsolutePath() == null) {
             displayReturn.put(GrpPhoto.DEST_NULL, (Integer) displayReturn.get(GrpPhoto.DEST_NULL) + 1);
             listeErreur.add("DEST_NULL:absolutePath is null");
             return displayReturn;
         }
+
         File directoryrepDest = new File(grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn());
         if (!directoryrepDest.exists()) {
             displayReturn.put(GrpPhoto.DEST_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.DEST_NOT_EXIST) + 1);
@@ -597,19 +621,20 @@ public class mainFrameController {
             return displayReturn;
         }
 
-        grpPhoto.setPathFromRoot( grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire());
-
-        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRoot();
+        //Création du repertoire destination
+        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire();
         File directory = new File(directoryName);
         if (!directory.exists()) {
             if (!dryRun) {
-                directory.mkdir();
+                ActionfichierRepertoire.mkdir(directory);
             }
         }
 
         for (int i = 0; i < grpPhoto.getEle().size(); i++) {
+
             File source = new File(grpPhoto.getEle().get(i));
             File destination = new File(directoryName + "/" + source.toPath().getFileName());
+
             if (source.toString().compareTo(destination.toString()) == 0) {
                 displayReturn.put(GrpPhoto.OK_MOVE_SAME, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_SAME) + 1);
             } else {
@@ -621,7 +646,7 @@ public class mainFrameController {
                         displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DRY_RUN) + 1);
                     } else {
                         try {
-                            Files.move(source.toPath(), destination.toPath());
+                            ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
                             displayReturn.put(GrpPhoto.OK_MOVE_DO, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DO) + 1);
                         } catch (IOException e) {
                             displayReturn.put(GrpPhoto.ERR_IN_MOVE, (Integer) displayReturn.get(GrpPhoto.ERR_IN_MOVE) + 1);

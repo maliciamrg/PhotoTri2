@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.mainFrameController">
+<VBox prefHeight="403.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.mainFrameController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>
@@ -56,7 +56,7 @@
                 <Label fx:id="lbRepertoireNew" layoutX="14.0" layoutY="73.0" prefHeight="17.0" prefWidth="235.0" text="REpNew" />
                 <Label fx:id="lbTempsAdherence" layoutX="14.0" layoutY="90.0" prefHeight="17.0" prefWidth="235.0" text="adherence" />
                 <CheckBox fx:id="chkDryRun" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#ChangeDryRun" text="DryRun" />
-                <TextArea fx:id="userlogInfo" editable="false" layoutX="8.0" layoutY="155.0" prefHeight="200.0" prefWidth="616.0">
+                <TextArea fx:id="userlogInfo" editable="false" layoutX="8.0" layoutY="155.0" prefHeight="200.0" prefWidth="754.0">
                <font>
                   <Font size="10.0" />
                </font>

@@ -354,6 +354,28 @@ public class RequeteSql {
         return SQLiteJDBCDriverConnection.select("select name , absolutePath from AgLibraryRootFolder ;");
     }
 
+    public static int sqlMkdirRepertory(String rootfolder, String pathasupprimer) {
+        try {
+            String sql = "" +
+                    "stoprun delete from AgLibraryFolder " +
+                    "where rootfolder = \"" + rootfolder + "\" " +
+                    "and " +
+                    "( " +
+                    "select absolutePath " +
+                    "from AgLibraryRootFolder " +
+                    "where id_local = \"" + rootfolder + "\" " +
+                    "LIMIT 1 " +
+                    ") " +
+                    " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
+                    "";
+
+            return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public static int sqlDeleteRepertory(String rootfolder, String pathasupprimer) {
         try {

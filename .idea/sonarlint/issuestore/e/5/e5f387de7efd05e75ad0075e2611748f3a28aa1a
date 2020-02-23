@@ -1,11 +1,11 @@
 
-ƒ"squid:ClassVariableVisibilityCheck"PMake conn a static final constant or non-public and provide accessors if needed.(Û«êßúÿÿÿÿ
-^squid:S20958"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹
-Rsquid:EmptyStatementUsageCheckx"Remove this empty statement.(Åñ­õşÿÿÿÿ8ññº¬….
-^squid:S2095J"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹
-rsquid:S00100o"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìóŸÚüÿÿÿÿ8ªÌ§¬….
-Tsquid:S2629"7Use the built-in formatting to construct this argument.(ş¨©X8“…†ü-
-@squid:S1643€"Use a StringBuilder instead.(ÿüí©ùÿÿÿÿ8´˜´¬….
-esquid:S2095_"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹8Òïø®….
-:squid:S1643w"Use a StringBuilder instead.(ïÿ¢¦8¨ÿ­¬….
+Rsquid:EmptyStatementUsageCheckw"Remove this empty statement.(Åñ­õşÿÿÿÿ8ññº¬….
 Fsquid:S1444"*Make this "public static conn" field final(Û«êßúÿÿÿÿ
+ƒ"squid:ClassVariableVisibilityCheck"PMake conn a static final constant or non-public and provide accessors if needed.(Û«êßúÿÿÿÿ
+esquid:S20957"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹8Òïø®….
+rsquid:S00100n"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìóŸÚüÿÿÿÿ8ªÌ§¬….
+Tsquid:S2629"7Use the built-in formatting to construct this argument.(ş¨©X8“…†ü-
+:squid:S1643v"Use a StringBuilder instead.(ïÿ¢¦8¨ÿ­¬….
+?squid:S1643"Use a StringBuilder instead.(ÿüí©ùÿÿÿÿ8´˜´¬….
+^squid:S2095^"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹
+^squid:S2095I"GUse try-with-resources or close this "Statement" in a "finally" clause.(Êë‹
