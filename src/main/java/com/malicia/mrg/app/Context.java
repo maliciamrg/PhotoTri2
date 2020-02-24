@@ -1,7 +1,7 @@
 package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
-import com.malicia.mrg.mvc.controllers.mainFrameController;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 import javafx.stage.Stage;
@@ -24,7 +24,7 @@ public class Context implements Serializable {
     private static final Context instance = new Context();
     private static final Logger LOGGER;
     public static Context currentContext;
-    private static mainFrameController controller;
+    private static MainFrameController controller;
     private static String root;
     private static Stage primaryStage;
     private static String baseDir;
@@ -93,7 +93,7 @@ public class Context implements Serializable {
      *
      * @return the controller
      */
-    public static mainFrameController getController() {
+    public static MainFrameController getController() {
         return controller;
     }
 
@@ -102,7 +102,7 @@ public class Context implements Serializable {
      *
      * @param controller the controller
      */
-    public static void setController(mainFrameController controller) {
+    public static void setController(MainFrameController controller) {
         Context.controller = controller;
     }
 

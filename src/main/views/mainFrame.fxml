@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="403.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.mainFrameController">
+<VBox prefHeight="403.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>

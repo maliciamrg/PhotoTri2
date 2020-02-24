@@ -16,6 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -30,7 +32,7 @@ import java.util.*;
 /**
  * The type Main frame controller.
  */
-public class mainFrameController {
+public class MainFrameController {
 
     private static final java.util.logging.Logger LOGGER;
     private static final String DEST_NULL = "destNull";
@@ -40,12 +42,12 @@ public class mainFrameController {
     private static final String OK_MOVE_SAME = "OKMoveSame";
     private static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     private static final String OK_MOVE_DO = "OKMoveDo";
+    private static final String DRYRUN = "dryRun =>";
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
-    private final String DRY_RUN = "dryRun =>";
     Map<String, String> absolutePath = new HashMap<String, String>();
     @FXML
     private ChoiceBox rootSelected;
@@ -61,10 +63,11 @@ public class mainFrameController {
     private CheckBox chkDryRun;
     @FXML
     private TextArea userlogInfo;
+
     /**
      * Instantiates a new Main frame controller.
      */
-    private mainFrameController() {
+    public MainFrameController() {
         LOGGER.info("mainFrameController");
     }
 
@@ -147,7 +150,7 @@ public class mainFrameController {
      * @param dReturnEle       the d return ele
      * @param groupAndMouveEle the group and mouve ele
      */
-    private void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
+    private void mergeHashtable(HashMap dReturnEle, HashMap groupAndMouveEle) {
         Set<String> keys = groupAndMouveEle.keySet();
         for (String key : keys) {
             if (dReturnEle.containsKey(key)) {
@@ -162,9 +165,9 @@ public class mainFrameController {
 
     }
 
-    private Hashtable moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) throws IOException, SQLException {
+    private HashMap moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) throws IOException, SQLException {
 
-        Hashtable displayReturn = new Hashtable();
+        HashMap displayReturn = new HashMap();
         displayReturn.put(DEST_NULL, 0);
         displayReturn.put(DEST_NOT_EXIST, 0);
         displayReturn.put(SRC_NOT_EXIST, 0);
@@ -189,10 +192,8 @@ public class mainFrameController {
         //Création du repertoire destination
         String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire();
         File directory = new File(directoryName);
-        if (!directory.exists()) {
-            if (!dryRun) {
-                ActionfichierRepertoire.mkdir(directory);
-            }
+        if (!directory.exists() && !dryRun) {
+            ActionfichierRepertoire.mkdir(directory);
         }
 
         for (int i = 0; i < grpPhoto.getEle().size(); i++) {
@@ -200,20 +201,16 @@ public class mainFrameController {
             File source = new File(grpPhoto.getEle().get(i));
             File destination = new File(directoryName + "/" + source.toPath().getFileName());
 
-            if (source.toString().compareTo(destination.toString()) == 0) {
+            if (true == (source.toString().compareTo(destination.toString()) == 0)) {
                 displayReturn.put(OK_MOVE_SAME, (Integer) displayReturn.get(OK_MOVE_SAME) + 1);
+            } else if (true == !source.exists()) {
+                displayReturn.put(SRC_NOT_EXIST, (Integer) displayReturn.get(SRC_NOT_EXIST) + 1);
+                throw new IllegalStateException("SRC_NOT_EXIST:" + source.toString());
+            } else if (true == dryRun) {
+                displayReturn.put(OK_MOVE_DRY_RUN, (Integer) displayReturn.get(OK_MOVE_DRY_RUN) + 1);
             } else {
-                if (!source.exists()) {
-                    displayReturn.put(SRC_NOT_EXIST, (Integer) displayReturn.get(SRC_NOT_EXIST) + 1);
-                    throw new IllegalStateException("SRC_NOT_EXIST:" + source.toString());
-                } else {
-                    if (dryRun) {
-                        displayReturn.put(OK_MOVE_DRY_RUN, (Integer) displayReturn.get(OK_MOVE_DRY_RUN) + 1);
-                    } else {
-                        ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
-                        displayReturn.put(OK_MOVE_DO, (Integer) displayReturn.get(OK_MOVE_DO) + 1);
-                    }
-                }
+                ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
+                displayReturn.put(OK_MOVE_DO, (Integer) displayReturn.get(OK_MOVE_DO) + 1);
             }
         }
         return displayReturn;
@@ -249,7 +246,7 @@ public class mainFrameController {
             long mint = rs.getLong("mint");
             long maxt = rs.getLong("maxt");
             String src = rs.getString("src");
-            String absolutePath = rs.getString("absolutePath");
+            String absPath = rs.getString("absolutePath");
 
             //constitution des groupes forcé
             if (listkidsModel.contains(CameraModel)) {
@@ -258,7 +255,7 @@ public class mainFrameController {
 
 
                 //Constitution des groupes de photo standard
-                if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
+                if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
@@ -271,9 +268,8 @@ public class mainFrameController {
                         }
                     }
 
-                    grpPhotoEnc = null;
                     grpPhotoEnc = new GrpPhoto();
-                    if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absolutePath, Context.getRepertoireNew() + "/")) {
+                    if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
                         throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                     }
                 }
@@ -304,15 +300,15 @@ public class mainFrameController {
         int nbeleOK = 0;
         int nbeleAfaire = 0;
 
-        Hashtable codeRetourAction = new Hashtable();
+        HashMap codeRetourAction = new HashMap();
 
-        LOGGER.info((dryRun ? DRY_RUN : "") + "Nb Groupe Crée " + ggp.size());
+        LOGGER.info((dryRun ? DRYRUN : "") + "Nb Groupe Crée " + ggp.size());
 
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
 
             //Deplacement
-            Hashtable hashRet = moveeletonewgroup(gptemp, dryRun);
+            HashMap hashRet = moveeletonewgroup(gptemp, dryRun);
 
             //Display
             if ((Integer) hashRet.get(OK_MOVE_DRY_RUN) > 0) {
@@ -320,7 +316,7 @@ public class mainFrameController {
                 LOGGER.info(" hashRet:" + hashRet.toString());
             }
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
-                LOGGER.info((dryRun ? DRY_RUN : "") + "Bazar Detail:" + hashRet.toString());
+                LOGGER.info((dryRun ? DRYRUN : "") + "Bazar Detail:" + hashRet.toString());
             }
 
             //Cumul des compteurs comparatif
@@ -333,7 +329,7 @@ public class mainFrameController {
         }
 
 
-        logecrireuserlogInfo((dryRun ? DRY_RUN : "") + "Nb Groupe " + ggp.size() + " = " + codeRetourAction.toString());
+        logecrireuserlogInfo((dryRun ? DRYRUN : "") + "Nb Groupe " + ggp.size() + " = " + codeRetourAction.toString());
 
         return (nbeleAfaire == nbeleOK);
     }
@@ -368,7 +364,7 @@ public class mainFrameController {
             rootSelected.setValue(rootSelected.getItems().get(0));
         } catch (SQLException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
     }
 
@@ -407,7 +403,7 @@ public class mainFrameController {
             Context.getController().initialize();
         } catch (SQLException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
     }
 
@@ -425,8 +421,17 @@ public class mainFrameController {
             logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
         } catch (IOException e) {
             logecrireuserlogInfo("sauvegarde erreur");
-            e.printStackTrace();
+            excptlog(e);
         }
+    }
+
+    private void excptlog(Exception theException) {
+        StringWriter stringWritter = new StringWriter();
+        PrintWriter printWritter = new PrintWriter(stringWritter, true);
+        theException.printStackTrace(printWritter);
+        printWritter.flush();
+        stringWritter.flush();
+        LOGGER.severe("theException = " + "\n" + stringWritter.toString());
     }
 
     /**
@@ -454,7 +459,7 @@ public class mainFrameController {
             logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
         } catch (SQLException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
     }
 
@@ -479,7 +484,7 @@ public class mainFrameController {
             }
         } catch (IOException | SQLException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
     }
 
@@ -493,7 +498,7 @@ public class mainFrameController {
             }
         } catch (IOException | URISyntaxException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
         logecrireuserlogInfo(Context.getUrlgitwiki());
     }
@@ -516,7 +521,7 @@ public class mainFrameController {
             }
         } catch (IOException | SQLException e) {
             logecrireuserlogInfo(e.toString());
-            e.printStackTrace();
+            excptlog(e);
         }
     }
 
@@ -532,25 +537,4 @@ public class mainFrameController {
         });
     }
 
-    private void setTypeEvenement() {
-//        anniversaire mariage fête vacances ski etc ...
-        String typeEvenement = "typeEvenement";
-    }
-
-    private void setEmplacement() {
-//        ville de prise de vue
-        String emplacement = "emplacement";
-    }
-
-    private void setPersonnes() {
-//        liste de personnes separré par des _
-        String personnes = "personnes";
-    }
-
-    private void setTypeSceancesPhoto() {
-//        Events 10-15 j
-//        Holidays 20-30 sem
-//        Shooting 03-05 j
-        String typeSceancesPhoto = "typeSéancesPhoto";
-    }
 }

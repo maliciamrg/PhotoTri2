@@ -1,7 +1,7 @@
 package com.malicia.mrg;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.controllers.mainFrameController;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +20,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
         Parent root = loader.load();
-        mainFrameController controller = loader.getController();
+        MainFrameController controller = loader.getController();
         controller.first();
         Context.setController(controller);
         Context.setPrimaryStage(primaryStage);
