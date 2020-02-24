@@ -10,8 +10,8 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#selectFichierLigthroom" text="Open…" />
-                        <MenuItem fx:id="makeadulpicatelrcatwithdate" mnemonicParsing="false" onAction="#makeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionSelectFichierLigthroom" text="Open…" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
                         <Menu mnemonicParsing="false" text="_Open Recent" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="_Close" />
@@ -28,12 +28,12 @@
                     <items>
                   <Menu mnemonicParsing="false" text="Purge Repertoire">
                     <items>
-                              <MenuItem mnemonicParsing="false" onAction="#deleteEmptyDirectoryRepertoireNew" text="[RepNew] Physique Vide (+logique lié)" />
-                              <MenuItem mnemonicParsing="false" onAction="#deleteRepertoireLogique" text="[All] Logique Vide" />
+                              <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryRepertoireNew" text="[RepNew] Physique Vide (+logique lié)" />
+                              <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="[All] Logique Vide" />
                     </items>
                   </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#movenewtogrpphotos" text="move New To GrpPhotos" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionMovenewtogrpphotos" text="move New To GrpPhotos" />
                         <MenuItem mnemonicParsing="false" text="_Copy" />
                         <MenuItem mnemonicParsing="false" text="_Paste" />
                         <MenuItem mnemonicParsing="false" text="_Delete" />
@@ -44,7 +44,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#abouturl" text="About PhotoTri2" />
+                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2" />
                     </items>
                 </Menu>
             </menus>
@@ -55,7 +55,7 @@
                 <ChoiceBox fx:id="rootSelected" layoutX="14.0" layoutY="48.0" prefWidth="150.0" />
                 <Label fx:id="lbRepertoireNew" layoutX="14.0" layoutY="73.0" prefHeight="17.0" prefWidth="235.0" text="REpNew" />
                 <Label fx:id="lbTempsAdherence" layoutX="14.0" layoutY="90.0" prefHeight="17.0" prefWidth="235.0" text="adherence" />
-                <CheckBox fx:id="chkDryRun" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#ChangeDryRun" text="DryRun" />
+                <CheckBox fx:id="chkDryRun" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#actionChangeDryRun" text="DryRun" />
                 <TextArea fx:id="userlogInfo" editable="false" layoutX="8.0" layoutY="155.0" prefHeight="200.0" prefWidth="754.0">
                <font>
                   <Font size="10.0" />

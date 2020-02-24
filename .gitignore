@@ -1,9 +1,32 @@
-# file: ~/.gitignore_global
-.DS_Store
-.idea
-# IntelliJ
-out/
+### Build files
 target/
+out/
+bin/
+dist/
+
+### Eclipse Core
+.project
+.settings
+.classpath
+.factorypath
+.tern-project
+
+### IDEA
+.idea/*
+!.idea/runConfigurations
+*.iml
+
+### Tests
+*.err
+*.trc
+*.log
 log.*.txt
 log.*.txt.*
-**/.idea/
+
+### System Files
+.DS_Store
+Thumbs.db
+.apt_generated
+
+
+
