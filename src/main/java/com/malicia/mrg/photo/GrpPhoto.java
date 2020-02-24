@@ -7,8 +7,8 @@ import java.util.List;
 
 public class GrpPhoto {
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
-    private static SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
+    private SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private String cameraModelGrp = "";
     private long mintGrp;
@@ -17,15 +17,15 @@ public class GrpPhoto {
     private List<Double> eledt = new ArrayList<>();
     private String absolutePath;
     private String pathFromRootComumn;
-    private String ForceGroup = "";
+    private String forceGroup = "";
 
     public GrpPhoto() {
 
     }
 
-    public GrpPhoto(String forceGroup, String AbsolutePath, String pathfromrootcomumn) {
-        ForceGroup = forceGroup;
-        absolutePath = AbsolutePath;
+    public GrpPhoto(String forceGroup, String abspath, String pathfromrootcomumn) {
+        this.forceGroup = forceGroup;
+        absolutePath = abspath;
         pathFromRootComumn = pathfromrootcomumn;
     }
 
@@ -65,11 +65,11 @@ public class GrpPhoto {
     }
 
     private String listeeletostring() {
-        String listeletostring = "";
+        StringBuilder listeletostring = new StringBuilder();
         for (int i = 0; i <= ele.size(); i++) {
-            listeletostring += "     " + eledt.get(i) + " -> " + ele.get(i) + "\n";
+            listeletostring.append("     " + eledt.get(i) + " -> " + ele.get(i) + "\n");
         }
-        return listeletostring;
+        return listeletostring.toString();
     }
 
     public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
@@ -84,15 +84,11 @@ public class GrpPhoto {
             absolutePath = absolutepath;
             pathFromRootComumn = pathfromrootcomumn;
         } else {
-            if (mint > 0) {
-                if (mint > maxtGrp) {
-                    return false;
-                }
+            if (mint > 0 && mint > maxtGrp) {
+                return false;
             }
-            if (maxt > 0) {
-                if (maxt < mintGrp) {
-                    return false;
-                }
+            if (maxt > 0 && maxt < mintGrp) {
+                return false;
             }
         }
 
@@ -121,8 +117,8 @@ public class GrpPhoto {
     }
 
     public String getNomRepetrtoire() {
-        if (ForceGroup.compareTo("") != 0) {
-            return (ForceGroup);
+        if (forceGroup.compareTo("") != 0) {
+            return (forceGroup);
         } else {
             Date datemin = new Date(mintGrp * 1000);
             String datemintFormat = repDateFormat.format(datemin);

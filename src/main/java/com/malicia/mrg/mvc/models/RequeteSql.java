@@ -173,21 +173,19 @@ public class RequeteSql {
 //                " having count(b.pathFromRoot)  = 1 ; ");
 
 
-        //* appel au select uniquement pour tracer dans la log
-        ResultSet rs = SQLiteJDBCDriverConnection.select(
-                " select b.pathFromRoot " +
-                        "from AgLibraryFolder b " +
-                        "left join AgLibraryFile a " +
-                        "on a.folder = b.id_local " +
-                        "left join AgLibraryFolder c " +
-                        "on c.pathFromRoot like b.pathFromRoot || \"_%\" " +
-                        "where a.folder is  NULL " +
-                        "and  c.pathFromRoot  is  NULL " +
-                        "group by  b.pathFromRoot ;");
+//        //* appel au select uniquement pour tracer dans la log
+//        SQLiteJDBCDriverConnection.select(
+//                " select b.pathFromRoot " +
+//                        "from AgLibraryFolder b " +
+//                        "left join AgLibraryFile a " +
+//                        "on a.folder = b.id_local " +
+//                        "left join AgLibraryFolder c " +
+//                        "on c.pathFromRoot like b.pathFromRoot || \"_%\" " +
+//                        "where a.folder is  NULL " +
+//                        "and  c.pathFromRoot  is  NULL " +
+//                        "group by  b.pathFromRoot ;");
 
-        try {
-            if (true) {
-                // rs.close();
+
                 String sql = " delete from AgLibraryFolder  " +
                         " where pathFromRoot in ( " +
                         "select b.pathFromRoot " +
@@ -205,11 +203,7 @@ public class RequeteSql {
                 int ret = pstmt.executeUpdate();
                 pstmt = null;
                 return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+
     }
 
     /**
@@ -336,13 +330,11 @@ public class RequeteSql {
                 "from AgLibraryRootFolder " +
                 "LIMIT 1 " +
                 ";");
-        try {
+
             while (rs.next()) {
                 return rs.getString("absolutePath");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
         return "";
     }
 
@@ -417,7 +409,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_source_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + "/").replace(absolutePathsource_toPath, "");
+        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + File.pathSeparator).replace(absolutePathsource_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -433,7 +425,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + "/").replace(absolutePathdestination_toPath, "");
+        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + File.pathSeparator).replace(absolutePathdestination_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -494,13 +486,11 @@ public class RequeteSql {
                 "like absolutePath || \"_%\"  ; " +
                 "");
 
-        try {
+
             while (result.next()) {
                 return result.getString("id_local");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
         return "";
     }
 
