@@ -33,7 +33,7 @@ public class ActionfichierRepertoire {
      * @return the boolean
      * @throws IOException the io exception
      */
-    public static boolean delete_dir(File dir) throws IOException {
+    public static boolean delete_dir(File dir) throws IOException, SQLException {
         boolean ret = true;
         ret &= (RequeteSql.sqlDeleteRepertory(RequeteSql.retrieverootfolder(dir.toString()), dir.toString()) > 0);
         if (ret) {
@@ -49,7 +49,7 @@ public class ActionfichierRepertoire {
      * @param directory the directory
      * @return the boolean
      */
-    public static boolean mkdir(File directory) {
+    public static boolean mkdir(File directory) throws SQLException {
         boolean ret = true;
         ret &= (RequeteSql.sqlMkdirRepertory(getNextIdlocal(), getNextIdGlobal(), RequeteSql.retrieverootfolder(directory.toString()), directory.toString()) > 0);
         if (ret) {
@@ -67,7 +67,7 @@ public class ActionfichierRepertoire {
      * @return the boolean
      * @throws IOException the io exception
      */
-    public static boolean move_file(Path source_toPath, Path destination_toPath) throws IOException {
+    public static boolean move_file(Path source_toPath, Path destination_toPath) throws IOException, SQLException {
         boolean ret = true;
         ret &= (RequeteSql.sqlmovefile(
                 RequeteSql.retrieverootfolder(source_toPath.toString()),
@@ -98,28 +98,28 @@ public class ActionfichierRepertoire {
      *
      * @return
      */
-    private static long getNextIdlocal() {
+    private static long getNextIdlocal() throws SQLException {
         long nextidlocal = 0;
-        try {
+//        try {
             long idlocal = RequeteSql.sqlGetAdobeentityIDCounter().getLong(1);
             nextidlocal = idlocal + 1;
             RequeteSql.sqlSetAdobeentityIDCounter(nextidlocal);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return nextidlocal;
     }
 
-    private static String getNextIdGlobal() {
+    private static String getNextIdGlobal() throws SQLException {
         String fmtnextidglobal = "";
-        try {
-            String idglobal = RequeteSql.sqlGetAdobestoreProviderID().getString(1);
+//        try {
+            String idglobal = RequeteSql.sqlGetIdGlobal().getString(1);
             fmtnextidglobal = calculnextidglobalidglobal(idglobal);
 
             //RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return fmtnextidglobal;
     }
 

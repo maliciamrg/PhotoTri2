@@ -7,6 +7,7 @@ import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -246,31 +247,32 @@ public class Context implements Serializable {
     public static void setup() {
 
 
-        InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
         try {
+
+            InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
             LogManager.getLogManager().readConfiguration(stream);
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
+
+
+            LOGGER.severe("---==[ severe  ]==---");
+            LOGGER.warning("---==[ warning ]==---");
+            LOGGER.info("---==[  info   ]==---");
+            LOGGER.config("---==[ config  ]==---");
+            LOGGER.fine("---==[  fine   ]==---");
+            LOGGER.finer("---==[  finer  ]==---");
+            LOGGER.finest("---==[ finest  ]==---");
+
+            LOGGER.info("Start");
+
+            currentContext = Context.loadPropertiesParameters();
+            if (currentContext == null) {
+                Context.initPropertiesParameters();
+            }
+
+            SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
+            Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
-
-
-        LOGGER.severe("---==[ severe  ]==---");
-        LOGGER.warning("---==[ warning ]==---");
-        LOGGER.info("---==[  info   ]==---");
-        LOGGER.config("---==[ config  ]==---");
-        LOGGER.fine("---==[  fine   ]==---");
-        LOGGER.finer("---==[  finer  ]==---");
-        LOGGER.finest("---==[ finest  ]==---");
-
-        LOGGER.info("Start");
-
-        currentContext = Context.loadPropertiesParameters();
-        if (currentContext == null) {
-            Context.initPropertiesParameters();
-        }
-
-        SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
-        Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
 
     }
 

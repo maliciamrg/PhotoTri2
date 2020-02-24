@@ -123,7 +123,7 @@ public class RequeteSql {
      *
      * @return the int
      */
-    public static int sqlDeleteRepertory() {
+    public static int sqlDeleteRepertory() throws SQLException {
 
         //compte le nombre de photo presente dans la base poour le repertoire
 
@@ -218,7 +218,7 @@ public class RequeteSql {
      * @param tempsAdherence the temps adherence
      * @return the result set
      */
-    public static ResultSet sqlGroupGrouplessByPlageAdheranceRepNew(String tempsAdherence) {
+    public static ResultSet sqlGroupGrouplessByPlageAdheranceRepNew(String tempsAdherence) throws SQLException {
 
         //Extraction des photo groupeless , dans le repertoire %repertoireNew%
         // et calcul la plage d'aherance (+- tempsAdherence)
@@ -258,20 +258,20 @@ public class RequeteSql {
     }
 
 
-    public static ResultSet sqlGetTableWithIdlocal() {
+    public static ResultSet sqlGetTableWithIdlocal() throws SQLException {
         return SQLiteJDBCDriverConnection.select(
                 "select * from \n" +
                         "(SELECT tbl_name FROM sqlite_master\n" +
                         "WHERE type = 'table'\n" +
                         "and sql like \"%id_global%\")" +
-                        ";" );
+                        ";");
     }
 
-    public static ResultSet sqlGetMaxIdlocalFromTbl(String tablename ) {
+    public static ResultSet sqlGetMaxIdlocalFromTbl(String tablename) throws SQLException {
         return SQLiteJDBCDriverConnection.select(
                 "select max(id_local) from " +
-                        "\""+tablename+"\" "+
-                        ";" );
+                        "\"" + tablename + "\" " +
+                        ";");
     }
 
 
@@ -281,7 +281,7 @@ public class RequeteSql {
      * @param repertoirePhoto the repertoire photo
      * @return the result set
      */
-    public static ResultSet listeExifNew(String repertoirePhoto) {
+    public static ResultSet listeExifNew(String repertoirePhoto) throws SQLException {
         return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
                 "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
                 "Adobe_images.fileWidth, Adobe_images.orientation, AgHarvestedExifMetadata.aperture, AgInternedExifCameraModel.value, " +
@@ -316,7 +316,7 @@ public class RequeteSql {
      *
      * @return the result set
      */
-    public static ResultSet selectionRepertoire() {
+    public static ResultSet selectionRepertoire() throws SQLException {
         return SQLiteJDBCDriverConnection.select("SELECT a.dest  " +
                 ", count(*) as nb " +
                 "FROM SelectionRepertoire a " +
@@ -330,7 +330,7 @@ public class RequeteSql {
      *
      * @return the path first
      */
-    public static String getabsolutePathFirst() {
+    public static String getabsolutePathFirst() throws SQLException {
         ResultSet rs = SQLiteJDBCDriverConnection.select("" +
                 "select absolutePath " +
                 "from AgLibraryRootFolder " +
@@ -372,119 +372,120 @@ public class RequeteSql {
      *
      * @return the result set
      */
-    public static ResultSet sqlGetAllRoot() {
+    public static ResultSet sqlGetAllRoot() throws SQLException {
         return SQLiteJDBCDriverConnection.select("select name , absolutePath from AgLibraryRootFolder ;");
     }
 
-    public static int sqlMkdirRepertory(long nextIdlocal, String nextIdGlobal, String rootfolder, String pathacree) {
-        try {
-            String absolutePath = SQLiteJDBCDriverConnection.select("" +
-                    "select absolutePath " +
-                    "from AgLibraryRootFolder " +
-                    "where id_local = \"" + rootfolder + "\" " +
-                    "LIMIT 1 " +
-                    ";").getString(1);
-            String pathacreewoabsolutePath = normalizePath(pathacree).replace(absolutePath, "");
-            String sql = "" +
-                    "INSERT INTO AgLibraryFolder " +
-                    "(id_local, " +
-                    "id_global, " +
-                    "pathFromRoot, " +
-                    "rootFolder) " +
-                    "VALUES ( " +
-                    " \"" + nextIdlocal+ "\" , " +
-                    " \"" + nextIdGlobal + "\" , " +
-                    " \"" + normalizePath(pathacreewoabsolutePath + "/" ) + "\" , " +
-                    " \"" + rootfolder  + "\"  " +
-                    ");" ;
+    public static int sqlMkdirRepertory(long nextIdlocal, String nextIdGlobal, String rootfolder, String pathacree) throws SQLException {
+//        try {
+        String absolutePath = SQLiteJDBCDriverConnection.select("" +
+                "select absolutePath " +
+                "from AgLibraryRootFolder " +
+                "where id_local = \"" + rootfolder + "\" " +
+                "LIMIT 1 " +
+                ";").getString(1);
+        String pathacreewoabsolutePath = normalizePath(pathacree).replace(absolutePath, "");
+        String sql = "" +
+                "INSERT INTO AgLibraryFolder " +
+                "(id_local, " +
+                "id_global, " +
+                "pathFromRoot, " +
+                "rootFolder) " +
+                "VALUES ( " +
+                " \"" + nextIdlocal + "\" , " +
+                " \"" + nextIdGlobal + "\" , " +
+                " \"" + normalizePath(pathacreewoabsolutePath + "/") + "\" , " +
+                " \"" + rootfolder + "\"  " +
+                ");";
 
-            return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
+        return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
-    public static int sqlmovefile(String idrootfolder_source_toPath,Path source_toPath, String idrootfolder_destination_toPath,Path destination_toPath) {
-        try {
-            String sql;
+    public static int sqlmovefile(String idrootfolder_source_toPath, Path source_toPath, String idrootfolder_destination_toPath, Path destination_toPath) throws SQLException {
+//        try {
+        String sql;
+        LOGGER.info(source_toPath.toString() + " => " + destination_toPath.toString());
 
-            String absolutePathsource_toPath = SQLiteJDBCDriverConnection.select("" +
-                    "select absolutePath " +
-                    "from AgLibraryRootFolder " +
-                    "where id_local = \"" + idrootfolder_source_toPath + "\" " +
-                    "LIMIT 1 " +
-                    ";").getString(1);
-            String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent()+"/").replace(absolutePathsource_toPath, "");
-            sql = "" +
-                    "select id_local " +
-                    "from AgLibraryFolder " +
-                    "where pathFromRoot = \"" + pathabsolutePathsource_toPath + "\" " +
-                    "and rootFolder = " + idrootfolder_source_toPath + " " +
-                    "LIMIT 1 " +
-                    ";";
-            String idsource_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
+        String absolutePathsource_toPath = SQLiteJDBCDriverConnection.select("" +
+                "select absolutePath " +
+                "from AgLibraryRootFolder " +
+                "where id_local = \"" + idrootfolder_source_toPath + "\" " +
+                "LIMIT 1 " +
+                ";").getString(1);
+        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + "/").replace(absolutePathsource_toPath, "");
+        sql = "" +
+                "select id_local " +
+                "from AgLibraryFolder " +
+                "where pathFromRoot = \"" + pathabsolutePathsource_toPath + "\" " +
+                "and rootFolder = " + idrootfolder_source_toPath + " " +
+                "LIMIT 1 " +
+                ";";
+        String idsource_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
 
-            String absolutePathdestination_toPath = SQLiteJDBCDriverConnection.select("" +
-                    "select absolutePath " +
-                    "from AgLibraryRootFolder " +
-                    "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
-                    "LIMIT 1 " +
-                    ";").getString(1);
-            String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent()+"/").replace(absolutePathdestination_toPath, "");
-            sql ="" +
-                    "select id_local " +
-                    "from AgLibraryFolder " +
-                    "where pathFromRoot = \"" + pathabsolutePathdestination_toPath + "\" " +
-                    "and rootFolder = " + idrootfolder_destination_toPath + " " +
-                    "LIMIT 1 " +
-                    ";";
-            String iddestination_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
+        String absolutePathdestination_toPath = SQLiteJDBCDriverConnection.select("" +
+                "select absolutePath " +
+                "from AgLibraryRootFolder " +
+                "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
+                "LIMIT 1 " +
+                ";").getString(1);
+        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + "/").replace(absolutePathdestination_toPath, "");
+        sql = "" +
+                "select id_local " +
+                "from AgLibraryFolder " +
+                "where pathFromRoot = \"" + pathabsolutePathdestination_toPath + "\" " +
+                "and rootFolder = " + idrootfolder_destination_toPath + " " +
+                "LIMIT 1 " +
+                ";";
+        String iddestination_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
 
-            sql = "" +
-                    "update AgLibraryFile " +
-                    "set folder =  " + iddestination_toPath + " " +
-                    "where idx_filename =  \"" + (new File(String.valueOf(source_toPath))).getName() + "\" " +
-                    "and folder =  " + idsource_toPath + " " +
-                    ";" ;
-
-            return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        sql = "" +
+                "update AgLibraryFile " +
+                "set folder =  " + iddestination_toPath + " " +
+                "where idx_filename =  \"" + (new File(String.valueOf(source_toPath))).getName() + "\" " +
+                "and folder =  " + idsource_toPath + " " +
+                ";";
+        LOGGER.info(sql);
+        return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
 
-    public static int sqlDeleteRepertory(String rootfolder, String pathasupprimer) {
-        try {
-            String sql = "" +
-                    "delete from AgLibraryFolder " +
-                    "where rootfolder = \"" + rootfolder + "\" " +
-                    "and " +
-                    "( " +
-                    "select absolutePath " +
-                    "from AgLibraryRootFolder " +
-                    "where id_local = \"" + rootfolder + "\" " +
-                    "LIMIT 1 " +
-                    ") " +
-                    " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
-                    "";
+    public static int sqlDeleteRepertory(String rootfolder, String pathasupprimer) throws SQLException {
+//        try {
+        String sql = "" +
+                "delete from AgLibraryFolder " +
+                "where rootfolder = \"" + rootfolder + "\" " +
+                "and " +
+                "( " +
+                "select absolutePath " +
+                "from AgLibraryRootFolder " +
+                "where id_local = \"" + rootfolder + "\" " +
+                "LIMIT 1 " +
+                ") " +
+                " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
+                "";
 
-            return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
+        return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
     }
 
     private static String normalizePath(String path) {
         return path.replaceAll("\\\\", "/");
     }
 
-    public static String retrieverootfolder(String path) {
+    public static String retrieverootfolder(String path) throws SQLException {
 
         ResultSet result = SQLiteJDBCDriverConnection.select("" +
                 "select id_local " +
@@ -503,14 +504,15 @@ public class RequeteSql {
         return "";
     }
 
-    public static ResultSet sqlGetAdobeentityIDCounter() {
-        return  SQLiteJDBCDriverConnection.select("" +
+    public static ResultSet sqlGetAdobeentityIDCounter() throws SQLException {
+        return SQLiteJDBCDriverConnection.select("" +
                 "select value " +
                 "from Adobe_variablesTable " +
                 "where name =  \"Adobe_entityIDCounter\" " +
                 ";");
     }
-    public static void sqlSetAdobeentityIDCounter(long nextidlocal) {
+
+    public static void sqlSetAdobeentityIDCounter(long nextidlocal) throws SQLException {
         SQLiteJDBCDriverConnection.select("" +
                 "update Adobe_variablesTable " +
                 "set value = " + nextidlocal + " " +
@@ -518,9 +520,13 @@ public class RequeteSql {
                 ";");
     }
 
-    public static ResultSet sqlGetAdobestoreProviderID() {
-        return  SQLiteJDBCDriverConnection.select("" +
-                "select id_global from AgLibraryFile " +
+    public static ResultSet sqlGetIdGlobal() throws SQLException {
+        return SQLiteJDBCDriverConnection.select("" +
+                "select id_global ,id_local " +
+                "from AgLibraryFile " +
+                "UNION " +
+                "select id_global ,id_local " +
+                "from AgLibraryFolder " +
                 "order by id_local desc " +
                 "LIMIT 1 " +
                 ";");
@@ -531,7 +537,7 @@ public class RequeteSql {
 //                ";");
     }
 
-    public static void sqlSetAdobestoreProviderID(String nextidglobal) {
+    public static void sqlSetAdobestoreProviderID(String nextidglobal) throws SQLException {
         SQLiteJDBCDriverConnection.select("" +
                 "update Adobe_variablesTable " +
                 "set value = \"" + nextidglobal + "\" " +

@@ -86,25 +86,25 @@ public class SQLiteJDBCDriverConnection {
     /**
      * select all rows in the warehouses table
      */
-    public static ResultSet select(String sql){
+    public static ResultSet select(String sql) throws SQLException {
 
 
         Statement stmt  = null;
-        try {
+//        try {
             stmt = conn.createStatement();
             LOGGER.finest(sql);
 
             // forcage display du resultset
             ResultSet resultSet = stmt.executeQuery(sql);
-            display_resultset(resultSet);
+//            display_resultset(resultSet);
 
             return  stmt.executeQuery(sql);
 
 
-        } catch (SQLException e) {
-            LOGGER.severe(e.getMessage());
-        }
-        return null;
+//        } catch (SQLException e) {
+//            LOGGER.severe(e.getMessage());
+//        }
+//        return null;
     }
 
     private static void display_resultset(ResultSet resultSet) throws SQLException {

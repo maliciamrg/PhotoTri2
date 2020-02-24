@@ -32,8 +32,8 @@ import java.util.*;
  */
 public class mainFrameController {
 
-    private static final java.util.logging.Logger LOGGER;
     public static final String DRY_RUN = "dryRun =>";
+    private static final java.util.logging.Logger LOGGER;
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
@@ -165,7 +165,7 @@ public class mainFrameController {
      * @param dir the dir
      * @return the boolean
      */
-    private static int boucleSupressionRepertoire(File dir) throws IOException {
+    private static int boucleSupressionRepertoire(File dir) throws IOException, SQLException {
         boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
@@ -211,12 +211,109 @@ public class mainFrameController {
     }
 
     /**
+     * Merge hashtable.
+     *
+     * @param dReturnEle       the d return ele
+     * @param groupAndMouveEle the group and mouve ele
+     */
+    public static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
+        Set<String> keys = groupAndMouveEle.keySet();
+        for (String key : keys) {
+            if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
+                if (dReturnEle.containsKey(key)) {
+                    int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
+                    dReturnEle.put(key, val);
+                } else {
+                    dReturnEle.put(key, groupAndMouveEle.get(key));
+                }
+//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
+            }
+        }
+
+    }
+
+    public static Hashtable moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) throws IOException {
+
+        Hashtable displayReturn = new Hashtable();
+        displayReturn.put(GrpPhoto.DEST_NULL, 0);
+        displayReturn.put(GrpPhoto.DEST_NOT_EXIST, 0);
+        displayReturn.put(GrpPhoto.SRC_NOT_EXIST, 0);
+        displayReturn.put(GrpPhoto.ERR_IN_MOVE, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_SAME, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, 0);
+        displayReturn.put(GrpPhoto.OK_MOVE_DO, 0);
+
+        ArrayList<String> listeErreur = new ArrayList<String>();
+
+        // Test de fesabilité
+        //
+        if (grpPhoto.getAbsolutePath() == null) {
+            displayReturn.put(GrpPhoto.DEST_NULL, (Integer) displayReturn.get(GrpPhoto.DEST_NULL) + 1);
+            listeErreur.add("DEST_NULL:absolutePath is null");
+            return displayReturn;
+        }
+
+        File directoryrepDest = new File(grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn());
+        if (!directoryrepDest.exists()) {
+            displayReturn.put(GrpPhoto.DEST_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.DEST_NOT_EXIST) + 1);
+            listeErreur.add("DEST_NOT_EXIST:" + directoryrepDest.toString());
+            return displayReturn;
+        }
+
+        //Création du repertoire destination
+        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire();
+        File directory = new File(directoryName);
+        if (!directory.exists()) {
+            if (!dryRun) {
+                try {
+                    ActionfichierRepertoire.mkdir(directory);
+                } catch (SQLException e) {
+                    LOGGER.info(e.toString());
+                    e.printStackTrace();
+                    return displayReturn;
+                }
+            }
+        }
+
+        for (int i = 0; i < grpPhoto.getEle().size(); i++) {
+
+            File source = new File(grpPhoto.getEle().get(i));
+            File destination = new File(directoryName + "/" + source.toPath().getFileName());
+
+            if (source.toString().compareTo(destination.toString()) == 0) {
+                displayReturn.put(GrpPhoto.OK_MOVE_SAME, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_SAME) + 1);
+            } else {
+                if (!source.exists()) {
+                    displayReturn.put(GrpPhoto.SRC_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.SRC_NOT_EXIST) + 1);
+                    listeErreur.add("SRC_NOT_EXIST:" + source.toString());
+                } else {
+                    if (dryRun) {
+                        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DRY_RUN) + 1);
+                    } else {
+                        try {
+                            ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
+                            displayReturn.put(GrpPhoto.OK_MOVE_DO, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DO) + 1);
+                        } catch (SQLException e) {
+                            displayReturn.put(GrpPhoto.ERR_IN_MOVE, (Integer) displayReturn.get(GrpPhoto.ERR_IN_MOVE) + 1);
+                            listeErreur.add("ERR_IN_MOVE:" + source.toString() + "=>" + destination.toString());
+                            LOGGER.info(e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        displayReturn.put(GrpPhoto.LISTE_ERREUR, listeErreur);
+        return displayReturn;
+    }
+
+    /**
      * Regroupe by new group java . util . list.
      *
      * @param listkidsModel the kids model list
      * @return the java . util . list
      */
-    public static java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) {
+    public java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) throws SQLException {
 
 //            constitution des groupes
 
@@ -278,33 +375,11 @@ public class mainFrameController {
             listGrpPhoto.add(Kidz);
 
         } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
             e.printStackTrace();
         }
 
         return listGrpPhoto;
-    }
-
-
-    /**
-     * Merge hashtable.
-     *
-     * @param dReturnEle       the d return ele
-     * @param groupAndMouveEle the group and mouve ele
-     */
-    public static void mergeHashtable(Hashtable dReturnEle, Hashtable groupAndMouveEle) {
-        Set<String> keys = groupAndMouveEle.keySet();
-        for (String key : keys) {
-            if (key.compareTo(GrpPhoto.LISTE_ERREUR) != 0) {
-                if (dReturnEle.containsKey(key)) {
-                    int val = (int) dReturnEle.get(key) + (int) groupAndMouveEle.get(key);
-                    dReturnEle.put(key, val);
-                } else {
-                    dReturnEle.put(key, groupAndMouveEle.get(key));
-                }
-//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
-            }
-        }
-
     }
 
     /**
@@ -314,7 +389,7 @@ public class mainFrameController {
      * @param ggp    the ggp
      * @return the boolean
      */
-    public boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) {
+    public boolean movetoNewGroup(boolean dryRun, List<GrpPhoto> ggp) throws IOException, SQLException {
 //       Execution du deplacement
 
         LOGGER.info("Printing result...");
@@ -333,8 +408,10 @@ public class mainFrameController {
             Hashtable hashRet = moveeletonewgroup(gptemp, dryRun);
 
             //Display
-            LOGGER.info("GrpPhoto:" + gptemp.toString());
-            LOGGER.info(" hashRet:" + hashRet.toString());
+            if ((Integer) hashRet.get(GrpPhoto.OK_MOVE_DRY_RUN) > 0) {
+                LOGGER.info("GrpPhoto:" + gptemp.toString());
+                LOGGER.info(" hashRet:" + hashRet.toString());
+            }
             if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
                 LOGGER.info((dryRun ? DRY_RUN : "") + "Bazar Detail:" + hashRet.toString());
             }
@@ -345,7 +422,7 @@ public class mainFrameController {
 
             //display liste erreur
             ArrayList<String> listeErreur = (ArrayList<String>) hashRet.get(GrpPhoto.LISTE_ERREUR);
-            if (listeErreur.size()>0) {
+            if (listeErreur.size() > 0) {
                 logecrireuserlogInfo((dryRun ? DRY_RUN : "") + "listeErreur non vide : ReSync Ligthroom ");
                 Iterator<String> iter = listeErreur.iterator();
                 while (iter.hasNext()) {
@@ -381,7 +458,7 @@ public class mainFrameController {
 
     }
 
-    private void initalizerootselection() {
+    private void initalizerootselection() throws SQLException {
         ResultSet rs = RequeteSql.sqlGetAllRoot();
         rootSelected.getSelectionModel().clearSelection();
         rootSelected.getItems().clear();
@@ -393,6 +470,7 @@ public class mainFrameController {
             }
             rootSelected.setValue(rootSelected.getItems().get(0));
         } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
             e.printStackTrace();
         }
     }
@@ -418,17 +496,22 @@ public class mainFrameController {
      * modifier et sauvegarde dans le properties
      */
     public void selectFichierLigthroom() {
-        //Create a file chooser
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
-        if (file != null) {
-            logecrireuserlogInfo("selectedFile:" + file.getAbsolutePath());
-            Context.setCatalogLrcat(file.getAbsolutePath());
-            initalizerootselection();
+        try {
+            //Create a file chooser
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
+            if (file != null) {
+                logecrireuserlogInfo("selectedFile:" + file.getAbsolutePath());
+                Context.setCatalogLrcat(file.getAbsolutePath());
+                initalizerootselection();
+            }
+            Context.savePropertiesParameters(Context.currentContext);
+            Context.getController().initialize();
+        } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            e.printStackTrace();
         }
-        Context.savePropertiesParameters(Context.currentContext);
-        Context.getController().initialize();
     }
 
     public void makeadulpicatelrcatwithdate() {
@@ -438,10 +521,10 @@ public class mainFrameController {
 
         String ori = Context.getCatalogLrcat();
         File fori = new File(ori);
-        String dupdest = fori.getParent() + "\\"+ formattedDate + "_" + fori.getName();
+        String dupdest = fori.getParent() + "\\" + formattedDate + "_" + fori.getName();
         File dest = new File(dupdest);
         try {
-            Files.copy(fori.toPath(),dest.toPath());
+            Files.copy(fori.toPath(), dest.toPath());
             logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
         } catch (IOException e) {
             logecrireuserlogInfo("sauvegarde erreur");
@@ -462,15 +545,20 @@ public class mainFrameController {
      * Boucle delete repertoire logique.
      */
     public void deleteRepertoireLogique() {
-        int nbdel = 0;
-        int nbdeltotal = 0;
-        do {
-            nbdel = RequeteSql.sqlDeleteRepertory();
-            nbdeltotal += nbdel;
-        }
-        while (nbdel > 0);
+        try {
+            int nbdel = 0;
+            int nbdeltotal = 0;
+            do {
+                nbdel = RequeteSql.sqlDeleteRepertory();
+                nbdeltotal += nbdel;
+            }
+            while (nbdel > 0);
 
-        logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+            logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+        } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            e.printStackTrace();
+        }
     }
 
     private void logecrireuserlogInfo(String msg) {
@@ -482,13 +570,19 @@ public class mainFrameController {
      * Move new to grp photos.
      */
     public void movenewtogrpphotos() {
-        LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
+        try {
+            LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
 
-        java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepNewbyGroup(Context.getKidsModelList());
-        if (movetoNewGroup(true, groupDePhoto) && !Context.getDryRun()) {
-            movetoNewGroup(Context.getDryRun(), groupDePhoto);
-        } else {
-            LOGGER.info("movetoNewGroup KO, nothig nmove");
+            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepNewbyGroup(Context.getKidsModelList());
+
+            if (movetoNewGroup(true, groupDePhoto) && !Context.getDryRun()) {
+                movetoNewGroup(Context.getDryRun(), groupDePhoto);
+            } else {
+                LOGGER.info("movetoNewGroup KO, nothig nmove");
+            }
+        } catch (IOException | SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -500,14 +594,12 @@ public class mainFrameController {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
+            logecrireuserlogInfo(e.toString());
             e.printStackTrace();
         }
         logecrireuserlogInfo(Context.getUrlgitwiki());
     }
-
 
     /**
      * Delete empty directory.
@@ -515,23 +607,23 @@ public class mainFrameController {
      * suprimmer tout les repertoires vide (physique et logique)
      */
     public void deleteEmptyDirectoryRepertoireNew() {
-        if (Context.getDryRun()) {
-            logecrireuserlogInfo("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
-        } else {
-            File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
+        try {
+            if (Context.getDryRun()) {
+                logecrireuserlogInfo("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
+            } else {
+                File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
 
-            int ndDelTotal=0;
-            try {
+                int ndDelTotal = 0;
                 ndDelTotal = boucleSupressionRepertoire(directory);
-            } catch (IOException e) {
-                e.printStackTrace();
+                logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
             }
-            logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
+        } catch (IOException | SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            e.printStackTrace();
         }
     }
 
-
-    public void first() {
+    public void first() throws SQLException {
         initalizerootselection();
         rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -541,74 +633,6 @@ public class mainFrameController {
                 }
             }
         });
-    }
-
-    public static Hashtable moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) {
-
-        Hashtable displayReturn = new Hashtable();
-        displayReturn.put(GrpPhoto.DEST_NULL, 0);
-        displayReturn.put(GrpPhoto.DEST_NOT_EXIST, 0);
-        displayReturn.put(GrpPhoto.SRC_NOT_EXIST, 0);
-        displayReturn.put(GrpPhoto.ERR_IN_MOVE, 0);
-        displayReturn.put(GrpPhoto.OK_MOVE_SAME, 0);
-        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, 0);
-        displayReturn.put(GrpPhoto.OK_MOVE_DO, 0);
-
-        ArrayList<String> listeErreur = new ArrayList<String>();
-
-        // Test de fesabilité
-        //
-        if (grpPhoto.getAbsolutePath() == null) {
-            displayReturn.put(GrpPhoto.DEST_NULL, (Integer) displayReturn.get(GrpPhoto.DEST_NULL) + 1);
-            listeErreur.add("DEST_NULL:absolutePath is null");
-            return displayReturn;
-        }
-
-        File directoryrepDest = new File(grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn());
-        if (!directoryrepDest.exists()) {
-            displayReturn.put(GrpPhoto.DEST_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.DEST_NOT_EXIST) + 1);
-            listeErreur.add("DEST_NOT_EXIST:" + directoryrepDest.toString());
-            return displayReturn;
-        }
-
-        //Création du repertoire destination
-        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire();
-        File directory = new File(directoryName);
-        if (!directory.exists()) {
-            if (!dryRun) {
-                ActionfichierRepertoire.mkdir(directory);
-            }
-        }
-
-        for (int i = 0; i < grpPhoto.getEle().size(); i++) {
-
-            File source = new File(grpPhoto.getEle().get(i));
-            File destination = new File(directoryName + "/" + source.toPath().getFileName());
-
-            if (source.toString().compareTo(destination.toString()) == 0) {
-                displayReturn.put(GrpPhoto.OK_MOVE_SAME, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_SAME) + 1);
-            } else {
-                if (!source.exists()) {
-                    displayReturn.put(GrpPhoto.SRC_NOT_EXIST, (Integer) displayReturn.get(GrpPhoto.SRC_NOT_EXIST) + 1);
-                    listeErreur.add("SRC_NOT_EXIST:" + source.toString());
-                } else {
-                    if (dryRun) {
-                        displayReturn.put(GrpPhoto.OK_MOVE_DRY_RUN, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DRY_RUN) + 1);
-                    } else {
-                        try {
-                            ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
-                            displayReturn.put(GrpPhoto.OK_MOVE_DO, (Integer) displayReturn.get(GrpPhoto.OK_MOVE_DO) + 1);
-                        } catch (IOException e) {
-                            displayReturn.put(GrpPhoto.ERR_IN_MOVE, (Integer) displayReturn.get(GrpPhoto.ERR_IN_MOVE) + 1);
-                            listeErreur.add("ERR_IN_MOVE:" + source.toString() + "=>" + destination.toString());
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-        displayReturn.put(GrpPhoto.LISTE_ERREUR, listeErreur);
-        return displayReturn;
     }
 
 }
