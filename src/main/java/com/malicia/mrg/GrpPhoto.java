@@ -10,7 +10,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class GrpPhoto {
-
+//test
     public static final String DEST_NULL = "destNull";
     public static final String DEST_NOT_EXIST = "destNotExist";
     public static final String SRC_NOT_EXIST = "srcNotExist";
@@ -210,6 +210,7 @@ public class GrpPhoto {
         displayReturn.put(LISTE_ERREUR,listeErreur);
         return displayReturn;
     }
+  
 
     private String getNomRepetrtoire() {
         if (ForceGroup.compareTo("")!=0) {
