@@ -23,7 +23,7 @@ public class GrpPhoto {
     private long mintGrp;
     private long maxtGrp;
     private List<String> ele = new ArrayList<>();
-   private List<Double> ele = new ArrayList<>();
+    private List<Double> eledt = new ArrayList<>();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
     private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
     private String absolutePath;
@@ -48,7 +48,6 @@ public class GrpPhoto {
         this.pathFromRootComumn = pathFromRootComumn;
     }
 
-    
 
     public String getCameraModelGrp() {
         return cameraModelGrp;
@@ -101,9 +100,9 @@ public class GrpPhoto {
             pathFromRootComumn = pathfromrootcomumn;
         } else {
             //if (cameraModel != null && cameraModelGrp != null) {
-              //  if (cameraModel.compareTo(cameraModelGrp) != 0) {
-               //     return false;
-               // }
+            //  if (cameraModel.compareTo(cameraModelGrp) != 0) {
+            //     return false;
+            // }
             //}
             if (mint > 0) {
                 if (mint > maxtGrp) {
@@ -117,12 +116,12 @@ public class GrpPhoto {
             }
         }
 
-        forceadd(cameraModel, mint, maxt, elesrc, captureTime );
+        forceadd(cameraModel, captureTime, mint, maxt, elesrc);
 
         return true;
     }
 
-    public void forceadd(String cameraModel, Double captime , long mint, long maxt, String elesrc) {
+    public void forceadd(String cameraModel, double captime, long mint, long maxt, String elesrc) {
         //elesrc dans le groupe a conserver
         if (mint < mintGrp || mintGrp == 0) {
             mintGrp = mint;
@@ -134,7 +133,7 @@ public class GrpPhoto {
             cameraModelGrp = cameraModel;
         }
         ele.add(elesrc);
-eledt.add(captime);
+        eledt.add(captime);
     }
 
     public int getnbele() {
@@ -143,7 +142,7 @@ eledt.add(captime);
 
     public String getNomRepetrtoire() {
         if (ForceGroup.compareTo("") != 0) {
-            return (ForceGroup );
+            return (ForceGroup);
         } else {
             Date datemin = new Date(mintGrp * 1000);
             String datemintFormat = repDateFormat.format(datemin);
@@ -152,19 +151,19 @@ eledt.add(captime);
             String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
 //       YYYY-MM-DD_EVENTS_LIEUX_PERSONNES
-        //    if (typeEvenement.compareTo("") == 0) {
-           //     setTypeEvenement();
-           // }
-           // if (emplacement.compareTo("") == 0) {
-              //  setEmplacement();
+            //    if (typeEvenement.compareTo("") == 0) {
+            //     setTypeEvenement();
+            // }
+            // if (emplacement.compareTo("") == 0) {
+            //  setEmplacement();
             //}
             //if (personnes.compareTo("") == 0) {
-             //   setPersonnes();
+            //   setPersonnes();
             //}
             //if (typeSceancesPhoto.compareTo("") == 0) {
-             //   setTypeSceancesPhoto();
+            //   setTypeSceancesPhoto();
             //}
-            return (datemintFormat + "_" + datemaxFormat).trim();//typeEvenement + "_" + emplacement + "_" + personnes + "_" + typeSceancesPhoto ).trim();
+            return (datemintFormat + "_" + datemaxtFormat).trim();//typeEvenement + "_" + emplacement + "_" + personnes + "_" + typeSceancesPhoto ).trim();
 //            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
         }
     }

@@ -342,7 +342,7 @@ public class mainFrameController {
 
                 //constitution des groupes forcé
                 if (listkidsModel.contains(CameraModel)) {
-                    Kidz.forceadd(null, mint, maxt, src);
+                    Kidz.forceadd(null, captureTime, mint, maxt, src);
                 } else {
 
 
@@ -636,23 +636,23 @@ public class mainFrameController {
     }
 private void setTypeEvenement() {
 //        anniversaire mariage fête vacances ski etc ...
-        this.typeEvenement = "typeEvenement";
+    String typeEvenement = "typeEvenement";
     }
 
     private void setEmplacement() {
 //        ville de prise de vue
-        this.emplacement = "emplacement";
+        String emplacement = "emplacement";
     }
 
     private void setPersonnes() {
 //        liste de personnes separré par des _
-        this.personnes = "personnes";
+        String personnes = "personnes";
     }
 
     private void setTypeSceancesPhoto() {
 //        Events 10-15 j
 //        Holidays 20-30 sem
 //        Shooting 03-05 j
-        this.typeSceancesPhoto = "typeSéancesPhoto";
+        String typeSceancesPhoto = "typeSéancesPhoto";
     }
 }
