@@ -634,5 +634,25 @@ public class mainFrameController {
             }
         });
     }
+private void setTypeEvenement() {
+//        anniversaire mariage fête vacances ski etc ...
+        this.typeEvenement = "typeEvenement";
+    }
 
+    private void setEmplacement() {
+//        ville de prise de vue
+        this.emplacement = "emplacement";
+    }
+
+    private void setPersonnes() {
+//        liste de personnes separré par des _
+        this.personnes = "personnes";
+    }
+
+    private void setTypeSceancesPhoto() {
+//        Events 10-15 j
+//        Holidays 20-30 sem
+//        Shooting 03-05 j
+        this.typeSceancesPhoto = "typeSéancesPhoto";
+    }
 }

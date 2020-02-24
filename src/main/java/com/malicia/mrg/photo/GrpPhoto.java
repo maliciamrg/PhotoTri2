@@ -15,14 +15,15 @@ public class GrpPhoto {
     public static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     public static final String OK_MOVE_DO = "OKMoveDo";
     public static final String LISTE_ERREUR = "ListeErreur";
-    private String typeEvenement = "";
-    private String emplacement = "";
-    private String personnes = "";
-    private String typeSceancesPhoto = "";
+    //private String typeEvenement = "";
+    //private String emplacement = "";
+    //private String personnes = "";
+    //private String typeSceancesPhoto = "";
     private String cameraModelGrp = "";
     private long mintGrp;
     private long maxtGrp;
     private List<String> ele = new ArrayList<>();
+   private List<Double> ele = new ArrayList<>();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
     private SimpleDateFormat repDateFormat = new SimpleDateFormat("YYYY-MM-dd");
     private String absolutePath;
@@ -47,27 +48,7 @@ public class GrpPhoto {
         this.pathFromRootComumn = pathFromRootComumn;
     }
 
-    private void setTypeEvenement() {
-//        anniversaire mariage fête vacances ski etc ...
-        this.typeEvenement = "typeEvenement";
-    }
-
-    private void setEmplacement() {
-//        ville de prise de vue
-        this.emplacement = "emplacement";
-    }
-
-    private void setPersonnes() {
-//        liste de personnes separré par des _
-        this.personnes = "personnes";
-    }
-
-    private void setTypeSceancesPhoto() {
-//        Events 10-15 j
-//        Holidays 20-30 sem
-//        Shooting 03-05 j
-        this.typeSceancesPhoto = "typeSéancesPhoto";
-    }
+    
 
     public String getCameraModelGrp() {
         return cameraModelGrp;
@@ -119,11 +100,11 @@ public class GrpPhoto {
             absolutePath = absolutepath;
             pathFromRootComumn = pathfromrootcomumn;
         } else {
-            if (cameraModel != null && cameraModelGrp != null) {
-                if (cameraModel.compareTo(cameraModelGrp) != 0) {
-                    return false;
-                }
-            }
+            //if (cameraModel != null && cameraModelGrp != null) {
+              //  if (cameraModel.compareTo(cameraModelGrp) != 0) {
+               //     return false;
+               // }
+            //}
             if (mint > 0) {
                 if (mint > maxtGrp) {
                     return false;
@@ -136,12 +117,12 @@ public class GrpPhoto {
             }
         }
 
-        forceadd(cameraModel, mint, maxt, elesrc);
+        forceadd(cameraModel, mint, maxt, elesrc, captureTime );
 
         return true;
     }
 
-    public void forceadd(String cameraModel, long mint, long maxt, String elesrc) {
+    public void forceadd(String cameraModel, Double captime , long mint, long maxt, String elesrc) {
         //elesrc dans le groupe a conserver
         if (mint < mintGrp || mintGrp == 0) {
             mintGrp = mint;
@@ -153,6 +134,7 @@ public class GrpPhoto {
             cameraModelGrp = cameraModel;
         }
         ele.add(elesrc);
+eledt.add(captime);
     }
 
     public int getnbele() {
@@ -161,7 +143,7 @@ public class GrpPhoto {
 
     public String getNomRepetrtoire() {
         if (ForceGroup.compareTo("") != 0) {
-            return (ForceGroup + "__" + cameraModelGrp);
+            return (ForceGroup );
         } else {
             Date datemin = new Date(mintGrp * 1000);
             String datemintFormat = repDateFormat.format(datemin);
@@ -170,19 +152,19 @@ public class GrpPhoto {
             String datemaxtFormat = simpleDateFormat.format(datemaxt);
 
 //       YYYY-MM-DD_EVENTS_LIEUX_PERSONNES
-            if (typeEvenement.compareTo("") == 0) {
-                setTypeEvenement();
-            }
-            if (emplacement.compareTo("") == 0) {
-                setEmplacement();
-            }
-            if (personnes.compareTo("") == 0) {
-                setPersonnes();
-            }
-            if (typeSceancesPhoto.compareTo("") == 0) {
-                setTypeSceancesPhoto();
-            }
-            return (datemintFormat + "_" + typeEvenement + "_" + emplacement + "_" + personnes + "_" + typeSceancesPhoto + "   " + cameraModelGrp).trim();
+        //    if (typeEvenement.compareTo("") == 0) {
+           //     setTypeEvenement();
+           // }
+           // if (emplacement.compareTo("") == 0) {
+              //  setEmplacement();
+            //}
+            //if (personnes.compareTo("") == 0) {
+             //   setPersonnes();
+            //}
+            //if (typeSceancesPhoto.compareTo("") == 0) {
+             //   setTypeSceancesPhoto();
+            //}
+            return (datemintFormat + "_" + datemaxFormat).trim();//typeEvenement + "_" + emplacement + "_" + personnes + "_" + typeSceancesPhoto ).trim();
 //            return (datemintFormat + "__" + String.format("%04d", getnbele()) + "__" + cameraModelGrp + "__" + datemaxtFormat);
         }
     }
