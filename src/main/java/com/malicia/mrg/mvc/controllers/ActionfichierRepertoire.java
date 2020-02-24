@@ -51,9 +51,7 @@ public class ActionfichierRepertoire {
      */
     public static boolean mkdir(File directory) {
         boolean ret = true;
-        String t = getNextIdGlobal();
-        long v = getNextIdlocal();
-        ret &= (RequeteSql.sqlMkdirRepertory(RequeteSql.retrieverootfolder(directory.toString()), directory.toString()) > 0);
+        ret &= (RequeteSql.sqlMkdirRepertory(getNextIdlocal(), getNextIdGlobal(), RequeteSql.retrieverootfolder(directory.toString()), directory.toString()) > 0);
         if (ret) {
             directory.mkdir();
         }
@@ -70,7 +68,15 @@ public class ActionfichierRepertoire {
      * @throws IOException the io exception
      */
     public static boolean move_file(Path source_toPath, Path destination_toPath) throws IOException {
-        Files.move(source_toPath, destination_toPath);
+        boolean ret = true;
+        ret &= (RequeteSql.sqlmovefile(
+                RequeteSql.retrieverootfolder(source_toPath.toString()),
+                source_toPath,
+                RequeteSql.retrieverootfolder(destination_toPath.toString()),
+                destination_toPath)> 0);
+        if (ret) {
+            Files.move(source_toPath, destination_toPath);
+        }
         return true;
     }
 
@@ -110,7 +116,7 @@ public class ActionfichierRepertoire {
             String idglobal = RequeteSql.sqlGetAdobestoreProviderID().getString(1);
             fmtnextidglobal = calculnextidglobalidglobal(idglobal);
 
-            RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
+            //RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
         } catch (SQLException e) {
             e.printStackTrace();
         }

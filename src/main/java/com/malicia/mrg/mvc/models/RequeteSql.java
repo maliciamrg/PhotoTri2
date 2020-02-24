@@ -2,6 +2,8 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -329,8 +331,10 @@ public class RequeteSql {
      * @return the path first
      */
     public static String getabsolutePathFirst() {
-        ResultSet rs = SQLiteJDBCDriverConnection.select("select absolutePath " +
+        ResultSet rs = SQLiteJDBCDriverConnection.select("" +
+                "select absolutePath " +
                 "from AgLibraryRootFolder " +
+                "LIMIT 1 " +
                 ";");
         try {
             while (rs.next()) {
@@ -372,20 +376,27 @@ public class RequeteSql {
         return SQLiteJDBCDriverConnection.select("select name , absolutePath from AgLibraryRootFolder ;");
     }
 
-    public static int sqlMkdirRepertory(String rootfolder, String pathasupprimer) {
+    public static int sqlMkdirRepertory(long nextIdlocal, String nextIdGlobal, String rootfolder, String pathacree) {
         try {
-            String sql = "" +
-                    "stoprun delete from AgLibraryFolder " +
-                    "where rootfolder = \"" + rootfolder + "\" " +
-                    "and " +
-                    "( " +
+            String absolutePath = SQLiteJDBCDriverConnection.select("" +
                     "select absolutePath " +
                     "from AgLibraryRootFolder " +
                     "where id_local = \"" + rootfolder + "\" " +
                     "LIMIT 1 " +
-                    ") " +
-                    " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
-                    "";
+                    ";").getString(1);
+            String pathacreewoabsolutePath = normalizePath(pathacree).replace(absolutePath, "");
+            String sql = "" +
+                    "INSERT INTO AgLibraryFolder " +
+                    "(id_local, " +
+                    "id_global, " +
+                    "pathFromRoot, " +
+                    "rootFolder) " +
+                    "VALUES ( " +
+                    " \"" + nextIdlocal+ "\" , " +
+                    " \"" + nextIdGlobal + "\" , " +
+                    " \"" + normalizePath(pathacreewoabsolutePath + "/" ) + "\" , " +
+                    " \"" + rootfolder  + "\"  " +
+                    ");" ;
 
             return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
 
@@ -394,6 +405,57 @@ public class RequeteSql {
         }
         return 0;
     }
+
+    public static int sqlmovefile(String idrootfolder_source_toPath,Path source_toPath, String idrootfolder_destination_toPath,Path destination_toPath) {
+        try {
+            String sql;
+
+            String absolutePathsource_toPath = SQLiteJDBCDriverConnection.select("" +
+                    "select absolutePath " +
+                    "from AgLibraryRootFolder " +
+                    "where id_local = \"" + idrootfolder_source_toPath + "\" " +
+                    "LIMIT 1 " +
+                    ";").getString(1);
+            String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent()+"/").replace(absolutePathsource_toPath, "");
+            sql = "" +
+                    "select id_local " +
+                    "from AgLibraryFolder " +
+                    "where pathFromRoot = \"" + pathabsolutePathsource_toPath + "\" " +
+                    "and rootFolder = " + idrootfolder_source_toPath + " " +
+                    "LIMIT 1 " +
+                    ";";
+            String idsource_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
+
+            String absolutePathdestination_toPath = SQLiteJDBCDriverConnection.select("" +
+                    "select absolutePath " +
+                    "from AgLibraryRootFolder " +
+                    "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
+                    "LIMIT 1 " +
+                    ";").getString(1);
+            String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent()+"/").replace(absolutePathdestination_toPath, "");
+            sql ="" +
+                    "select id_local " +
+                    "from AgLibraryFolder " +
+                    "where pathFromRoot = \"" + pathabsolutePathdestination_toPath + "\" " +
+                    "and rootFolder = " + idrootfolder_destination_toPath + " " +
+                    "LIMIT 1 " +
+                    ";";
+            String iddestination_toPath = SQLiteJDBCDriverConnection.select(sql).getString(1);
+
+            sql = "" +
+                    "update AgLibraryFile " +
+                    "set folder =  " + iddestination_toPath + " " +
+                    "where idx_filename =  \"" + (new File(String.valueOf(source_toPath))).getName() + "\" " +
+                    "and folder =  " + idsource_toPath + " " +
+                    ";" ;
+
+            return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
     public static int sqlDeleteRepertory(String rootfolder, String pathasupprimer) {
         try {
@@ -458,16 +520,22 @@ public class RequeteSql {
 
     public static ResultSet sqlGetAdobestoreProviderID() {
         return  SQLiteJDBCDriverConnection.select("" +
-                "select value " +
-                "from Adobe_variablesTable " +
-                "where name =  \"Adobe_storeProviderID\" " +
+                "select id_global from AgLibraryFile " +
+                "order by id_local desc " +
+                "LIMIT 1 " +
                 ";");
+//        return  SQLiteJDBCDriverConnection.select("" +
+//                "select value " +
+//                "from Adobe_variablesTable " +
+//                "where name =  \"Adobe_storeProviderID\" " +
+//                ";");
     }
-    public static void sqlSetAdobestoreProviderID(String nextidlocal) {
+
+    public static void sqlSetAdobestoreProviderID(String nextidglobal) {
         SQLiteJDBCDriverConnection.select("" +
                 "update Adobe_variablesTable " +
-                "set value = \"" + nextidlocal + "\" " +
-                "where name =  \"Adobe_entityIDCounter\" " +
+                "set value = \"" + nextidglobal + "\" " +
+                "where name =  \"Adobe_storeProviderID\" " +
                 ";");
     }
 }

@@ -22,6 +22,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
 
@@ -428,6 +429,24 @@ public class mainFrameController {
         }
         Context.savePropertiesParameters(Context.currentContext);
         Context.getController().initialize();
+    }
+
+    public void makeadulpicatelrcatwithdate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        String formattedDate = sdf.format(date);
+
+        String ori = Context.getCatalogLrcat();
+        File fori = new File(ori);
+        String dupdest = fori.getParent() + "\\"+ formattedDate + "_" + fori.getName();
+        File dest = new File(dupdest);
+        try {
+            Files.copy(fori.toPath(),dest.toPath());
+            logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
+        } catch (IOException e) {
+            logecrireuserlogInfo("sauvegarde erreur");
+            e.printStackTrace();
+        }
     }
 
     /**
