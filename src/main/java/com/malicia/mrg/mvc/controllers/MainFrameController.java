@@ -226,9 +226,9 @@ public class MainFrameController {
 
 //            constitution des groupes
 
-        GrpPhoto Bazaz = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto NoDate = new GrpPhoto("@NoDate", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto Kidz = new GrpPhoto("@Kidz", Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto Bazar = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto NoDate = new GrpPhoto(Context.getNoDate(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto Kidz = new GrpPhoto(Context.getKidz(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
 
         ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdheranceRepNew(Context.getTempsAdherence());
 
@@ -259,7 +259,7 @@ public class MainFrameController {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
-                        Bazaz.add(grpPhotoEnc.getEle());
+                        Bazar.add(grpPhotoEnc.getEle());
                     } else {
                         if (grpPhotoEnc.isdateNull()) {
                             NoDate.add(grpPhotoEnc.getEle());
@@ -277,7 +277,7 @@ public class MainFrameController {
             }
         }
         listGrpPhoto.add(grpPhotoEnc);
-        listGrpPhoto.add(Bazaz);
+        listGrpPhoto.add(Bazar);
         listGrpPhoto.add(NoDate);
         listGrpPhoto.add(Kidz);
 
@@ -488,6 +488,20 @@ public class MainFrameController {
         }
     }
 
+    /**
+     * Move chaque photo du bazar dans un groupe.
+     * #interactif
+     *
+     */
+    public void actionRangerlebazar() {
+        try {
+            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
+            throw new IllegalStateException("En travaux");
+        } catch (Exception e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
+    }
     /**
      * Abouturl.
      */

@@ -33,8 +33,16 @@
                     </items>
                   </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
+                <Menu mnemonicParsing="false" text="Rep New">
+                    <items>
                         <MenuItem mnemonicParsing="false" onAction="#actionMovenewtogrpphotos" text="move New To GrpPhotos" />
-                        <MenuItem mnemonicParsing="false" text="_Copy" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Rep Bazar">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="ranger le Bazar" />
+                    </items>
+                </Menu>
                         <MenuItem mnemonicParsing="false" text="_Paste" />
                         <MenuItem mnemonicParsing="false" text="_Delete" />
                         <SeparatorMenuItem mnemonicParsing="false" />

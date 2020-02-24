@@ -35,6 +35,8 @@ public class Context implements Serializable {
     private static String catalogLrcat = "";
     private static String urlgitwiki = "";
     private static String bazar = "";
+    private static String Kidz = "";
+    private static String NoDate = "";
     private static List<String> kidsModelList;
 
     /**
@@ -42,6 +44,22 @@ public class Context implements Serializable {
      */
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public static String getKidz() {
+        return Kidz;
+    }
+
+    public static void setKidz(String kidz) {
+        Kidz = kidz;
+    }
+
+    public static String getNoDate() {
+        return NoDate;
+    }
+
+    public static void setNoDate(String noDate) {
+        NoDate = noDate;
     }
 
     public static String getUrlgitwiki() {
@@ -304,6 +322,8 @@ public class Context implements Serializable {
         setDryRun(properties.getProperty("dryRun", "true").compareTo("true") == 0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setBazar(properties.getProperty("repBazar"));
+        setNoDate(properties.getProperty("repNoDate"));
+        setKidz(properties.getProperty("repKidz"));
         setBaseDir(properties.getProperty("BaseDir"));
     }
 
