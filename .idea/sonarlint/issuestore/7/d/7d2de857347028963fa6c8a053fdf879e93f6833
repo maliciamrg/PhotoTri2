@@ -1,12 +1,0 @@
-
-psquid:S00117$"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï‘Èš8ã—Ø¾÷-
-ksquid:S3986"HMake sure that Week Year "YYYY" is expected here instead of Year "yyyy".(§§Û´ûÿÿÿÿ8˜­©‡ú-
-Psquid:S1172n"2Remove this unused method parameter "captureTime".(½ê°8üí•»÷-
-psquid:S3776n"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(½ê°8›Õã†.
-tsquid:S00116"URename this field "ForceGroup" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µâİ8üí•»÷-
-osquid:CommentedOutCodeLineº"<This block of commented-out lines of code should be removed.(†ÛÅİıÿÿÿÿ8µ¿²‡ú-
-Msquid:S1066…"/Merge this if statement with the enclosing one.(¥Û¹8›Õã†.
-fsquid:S1854ª"BRemove this useless assignment to local variable "datemaxtFormat".(‰Û¦½ùÿÿÿÿ8””±‡ú-
-Msquid:S1066{"/Merge this if statement with the enclosing one.(²çµ³8›Õã†.
-Msquid:S1066€"/Merge this if statement with the enclosing one.(ô”ˆh8›Õã†.
-Wsquid:S1481ª"3Remove this unused "datemaxtFormat" local variable.(‰Û¦½ùÿÿÿÿ8µ¿²‡ú-
