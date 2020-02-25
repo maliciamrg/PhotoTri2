@@ -217,19 +217,17 @@ public class MainFrameController {
         return displayReturn;
     }
 
-	
 
-	private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
+    private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
-		ResultSet rsele = RequeteSql.sqleleRepBazar(Context.getTempsAdherence(),repBazar);
+        ResultSet rsele = RequeteSql.sqleleRepBazar(Context.getTempsAdherence(), repBazar);
 
         java.util.List<ElePhoto> listElePhoto = new ArrayList();
 
 
         while (rsele.next()) {
-
 
 
             // Recuperer les info de l'elements
@@ -240,71 +238,60 @@ public class MainFrameController {
             String absPath = rsele.getString("absolutePath");
 
 
-
-			//Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto( captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/"));
-
+            //Constitution des groupes de photo standard
+            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/"));
 
 
-
-			}
-
-
-
+        }
 
 
         return listElePhoto;
     }
 
-	private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
+    private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
-        ResultSet rsgrp = RequeteSql.sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(),repBazar);
-       
-		GrpPhoto grpPhotoEnc = new GrpPhoto()
+        ResultSet rsgrp = RequeteSql.sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(), repBazar);
+
+        GrpPhoto grpPhotoEnc = new GrpPhoto();
 
         java.util.List<GrpPhoto> listGrpPhoto = new ArrayList();
-	
+
 
         while (rsgrp.next()) {
 
-			
-			
+
             // Recuperer les info de l'elements
             long captureTime = rsgrp.getLong("captureTime");
             long mint = rsgrp.getLong("mint");
             long maxt = rsgrp.getLong("maxt");
             String src = rsgrp.getString("src");
+            String pathFromRoot = rsgrp.getString("pathFromRoot");
             String absPath = rsgrp.getString("absolutePath");
 
-         
 
-                //Constitution des groupes de photo standard
+            //Constitution des groupes de photo standard
+            if (!grpPhotoEnc.add(pathFromRoot, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+
+
+                listGrpPhoto.add(grpPhotoEnc);
+
+
+                grpPhotoEnc = new GrpPhoto();
                 if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
-
-                   
-                    listGrpPhoto.add(grpPhotoEnc);
-                        
-                    
-
-                    grpPhotoEnc = new GrpPhoto();
-                    if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
-                        throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
-                    }
+                    throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                 }
+            }
 
-            
+
         }
         listGrpPhoto.add(grpPhotoEnc);
-        
 
-		
-		
 
         return listGrpPhoto;
     }
-	
+
     /**
      * Regroupe by new group java . util . list.
      *
@@ -580,25 +567,24 @@ public class MainFrameController {
     /**
      * Move chaque photo du bazar dans un groupe.
      * #interactif
-     *
      */
     public void actionRangerlebazar() {
         try {
-            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun())
-		
-			java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar())
+            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
 
-			java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar())
-			
-		
-		
-			
+            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar());
+
+            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar());
+
+
+
             throw new IllegalStateException("En travaux");
         } catch (Exception e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
     }
+
     /**
      * Abouturl.
      */

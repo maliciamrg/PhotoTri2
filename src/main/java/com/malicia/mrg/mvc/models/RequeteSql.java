@@ -535,10 +535,76 @@ public class RequeteSql {
                 ";");
     }
 
-    public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar) {
+    public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar) throws SQLException {
+
+        //Extraction des photo  , dans toute la bib
+        // et calcul la plage d'aherance (+- tempsAdherence)
+        //
+        // GroupNewPhoto
+        //      captureTime (in seconds)
+        //      mint (adherence min) (in seconds)
+        //      maxt (adherence max) (in seconds)
+        //      pathFromRoot (pathFromRoot)
+        //      src (element)
+        //      absolutePath (absolutePath)
+        //      captureTimeOrig
+        return SQLiteJDBCDriverConnection.select(
+                "select  " +
+                        " strftime('%s', e.captureTime) as captureTime , " +
+                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
+                        " b.pathFromRoot , " +
+                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath  as absolutePath , " +
+                        " e.captureTime as captureTimeOrig " +
+                        "from AgLibraryFile a  " +
+                        "inner join AgLibraryFolder b  " +
+                        "on a.folder = b.id_local  " +
+                        "inner join AgLibraryRootFolder c  " +
+                        "on b.rootFolder = c.id_local  " +
+                        "inner join Adobe_images e  " +
+                        "on a.id_local = e.rootFile  " +
+                        "Where b.pathFromRoot not like \"" + "%" + repBazar + "%" + "\"" +
+//                        " Order by CameraModel , captureTime ;  ");
+                        " Order by b.pathFromRoot , captureTime ;  ");
+
     }
 
-    public static ResultSet sqleleRepBazar(String tempsAdherence, String repBazar) {
+    public static ResultSet sqleleRepBazar(String tempsAdherence, String repBazar) throws SQLException {
+        //Extraction des photo  , du bazar
+        // et calcul la plage d'aherance (+- tempsAdherence)
+        //
+        // GroupNewPhoto
+        //      captureTime (in seconds)
+        //      mint (adherence min) (in seconds)
+        //      maxt (adherence max) (in seconds)
+        //      CameraModel
+        //      src (element)
+        //      absolutePath (absolutePath)
+        //      captureTimeOrig
+        return SQLiteJDBCDriverConnection.select(
+                "select  " +
+                        " strftime('%s', e.captureTime) as captureTime , " +
+                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
+                        " aiecm.value as CameraModel , " +
+                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath  as absolutePath , " +
+                        " e.captureTime as captureTimeOrig " +
+                        "from AgLibraryFile a  " +
+                        "inner join AgLibraryFolder b  " +
+                        "on a.folder = b.id_local  " +
+                        "inner join AgLibraryRootFolder c  " +
+                        "on b.rootFolder = c.id_local  " +
+                        "inner join Adobe_images e  " +
+                        "on a.id_local = e.rootFile  " +
+                        "LEFT JOIN AgHarvestedExifMetadata ahem " +
+                        "ON e.id_local = ahem.image " +
+                        "LEFT JOIN AgInternedExifCameraModel aiecm " +
+                        "ON ahem.cameraModelRef = aiecm.id_local " +
+                        "Where b.pathFromRoot like \"" + "%" + repBazar + "%" + "\"" +
+//                        " Order by CameraModel , captureTime ;  ");
+                        " Order by captureTime ;  ");
     }
 }
 
