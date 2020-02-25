@@ -216,6 +216,95 @@ public class MainFrameController {
         return displayReturn;
     }
 
+	
+
+	private java.util.List<GrpPhoto> getEleBazar(String repBazar) throws SQLException {
+
+//            constitution des groupes
+
+		ResultSet rsele = RequeteSql.sqleleRepBazar(Context.getTempsAdherence(),repBazar);
+
+        java.util.List<ElePhoto> listElePhoto = new ArrayList();
+
+
+        while (rsele.next()) {
+
+
+
+            // Recuperer les info de l'elements
+            long captureTime = rsgrp.getLong("captureTime");
+            long mint = rsgrp.getLong("mint");
+            long maxt = rsgrp.getLong("maxt");
+            String src = rsgrp.getString("src");
+            String absPath = rsgrp.getString("absolutePath");
+
+
+
+			//Constitution des groupes de photo standard
+			listelephoto.add(new elephoto( captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) 
+
+
+				listElePhoto.add(grpPhotoEnc);
+
+
+			}
+
+
+
+
+
+        return listElePhoto;
+    }
+
+	private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
+
+//            constitution des groupes
+
+        ResultSet rsgrp = RequeteSql.sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(),repBazar);
+       
+		GrpPhoto grpPhotoEnc = new GrpPhoto()
+
+        java.util.List<GrpPhoto> listGrpPhoto = new ArrayList();
+	
+
+        while (rsgrp.next()) {
+
+			
+			
+            // Recuperer les info de l'elements
+            long captureTime = rsgrp.getLong("captureTime");
+            long mint = rsgrp.getLong("mint");
+            long maxt = rsgrp.getLong("maxt");
+            String src = rsgrp.getString("src");
+            String absPath = rsgrp.getString("absolutePath");
+
+         
+
+                //Constitution des groupes de photo standard
+                if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+
+                   
+                    listGrpPhoto.add(grpPhotoEnc);
+                        
+                    
+
+                    grpPhotoEnc = new GrpPhoto();
+                    if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+                        throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
+                    }
+                }
+
+            
+        }
+        listGrpPhoto.add(grpPhotoEnc);
+        
+
+		
+		
+
+        return listGrpPhoto;
+    }
+	
     /**
      * Regroupe by new group java . util . list.
      *
@@ -495,7 +584,15 @@ public class MainFrameController {
      */
     public void actionRangerlebazar() {
         try {
-            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
+            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun())
+		
+			java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar())
+
+			java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar())
+			
+		
+		
+			
             throw new IllegalStateException("En travaux");
         } catch (Exception e) {
             logecrireuserlogInfo(e.toString());
