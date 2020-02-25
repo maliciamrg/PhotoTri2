@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.app.ElePhoto;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.GrpPhoto;
 import javafx.beans.value.ChangeListener;
@@ -218,7 +219,7 @@ public class MainFrameController {
 
 	
 
-	private java.util.List<GrpPhoto> getEleBazar(String repBazar) throws SQLException {
+	private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
@@ -232,19 +233,18 @@ public class MainFrameController {
 
 
             // Recuperer les info de l'elements
-            long captureTime = rsgrp.getLong("captureTime");
-            long mint = rsgrp.getLong("mint");
-            long maxt = rsgrp.getLong("maxt");
-            String src = rsgrp.getString("src");
-            String absPath = rsgrp.getString("absolutePath");
+            long captureTime = rsele.getLong("captureTime");
+            long mint = rsele.getLong("mint");
+            long maxt = rsele.getLong("maxt");
+            String src = rsele.getString("src");
+            String absPath = rsele.getString("absolutePath");
 
 
 
 			//Constitution des groupes de photo standard
-			listelephoto.add(new elephoto( captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) 
+            listElePhoto.add(new ElePhoto( captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/"));
 
 
-				listElePhoto.add(grpPhotoEnc);
 
 
 			}

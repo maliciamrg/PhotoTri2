@@ -534,6 +534,12 @@ public class RequeteSql {
                 "where name =  \"Adobe_storeProviderID\" " +
                 ";");
     }
+
+    public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar) {
+    }
+
+    public static ResultSet sqleleRepBazar(String tempsAdherence, String repBazar) {
+    }
 }
 
 
