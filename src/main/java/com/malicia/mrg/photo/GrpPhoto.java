@@ -14,7 +14,12 @@ public class GrpPhoto {
     private long mintGrp;
     private long maxtGrp;
     private List<String> ele = new ArrayList<>();
-    private List<Double> eledt = new ArrayList<>();
+
+    public List<String> getEledt() {
+        return eledt;
+    }
+
+    private List<String> eledt = new ArrayList<>();
     private String absolutePath;
     private String pathFromRootComumn;
     private String forceGroup = "";
@@ -65,8 +70,11 @@ public class GrpPhoto {
     }
 
     private String listeeletostring() {
+        if (ele.size()!=eledt.size()){
+            throw new IllegalStateException("ele.size=>" + ele.size()+ " != " +" eledt.size=>" +  eledt.size());
+        }
         StringBuilder listeletostring = new StringBuilder();
-        for (int i = 0; i <= ele.size(); i++) {
+        for (int i = 0; i < ele.size(); i++) {
             listeletostring.append("     " + eledt.get(i) + " -> " + ele.get(i) + "\n");
         }
         return listeletostring.toString();
@@ -84,16 +92,21 @@ public class GrpPhoto {
             absolutePath = absolutepath;
             pathFromRootComumn = pathfromrootcomumn;
         } else {
-            if (mint > 0 && mint > maxtGrp) {
-                return false;
-            }
-            if (maxt > 0 && maxt < mintGrp) {
-                return false;
-            }
+            if (!testInterval(mint, maxt)) return false;
         }
 
         forceadd(cameraModel, captureTime, mint, maxt, elesrc);
 
+        return true;
+    }
+
+    public boolean testInterval(long mint, long maxt) {
+        if (mint > 0 && mint > maxtGrp) {
+            return false;
+        }
+        if (maxt > 0 && maxt < mintGrp) {
+            return false;
+        }
         return true;
     }
 
@@ -109,7 +122,11 @@ public class GrpPhoto {
             cameraModelGrp = cameraModel;
         }
         ele.add(elesrc);
-        eledt.add(captime);
+
+        Date datecaptime = new Date((long) (captime * 1000));
+        String datemaxtFormat = simpleDateFormat.format(datecaptime);
+
+        eledt.add(datemaxtFormat);
     }
 
     public int getnbele() {
@@ -130,8 +147,9 @@ public class GrpPhoto {
         }
     }
 
-    public void add(List<String> eleIn) {
+    public void add(List<String> eleIn, List<String> eledtIn) {
         ele.addAll(eleIn);
+        eledt.addAll(eledtIn);
     }
 
     public boolean isdateNull() {

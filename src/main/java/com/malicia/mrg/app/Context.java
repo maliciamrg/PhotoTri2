@@ -267,7 +267,7 @@ public class Context implements Serializable {
 
         try {
 
-            InputStream stream = Main.class.getClassLoader().getResourceAsStream("logging.properties");
+            InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
             LogManager.getLogManager().readConfiguration(stream);
 
 

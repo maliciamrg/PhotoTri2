@@ -1,7 +1,8 @@
 package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.ElePhoto;
+import com.malicia.mrg.app.Ressources;
+import com.malicia.mrg.photo.ElePhoto;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.GrpPhoto;
 import javafx.beans.value.ChangeListener;
@@ -218,7 +219,7 @@ public class MainFrameController {
     }
 
 
-    private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
+    public java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
@@ -248,7 +249,7 @@ public class MainFrameController {
         return listElePhoto;
     }
 
-    private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
+    public java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
@@ -264,6 +265,7 @@ public class MainFrameController {
 
             // Recuperer les info de l'elements
             long captureTime = rsgrp.getLong("captureTime");
+            long captureTimeOrig = rsgrp.getLong("captureTimeOrig");
             long mint = rsgrp.getLong("mint");
             long maxt = rsgrp.getLong("maxt");
             String src = rsgrp.getString("src");
@@ -279,7 +281,7 @@ public class MainFrameController {
 
 
                 grpPhotoEnc = new GrpPhoto();
-                if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+                if (!grpPhotoEnc.add(pathFromRoot, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
                     throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                 }
             }
@@ -298,7 +300,7 @@ public class MainFrameController {
      * @param listkidsModel the kids model list
      * @return the java . util . list
      */
-    private java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) throws SQLException {
+    public java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) throws SQLException {
 
 //            constitution des groupes
 
@@ -319,6 +321,7 @@ public class MainFrameController {
             // Recuperer les info de l'elements
             String CameraModel = rs.getString("CameraModel");
             long captureTime = rs.getLong("captureTime");
+            long captureTimeOrig = rs.getLong("captureTimeOrig");
             long mint = rs.getLong("mint");
             long maxt = rs.getLong("maxt");
             String src = rs.getString("src");
@@ -331,21 +334,21 @@ public class MainFrameController {
 
 
                 //Constitution des groupes de photo standard
-                if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+                if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
-                        Bazar.add(grpPhotoEnc.getEle());
+                        Bazar.add(grpPhotoEnc.getEle(),grpPhotoEnc.getEledt());
                     } else {
                         if (grpPhotoEnc.isdateNull()) {
-                            NoDate.add(grpPhotoEnc.getEle());
+                            NoDate.add(grpPhotoEnc.getEle(),grpPhotoEnc.getEledt());
                         } else {
                             listGrpPhoto.add(grpPhotoEnc);
                         }
                     }
 
                     grpPhotoEnc = new GrpPhoto();
-                    if (!grpPhotoEnc.add(CameraModel, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+                    if (!grpPhotoEnc.add(null, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
                         throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                     }
                 }
@@ -573,12 +576,23 @@ public class MainFrameController {
             LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
 
             java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar());
-
             java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar());
+            for (int iele = 0; iele < elementsPhoto.size(); iele++) {
+                ElePhoto elePhotocurrent = elementsPhoto.get(iele);
+                elePhotocurrent.getMint();
+                elePhotocurrent.getMaxt();
+                for (int igrp = 0; igrp < groupDePhoto.size(); igrp++) {
+                    if(groupDePhoto.get(igrp).testInterval(elePhotocurrent.getMint(), elePhotocurrent.getMaxt())){
+                        elePhotocurrent.addgroupDePhotoCandidat(groupDePhoto.get(igrp));
+                    }
+                }
+            }
+            if (Context.getDryRun()) {
+                System.out.println(Ressources.listetostring(elementsPhoto));
+            }
 
 
-
-            throw new IllegalStateException("En travaux");
+//            throw new IllegalStateException("En travaux");
         } catch (Exception e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
