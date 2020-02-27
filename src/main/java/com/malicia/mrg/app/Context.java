@@ -2,7 +2,7 @@ package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
-import com.malicia.mrg.mvc.controllers.PopUpChxRepertoireController;
+import com.malicia.mrg.mvc.controllers.PopUpController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
 import javafx.stage.Popup;
@@ -40,7 +40,7 @@ public class Context implements Serializable {
     private static String Kidz = "";
     private static String NoDate = "";
     private static List<String> kidsModelList;
-    private static PopUpChxRepertoireController controllerpopup;
+    private static PopUpController controllerpopup;
     private static Popup popup;
 
     /**
@@ -58,11 +58,11 @@ public class Context implements Serializable {
         Context.popup = popup;
     }
 
-    public static PopUpChxRepertoireController getControllerpopup() {
+    public static PopUpController getControllerpopup() {
         return controllerpopup;
     }
 
-    public static void setControllerpopup(PopUpChxRepertoireController controllerpopup) {
+    public static void setControllerpopup(PopUpController controllerpopup) {
         Context.controllerpopup = controllerpopup;
     }
 

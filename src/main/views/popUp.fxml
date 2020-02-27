@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane onKeyPressed="#handle" prefHeight="402.0" prefWidth="912.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.PopUpController">
+   <children>
+      <Button fx:id="BtnCancel" layoutX="846.0" layoutY="357.0" mnemonicParsing="false" onAction="#ActionBtnCancel" text="Cancel" />
+      <ImageView fx:id="image2UL" fitHeight="150.0" fitWidth="200.0" layoutX="498.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imageOne" fitHeight="300.0" fitWidth="448.0" layoutX="14.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2UR" fitHeight="150.0" fitWidth="200.0" layoutX="698.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2LL" fitHeight="150.0" fitWidth="200.0" layoutX="498.0" layoutY="198.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2LR" fitHeight="150.0" fitWidth="200.0" layoutX="698.0" layoutY="198.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lblinfo" layoutX="27.0" layoutY="361.0" prefHeight="17.0" prefWidth="803.0" text="Label" />
+      <Label contentDisplay="CENTER" layoutX="302.0" layoutY="14.0" prefHeight="17.0" prefWidth="309.0" text="RIGTH =&gt; Next Element  DOWN =&gt; Move Element" />
+   </children>
+</AnchorPane>

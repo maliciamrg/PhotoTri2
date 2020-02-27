@@ -35,7 +35,7 @@ public class MainFrameControllerTest {
     @Test
     public void testregroupeEleRepHorsBazarbyGroup() {
         try {
-            List<GrpPhoto> groupDePhoto = controller.regroupeEleRepHorsBazarbyGroup(Context.getBazar());
+            List<GrpPhoto> groupDePhoto = controller.regroupeEleRepHorsBazarbyGroup(Context.getBazar(),Context.getKidz());
             System.out.println(Ressources.listetostring(groupDePhoto));
             assertTrue(true);
         } catch (SQLException e) {

@@ -2,7 +2,6 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.Ressources;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.ElePhoto;
 import com.malicia.mrg.photo.GrpPhoto;
@@ -21,7 +20,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.swing.*;
-import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -29,14 +27,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
-
 
 
 /**
@@ -139,7 +135,7 @@ public class MainFrameController {
      * @return the imageicon resized
      */
     private ImageIcon getImageiconResized(String imagesJpg) {
-        LOGGER.info(imagesJpg.toString());
+        LOGGER.info(imagesJpg);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //this is your screen size
         ImageIcon imageIcon = new ImageIcon(imagesJpg); //imports the image
         imageIcon.getImage().flush();
@@ -200,7 +196,7 @@ public class MainFrameController {
         }
 
         //Création du repertoire destination
-        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNomRepetrtoire();
+        String directoryName = grpPhoto.getAbsolutePath() + grpPhoto.getPathFromRootComumn() + grpPhoto.getNvxNomRepertoire();
         File directory = new File(directoryName);
         if (!directory.exists() && !dryRun) {
             ActionfichierRepertoire.mkdir(directory);
@@ -257,11 +253,11 @@ public class MainFrameController {
         return listElePhoto;
     }
 
-    public java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar) throws SQLException {
+    public java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar, String repKidz) throws SQLException {
 
 //            constitution des groupes
-
-        ResultSet rsgrp = RequeteSql.sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(), repBazar);
+//        grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn() + grpphotoenc.getNomRepetrtoire()
+        ResultSet rsgrp = RequeteSql.sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(), repBazar, repKidz);
 
         GrpPhoto grpPhotoEnc = new GrpPhoto();
 
@@ -282,14 +278,14 @@ public class MainFrameController {
 
 
             //Constitution des groupes de photo standard
-            if (!grpPhotoEnc.add(pathFromRoot, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/")) {
 
 
                 listGrpPhoto.add(grpPhotoEnc);
 
 
                 grpPhotoEnc = new GrpPhoto();
-                if (!grpPhotoEnc.add(pathFromRoot, captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/")) {
+                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/")) {
                     throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                 }
             }
@@ -402,7 +398,7 @@ public class MainFrameController {
                 LOGGER.info("GrpPhoto:" + gptemp.toString());
                 LOGGER.info(" hashRet:" + hashRet.toString());
             }
-            if (gptemp.getNomRepetrtoire().compareTo("@Bazar__") == 0) {
+            if (gptemp.getNvxNomRepertoire().compareTo("@Bazar__") == 0) {
                 LOGGER.info((dryRun ? DRYRUN : "") + "Bazar Detail:" + hashRet.toString());
             }
 
@@ -583,7 +579,7 @@ public class MainFrameController {
         try {
             LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
 
-            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar());
+            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar(), Context.getKidz());
             java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar());
             for (int iele = 0; iele < elementsPhoto.size(); iele++) {
                 ElePhoto elePhotocurrent = elementsPhoto.get(iele);
@@ -598,9 +594,10 @@ public class MainFrameController {
                     System.out.println(elementsPhoto.get(iele));
                 } else {
                     HashMap<String, Object> ret = showPopupWindow(elePhotocurrent);
-                    PopUpChxRepertoireController ctrlpopup = Context.getControllerpopup();
-                    if (ret.get(ctrlpopup.retCancel).toString().compareTo(ctrlpopup.valstoprun)==0){
-                        throw new IllegalStateException("actionRangerlebazar->ctrlpopup:"+ctrlpopup.valstoprun);
+                    if (ret != null) {
+                        if (ret.get(PopUpController.retourCode).toString().compareTo(PopUpController.valstoprun) == 0) {
+                            throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.valstoprun);
+                        }
                     }
                 }
             }
@@ -613,31 +610,81 @@ public class MainFrameController {
         }
     }
 
-    private HashMap<String, Object> showPopupWindow(ElePhoto elePhotocurrent) throws IOException {
+    private HashMap<String, Object> showPopupWindow(ElePhoto elePhotocurrent) throws IOException, SQLException {
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
         //Preparation technique de la popup
         FXMLLoader loaderpopup = new FXMLLoader();
-        loaderpopup.setLocation(Main.class.getClassLoader().getResource("popUpChxRepertoire.fxml"));
+        loaderpopup.setLocation(Main.class.getClassLoader().getResource("popUp.fxml"));
         Parent rootpopup = loaderpopup.load();
-        PopUpChxRepertoireController controllerpopup = loaderpopup.getController();
+        PopUpController controllerpopup = loaderpopup.getController();
         Context.setControllerpopup(controllerpopup);
         Scene scene = new Scene(rootpopup);
         Stage popupStage = new Stage();
-        controllerpopup.setPopupStage(popupStage);
+        PopUpController.setPopupStage(popupStage);
         popupStage.initOwner(Context.getPrimaryStage());
         popupStage.initModality(Modality.WINDOW_MODAL);
         popupStage.setScene(scene);
 
         //Preparation fonctionelle de la popup
-        controllerpopup.setImage(PopUpChxRepertoireController.idimageOne, elePhotocurrent.getSrc());
-        controllerpopup.setImage(PopUpChxRepertoireController.idimage2LL, elePhotocurrent.getSrc());
-        controllerpopup.setImage(PopUpChxRepertoireController.idimage2LR, elePhotocurrent.getSrc());
-        controllerpopup.setImage(PopUpChxRepertoireController.idimage2UL, elePhotocurrent.getSrc());
-        controllerpopup.setImage(PopUpChxRepertoireController.idimage2UR, elePhotocurrent.getSrc());
+        controllerpopup.setImage(PopUpController.idimageOne, elePhotocurrent.getSrc());
 
-        //execution popup
-        popupStage.showAndWait();
+        for (int i = 0; i < elePhotocurrent.getGrpPhotoCandidat().size(); i++) {
+            LOGGER.info(elePhotocurrent.toString());
+            GrpPhoto grpphotoenc = elePhotocurrent.getGrpPhotoCandidat().get(i);
+            List<String> grpphotoele = grpphotoenc.getEle();
+            controllerpopup.setLblinfo("" + (i + 1) + "/" + elePhotocurrent.getGrpPhotoCandidat().size() + " : " + grpphotoenc.getPathFromRootComumn());
+            int nb = grpphotoele.size();
+            int id1 = 0, id2 = 0, id3 = 0, id4 = 0;
+
+            switch (nb) {
+                case 1:
+                    id1 = id2 = id3 = id4 = 0;
+                    break;
+                case 2:
+                    id1 = id2 = 0;
+                    id3 = id4 = 1;
+                    break;
+                case 3:
+                    id1 = id2 = 0;
+                    id3 = 1;
+                    id4 = 2;
+                    break;
+                case 4:
+                    id1 = 0;
+                    id2 = 1;
+                    id3 = 2;
+                    id4 = 3;
+                    break;
+                default:
+                    int delta = (nb - 1) / 3;
+                    id1 = 0;
+                    id2 = id1 + delta;
+                    id3 = id2 + delta;
+                    id4 = id3 + delta;
+                    break;
+            }
+            controllerpopup.setImage(PopUpController.idimage2LL, grpphotoele.get(id1));
+            controllerpopup.setImage(PopUpController.idimage2LR, grpphotoele.get(id2));
+            controllerpopup.setImage(PopUpController.idimage2UL, grpphotoele.get(id3));
+            controllerpopup.setImage(PopUpController.idimage2UR, grpphotoele.get(id4));
+            //execution popup
+            popupStage.showAndWait();
+            HashMap<String, Object> ret = controllerpopup.getResult();
+            switch (ret.get(PopUpController.retourCode).toString()) {
+                case PopUpController.valstoprun:
+                    return ret;
+                case PopUpController.valselect:
+                    File source = new File(elePhotocurrent.getSrc());
+                    String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
+                    File destination = new File(directoryName + "/" + source.toPath().getFileName());
+                    ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
+                    return ret;
+                case PopUpController.valnext:
+                    break;
+            }
+        }
+
 
         return controllerpopup.getResult();
     }

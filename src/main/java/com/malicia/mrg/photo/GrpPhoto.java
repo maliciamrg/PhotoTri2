@@ -10,6 +10,10 @@ public class GrpPhoto {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
     private SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public String getCameraModelGrp() {
+        return cameraModelGrp;
+    }
+
     private String cameraModelGrp = "";
     private long mintGrp;
     private long maxtGrp;
@@ -63,7 +67,7 @@ public class GrpPhoto {
                 ", mintGrp=" + datemintFormat +
                 ", maxtGrp=" + datemaxtFormat +
                 ", nbele=" + ele.size() +
-                ", getNomRepetrtoire=" + getNomRepetrtoire() +
+                ", getNomRepetrtoire=" + getNvxNomRepertoire() +
                 "}" +
                 "\n" +
                 listeeletostring();
@@ -133,7 +137,7 @@ public class GrpPhoto {
         return ele.size();
     }
 
-    public String getNomRepetrtoire() {
+    public String getNvxNomRepertoire() {
         if (forceGroup.compareTo("") != 0) {
             return (forceGroup);
         } else {

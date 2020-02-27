@@ -83,7 +83,7 @@ public class RequeteSql {
                 " aiecm.value as CameraModel ," +
                 " b.pathFromRoot ," +
                 " c.absolutePath , " +
-                " a.originalFilename ," +
+                " a.lc_idx_filename as originalFilename ," +
                 " e.captureTime as captureTimeOrig " +
                 "from AgLibraryFile a  " +
                 "inner join AgLibraryFolder b  " +
@@ -231,7 +231,7 @@ public class RequeteSql {
                         " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
                         " aiecm.value as CameraModel , " +
-                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath || b.pathFromRoot || a.lc_idx_filename as src , " +
                         " c.absolutePath  as absolutePath , " +
                         " e.captureTime as captureTimeOrig " +
                         "from AgLibraryFile a  " +
@@ -276,7 +276,7 @@ public class RequeteSql {
      * @return the result set
      */
     public static ResultSet listeExifNew(String repertoirePhoto) throws SQLException {
-        return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.originalFilename, Adobe_images.aspectRatioCache, " +
+        return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.lc_idx_filename, Adobe_images.aspectRatioCache, " +
                 "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
                 "Adobe_images.fileWidth, Adobe_images.orientation, AgHarvestedExifMetadata.aperture, AgInternedExifCameraModel.value, " +
                 "AgHarvestedExifMetadata.dateDay, AgHarvestedExifMetadata.dateMonth, AgHarvestedExifMetadata.dateYear, AgHarvestedExifMetadata.flashFired, " +
@@ -409,7 +409,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_source_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + File.pathSeparator).replace(absolutePathsource_toPath, "");
+        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + File.separator).replace(absolutePathsource_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -425,7 +425,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + File.pathSeparator).replace(absolutePathdestination_toPath, "");
+        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + File.separator).replace(absolutePathdestination_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -438,7 +438,7 @@ public class RequeteSql {
         sql = "" +
                 "update AgLibraryFile " +
                 "set folder =  " + iddestination_toPath + " " +
-                "where idx_filename =  \"" + (new File(String.valueOf(source_toPath))).getName() + "\" " +
+                "where lc_idx_filename =  \"" + (new File(String.valueOf(source_toPath))).getName() + "\" " +
                 "and folder =  " + idsource_toPath + " " +
                 ";";
         LOGGER.info(sql);
@@ -535,7 +535,7 @@ public class RequeteSql {
                 ";");
     }
 
-    public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar) throws SQLException {
+    public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar, String repKidz) throws SQLException {
 
         //Extraction des photo  , dans toute la bib
         // et calcul la plage d'aherance (+- tempsAdherence)
@@ -554,7 +554,7 @@ public class RequeteSql {
                         " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
                         " b.pathFromRoot , " +
-                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath || b.pathFromRoot || a.lc_idx_filename as src , " +
                         " c.absolutePath  as absolutePath , " +
                         " e.captureTime as captureTimeOrig " +
                         "from AgLibraryFile a  " +
@@ -565,6 +565,7 @@ public class RequeteSql {
                         "inner join Adobe_images e  " +
                         "on a.id_local = e.rootFile  " +
                         "Where b.pathFromRoot not like \"" + "%" + repBazar + "%" + "\"" +
+                        " and b.pathFromRoot not like \"" + "%" + repKidz + "%" + "\"" +
 //                        " Order by CameraModel , captureTime ;  ");
                         " Order by b.pathFromRoot , captureTime ;  ");
 
@@ -588,7 +589,7 @@ public class RequeteSql {
                         " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
                         " aiecm.value as CameraModel , " +
-                        " c.absolutePath || b.pathFromRoot || a.originalFilename as src , " +
+                        " c.absolutePath || b.pathFromRoot || a.lc_idx_filename as src , " +
                         " c.absolutePath  as absolutePath , " +
                         " e.captureTime as captureTimeOrig " +
                         "from AgLibraryFile a  " +

@@ -6,21 +6,6 @@ import java.util.List;
 public class ElePhoto {
 
     private long captureTime;
-
-    @Override
-    public String toString() {
-        return "ElePhoto{" +
-                "captureTime=" + captureTime +
-                ", mint=" + mint +
-                ", maxt=" + maxt +
-                ", src='" + src + '\'' +
-                ", absPath='" + absPath + '\'' +
-                ", rep='" + rep + '\'' +
-                "}"+
-                "\n" +
-                listegrpPhotoCandidattostring();
-    }
-
     private long mint;
     private long maxt;
     private String src;
@@ -36,6 +21,25 @@ public class ElePhoto {
         this.absPath = absPath;
         this.rep = rep;
     }
+
+    @Override
+    public String toString() {
+        return "ElePhoto{" +
+                "captureTime=" + captureTime +
+                ", mint=" + mint +
+                ", maxt=" + maxt +
+                ", src='" + src + '\'' +
+                ", absPath='" + absPath + '\'' +
+                ", rep='" + rep + '\'' +
+                "}" +
+                "\n" +
+                listegrpPhotoCandidattostring();
+    }
+
+    public List<GrpPhoto> getGrpPhotoCandidat() {
+        return grpPhotoCandidat;
+    }
+
 
     public long getCaptureTime() {
         return captureTime;
