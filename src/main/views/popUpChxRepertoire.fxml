@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="359.0" prefWidth="912.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.PopUpChxRepertoireController">
+   <children>
+      <Button fx:id="BtnCancel" layoutX="846.0" layoutY="322.0" mnemonicParsing="false" onAction="#ActionBtnCancel" text="Cancel" />
+      <ImageView fx:id="image2UL" fitHeight="150.0" fitWidth="200.0" layoutX="498.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imageOne" fitHeight="300.0" fitWidth="448.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2UR" fitHeight="150.0" fitWidth="200.0" layoutX="698.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2LL" fitHeight="150.0" fitWidth="200.0" layoutX="498.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="image2LR" fitHeight="150.0" fitWidth="200.0" layoutX="698.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

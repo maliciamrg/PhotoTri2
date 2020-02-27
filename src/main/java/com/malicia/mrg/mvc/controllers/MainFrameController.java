@@ -1,20 +1,27 @@
 package com.malicia.mrg.mvc.controllers;
 
+import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.Ressources;
-import com.malicia.mrg.photo.ElePhoto;
 import com.malicia.mrg.mvc.models.RequeteSql;
+import com.malicia.mrg.photo.ElePhoto;
 import com.malicia.mrg.photo.GrpPhoto;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.swing.*;
+import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +36,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+
 
 
 /**
@@ -130,7 +138,7 @@ public class MainFrameController {
      * @param imagesJpg the images jpg
      * @return the imageicon resized
      */
-    private ImageIcon getImageiconResized(URL imagesJpg) {
+    private ImageIcon getImageiconResized(String imagesJpg) {
         LOGGER.info(imagesJpg.toString());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //this is your screen size
         ImageIcon imageIcon = new ImageIcon(imagesJpg); //imports the image
@@ -338,10 +346,10 @@ public class MainFrameController {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
-                        Bazar.add(grpPhotoEnc.getEle(),grpPhotoEnc.getEledt());
+                        Bazar.add(grpPhotoEnc.getEle(), grpPhotoEnc.getEledt());
                     } else {
                         if (grpPhotoEnc.isdateNull()) {
-                            NoDate.add(grpPhotoEnc.getEle(),grpPhotoEnc.getEledt());
+                            NoDate.add(grpPhotoEnc.getEle(), grpPhotoEnc.getEledt());
                         } else {
                             listGrpPhoto.add(grpPhotoEnc);
                         }
@@ -582,13 +590,19 @@ public class MainFrameController {
                 elePhotocurrent.getMint();
                 elePhotocurrent.getMaxt();
                 for (int igrp = 0; igrp < groupDePhoto.size(); igrp++) {
-                    if(groupDePhoto.get(igrp).testInterval(elePhotocurrent.getMint(), elePhotocurrent.getMaxt())){
+                    if (groupDePhoto.get(igrp).testInterval(elePhotocurrent.getMint(), elePhotocurrent.getMaxt())) {
                         elePhotocurrent.addgroupDePhotoCandidat(groupDePhoto.get(igrp));
                     }
                 }
-            }
-            if (Context.getDryRun()) {
-                System.out.println(Ressources.listetostring(elementsPhoto));
+                if (Context.getDryRun()) {
+                    System.out.println(elementsPhoto.get(iele));
+                } else {
+                    HashMap<String, Object> ret = showPopupWindow(elePhotocurrent);
+                    PopUpChxRepertoireController ctrlpopup = Context.getControllerpopup();
+                    if (ret.get(ctrlpopup.retCancel).toString().compareTo(ctrlpopup.valstoprun)==0){
+                        throw new IllegalStateException("actionRangerlebazar->ctrlpopup:"+ctrlpopup.valstoprun);
+                    }
+                }
             }
 
 
@@ -597,6 +611,35 @@ public class MainFrameController {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
+    }
+
+    private HashMap<String, Object> showPopupWindow(ElePhoto elePhotocurrent) throws IOException {
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+        //Preparation technique de la popup
+        FXMLLoader loaderpopup = new FXMLLoader();
+        loaderpopup.setLocation(Main.class.getClassLoader().getResource("popUpChxRepertoire.fxml"));
+        Parent rootpopup = loaderpopup.load();
+        PopUpChxRepertoireController controllerpopup = loaderpopup.getController();
+        Context.setControllerpopup(controllerpopup);
+        Scene scene = new Scene(rootpopup);
+        Stage popupStage = new Stage();
+        controllerpopup.setPopupStage(popupStage);
+        popupStage.initOwner(Context.getPrimaryStage());
+        popupStage.initModality(Modality.WINDOW_MODAL);
+        popupStage.setScene(scene);
+
+        //Preparation fonctionelle de la popup
+        controllerpopup.setImage(PopUpChxRepertoireController.idimageOne, elePhotocurrent.getSrc());
+        controllerpopup.setImage(PopUpChxRepertoireController.idimage2LL, elePhotocurrent.getSrc());
+        controllerpopup.setImage(PopUpChxRepertoireController.idimage2LR, elePhotocurrent.getSrc());
+        controllerpopup.setImage(PopUpChxRepertoireController.idimage2UL, elePhotocurrent.getSrc());
+        controllerpopup.setImage(PopUpChxRepertoireController.idimage2UR, elePhotocurrent.getSrc());
+
+        //execution popup
+        popupStage.showAndWait();
+
+        return controllerpopup.getResult();
     }
 
     /**
@@ -646,6 +689,7 @@ public class MainFrameController {
                 }
             }
         });
+        initialize();
     }
 
 }

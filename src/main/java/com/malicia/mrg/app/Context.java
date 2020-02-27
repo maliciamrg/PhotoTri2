@@ -2,8 +2,10 @@ package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
+import com.malicia.mrg.mvc.controllers.PopUpChxRepertoireController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -38,12 +40,30 @@ public class Context implements Serializable {
     private static String Kidz = "";
     private static String NoDate = "";
     private static List<String> kidsModelList;
+    private static PopUpChxRepertoireController controllerpopup;
+    private static Popup popup;
 
     /**
      *
      */
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public static Popup getPopup() {
+        return popup;
+    }
+
+    public static void setPopup(Popup popup) {
+        Context.popup = popup;
+    }
+
+    public static PopUpChxRepertoireController getControllerpopup() {
+        return controllerpopup;
+    }
+
+    public static void setControllerpopup(PopUpChxRepertoireController controllerpopup) {
+        Context.controllerpopup = controllerpopup;
     }
 
     public static String getKidz() {
@@ -294,7 +314,6 @@ public class Context implements Serializable {
 
     }
 
-
     /**
      * Init properties parameters.
      */
@@ -345,7 +364,6 @@ public class Context implements Serializable {
         Context.catalogLrcat = catalogLrcat;
     }
 
-
     /**
      * Save properties parameters.
      */
@@ -368,7 +386,6 @@ public class Context implements Serializable {
         }
 
     }
-
 
     /**
      * Load properties parameters context.
@@ -397,6 +414,5 @@ public class Context implements Serializable {
         }
         return null;
     }
-
 
 }
