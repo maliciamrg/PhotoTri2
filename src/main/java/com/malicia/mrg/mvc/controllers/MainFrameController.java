@@ -202,10 +202,11 @@ public class MainFrameController {
             ActionfichierRepertoire.mkdir(directory);
         }
 
-        for (int i = 0; i < grpPhoto.getEle().size(); i++) {
+        for (int i = 0; i < grpPhoto.getElesrc().size(); i++) {
 
-            File source = new File(grpPhoto.getEle().get(i));
+            File source = new File(grpPhoto.getElesrc().get(i));
             File destination = new File(directoryName + "/" + source.toPath().getFileName());
+            grpPhoto.addEledest(i,ActionfichierRepertoire.normalizePath(destination.toString()));
 
             if (true == (source.toString().compareTo(destination.toString()) == 0)) {
                 displayReturn.put(OK_MOVE_SAME, (Integer) displayReturn.get(OK_MOVE_SAME) + 1);
@@ -333,7 +334,7 @@ public class MainFrameController {
 
             //constitution des groupes forcé
             if (listkidsModel.contains(CameraModel)) {
-                Kidz.forceadd(null, captureTime, mint, maxt, src);
+                Kidz.forceadd(null, captureTime, mint, maxt, ActionfichierRepertoire.normalizePath(src));
             } else {
 
 
@@ -342,10 +343,10 @@ public class MainFrameController {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
-                        Bazar.add(grpPhotoEnc.getEle(), grpPhotoEnc.getEledt());
+                        Bazar.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
                     } else {
                         if (grpPhotoEnc.isdateNull()) {
-                            NoDate.add(grpPhotoEnc.getEle(), grpPhotoEnc.getEledt());
+                            NoDate.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
                         } else {
                             listGrpPhoto.add(grpPhotoEnc);
                         }
@@ -395,12 +396,12 @@ public class MainFrameController {
 
             //Display
             if ((Integer) hashRet.get(OK_MOVE_DRY_RUN) > 0) {
+                LOGGER.info("hashRet:" + hashRet.toString());
                 LOGGER.info("GrpPhoto:" + gptemp.toString());
-                LOGGER.info(" hashRet:" + hashRet.toString());
             }
-            if (gptemp.getNvxNomRepertoire().compareTo("@Bazar__") == 0) {
-                LOGGER.info((dryRun ? DRYRUN : "") + "Bazar Detail:" + hashRet.toString());
-            }
+//            if (gptemp.getNvxNomRepertoire().compareTo("@Bazar__") == 0) {
+//                LOGGER.info((dryRun ? DRYRUN : "") + "Bazar Detail:" + hashRet.toString());
+//            }
 
             //Cumul des compteurs comparatif
             nbeleAfaire += gptemp.getnbele();
@@ -632,7 +633,7 @@ public class MainFrameController {
         for (int i = 0; i < elePhotocurrent.getGrpPhotoCandidat().size(); i++) {
             LOGGER.info(elePhotocurrent.toString());
             GrpPhoto grpphotoenc = elePhotocurrent.getGrpPhotoCandidat().get(i);
-            List<String> grpphotoele = grpphotoenc.getEle();
+            List<String> grpphotoele = grpphotoenc.getElesrc();
             controllerpopup.setLblinfo("" + (i + 1) + "/" + elePhotocurrent.getGrpPhotoCandidat().size() + " : " + grpphotoenc.getPathFromRootComumn());
             int nb = grpphotoele.size();
             int id1 = 0, id2 = 0, id3 = 0, id4 = 0;

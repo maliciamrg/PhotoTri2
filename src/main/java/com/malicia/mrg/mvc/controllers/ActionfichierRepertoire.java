@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.mvc.models.RequeteSql;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,9 +128,13 @@ public class ActionfichierRepertoire {
         BigInteger decimal = new BigInteger(hexv.substring(0, 8) + hexv.substring(9, 13)
                 + hexv.substring(14, 18) + hexv.substring(19, 23) + hexv.substring(24, 36), 16);
         decimal = decimal.add(BigInteger.ONE);
-        String hexvp1 = decimal.toString(16).toUpperCase();
+        String hexvp1 = StringUtils.leftPad(decimal.toString(16).toUpperCase(),32,"0");
 //        String str = Integer.toHexString(decimal+1);
         return hexvp1.substring(0, 8) + "-" + hexvp1.substring(8, 12) + "-" + hexvp1.substring(12, 16) + "-" + hexvp1.substring(16, 20) + "-" + hexvp1.substring(20, 32);
+    }
+
+    public static String normalizePath(String path) {
+        return path.replaceAll("\\\\", "/");
     }
 
     /**

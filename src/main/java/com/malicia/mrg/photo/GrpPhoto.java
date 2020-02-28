@@ -1,5 +1,7 @@
 package com.malicia.mrg.photo;
 
+import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,35 +11,39 @@ public class GrpPhoto {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
     private SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    public String getCameraModelGrp() {
-        return cameraModelGrp;
-    }
-
     private String cameraModelGrp = "";
     private long mintGrp;
     private long maxtGrp;
-    private List<String> ele = new ArrayList<>();
-
-    public List<String> getEledt() {
-        return eledt;
-    }
-
+    private List<String> elesrc = new ArrayList<>();
+    private List<String> eledest = new ArrayList<>();
     private List<String> eledt = new ArrayList<>();
     private String absolutePath;
     private String pathFromRootComumn;
     private String forceGroup = "";
-
     public GrpPhoto() {
 
     }
-
     public GrpPhoto(String forceGroup, String abspath, String pathfromrootcomumn) {
         this.forceGroup = forceGroup;
         absolutePath = abspath;
         pathFromRootComumn = pathfromrootcomumn;
     }
 
+    public List<String> getEledest() {
+        return eledest;
+    }
+
+    public void setEledest(List<String> eledest) {
+        this.eledest = eledest;
+    }
+
+    public String getCameraModelGrp() {
+        return cameraModelGrp;
+    }
+
+    public List<String> getEledt() {
+        return eledt;
+    }
 
     public String getAbsolutePath() {
         return absolutePath;
@@ -47,8 +53,8 @@ public class GrpPhoto {
         return pathFromRootComumn;
     }
 
-    public List<String> getEle() {
-        return ele;
+    public List<String> getElesrc() {
+        return elesrc;
     }
 
 
@@ -66,7 +72,7 @@ public class GrpPhoto {
                 "cameraModelGrp='" + cameraModelGrp + '\'' +
                 ", mintGrp=" + datemintFormat +
                 ", maxtGrp=" + datemaxtFormat +
-                ", nbele=" + ele.size() +
+                ", nbele=" + elesrc.size() +
                 ", getNomRepetrtoire=" + getNvxNomRepertoire() +
                 "}" +
                 "\n" +
@@ -74,12 +80,12 @@ public class GrpPhoto {
     }
 
     private String listeeletostring() {
-        if (ele.size()!=eledt.size()){
-            throw new IllegalStateException("ele.size=>" + ele.size()+ " != " +" eledt.size=>" +  eledt.size());
+        if (elesrc.size() != eledt.size() || elesrc.size() != eledest.size()) {
+            throw new IllegalStateException("ele.size=>" + elesrc.size() + " != " + " eledt.size=>" + eledt.size()+ " != " + " eledest.size=>" + eledest.size());
         }
         StringBuilder listeletostring = new StringBuilder();
-        for (int i = 0; i < ele.size(); i++) {
-            listeletostring.append("     " + eledt.get(i) + " -> " + ele.get(i) + "\n");
+        for (int i = 0; i < elesrc.size(); i++) {
+            listeletostring.append("     " + eledt.get(i) + " -> " + elesrc.get(i)  + " -> " + eledest.get(i)  + "\n");
         }
         return listeletostring.toString();
     }
@@ -99,7 +105,7 @@ public class GrpPhoto {
             if (!testInterval(mint, maxt)) return false;
         }
 
-        forceadd(cameraModel, captureTime, mint, maxt, elesrc);
+        forceadd(cameraModel, captureTime, mint, maxt, ActionfichierRepertoire.normalizePath(elesrc));
 
         return true;
     }
@@ -125,7 +131,7 @@ public class GrpPhoto {
         if (cameraModel != null) {
             cameraModelGrp = cameraModel;
         }
-        ele.add(elesrc);
+        this.elesrc.add(elesrc);
 
         Date datecaptime = new Date((long) (captime * 1000));
         String datemaxtFormat = simpleDateFormat.format(datecaptime);
@@ -134,7 +140,7 @@ public class GrpPhoto {
     }
 
     public int getnbele() {
-        return ele.size();
+        return elesrc.size();
     }
 
     public String getNvxNomRepertoire() {
@@ -151,9 +157,10 @@ public class GrpPhoto {
         }
     }
 
-    public void add(List<String> eleIn, List<String> eledtIn) {
-        ele.addAll(eleIn);
+    public void add(List<String> eleIn, List<String> eledtIn, List<String> eledestIn) {
+        elesrc.addAll(eleIn);
         eledt.addAll(eledtIn);
+        eledest.addAll(eledestIn);
     }
 
     public boolean isdateNull() {
@@ -161,4 +168,11 @@ public class GrpPhoto {
     }
 
 
+    public void addEledest(int i, String dest) {
+        if (eledest.size() < i) {
+            throw new IllegalStateException("nb ele dest non conforme : " + eledest.size() + " < " + i);
+        } else {
+            eledest.add(dest);
+        }
+    }
 }

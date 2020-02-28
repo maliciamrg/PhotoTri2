@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -376,7 +377,7 @@ public class RequeteSql {
                 "where id_local = \"" + rootfolder + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathacreewoabsolutePath = normalizePath(pathacree).replace(absolutePath, "");
+        String pathacreewoabsolutePath = ActionfichierRepertoire.normalizePath(pathacree).replace(absolutePath, "");
         String sql = "" +
                 "INSERT INTO AgLibraryFolder " +
                 "(id_local, " +
@@ -386,7 +387,7 @@ public class RequeteSql {
                 "VALUES ( " +
                 " \"" + nextIdlocal + "\" , " +
                 " \"" + nextIdGlobal + "\" , " +
-                " \"" + normalizePath(pathacreewoabsolutePath + "/") + "\" , " +
+                " \"" + ActionfichierRepertoire.normalizePath(pathacreewoabsolutePath + "/") + "\" , " +
                 " \"" + rootfolder + "\"  " +
                 ");";
 
@@ -409,7 +410,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_source_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathsource_toPath = normalizePath((new File(String.valueOf(source_toPath))).getParent() + File.separator).replace(absolutePathsource_toPath, "");
+        String pathabsolutePathsource_toPath = ActionfichierRepertoire.normalizePath((new File(String.valueOf(source_toPath))).getParent() + File.separator).replace(absolutePathsource_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -425,7 +426,7 @@ public class RequeteSql {
                 "where id_local = \"" + idrootfolder_destination_toPath + "\" " +
                 "LIMIT 1 " +
                 ";").getString(1);
-        String pathabsolutePathdestination_toPath = normalizePath((new File(String.valueOf(destination_toPath))).getParent() + File.separator).replace(absolutePathdestination_toPath, "");
+        String pathabsolutePathdestination_toPath = ActionfichierRepertoire.normalizePath((new File(String.valueOf(destination_toPath))).getParent() + File.separator).replace(absolutePathdestination_toPath, "");
         sql = "" +
                 "select id_local " +
                 "from AgLibraryFolder " +
@@ -462,7 +463,7 @@ public class RequeteSql {
                 "where id_local = \"" + rootfolder + "\" " +
                 "LIMIT 1 " +
                 ") " +
-                " || pathFromRoot = \"" + normalizePath(pathasupprimer + "/") + "\" " +
+                " || pathFromRoot = \"" + ActionfichierRepertoire.normalizePath(pathasupprimer + "/") + "\" " +
                 "";
 
         return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
@@ -473,16 +474,12 @@ public class RequeteSql {
 //        return 0;
     }
 
-    private static String normalizePath(String path) {
-        return path.replaceAll("\\\\", "/");
-    }
-
     public static String retrieverootfolder(String path) throws SQLException {
 
         ResultSet result = SQLiteJDBCDriverConnection.select("" +
                 "select id_local " +
                 "from AgLibraryRootFolder " +
-                "where \"" + normalizePath(path) + "\" " +
+                "where \"" + ActionfichierRepertoire.normalizePath(path) + "\" " +
                 "like absolutePath || \"_%\"  ; " +
                 "");
 
@@ -503,11 +500,14 @@ public class RequeteSql {
     }
 
     public static void sqlSetAdobeentityIDCounter(long nextidlocal) throws SQLException {
-        SQLiteJDBCDriverConnection.select("" +
-                "update Adobe_variablesTable " +
-                "set value = " + nextidlocal + " " +
-                "where name =  \"Adobe_entityIDCounter\" " +
-                ";");
+        String sql = "update Adobe_variablesTable   " +
+                " set value = \"" + nextidlocal + "\" " +
+                " where name =  \"Adobe_entityIDCounter\" "  +
+                "; ";
+        PreparedStatement pstmt = null;
+        pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
+        int ret = pstmt.executeUpdate();
+        pstmt = null;
     }
 
     public static ResultSet sqlGetIdGlobal() throws SQLException {
@@ -528,11 +528,14 @@ public class RequeteSql {
     }
 
     public static void sqlSetAdobestoreProviderID(String nextidglobal) throws SQLException {
-        SQLiteJDBCDriverConnection.select("" +
-                "update Adobe_variablesTable " +
-                "set value = \"" + nextidglobal + "\" " +
-                "where name =  \"Adobe_storeProviderID\" " +
-                ";");
+        String sql = "update Adobe_variablesTable   " +
+                " set value = \"" + nextidglobal + "\" " +
+                " where name =  \"Adobe_storeProviderID\" "  +
+                "; ";
+        PreparedStatement pstmt = null;
+        pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
+        int ret = pstmt.executeUpdate();
+        pstmt = null;
     }
 
     public static ResultSet sqlGroupByPlageAdheranceHorsRepBazar(String tempsAdherence, String repBazar, String repKidz) throws SQLException {
