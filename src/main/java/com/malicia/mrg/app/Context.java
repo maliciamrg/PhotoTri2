@@ -37,6 +37,16 @@ public class Context implements Serializable {
     private static String catalogLrcat = "";
     private static String urlgitwiki = "";
     private static String bazar = "";
+
+    public static int getThresholdBazar() {
+        return thresholdBazar;
+    }
+
+    public static void setThresholdBazar(int thresholdBazar) {
+        Context.thresholdBazar = thresholdBazar;
+    }
+
+    private static int thresholdBazar = 0;
     private static String Kidz = "";
     private static String NoDate = "";
     private static List<String> kidsModelList;
@@ -341,6 +351,7 @@ public class Context implements Serializable {
         setDryRun(properties.getProperty("dryRun", "true").compareTo("true") == 0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setBazar(properties.getProperty("repBazar"));
+        setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
         setBaseDir(properties.getProperty("BaseDir"));

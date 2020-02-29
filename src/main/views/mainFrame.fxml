@@ -36,6 +36,7 @@
                 <Menu mnemonicParsing="false" text="Rep New">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#actionMovenewtogrpphotos" text="move New To GrpPhotos" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Rep Bazar">

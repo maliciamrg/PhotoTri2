@@ -3,8 +3,10 @@ package com.malicia.mrg.mvc.controllers;
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
+import com.malicia.mrg.photo.Ele;
 import com.malicia.mrg.photo.ElePhoto;
 import com.malicia.mrg.photo.GrpPhoto;
+import com.malicia.mrg.photo.Rep;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -28,11 +30,15 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -49,6 +55,7 @@ public class MainFrameController {
     private static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     private static final String OK_MOVE_DO = "OKMoveDo";
     private static final String DRYRUN = "dryRun =>";
+    private static final Object FILE = 1;
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
@@ -206,7 +213,7 @@ public class MainFrameController {
 
             File source = new File(grpPhoto.getElesrc().get(i));
             File destination = new File(directoryName + "/" + source.toPath().getFileName());
-            grpPhoto.addEledest(i,ActionfichierRepertoire.normalizePath(destination.toString()));
+            grpPhoto.addEledest(i, ActionfichierRepertoire.normalizePath(destination.toString()));
 
             if (true == (source.toString().compareTo(destination.toString()) == 0)) {
                 displayReturn.put(OK_MOVE_SAME, (Integer) displayReturn.get(OK_MOVE_SAME) + 1);
@@ -550,6 +557,148 @@ public class MainFrameController {
     private void logecrireuserlogInfo(String msg) {
         userlogInfo.appendText(msg + "\n");
         LOGGER.info(msg);
+    }
+
+    /**
+     * Move new to grp photos.
+     */
+    public void actionRangerRejet() {
+        try {
+            ResultSet rsele = RequeteSql.sqlgetListelementrejetaranger(Context.getTempsAdherence());
+
+        } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
+    }
+
+
+    /**
+     * Move new to grp photos.
+     */
+    public void actionRangerNew() {
+        try {
+            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
+
+            java.util.List<Ele> listEle = new ArrayList();
+            java.util.List<Rep> listRep = new ArrayList();
+
+            int minprev = 0;
+            long maxprev = 0;
+            int idx = 1; // idx 0 pour le bazar
+            int idxrep = 0;
+
+            while (rsele.next()) {
+
+                // Recuperer les info de l'elements
+                String file_id_local = rsele.getString("file_id_local");
+                String folder_id_local = rsele.getString("folder_id_local");
+                String pathFromRoot = rsele.getString("pathFromRoot");
+                String lc_idx_filename = rsele.getString("lc_idx_filename");
+                String captureTime = rsele.getString("captureTime");
+                long mint = rsele.getLong("mint");
+                long maxt = rsele.getLong("maxt");
+
+                if (mint > maxprev || idx == 1) {
+                    idx += 1;
+                }
+                maxprev = maxt;
+
+                listEle.add(new Ele(idx, file_id_local, lc_idx_filename, folder_id_local, captureTime , pathFromRoot));
+
+                boolean newrep = true;
+                for (int i = 0; i < listRep.size(); i++) {
+                    if (folder_id_local.compareTo(listRep.get(i).getFolder_id_local()) == 0) {
+                        newrep = false;
+                        break;
+                    }
+                    ;
+                }
+                if (newrep) {
+                    idxrep += 1;
+                    listRep.add(new Rep(idxrep, folder_id_local, pathFromRoot));
+                }
+
+            }
+
+            //recalcul des idx pour les ele pour envoyer dans le bazar
+            int nbidx = 1;
+            int idxencart = 0;
+            for (int i = 1; i < listEle.size(); i++) {
+                int idxprev = listEle.get(i - 1).getIdx();
+                int idxenc = listEle.get(i).getIdx();
+                if (idxenc == idxprev) {
+                    nbidx += 1;
+                } else {
+                    if (nbidx < Context.getThresholdBazar()) {
+                        for (int y = 1; y <= nbidx; y++) {
+                            listEle.get(i - y).setIdx(1);
+                        }
+                    }
+                    nbidx = 1;
+                }
+            }
+
+            //compactage des idx
+            idx = 2;
+            int idxprev = listEle.get(0).getIdx();
+            for (int i = 0; i < listEle.size(); i++) {
+                int idxenc = listEle.get(i).getIdx();
+                if (idxenc > 1) {
+                    if (idxenc != idxprev) {
+                        idx +=1;
+                    }
+                    listEle.get(i).setIdx(idx);
+                    idxprev = idxenc;
+                }
+
+            }
+            //test si assez de repertoire
+            if (idx  > idxrep) {
+                throw new IllegalStateException("Créer " + (idx  - idxrep) + " repertoire tech dans lightroom");
+            }
+
+            //action sur les elements
+            for (int i = 1; i < listEle.size(); i++) {
+                int idxenc = listEle.get(i).getIdx();
+                String lc_idx_filename = listEle.get(i).getLc_idx_filename();
+                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$"+ supprimerbalisedollar(lc_idx_filename);
+                listEle.get(i).renameto(rename);
+  //              listEle.get(i).moveto(listRep.get(idxenc));
+            }
+
+            //action sur les repertoires
+            for (int i = 1; i < listRep.size(); i++) {
+                int idxenc = listRep.get(i).getIdxrep();
+                String pathFromRoot = listRep.get(i).getPathFromRoot();
+                String rename;
+                if (i <= idx) {
+                    rename = Context.getRepertoireNew() + File.separator + "$grp" + String.format("%05d", idxenc) + "$";
+                } else {
+                    rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
+                }
+                listRep.get(i).moveto(rename);
+            }
+
+        } catch (SQLException | IOException e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
+    }
+
+    private String createnewname(String balisedollar, String pathnettoyer) {
+        return "";
+    }
+
+
+    private String supprimerbalisedollar(String lc_idx_filename) {
+        Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
+        Matcher matcher = pattern.matcher(lc_idx_filename);
+        if (matcher.find()) {
+            return matcher.group(2);
+        }
+        return "";
+
     }
 
     /**

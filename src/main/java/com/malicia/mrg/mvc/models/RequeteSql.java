@@ -251,7 +251,44 @@ public class RequeteSql {
                         " Order by captureTime ;  ");
 
     }
-
+    public static ResultSet sqlgetListelementrejetaranger(String tempsAdherence) throws SQLException {
+        return SQLiteJDBCDriverConnection.select(
+                "select a.id_local as file_id_local, " +
+                        "b.id_local as folder_id_local , " +
+                        "b.pathFromRoot , " +
+                        "a.lc_idx_filename as lc_idx_filename , " +
+                        "e.captureTime " +
+                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
+                        "from AgLibraryFile a  " +
+                        "inner join AgLibraryFolder b   " +
+                        " on a.folder = b.id_local  " +
+                        "inner join AgLibraryRootFolder c  " +
+                        " on b.rootFolder = c.id_local   " +
+                        "inner join Adobe_images e  " +
+                        " on a.id_local = e.rootFile    " +
+                        "Where b.pathFromRoot like \"%@New%\" \n" +
+                        "order by captureTime asc;");
+    }
+    public static ResultSet sqlgetListelementnewaclasser(String tempsAdherence) throws SQLException {
+        return SQLiteJDBCDriverConnection.select(
+                "select a.id_local as file_id_local, " +
+                        "b.id_local as folder_id_local , " +
+                        "b.pathFromRoot , " +
+                        "a.lc_idx_filename as lc_idx_filename , " +
+                        "e.captureTime ," +
+                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
+                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt  " +
+                        "from AgLibraryFile a  " +
+                        "inner join AgLibraryFolder b   " +
+                        " on a.folder = b.id_local  " +
+                        "inner join AgLibraryRootFolder c  " +
+                        " on b.rootFolder = c.id_local   " +
+                        "inner join Adobe_images e  " +
+                        " on a.id_local = e.rootFile    " +
+                        "Where b.pathFromRoot like \"%"+ Context.getRepertoireNew() +"%\" " +
+                        "order by captureTime asc;");
+    }
 
     public static ResultSet sqlGetTableWithIdlocal() throws SQLException {
         return SQLiteJDBCDriverConnection.select(
@@ -609,6 +646,17 @@ public class RequeteSql {
                         "Where b.pathFromRoot like \"" + "%" + repBazar + "%" + "\"" +
 //                        " Order by CameraModel , captureTime ;  ");
                         " Order by captureTime ;  ");
+    }
+
+    public static int sqlrenamefile(String file_id_local, String rename) throws SQLException {
+        String sql;
+        sql = "" +
+                "update AgLibraryFile " +
+                "set lc_idx_filename =  \"" + rename + "\" " +
+                "where id_local =  " + file_id_local + " " +
+                ";";
+        LOGGER.info(sql);
+        return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
     }
 }
 

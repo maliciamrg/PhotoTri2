@@ -1,5 +1,6 @@
 package com.malicia.mrg.mvc.controllers;
 
+import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import org.apache.commons.lang3.StringUtils;
 
@@ -148,14 +149,35 @@ public class ActionfichierRepertoire {
      * @param rootFolder       the root folder
      * @throws SQLException the sql exception
      */
-    private void renommerUnRepertoire(String repertoiresource, String repertoiredest, String idLocal, String rootFolder) throws SQLException {
+    public static void renommerUnRepertoire( String idLocal, String relativerepertoiredest , String pathtorootorig) throws SQLException {
+        String repertoiredest = normalizePath(Context.getAbsolutePathFirst()  + relativerepertoiredest);
+        String repertoiresource = normalizePath(Context.getAbsolutePathFirst() + pathtorootorig);
         File directory = new File(repertoiresource);
         File directorydest = new File(repertoiredest);
-        if (directory.isDirectory()) {
-            directory.renameTo(directorydest);
-            RequeteSql.updateRepertoryName(idLocal, composeRelativeRep(rootFolder, repertoiredest));
+        if (repertoiresource.compareTo(repertoiredest)!=0) {
+            if (directory.isDirectory()) {
+                directory.renameTo(directorydest);
+                RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest);
+            }
         }
 
+    }
+
+    public static void rename_file(String file_id_local, String lc_idx_filename, String rename, String pathFromRoot) throws SQLException, IOException {
+        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + rename);
+        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename );
+        File fsource = new File(source);
+        File fdest = new File(dest);
+
+        if (source.compareTo(dest)!=0) {
+            boolean ret = true;
+            ret &= (RequeteSql.sqlrenamefile(
+                    file_id_local,
+                    rename) > 0);
+            if (ret) {
+                Files.move(fsource.toPath(), fdest.toPath());
+            }
+        }
     }
 
     /**
