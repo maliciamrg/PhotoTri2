@@ -256,18 +256,12 @@ public class RequeteSql {
                 "select a.id_local as file_id_local, " +
                         "b.id_local as folder_id_local , " +
                         "b.pathFromRoot , " +
-                        "a.lc_idx_filename as lc_idx_filename , " +
-                        "e.captureTime " +
-                        " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
-                        " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
+                        "a.lc_idx_filename as lc_idx_filename " +
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
-                        "inner join AgLibraryRootFolder c  " +
-                        " on b.rootFolder = c.id_local   " +
-                        "inner join Adobe_images e  " +
-                        " on a.id_local = e.rootFile    " +
-                        "Where b.pathFromRoot like \"%@New%\" \n" +
+                        "Where b.pathFromRoot not like \"" + Context.getRepertoireNew() + "%" + "\"" +
+                        "  and b.pathFromRoot like \"%" + Context.getRepRejet() + "\"" +
                         "order by captureTime asc;");
     }
     public static ResultSet sqlgetListelementnewaclasser(String tempsAdherence) throws SQLException {

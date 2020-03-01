@@ -30,8 +30,6 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -316,7 +314,7 @@ public class MainFrameController {
 
 //            constitution des groupes
 
-        GrpPhoto Bazar = new GrpPhoto(Context.getBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto Bazar = new GrpPhoto(Context.getRepBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
         GrpPhoto NoDate = new GrpPhoto(Context.getNoDate(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
         GrpPhoto Kidz = new GrpPhoto(Context.getKidz(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
 
@@ -566,6 +564,20 @@ public class MainFrameController {
         try {
             ResultSet rsele = RequeteSql.sqlgetListelementrejetaranger(Context.getTempsAdherence());
 
+            int minprev = 0;
+            long maxprev = 0;
+            int idx = 1; // idx 0 pour le bazar
+            int idxrep = 0;
+
+            while (rsele.next()) {
+
+                // Recuperer les info de l'elements
+                String file_id_local = rsele.getString("file_id_local");
+                String folder_id_local = rsele.getString("folder_id_local");
+                String pathFromRoot = rsele.getString("pathFromRoot");
+                String lc_idx_filename = rsele.getString("lc_idx_filename");
+
+            }
         } catch (SQLException e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
@@ -604,7 +616,7 @@ public class MainFrameController {
                 }
                 maxprev = maxt;
 
-                listEle.add(new Ele(idx, file_id_local, lc_idx_filename, folder_id_local, captureTime , pathFromRoot));
+                listEle.add(new Ele(idx, file_id_local, lc_idx_filename, folder_id_local, captureTime, pathFromRoot));
 
                 boolean newrep = true;
                 for (int i = 0; i < listRep.size(); i++) {
@@ -612,7 +624,6 @@ public class MainFrameController {
                         newrep = false;
                         break;
                     }
-                    ;
                 }
                 if (newrep) {
                     idxrep += 1;
@@ -646,7 +657,7 @@ public class MainFrameController {
                 int idxenc = listEle.get(i).getIdx();
                 if (idxenc > 1) {
                     if (idxenc != idxprev) {
-                        idx +=1;
+                        idx += 1;
                     }
                     listEle.get(i).setIdx(idx);
                     idxprev = idxenc;
@@ -654,17 +665,17 @@ public class MainFrameController {
 
             }
             //test si assez de repertoire
-            if (idx  > idxrep) {
-                throw new IllegalStateException("Créer " + (idx  - idxrep) + " repertoire tech dans lightroom");
+            if (idx > idxrep) {
+                throw new IllegalStateException("Créer " + (idx - idxrep) + " repertoire tech dans lightroom");
             }
 
             //action sur les elements
             for (int i = 1; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
                 String lc_idx_filename = listEle.get(i).getLc_idx_filename();
-                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$"+ supprimerbalisedollar(lc_idx_filename);
+                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lc_idx_filename);
                 listEle.get(i).renameto(rename);
-  //              listEle.get(i).moveto(listRep.get(idxenc));
+                //              listEle.get(i).moveto(listRep.get(idxenc));
             }
 
             //action sur les repertoires
@@ -729,8 +740,8 @@ public class MainFrameController {
         try {
             LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
 
-            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getBazar(), Context.getKidz());
-            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getBazar());
+            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getRepBazar(), Context.getKidz());
+            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getRepBazar());
             for (int iele = 0; iele < elementsPhoto.size(); iele++) {
                 ElePhoto elePhotocurrent = elementsPhoto.get(iele);
                 elePhotocurrent.getMint();

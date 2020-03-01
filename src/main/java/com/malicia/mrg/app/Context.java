@@ -36,7 +36,17 @@ public class Context implements Serializable {
     private static String tempsAdherence = "";
     private static String catalogLrcat = "";
     private static String urlgitwiki = "";
-    private static String bazar = "";
+    private static String repBazar = "";
+
+    public static String getRepRejet() {
+        return repRejet;
+    }
+
+    public static void setRepRejet(String repRejet) {
+        Context.repRejet = repRejet;
+    }
+
+    private static String repRejet = "";
 
     public static int getThresholdBazar() {
         return thresholdBazar;
@@ -204,17 +214,17 @@ public class Context implements Serializable {
      *
      * @return the bazar
      */
-    public static String getBazar() {
-        return bazar;
+    public static String getRepBazar() {
+        return repBazar;
     }
 
     /**
      * Sets bazar.
      *
-     * @param bazar the bazar
+     * @param repBazar the bazar
      */
-    public static void setBazar(String bazar) {
-        Context.bazar = bazar;
+    public static void setRepBazar(String repBazar) {
+        Context.repBazar = repBazar;
     }
 
     /**
@@ -350,7 +360,8 @@ public class Context implements Serializable {
         setUrlgitwiki(properties.getProperty("urlgitwiki"));
         setDryRun(properties.getProperty("dryRun", "true").compareTo("true") == 0);
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
-        setBazar(properties.getProperty("repBazar"));
+        setRepBazar(properties.getProperty("repBazar"));
+        setRepRejet(properties.getProperty("repRejet"));
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
