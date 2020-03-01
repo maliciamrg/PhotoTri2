@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.app.Packager;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.Ele;
 import com.malicia.mrg.photo.ElePhoto;
@@ -577,8 +578,14 @@ public class MainFrameController {
                 String pathFromRoot = rsele.getString("pathFromRoot");
                 String lc_idx_filename = rsele.getString("lc_idx_filename");
 
+                String source = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename);
+                String nomzip = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + "$ZipRejet$" + pathFromRoot);
+
+                List<File> sources = new ArrayList<File>((Collection<? extends File>) new File(source));
+                Packager.packZip(new File(nomzip), sources);
+
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
@@ -597,7 +604,8 @@ public class MainFrameController {
 
             int minprev = 0;
             long maxprev = 0;
-            int idx = 1; // idx 0 pour le bazar
+            int idxBazar = 1;// idx 1 pour le bazar
+            int idx = 1; // idx 1 pour le bazar
             int idxrep = 0;
 
             while (rsele.next()) {
@@ -611,7 +619,7 @@ public class MainFrameController {
                 long mint = rsele.getLong("mint");
                 long maxt = rsele.getLong("maxt");
 
-                if (mint > maxprev || idx == 1) {
+                if (mint > maxprev || idx == idxBazar) {// idx 1 pour le bazar
                     idx += 1;
                 }
                 maxprev = maxt;
@@ -633,6 +641,7 @@ public class MainFrameController {
             }
 
             //recalcul des idx pour les ele pour envoyer dans le bazar
+            // idx 1 pour le bazar
             int nbidx = 1;
             int idxencart = 0;
             for (int i = 1; i < listEle.size(); i++) {
@@ -643,7 +652,7 @@ public class MainFrameController {
                 } else {
                     if (nbidx < Context.getThresholdBazar()) {
                         for (int y = 1; y <= nbidx; y++) {
-                            listEle.get(i - y).setIdx(1);
+                            listEle.get(i - y).setIdx(idxBazar);
                         }
                     }
                     nbidx = 1;
@@ -651,7 +660,7 @@ public class MainFrameController {
             }
 
             //compactage des idx
-            idx = 2;
+            idx = 2;//idx 1 pour bazar
             int idxprev = listEle.get(0).getIdx();
             for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
@@ -670,7 +679,7 @@ public class MainFrameController {
             }
 
             //action sur les elements
-            for (int i = 1; i < listEle.size(); i++) {
+            for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
                 String lc_idx_filename = listEle.get(i).getLc_idx_filename();
                 String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lc_idx_filename);
@@ -679,14 +688,18 @@ public class MainFrameController {
             }
 
             //action sur les repertoires
-            for (int i = 1; i < listRep.size(); i++) {
+            for (int i = 0; i < listRep.size(); i++) {
                 int idxenc = listRep.get(i).getIdxrep();
                 String pathFromRoot = listRep.get(i).getPathFromRoot();
                 String rename;
-                if (i <= idx) {
-                    rename = Context.getRepertoireNew() + File.separator + "$grp" + String.format("%05d", idxenc) + "$";
+                if (idxBazar == idx) {
+                    rename = Context.getRepertoireNew() + File.separator +  Context.getRepBazar() ;
                 } else {
-                    rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
+                    if (i <= idx) {
+                        rename = Context.getRepertoireNew() + File.separator + "$grp" + String.format("%05d", idxenc) + "$";
+                    } else {
+                        rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
+                    }
                 }
                 listRep.get(i).moveto(rename);
             }
