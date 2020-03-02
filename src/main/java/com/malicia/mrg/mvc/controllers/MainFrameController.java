@@ -22,7 +22,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +35,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +54,6 @@ public class MainFrameController {
     private static final String OK_MOVE_DRY_RUN = "OKMoveDryRun";
     private static final String OK_MOVE_DO = "OKMoveDo";
     private static final String DRYRUN = "dryRun =>";
-    private static final Object FILE = 1;
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
@@ -63,7 +62,7 @@ public class MainFrameController {
     /**
      * The Absolute path.
      */
-    Map<String, String> absolutePath = new HashMap<String, String>();
+    Map<String, String> absolutePath = new HashMap<>();
     @FXML
     private ChoiceBox rootSelected;
     @FXML
@@ -103,7 +102,7 @@ public class MainFrameController {
 
             if (success == children.length) {
                 // The directory is now empty directory free so delete it
-                LOGGER.info("delete repertory:" + dir.toString());
+                LOGGER.log(java.util.logging.Level.INFO, "delete repertory: {1} ", dir);
                 returnVal = ActionfichierRepertoire.delete_dir(dir);
                 if (returnVal) {
                     return 1;
@@ -130,10 +129,7 @@ public class MainFrameController {
             } else {
                 dReturnEle.put(key, groupAndMouveEle.get(key));
             }
-//            System.out.println("Value of "+key+" is: "+groupAndMouveEle.get(key));
-
         }
-
     }
 
     private HashMap moveeletonewgroup(GrpPhoto grpPhoto, boolean dryRun) throws IOException, SQLException {
@@ -170,15 +166,15 @@ public class MainFrameController {
         for (int i = 0; i < grpPhoto.getElesrc().size(); i++) {
 
             File source = new File(grpPhoto.getElesrc().get(i));
-            File destination = new File(directoryName + "/" + source.toPath().getFileName());
+            File destination = new File(directoryName + File.separator + source.toPath().getFileName());
             grpPhoto.addEledest(i, ActionfichierRepertoire.normalizePath(destination.toString()));
 
-            if (true == (source.toString().compareTo(destination.toString()) == 0)) {
+            if ((source.toString().compareTo(destination.toString()) == 0)) {
                 displayReturn.put(OK_MOVE_SAME, (Integer) displayReturn.get(OK_MOVE_SAME) + 1);
-            } else if (true == !source.exists()) {
+            } else if (!source.exists()) {
                 displayReturn.put(SRC_NOT_EXIST, (Integer) displayReturn.get(SRC_NOT_EXIST) + 1);
                 throw new IllegalStateException("SRC_NOT_EXIST:" + source.toString());
-            } else if (true == dryRun) {
+            } else if (dryRun) {
                 displayReturn.put(OK_MOVE_DRY_RUN, (Integer) displayReturn.get(OK_MOVE_DRY_RUN) + 1);
             } else {
                 ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
@@ -209,11 +205,11 @@ public class MainFrameController {
 
 
             // Recuperer les info de l'elements
-            long captureTime = rsele.getLong("captureTime");
+            long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             long mint = rsele.getLong("mint");
             long maxt = rsele.getLong("maxt");
             String src = rsele.getString("src");
-            String absPath = rsele.getString("absolutePath");
+            String absPath = rsele.getString( Context.PATH_FROM_ROOT);
 
 
             //Constitution des groupes de photo standard
@@ -249,13 +245,12 @@ public class MainFrameController {
 
 
             // Recuperer les info de l'elements
-            long captureTime = rsgrp.getLong("captureTime");
-            long captureTimeOrig = rsgrp.getLong("captureTimeOrig");
+            long captureTime = rsgrp.getLong(Context.CAPTURE_TIME);
             long mint = rsgrp.getLong("mint");
             long maxt = rsgrp.getLong("maxt");
             String src = rsgrp.getString("src");
-            String pathFromRoot = rsgrp.getString("pathFromRoot");
-            String absPath = rsgrp.getString("absolutePath");
+            String pathFromRoot = rsgrp.getString(Context.PATH_FROM_ROOT);
+            String absPath = rsgrp.getString(Context.PATH_FROM_ROOT);
 
 
             //Constitution des groupes de photo standard
@@ -290,9 +285,9 @@ public class MainFrameController {
 
 //            constitution des groupes
 
-        GrpPhoto Bazar = new GrpPhoto(Context.getRepBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto NoDate = new GrpPhoto(Context.getNoDate(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
-        GrpPhoto Kidz = new GrpPhoto(Context.getKidz(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto baZar = new GrpPhoto(Context.getRepBazar(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto noDate = new GrpPhoto(Context.getNoDate(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
+        GrpPhoto kiDz = new GrpPhoto(Context.getKidz(), Context.getAbsolutePathFirst(), Context.getRepertoireNew() + "/");
 
         ResultSet rs = RequeteSql.sqlGroupGrouplessByPlageAdheranceRepNew(Context.getTempsAdherence());
 
@@ -305,17 +300,16 @@ public class MainFrameController {
 
 
             // Recuperer les info de l'elements
-            String CameraModel = rs.getString("CameraModel");
-            long captureTime = rs.getLong("captureTime");
-            long captureTimeOrig = rs.getLong("captureTimeOrig");
+            String cameraModel = rs.getString("CameraModel");
+            long captureTime = rs.getLong(Context.CAPTURE_TIME);
             long mint = rs.getLong("mint");
             long maxt = rs.getLong("maxt");
             String src = rs.getString("src");
-            String absPath = rs.getString("absolutePath");
+            String absPath = rs.getString(Context.PATH_FROM_ROOT);
 
             //constitution des groupes forcé
-            if (listkidsModel.contains(CameraModel)) {
-                Kidz.forceadd(null, captureTime, mint, maxt, ActionfichierRepertoire.normalizePath(src));
+            if (listkidsModel.contains(cameraModel)) {
+                kiDz.forceadd(null, captureTime, mint, maxt, ActionfichierRepertoire.normalizePath(src));
             } else {
 
 
@@ -324,10 +318,10 @@ public class MainFrameController {
 
                     //regroupement forcé des groupe de photos
                     if (grpPhotoEnc.getnbele() <= 5) {
-                        Bazar.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
+                        baZar.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
                     } else {
                         if (grpPhotoEnc.isdateNull()) {
-                            NoDate.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
+                            noDate.add(grpPhotoEnc.getElesrc(), grpPhotoEnc.getEledt(), grpPhotoEnc.getEledest());
                         } else {
                             listGrpPhoto.add(grpPhotoEnc);
                         }
@@ -342,9 +336,9 @@ public class MainFrameController {
             }
         }
         listGrpPhoto.add(grpPhotoEnc);
-        listGrpPhoto.add(Bazar);
-        listGrpPhoto.add(NoDate);
-        listGrpPhoto.add(Kidz);
+        listGrpPhoto.add(baZar);
+        listGrpPhoto.add(noDate);
+        listGrpPhoto.add(kiDz);
 
 
         return listGrpPhoto;
@@ -367,8 +361,9 @@ public class MainFrameController {
 
         HashMap codeRetourAction = new HashMap();
 
-        LOGGER.info((dryRun ? DRYRUN : "") + "Nb Groupe Crée " + ggp.size());
-
+        LOGGER.log(Level.INFO,
+                "{0}Nb Groupe Crée {1}",
+                new String[]{dryRun ? DRYRUN : "", String.valueOf(ggp.size())});
         for (int i = 0; i < ggp.size(); i++) {
             GrpPhoto gptemp = ggp.get(i);
 
@@ -380,9 +375,6 @@ public class MainFrameController {
                 LOGGER.info("hashRet:" + hashRet.toString());
                 LOGGER.info("GrpPhoto:" + gptemp.toString());
             }
-//            if (gptemp.getNvxNomRepertoire().compareTo("@Bazar__") == 0) {
-//                LOGGER.info((dryRun ? DRYRUN : "") + "Bazar Detail:" + hashRet.toString());
-//            }
 
             //Cumul des compteurs comparatif
             nbeleAfaire += gptemp.getnbele();
@@ -423,7 +415,7 @@ public class MainFrameController {
         try {
             while (rs.next()) {
                 String name = rs.getString("name");
-                absolutePath.put(name, rs.getString("absolutePath"));
+                absolutePath.put(name, rs.getString(Context.PATH_FROM_ROOT));
                 rootSelected.getItems().add(name);
             }
             rootSelected.setValue(rootSelected.getItems().get(0));
@@ -441,7 +433,7 @@ public class MainFrameController {
      *
      * @param rootName the root name
      */
-    private void selectLeRepertoireRootduFichierLigthroom(String rootName) {
+    private void selectLeRepertoireRootduFichierLigthroom(String rootName) throws IOException {
         logecrireuserlogInfo("absolutePath.get(rootName) : " + absolutePath.get(rootName));
         Context.setRoot(absolutePath.get(rootName));
         Context.savePropertiesParameters(Context.currentContext);
@@ -466,7 +458,7 @@ public class MainFrameController {
             }
             Context.savePropertiesParameters(Context.currentContext);
             Context.getController().initialize();
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
@@ -541,27 +533,17 @@ public class MainFrameController {
      */
     public void actionRangerRejet() {
         try {
-            ResultSet rsele = RequeteSql.sqlgetListelementrejetaranger(Context.getTempsAdherence());
-
-            int minprev = 0;
-            long maxprev = 0;
-            int idx = 1; // idx 0 pour le bazar
-            int idxrep = 0;
+            ResultSet rsele = RequeteSql.sqlgetListelementrejetaranger();
 
             while (rsele.next()) {
 
                 // Recuperer les info de l'elements
-                String file_id_local = rsele.getString("file_id_local");
-                String folder_id_local = rsele.getString("folder_id_local");
-                String pathFromRoot = rsele.getString("pathFromRoot");
-                String lc_idx_filename = rsele.getString("lc_idx_filename");
+                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+                String lcIdxFilename = rsele.getString("lc_idx_filename");
 
-                String source = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename);
+                String source = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lcIdxFilename);
                 String dest = source + ".rejet";
                 ActionfichierRepertoire.move_file(new File(source).toPath(), new File(dest).toPath());
-//                String nomzip = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + "$" + Context.getTitreRejet()+ "$" + pathFromRoot.replace("/", "_") + ".zip");
-
-//                Packager.packZip(new File(nomzip), new File(source));
 
             }
         } catch (SQLException | IOException e) {
@@ -581,7 +563,6 @@ public class MainFrameController {
             java.util.List<Ele> listEle = new ArrayList();
             java.util.List<Rep> listRep = new ArrayList();
 
-            int minprev = 0;
             long maxprev = 0;
             int idxBazar = 1;// idx 1 pour le bazar
             int idx = 1; // idx 1 pour le bazar
@@ -590,11 +571,10 @@ public class MainFrameController {
             while (rsele.next()) {
 
                 // Recuperer les info de l'elements
-                String file_id_local = rsele.getString("file_id_local");
-                String folder_id_local = rsele.getString("folder_id_local");
-                String pathFromRoot = rsele.getString("pathFromRoot");
-                String lc_idx_filename = rsele.getString("lc_idx_filename");
-                String captureTime = rsele.getString("captureTime");
+                String fileIdLocal = rsele.getString("file_id_local");
+                String folderIdLocal = rsele.getString("folder_id_local");
+                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+                String lcIdxFilename = rsele.getString("lc_idx_filename");
                 long mint = rsele.getLong("mint");
                 long maxt = rsele.getLong("maxt");
 
@@ -603,18 +583,18 @@ public class MainFrameController {
                 }
                 maxprev = maxt;
 
-                listEle.add(new Ele(idx, file_id_local, lc_idx_filename, folder_id_local, captureTime, pathFromRoot));
+                listEle.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
 
                 boolean newrep = true;
-                for (int i = 0; i < listRep.size(); i++) {
-                    if (folder_id_local.compareTo(listRep.get(i).getFolderIdLocal()) == 0) {
+                for (Rep rep : listRep) {
+                    if (folderIdLocal.compareTo(rep.getFolderIdLocal()) == 0) {
                         newrep = false;
                         break;
                     }
                 }
                 if (newrep) {
                     idxrep += 1;
-                    listRep.add(new Rep(idxrep, folder_id_local, pathFromRoot));
+                    listRep.add(new Rep(idxrep, folderIdLocal, pathFromRoot));
                 }
 
             }
@@ -622,7 +602,6 @@ public class MainFrameController {
             //recalcul des idx pour les ele pour envoyer dans le bazar
             // idx 1 pour le bazar
             int nbidx = 1;
-            int idxencart = 0;
             for (int i = 1; i < listEle.size(); i++) {
                 int idxprev = listEle.get(i - 1).getIdx();
                 int idxenc = listEle.get(i).getIdx();
@@ -641,13 +620,13 @@ public class MainFrameController {
             //compactage des idx
             idx = 2;//idx 1 pour bazar
             int idxprev = listEle.get(0).getIdx();
-            for (int i = 0; i < listEle.size(); i++) {
-                int idxenc = listEle.get(i).getIdx();
+            for (Ele ele : listEle) {
+                int idxenc = ele.getIdx();
                 if (idxenc > 1) {
                     if (idxenc != idxprev) {
                         idx += 1;
                     }
-                    listEle.get(i).setIdx(idx);
+                    ele.setIdx(idx);
                     idxprev = idxenc;
                 }
 
@@ -660,8 +639,8 @@ public class MainFrameController {
             //action sur les elements
             for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
-                String lc_idx_filename = listEle.get(i).getLcIdxFilename();
-                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lc_idx_filename);
+                String lcIdxFilename = listEle.get(i).getLcIdxFilename();
+                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lcIdxFilename);
                 listEle.get(i).renameto(rename);
                 listEle.get(i).moveto(listRep.get(idxenc));
             }
@@ -683,10 +662,10 @@ public class MainFrameController {
                 }
                 rename = ActionfichierRepertoire.normalizePath(rename + "/");
                 boolean repexist = false;
-                for (int y = 0; y < listRep.size(); y++) {
-                    if (listRep.get(y).getPathFromRoot().compareTo(rename) == 0) {
+                for (Rep rep : listRep) {
+                    if (rep.getPathFromRoot().compareTo(rename) == 0) {
                         repexist = true;
-                        listRepAsup.add(listRep.get(y));
+                        listRepAsup.add(rep);
                         break;
                     }
                 }
@@ -708,9 +687,9 @@ public class MainFrameController {
         }
     }
 
-    private String supprimerbalisedollar(String lc_idx_filename) {
+    private String supprimerbalisedollar(String lcIdxFilename) {
         Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
-        Matcher matcher = pattern.matcher(lc_idx_filename);
+        Matcher matcher = pattern.matcher(lcIdxFilename);
         if (matcher.find()) {
             return matcher.group(2);
         }
@@ -723,7 +702,7 @@ public class MainFrameController {
      */
     public void actionMovenewtogrpphotos() {
         try {
-            LOGGER.info("moveNewToGrpPhotos : dryRun = " + Context.getDryRun());
+            LOGGER.log(Level.INFO, "actionRangerlebazar : dryRun = {1}", Context.getDryRun());
 
             java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepNewbyGroup(Context.getKidsModelList());
 
@@ -744,7 +723,8 @@ public class MainFrameController {
      */
     public void actionRangerlebazar() {
         try {
-            LOGGER.info("actionRangerlebazar : dryRun = " + Context.getDryRun());
+
+            LOGGER.log(Level.INFO, "actionRangerlebazar : dryRun = {1}", Context.getDryRun());
 
             java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getRepBazar(), Context.getKidz());
             java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getRepBazar());
@@ -758,19 +738,14 @@ public class MainFrameController {
                     }
                 }
                 if (Context.getDryRun()) {
-                    System.out.println(elementsPhoto.get(iele));
+                    LOGGER.log(Level.INFO, elementsPhoto.get(iele));
                 } else {
                     HashMap<String, Object> ret = showPopupWindow(elePhotocurrent);
-                    if (ret != null) {
-                        if (ret.get(PopUpController.retourCode).toString().compareTo(PopUpController.valstoprun) == 0) {
-                            throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.valstoprun);
-                        }
+                    if (ret != null && ret.get(PopUpController.retourCode).toString().compareTo(PopUpController.valstoprun) == 0) {
+                        throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.valstoprun);
                     }
                 }
             }
-
-
-//            throw new IllegalStateException("En travaux");
         } catch (Exception e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
@@ -778,7 +753,6 @@ public class MainFrameController {
     }
 
     private HashMap<String, Object> showPopupWindow(ElePhoto elePhotocurrent) throws IOException, SQLException {
-        HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
         //Preparation technique de la popup
         FXMLLoader loaderpopup = new FXMLLoader();
@@ -802,7 +776,10 @@ public class MainFrameController {
             List<String> grpphotoele = grpphotoenc.getElesrc();
             controllerpopup.setLblinfo("" + (i + 1) + "/" + elePhotocurrent.getGrpPhotoCandidat().size() + " : " + grpphotoenc.getPathFromRootComumn());
             int nb = grpphotoele.size();
-            int id1 = 0, id2 = 0, id3 = 0, id4 = 0;
+            int id1 = 0;
+            int id2 = 0;
+            int id3 = 0;
+            int id4 = 0;
 
             switch (nb) {
                 case 1:
@@ -844,11 +821,13 @@ public class MainFrameController {
                 case PopUpController.valselect:
                     File source = new File(elePhotocurrent.getSrc());
                     String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
-                    File destination = new File(directoryName + "/" + source.toPath().getFileName());
+                    File destination = new File(directoryName + File.separator + source.toPath().getFileName());
                     ActionfichierRepertoire.move_file(source.toPath(), destination.toPath());
                     return ret;
                 case PopUpController.valnext:
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + ret.get(PopUpController.retourCode).toString());
             }
         }
 
@@ -881,7 +860,7 @@ public class MainFrameController {
             if (Context.getDryRun()) {
                 logecrireuserlogInfo("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
             } else {
-                File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + "/");
+                File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + File.separator);
 
                 int ndDelTotal = 0;
                 ndDelTotal = boucleSupressionRepertoire(directory);
@@ -904,7 +883,11 @@ public class MainFrameController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 if ((Integer) number2 >= 0) {
-                    selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                    try {
+                        selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
+                    } catch (IOException e) {
+                        LOGGER.log(Level.INFO,e.toString());
+                    }
                 }
             }
         });

@@ -22,14 +22,6 @@ public class Ele {
      */
     private String lcIdxFilename;
     /**
-     * The Folder id local.
-     */
-    private String folderIdLocal;
-    /**
-     * The Capture time.
-     */
-    private String captureTime;
-    /**
      * The Path from root.
      */
     private String pathFromRoot;
@@ -40,16 +32,12 @@ public class Ele {
      * @param idx           the idx
      * @param fileIdLocal   the file id local
      * @param lcIdxFilename the lc idx filename
-     * @param folderIdLocal the folder id local
-     * @param captureTime   the capture time
      * @param pathFromRoot  the path from root
      */
-    public Ele(int idx, String fileIdLocal, String lcIdxFilename, String folderIdLocal, String captureTime, String pathFromRoot) {
+    public Ele(int idx, String fileIdLocal, String lcIdxFilename, String pathFromRoot) {
         this.idx = idx;
         this.fileIdLocal = fileIdLocal;
         this.lcIdxFilename = lcIdxFilename;
-        this.folderIdLocal = folderIdLocal;
-        this.captureTime = captureTime;
         this.pathFromRoot = pathFromRoot;
     }
 

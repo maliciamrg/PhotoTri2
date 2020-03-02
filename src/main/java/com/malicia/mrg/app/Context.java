@@ -25,13 +25,21 @@ public class Context implements Serializable {
      * The constant CONTEXT_OBJECTS_TXT.
      */
     public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
+    /**
+     * The constant PATH_FROM_ROOT.
+     */
+    public static final String PATH_FROM_ROOT = "pathFromRoot";
+    /**
+     * The constant CAPTURE_TIME.
+     */
+    public static final String CAPTURE_TIME = "captureTime";
     private static final long serialVersionUID = 1L;
     private static final Context instance = new Context();
     private static final Logger LOGGER;
     /**
      * The constant currentContext.
      */
-    public static Context currentContext;
+    public static Context currentContext = new Context();
     private static MainFrameController controller;
     private static String root;
     private static Stage primaryStage;
@@ -46,8 +54,8 @@ public class Context implements Serializable {
     private static String repRejet = "";
     private static String titreRejet = "";
     private static int thresholdBazar = 0;
-    private static String Kidz = "";
-    private static String NoDate = "";
+    private static String kidz = "";
+    private static String noDate = "";
     private static List<String> kidsModelList;
     private static PopUpController controllerpopup;
     private static Popup popup;
@@ -119,7 +127,7 @@ public class Context implements Serializable {
      * @return the kidz
      */
     public static String getKidz() {
-        return Kidz;
+        return kidz;
     }
 
     /**
@@ -128,7 +136,7 @@ public class Context implements Serializable {
      * @param kidz the kidz
      */
     public static void setKidz(String kidz) {
-        Kidz = kidz;
+        Context.kidz = kidz;
     }
 
     /**
@@ -137,7 +145,7 @@ public class Context implements Serializable {
      * @return the no date
      */
     public static String getNoDate() {
-        return NoDate;
+        return noDate;
     }
 
     /**
@@ -146,7 +154,7 @@ public class Context implements Serializable {
      * @param noDate the no date
      */
     public static void setNoDate(String noDate) {
-        NoDate = noDate;
+        Context.noDate = noDate;
     }
 
     /**
@@ -331,36 +339,35 @@ public class Context implements Serializable {
 
     /**
      * Sets .
+     *
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
+     * @throws SQLException           the sql exception
      */
-    public static void setup() {
+    public static void setup() throws IOException, ClassNotFoundException, SQLException {
 
 
-        try {
-
-            InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
-            LogManager.getLogManager().readConfiguration(stream);
+        InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
+        LogManager.getLogManager().readConfiguration(stream);
 
 
-            LOGGER.severe("---==[ severe  ]==---");
-            LOGGER.warning("---==[ warning ]==---");
-            LOGGER.info("---==[  info   ]==---");
-            LOGGER.config("---==[ config  ]==---");
-            LOGGER.fine("---==[  fine   ]==---");
-            LOGGER.finer("---==[  finer  ]==---");
-            LOGGER.finest("---==[ finest  ]==---");
+        LOGGER.severe("---==[ severe  ]==---");
+        LOGGER.warning("---==[ warning ]==---");
+        LOGGER.info("---==[  info   ]==---");
+        LOGGER.config("---==[ config  ]==---");
+        LOGGER.fine("---==[  fine   ]==---");
+        LOGGER.finer("---==[  finer  ]==---");
+        LOGGER.finest("---==[ finest  ]==---");
 
-            LOGGER.info("Start");
+        LOGGER.info("Start");
 
-            currentContext = Context.loadPropertiesParameters();
-            if (currentContext == null) {
-                Context.initPropertiesParameters();
-            }
-
-            SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
-            Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
+        currentContext = Context.loadPropertiesParameters();
+        if (currentContext == null) {
+            Context.initPropertiesParameters();
         }
+
+        SQLiteJDBCDriverConnection.connect(Context.getCatalogLrcat());
+        Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
 
     }
 
@@ -421,18 +428,14 @@ public class Context implements Serializable {
      * Save properties parameters.
      *
      * @param ctx the ctx
+     * @throws IOException the io exception
      */
-    public static void savePropertiesParameters(Context ctx) {
+    public static void savePropertiesParameters(Context ctx) throws IOException {
         LOGGER.info("savePropertiesParameters");
-        try {
-            FileOutputStream f = new FileOutputStream(new File(CONTEXT_OBJECTS_TXT));
-            ObjectOutputStream o = new ObjectOutputStream(f);
+        try (FileOutputStream f = new FileOutputStream(new File(CONTEXT_OBJECTS_TXT)); ObjectOutputStream o = new ObjectOutputStream(f)) {
 
             // Write objects to file
             o.writeObject(ctx);
-
-            o.close();
-            f.close();
 
         } catch (FileNotFoundException e) {
             LOGGER.info("File not found");
@@ -446,28 +449,14 @@ public class Context implements Serializable {
      * Load properties parameters context.
      *
      * @return the context
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
      */
-    public static Context loadPropertiesParameters() {
-        try {
-            FileInputStream fi = new FileInputStream(new File(CONTEXT_OBJECTS_TXT));
-            ObjectInputStream oi = new ObjectInputStream(fi);
-
-            // Read objects
-            Context ctx = (Context) oi.readObject();
-
-            oi.close();
-            fi.close();
-
-            return ctx;
-        } catch (FileNotFoundException e) {
-            LOGGER.info("File not found");
-        } catch (IOException e) {
-            LOGGER.info("Error initializing stream");
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+    public static Context loadPropertiesParameters() throws IOException, ClassNotFoundException {
+        FileInputStream fi = new FileInputStream(new File(CONTEXT_OBJECTS_TXT));
+        ObjectInputStream oi = new ObjectInputStream(fi);
+        // Read objects
+        return (Context) oi.readObject();
     }
 
 }

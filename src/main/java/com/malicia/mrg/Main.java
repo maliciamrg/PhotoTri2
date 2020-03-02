@@ -8,6 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 /**
  * The type Main.
  */
@@ -18,7 +21,7 @@ public class Main extends Application {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
         Context.setup();
         launch(args);
     }

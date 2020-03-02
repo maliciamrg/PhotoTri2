@@ -1,5 +1,6 @@
 package com.malicia.mrg.app;
 
+import com.malicia.mrg.app.Context;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertNotNull;
