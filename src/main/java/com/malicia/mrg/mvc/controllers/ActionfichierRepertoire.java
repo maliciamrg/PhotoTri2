@@ -33,7 +33,8 @@ public class ActionfichierRepertoire {
      *
      * @param dir the dir
      * @return the boolean
-     * @throws IOException the io exception
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
      */
     public static boolean delete_dir(File dir) throws IOException, SQLException {
         boolean ret = true;
@@ -50,6 +51,7 @@ public class ActionfichierRepertoire {
      *
      * @param directory the directory
      * @return the boolean
+     * @throws SQLException the sql exception
      */
     public static boolean mkdir(File directory) throws SQLException {
         boolean ret = true;
@@ -67,7 +69,34 @@ public class ActionfichierRepertoire {
      * @param source_toPath      the source to path
      * @param destination_toPath the destination to path
      * @return the boolean
-     * @throws IOException the io exception
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public static boolean move_file(String file_id_local, String folder_id_local,String lc_idx_filename, String pathFromRootsrc , String pathFromRootdest) throws IOException, SQLException {
+        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRootsrc + lc_idx_filename);
+        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRootdest + lc_idx_filename );
+        File fsource = new File(source);
+        File fdest = new File(dest);
+        if (fsource.compareTo(fdest)!=0) {
+            boolean ret = true;
+            ret &= (RequeteSql.sqlmovefile(
+                    file_id_local,
+                    folder_id_local) > 0);
+            if (ret) {
+                Files.move(fsource.toPath(), fdest.toPath());
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Move file boolean.
+     *
+     * @param source_toPath      the source to path
+     * @param destination_toPath the destination to path
+     * @return the boolean
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
      */
     public static boolean move_file(Path source_toPath, Path destination_toPath) throws IOException, SQLException {
         boolean ret = true;
@@ -134,6 +163,12 @@ public class ActionfichierRepertoire {
         return hexvp1.substring(0, 8) + "-" + hexvp1.substring(8, 12) + "-" + hexvp1.substring(12, 16) + "-" + hexvp1.substring(16, 20) + "-" + hexvp1.substring(20, 32);
     }
 
+    /**
+     * Normalize path string.
+     *
+     * @param path the path
+     * @return the string
+     */
     public static String normalizePath(String path) {
         return path.replaceAll("\\\\", "/");
     }
@@ -143,10 +178,9 @@ public class ActionfichierRepertoire {
      * <p>
      * renomme un repertoire (physique et logique)
      *
-     * @param repertoiresource the repertoiresource
-     * @param repertoiredest   the repertoiredest
-     * @param idLocal          the id local
-     * @param rootFolder       the root folder
+     * @param idLocal                the id local
+     * @param relativerepertoiredest the relativerepertoiredest
+     * @param pathtorootorig         the pathtorootorig
      * @throws SQLException the sql exception
      */
     public static void renommerUnRepertoire( String idLocal, String relativerepertoiredest , String pathtorootorig) throws SQLException {
@@ -163,6 +197,16 @@ public class ActionfichierRepertoire {
 
     }
 
+    /**
+     * Rename file.
+     *
+     * @param file_id_local   the file id local
+     * @param lc_idx_filename the lc idx filename
+     * @param rename          the rename
+     * @param pathFromRoot    the path from root
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
     public static void rename_file(String file_id_local, String lc_idx_filename, String rename, String pathFromRoot) throws SQLException, IOException {
         String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + rename);
         String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename );

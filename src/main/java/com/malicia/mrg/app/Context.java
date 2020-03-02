@@ -21,10 +21,16 @@ import java.util.logging.Logger;
  */
 public class Context implements Serializable {
 
+    /**
+     * The constant CONTEXT_OBJECTS_TXT.
+     */
     public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
     private static final long serialVersionUID = 1L;
     private static final Context instance = new Context();
     private static final Logger LOGGER;
+    /**
+     * The constant currentContext.
+     */
     public static Context currentContext;
     private static MainFrameController controller;
     private static String root;
@@ -37,25 +43,8 @@ public class Context implements Serializable {
     private static String catalogLrcat = "";
     private static String urlgitwiki = "";
     private static String repBazar = "";
-
-    public static String getRepRejet() {
-        return repRejet;
-    }
-
-    public static void setRepRejet(String repRejet) {
-        Context.repRejet = repRejet;
-    }
-
     private static String repRejet = "";
-
-    public static int getThresholdBazar() {
-        return thresholdBazar;
-    }
-
-    public static void setThresholdBazar(int thresholdBazar) {
-        Context.thresholdBazar = thresholdBazar;
-    }
-
+    private static String titreRejet = "";
     private static int thresholdBazar = 0;
     private static String Kidz = "";
     private static String NoDate = "";
@@ -70,42 +59,146 @@ public class Context implements Serializable {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    /**
+     * Gets rep rejet.
+     *
+     * @return the rep rejet
+     */
+    public static String getRepRejet() {
+        return repRejet;
+    }
+
+    /**
+     * Sets rep rejet.
+     *
+     * @param repRejet the rep rejet
+     */
+    public static void setRepRejet(String repRejet) {
+        Context.repRejet = repRejet;
+    }
+
+    /**
+     * Gets titre rejet.
+     *
+     * @return the titre rejet
+     */
+    public static String getTitreRejet() {
+        return titreRejet;
+    }
+
+    /**
+     * Sets titre rejet.
+     *
+     * @param titreRejet the titre rejet
+     */
+    public static void setTitreRejet(String titreRejet) {
+        Context.titreRejet = titreRejet;
+    }
+
+    /**
+     * Gets threshold bazar.
+     *
+     * @return the threshold bazar
+     */
+    public static int getThresholdBazar() {
+        return thresholdBazar;
+    }
+
+    /**
+     * Sets threshold bazar.
+     *
+     * @param thresholdBazar the threshold bazar
+     */
+    public static void setThresholdBazar(int thresholdBazar) {
+        Context.thresholdBazar = thresholdBazar;
+    }
+
+    /**
+     * Gets popup.
+     *
+     * @return the popup
+     */
     public static Popup getPopup() {
         return popup;
     }
 
+    /**
+     * Sets popup.
+     *
+     * @param popup the popup
+     */
     public static void setPopup(Popup popup) {
         Context.popup = popup;
     }
 
+    /**
+     * Gets controllerpopup.
+     *
+     * @return the controllerpopup
+     */
     public static PopUpController getControllerpopup() {
         return controllerpopup;
     }
 
+    /**
+     * Sets controllerpopup.
+     *
+     * @param controllerpopup the controllerpopup
+     */
     public static void setControllerpopup(PopUpController controllerpopup) {
         Context.controllerpopup = controllerpopup;
     }
 
+    /**
+     * Gets kidz.
+     *
+     * @return the kidz
+     */
     public static String getKidz() {
         return Kidz;
     }
 
+    /**
+     * Sets kidz.
+     *
+     * @param kidz the kidz
+     */
     public static void setKidz(String kidz) {
         Kidz = kidz;
     }
 
+    /**
+     * Gets no date.
+     *
+     * @return the no date
+     */
     public static String getNoDate() {
         return NoDate;
     }
 
+    /**
+     * Sets no date.
+     *
+     * @param noDate the no date
+     */
     public static void setNoDate(String noDate) {
         NoDate = noDate;
     }
 
+    /**
+     * Gets urlgitwiki.
+     *
+     * @return the urlgitwiki
+     */
     public static String getUrlgitwiki() {
         return urlgitwiki;
     }
 
+    /**
+     * Sets urlgitwiki.
+     *
+     * @param urlgitwiki the urlgitwiki
+     */
     public static void setUrlgitwiki(String urlgitwiki) {
         Context.urlgitwiki = urlgitwiki;
     }
@@ -362,6 +455,7 @@ public class Context implements Serializable {
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setRepBazar(properties.getProperty("repBazar"));
         setRepRejet(properties.getProperty("repRejet"));
+        setTitreRejet(properties.getProperty("titreRejet"));
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
@@ -388,6 +482,8 @@ public class Context implements Serializable {
 
     /**
      * Save properties parameters.
+     *
+     * @param ctx the ctx
      */
     public static void savePropertiesParameters(Context ctx) {
         LOGGER.info("savePropertiesParameters");

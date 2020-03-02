@@ -2,7 +2,6 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.Packager;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.Ele;
 import com.malicia.mrg.photo.ElePhoto;
@@ -60,6 +59,9 @@ public class MainFrameController {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
+    /**
+     * The Absolute path.
+     */
     Map<String, String> absolutePath = new HashMap<String, String>();
     @FXML
     private ChoiceBox rootSelected;
@@ -230,6 +232,13 @@ public class MainFrameController {
     }
 
 
+    /**
+     * Gets ele bazar.
+     *
+     * @param repBazar the rep bazar
+     * @return the ele bazar
+     * @throws SQLException the sql exception
+     */
     public java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
 
 //            constitution des groupes
@@ -260,6 +269,14 @@ public class MainFrameController {
         return listElePhoto;
     }
 
+    /**
+     * Regroupe ele rep hors bazarby group java . util . list.
+     *
+     * @param repBazar the rep bazar
+     * @param repKidz  the rep kidz
+     * @return the java . util . list
+     * @throws SQLException the sql exception
+     */
     public java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar, String repKidz) throws SQLException {
 
 //            constitution des groupes
@@ -310,6 +327,7 @@ public class MainFrameController {
      *
      * @param listkidsModel the kids model list
      * @return the java . util . list
+     * @throws SQLException the sql exception
      */
     public java.util.List<GrpPhoto> regroupeEleRepNewbyGroup(List<String> listkidsModel) throws SQLException {
 
@@ -497,6 +515,9 @@ public class MainFrameController {
         }
     }
 
+    /**
+     * Action makeadulpicatelrcatwithdate.
+     */
     public void actionMakeadulpicatelrcatwithdate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -579,10 +600,11 @@ public class MainFrameController {
                 String lc_idx_filename = rsele.getString("lc_idx_filename");
 
                 String source = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename);
-                String nomzip = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + "$ZipRejet$" + pathFromRoot);
+                String dest = source + ".rejet";
+                ActionfichierRepertoire.move_file(new File(source).toPath(), new File(dest).toPath());
+//                String nomzip = ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + "$" + Context.getTitreRejet()+ "$" + pathFromRoot.replace("/", "_") + ".zip");
 
-                List<File> sources = new ArrayList<File>((Collection<? extends File>) new File(source));
-                Packager.packZip(new File(nomzip), sources);
+//                Packager.packZip(new File(nomzip), new File(source));
 
             }
         } catch (SQLException | IOException e) {
@@ -684,16 +706,17 @@ public class MainFrameController {
                 String lc_idx_filename = listEle.get(i).getLc_idx_filename();
                 String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lc_idx_filename);
                 listEle.get(i).renameto(rename);
-                //              listEle.get(i).moveto(listRep.get(idxenc));
+                listEle.get(i).moveto(listRep.get(idxenc));
             }
 
-            //action sur les repertoires
+            //preparation action sur les repertoires
+            java.util.List<Rep> listRepAsup = new ArrayList();
+            java.util.List<String> listRepRename = new ArrayList();
             for (int i = 0; i < listRep.size(); i++) {
                 int idxenc = listRep.get(i).getIdxrep();
-                String pathFromRoot = listRep.get(i).getPathFromRoot();
                 String rename;
                 if (idxBazar == idx) {
-                    rename = Context.getRepertoireNew() + File.separator +  Context.getRepBazar() ;
+                    rename = Context.getRepertoireNew() + File.separator + Context.getRepBazar();
                 } else {
                     if (i <= idx) {
                         rename = Context.getRepertoireNew() + File.separator + "$grp" + String.format("%05d", idxenc) + "$";
@@ -701,8 +724,26 @@ public class MainFrameController {
                         rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
                     }
                 }
-                listRep.get(i).moveto(rename);
+                rename = ActionfichierRepertoire.normalizePath(rename+"/");
+                boolean repexist = false;
+                for (int y = 0; y < listRep.size(); y++) {
+                    if (listRep.get(y).getPathFromRoot().compareTo(rename) == 0) {
+                        repexist = true;
+                        listRepAsup.add(listRep.get(y));
+                        break;
+                    }
+                }
+                if (!repexist) {
+                    listRepRename.add(rename);
+                }
             }
+            listRep.removeAll(listRepAsup);
+
+            //action sur les repertoire
+            for (int i = 0; i < listRep.size(); i++) {
+                listRep.get(i).moveto(listRepRename.get(i));
+            }
+
 
         } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
@@ -900,6 +941,11 @@ public class MainFrameController {
         }
     }
 
+    /**
+     * First.
+     *
+     * @throws SQLException the sql exception
+     */
     public void first() throws SQLException {
         initalizerootselection();
         rootSelected.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {

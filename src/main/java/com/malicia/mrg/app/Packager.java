@@ -1,99 +1,63 @@
 package com.malicia.mrg.app;
 
 
+import net.lingala.zip4j.exception.ZipException;
+
 import java.io.File;
-        import java.io.FileInputStream;
-        import java.io.FileOutputStream;
-        import java.io.IOException;
-        import java.util.List;
-        import java.util.zip.Deflater;
-        import java.util.zip.ZipEntry;
-        import java.util.zip.ZipOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Packager
-{
-    public static void packZip(File output, List<File> sources) throws IOException
-    {
-        System.out.println("Packaging to " + output.getName());
-        ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(output));
-        zipOut.setLevel(Deflater.DEFAULT_COMPRESSION);
+public class Packager {
+    public static void packZip(File output, File sources) throws ZipException {
+        try {
 
-        for (File source : sources)
-        {
-            if (source.isDirectory())
-            {
-                zipDir(zipOut, "", source);
-            } else
-            {
-                zipFile(zipOut, "", source);
-            }
+            //1.0 Create properties for Zip file creation
+            Map<String, String> zipSysProps = new HashMap<>();
+            zipSysProps.put("create", "true");
+
+            //2.0 Form the URI for the Zip File
+            Path zip_path = Paths.get(output.toPath().toString());
+            URI zip_uri = new URI("jar:file",
+                    zip_path.toUri().getPath(),
+                    null);
+
+            //3.0 Create the Zip file specified by the URI
+            FileSystem ZipFileSystem =
+                    FileSystems.newFileSystem(
+                            zip_uri,
+                            zipSysProps);
+//            System.out.println("Zip File Created: " +
+//                    ZipFileSystem.toString());
+
+            //4.0 Get the Path of Source and
+            // Destination file and Add to Zip
+            //4.1 Create the Source locations
+            Path Source1 = Paths.get(sources.toPath().toString());
+
+            //4.2 Create Destination location in Zip
+            Path Dest1 = ZipFileSystem.getPath(
+                    "/"+ sources.getName());
+
+            //4.3 Copy the Source to Destination
+            // (Place File one by one)
+            Files.move(
+                    Source1,
+                    Dest1,
+                    StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File Moved to Zip:" + Dest1);
+
+            ZipFileSystem.close();
+
+        } catch (URISyntaxException Ex) {
+            System.out.println("URISyntaxException: "
+                    + Ex.getMessage());
+        } catch (IOException Ex) {
+            System.out.println("IO Exception: "
+                    + Ex.getMessage());
         }
-        zipOut.flush();
-        zipOut.close();
-        System.out.println("Done");
-    }
-
-    private static String buildPath(String path, String file)
-    {
-        if (path == null || path.isEmpty())
-        {
-            return file;
-        } else
-        {
-            return path + "/" + file;
-        }
-    }
-
-    private static void zipDir(ZipOutputStream zos, String path, File dir) throws IOException
-    {
-        if (!dir.canRead())
-        {
-            System.out.println("Cannot read " + dir.getCanonicalPath() + " (maybe because of permissions)");
-            return;
-        }
-
-        File[] files = dir.listFiles();
-        path = buildPath(path, dir.getName());
-        System.out.println("Adding Directory " + path);
-
-        for (File source : files)
-        {
-            if (source.isDirectory())
-            {
-                zipDir(zos, path, source);
-            } else
-            {
-                zipFile(zos, path, source);
-            }
-        }
-
-        System.out.println("Leaving Directory " + path);
-    }
-
-    private static void zipFile(ZipOutputStream zos, String path, File file) throws IOException
-    {
-        if (!file.canRead())
-        {
-            System.out.println("Cannot read " + file.getCanonicalPath() + " (maybe because of permissions)");
-            return;
-        }
-
-        System.out.println("Compressing " + file.getName());
-        zos.putNextEntry(new ZipEntry(buildPath(path, file.getName())));
-
-        FileInputStream fis = new FileInputStream(file);
-
-        byte[] buffer = new byte[4092];
-        int byteCount = 0;
-        while ((byteCount = fis.read(buffer)) != -1)
-        {
-            zos.write(buffer, 0, byteCount);
-            System.out.print('.');
-            System.out.flush();
-        }
-        System.out.println();
-
-        fis.close();
-        zos.closeEntry();
     }
 }
