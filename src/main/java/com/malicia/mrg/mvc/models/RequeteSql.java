@@ -479,10 +479,8 @@ public class RequeteSql {
     /**
      * Sqlmovefile int.
      *
-     * @param idrootfolder_source_toPath      the idrootfolder source to path
-     * @param source_toPath                   the source to path
-     * @param idrootfolder_destination_toPath the idrootfolder destination to path
-     * @param destination_toPath              the destination to path
+     * @param file_id_local   the file id local
+     * @param folder_id_local the folder id local
      * @return the int
      * @throws SQLException the sql exception
      */

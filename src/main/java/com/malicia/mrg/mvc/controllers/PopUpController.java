@@ -13,16 +13,46 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * The type Pop up controller.
+ */
 public class PopUpController {
 
+    /**
+     * The constant retourCode.
+     */
     public static final String retourCode = "retourCode";
+    /**
+     * The constant valstoprun.
+     */
     public static final String valstoprun = "stopRun";
+    /**
+     * The constant valnext.
+     */
     public static final String valnext = "next";
+    /**
+     * The constant valselect.
+     */
     public static final String valselect = "select";
+    /**
+     * The constant idimageOne.
+     */
     public static final String idimageOne = "imageOne";
+    /**
+     * The constant idimage2UL.
+     */
     public static final String idimage2UL = "image2UL";
+    /**
+     * The constant idimage2UR.
+     */
     public static final String idimage2UR = "image2UR";
+    /**
+     * The constant idimage2LL.
+     */
     public static final String idimage2LL = "image2LL";
+    /**
+     * The constant idimage2LR.
+     */
     public static final String idimage2LR = "image2LR";
     private static final java.util.logging.Logger LOGGER;
     private static Stage popupStage;
@@ -47,10 +77,20 @@ public class PopUpController {
     private Label lblinfo;
     private HashMap<String, Object> Result = new HashMap<String, Object>();
 
+    /**
+     * Gets popup stage.
+     *
+     * @return the popup stage
+     */
     public static Stage getPopupStage() {
         return popupStage;
     }
 
+    /**
+     * Sets popup stage.
+     *
+     * @param popupStage the popup stage
+     */
     public static void setPopupStage(Stage popupStage) {
         PopUpController.popupStage = popupStage;
     }
@@ -83,14 +123,29 @@ public class PopUpController {
 //        return result;
 //    }
 
+    /**
+     * Sets lblinfo.
+     *
+     * @param lblinfo the lblinfo
+     */
     public void setLblinfo(String lblinfo) {
         this.lblinfo.setText(lblinfo);
     }
 
+    /**
+     * Gets result.
+     *
+     * @return the result
+     */
     public HashMap<String, Object> getResult() {
         return Result;
     }
 
+    /**
+     * Handle.
+     *
+     * @param key the key
+     */
     @FXML
     public void handle(KeyEvent key) {
         System.out.println("Event handled! : " + key.getCharacter());
@@ -108,6 +163,9 @@ public class PopUpController {
         }
     }
 
+    /**
+     * Action btn cancel.
+     */
     public void ActionBtnCancel() {
         Result.put(retourCode, valstoprun);
         closeStage();
@@ -122,10 +180,22 @@ public class PopUpController {
         }
     }
 
+    /**
+     * Sets image one.
+     *
+     * @param src the src
+     */
     public void setImageOne(Image src) {
         imageOne.setImage(src);
     }
 
+    /**
+     * Sets image.
+     *
+     * @param nomimage the nomimage
+     * @param src      the src
+     * @throws IOException the io exception
+     */
     public void setImage(String nomimage, String src) throws IOException {
         LOGGER.info(src);
         String ext = FilenameUtils.getExtension(src).toLowerCase();

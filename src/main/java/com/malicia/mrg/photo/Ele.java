@@ -12,43 +12,43 @@ public class Ele {
     /**
      * The Idx.
      */
-    int idx;
+    private int idx;
     /**
      * The File id local.
      */
-    String file_id_local;
+    private String fileIdLocal;
     /**
      * The Lc idx filename.
      */
-    String lc_idx_filename;
+    private String lcIdxFilename;
     /**
      * The Folder id local.
      */
-    String folder_id_local;
+    private String folderIdLocal;
     /**
      * The Capture time.
      */
-    String captureTime;
+    private String captureTime;
     /**
      * The Path from root.
      */
-    String pathFromRoot;
+    private String pathFromRoot;
 
     /**
      * Instantiates a new Ele.
      *
-     * @param idx             the idx
-     * @param file_id_local   the file id local
-     * @param lc_idx_filename the lc idx filename
-     * @param folder_id_local the folder id local
-     * @param captureTime     the capture time
-     * @param pathFromRoot    the path from root
+     * @param idx           the idx
+     * @param fileIdLocal   the file id local
+     * @param lcIdxFilename the lc idx filename
+     * @param folderIdLocal the folder id local
+     * @param captureTime   the capture time
+     * @param pathFromRoot  the path from root
      */
-    public Ele(int idx, String file_id_local, String lc_idx_filename, String folder_id_local, String captureTime, String pathFromRoot) {
+    public Ele(int idx, String fileIdLocal, String lcIdxFilename, String folderIdLocal, String captureTime, String pathFromRoot) {
         this.idx = idx;
-        this.file_id_local = file_id_local;
-        this.lc_idx_filename = lc_idx_filename;
-        this.folder_id_local = folder_id_local;
+        this.fileIdLocal = fileIdLocal;
+        this.lcIdxFilename = lcIdxFilename;
+        this.folderIdLocal = folderIdLocal;
         this.captureTime = captureTime;
         this.pathFromRoot = pathFromRoot;
     }
@@ -94,17 +94,17 @@ public class Ele {
      *
      * @return the file id local
      */
-    public String getFile_id_local() {
-        return file_id_local;
+    public String getFileIdLocal() {
+        return fileIdLocal;
     }
 
     /**
      * Sets file id local.
      *
-     * @param file_id_local the file id local
+     * @param fileIdLocal the file id local
      */
-    public void setFile_id_local(String file_id_local) {
-        this.file_id_local = file_id_local;
+    public void setFileIdLocal(String fileIdLocal) {
+        this.fileIdLocal = fileIdLocal;
     }
 
     /**
@@ -112,17 +112,17 @@ public class Ele {
      *
      * @return the lc idx filename
      */
-    public String getLc_idx_filename() {
-        return lc_idx_filename;
+    public String getLcIdxFilename() {
+        return lcIdxFilename;
     }
 
     /**
      * Sets lc idx filename.
      *
-     * @param lc_idx_filename the lc idx filename
+     * @param lcIdxFilename the lc idx filename
      */
-    public void setLc_idx_filename(String lc_idx_filename) {
-        this.lc_idx_filename = lc_idx_filename;
+    public void setLcIdxFilename(String lcIdxFilename) {
+        this.lcIdxFilename = lcIdxFilename;
     }
 
     /**
@@ -130,17 +130,17 @@ public class Ele {
      *
      * @return the folder id local
      */
-    public String getFolder_id_local() {
-        return folder_id_local;
+    public String getFolderIdLocal() {
+        return folderIdLocal;
     }
 
     /**
      * Sets folder id local.
      *
-     * @param folder_id_local the folder id local
+     * @param folderIdLocal the folder id local
      */
-    public void setFolder_id_local(String folder_id_local) {
-        this.folder_id_local = folder_id_local;
+    public void setFolderIdLocal(String folderIdLocal) {
+        this.folderIdLocal = folderIdLocal;
     }
 
     /**
@@ -165,10 +165,11 @@ public class Ele {
      * Moveto.
      *
      * @param rep the rep
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
      */
     public void moveto(Rep rep) throws IOException, SQLException {
-        ActionfichierRepertoire.move_file(file_id_local, rep.getFolder_id_local() , lc_idx_filename , pathFromRoot , rep.getPathFromRoot());
-     //   ActionfichierRepertoire.move_file(rep);
+        ActionfichierRepertoire.move_file(fileIdLocal, rep.getFolderIdLocal(), lcIdxFilename, pathFromRoot, rep.getPathFromRoot());
     }
 
     /**
@@ -179,7 +180,7 @@ public class Ele {
      * @throws SQLException the sql exception
      */
     public void renameto(String rename) throws IOException, SQLException {
-        ActionfichierRepertoire.rename_file(file_id_local, lc_idx_filename , rename , pathFromRoot);
-        lc_idx_filename = rename;
+        ActionfichierRepertoire.rename_file(fileIdLocal, lcIdxFilename, rename, pathFromRoot);
+        lcIdxFilename = rename;
     }
 }

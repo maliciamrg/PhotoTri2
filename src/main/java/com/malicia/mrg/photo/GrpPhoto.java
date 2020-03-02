@@ -131,11 +131,11 @@ public class GrpPhoto {
 
     private String listeeletostring() {
         if (elesrc.size() != eledt.size() || elesrc.size() != eledest.size()) {
-            throw new IllegalStateException("ele.size=>" + elesrc.size() + " != " + " eledt.size=>" + eledt.size()+ " != " + " eledest.size=>" + eledest.size());
+            throw new IllegalStateException("ele.size=>" + elesrc.size() + " != " + " eledt.size=>" + eledt.size() + " != " + " eledest.size=>" + eledest.size());
         }
         StringBuilder listeletostring = new StringBuilder();
         for (int i = 0; i < elesrc.size(); i++) {
-            listeletostring.append("     " + eledt.get(i) + " -> " + elesrc.get(i)  + " -> " + eledest.get(i)  + "\n");
+            listeletostring.append("     " + eledt.get(i) + " -> " + elesrc.get(i) + " -> " + eledest.get(i) + "\n");
         }
         return listeletostring.toString();
     }
@@ -183,10 +183,7 @@ public class GrpPhoto {
         if (mint > 0 && mint > maxtGrp) {
             return false;
         }
-        if (maxt > 0 && maxt < mintGrp) {
-            return false;
-        }
-        return true;
+        return maxt <= 0 || maxt >= mintGrp;
     }
 
     /**

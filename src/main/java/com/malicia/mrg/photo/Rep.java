@@ -15,7 +15,7 @@ public class Rep {
     /**
      * The Folder id local.
      */
-    String folder_id_local;
+    String folderIdLocal;
     /**
      * The Path from root.
      */
@@ -25,13 +25,13 @@ public class Rep {
     /**
      * Instantiates a new Rep.
      *
-     * @param idxrep          the idxrep
-     * @param folder_id_local the folder id local
-     * @param pathFromRoot    the path from root
+     * @param idxrep        the idxrep
+     * @param folderIdLocal the folder id local
+     * @param pathFromRoot  the path from root
      */
-    public Rep(int idxrep, String folder_id_local, String pathFromRoot) {
+    public Rep(int idxrep, String folderIdLocal, String pathFromRoot) {
         this.idxrep = idxrep;
-        this.folder_id_local = folder_id_local;
+        this.folderIdLocal = folderIdLocal;
         this.pathFromRoot = pathFromRoot;
     }
 
@@ -58,17 +58,17 @@ public class Rep {
      *
      * @return the folder id local
      */
-    public String getFolder_id_local() {
-        return folder_id_local;
+    public String getFolderIdLocal() {
+        return folderIdLocal;
     }
 
     /**
      * Sets folder id local.
      *
-     * @param folder_id_local the folder id local
+     * @param folderIdLocal the folder id local
      */
-    public void setFolder_id_local(String folder_id_local) {
-        this.folder_id_local = folder_id_local;
+    public void setFolderIdLocal(String folderIdLocal) {
+        this.folderIdLocal = folderIdLocal;
     }
 
     /**
@@ -97,7 +97,7 @@ public class Rep {
      * @throws SQLException the sql exception
      */
     public void moveto(String rename) throws SQLException {
-        ActionfichierRepertoire.renommerUnRepertoire(folder_id_local, rename, pathFromRoot);
+        ActionfichierRepertoire.renommerUnRepertoire(folderIdLocal, rename, pathFromRoot);
     }
 
 }

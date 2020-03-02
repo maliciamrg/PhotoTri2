@@ -7,8 +7,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Ressources.
+ */
 public class Ressources {
 
+    /**
+     * Gets resource files.
+     *
+     * @param path the path
+     * @return the resource files
+     * @throws IOException the io exception
+     */
     public static List<String> getResourceFiles(String path) throws IOException {
         List<String> filenames = new ArrayList<>();
 
@@ -36,6 +46,12 @@ public class Ressources {
         return Thread.currentThread().getContextClassLoader();
     }
 
+    /**
+     * Listetostring string.
+     *
+     * @param ele the ele
+     * @return the string
+     */
     public static String listetostring(List<?> ele) {
         StringBuilder listeletostring = new StringBuilder();
         for (int i = 0; i < ele.size(); i++) {

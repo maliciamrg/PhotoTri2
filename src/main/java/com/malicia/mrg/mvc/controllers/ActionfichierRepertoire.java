@@ -66,18 +66,21 @@ public class ActionfichierRepertoire {
     /**
      * Move file boolean.
      *
-     * @param source_toPath      the source to path
-     * @param destination_toPath the destination to path
+     * @param file_id_local    the file id local
+     * @param folder_id_local  the folder id local
+     * @param lc_idx_filename  the lc idx filename
+     * @param pathFromRootsrc  the path from rootsrc
+     * @param pathFromRootdest the path from rootdest
      * @return the boolean
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public static boolean move_file(String file_id_local, String folder_id_local,String lc_idx_filename, String pathFromRootsrc , String pathFromRootdest) throws IOException, SQLException {
+    public static boolean move_file(String file_id_local, String folder_id_local, String lc_idx_filename, String pathFromRootsrc, String pathFromRootdest) throws IOException, SQLException {
         String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRootsrc + lc_idx_filename);
-        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRootdest + lc_idx_filename );
+        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRootdest + lc_idx_filename);
         File fsource = new File(source);
         File fdest = new File(dest);
-        if (fsource.compareTo(fdest)!=0) {
+        if (fsource.compareTo(fdest) != 0) {
             boolean ret = true;
             ret &= (RequeteSql.sqlmovefile(
                     file_id_local,
@@ -104,7 +107,7 @@ public class ActionfichierRepertoire {
                 RequeteSql.retrieverootfolder(source_toPath.toString()),
                 source_toPath,
                 RequeteSql.retrieverootfolder(destination_toPath.toString()),
-                destination_toPath)> 0);
+                destination_toPath) > 0);
         if (ret) {
             Files.move(source_toPath, destination_toPath);
         }
@@ -132,9 +135,9 @@ public class ActionfichierRepertoire {
     private static long getNextIdlocal() throws SQLException {
         long nextidlocal = 0;
 //        try {
-            long idlocal = RequeteSql.sqlGetAdobeentityIDCounter().getLong(1);
-            nextidlocal = idlocal + 1;
-            RequeteSql.sqlSetAdobeentityIDCounter(nextidlocal);
+        long idlocal = RequeteSql.sqlGetAdobeentityIDCounter().getLong(1);
+        nextidlocal = idlocal + 1;
+        RequeteSql.sqlSetAdobeentityIDCounter(nextidlocal);
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
@@ -144,10 +147,10 @@ public class ActionfichierRepertoire {
     private static String getNextIdGlobal() throws SQLException {
         String fmtnextidglobal = "";
 //        try {
-            String idglobal = RequeteSql.sqlGetIdGlobal().getString(1);
-            fmtnextidglobal = calculnextidglobalidglobal(idglobal);
+        String idglobal = RequeteSql.sqlGetIdGlobal().getString(1);
+        fmtnextidglobal = calculnextidglobalidglobal(idglobal);
 
-            //RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
+        //RequeteSql.sqlSetAdobestoreProviderID(fmtnextidglobal);
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
@@ -158,7 +161,7 @@ public class ActionfichierRepertoire {
         BigInteger decimal = new BigInteger(hexv.substring(0, 8) + hexv.substring(9, 13)
                 + hexv.substring(14, 18) + hexv.substring(19, 23) + hexv.substring(24, 36), 16);
         decimal = decimal.add(BigInteger.ONE);
-        String hexvp1 = StringUtils.leftPad(decimal.toString(16).toUpperCase(),32,"0");
+        String hexvp1 = StringUtils.leftPad(decimal.toString(16).toUpperCase(), 32, "0");
 //        String str = Integer.toHexString(decimal+1);
         return hexvp1.substring(0, 8) + "-" + hexvp1.substring(8, 12) + "-" + hexvp1.substring(12, 16) + "-" + hexvp1.substring(16, 20) + "-" + hexvp1.substring(20, 32);
     }
@@ -183,12 +186,12 @@ public class ActionfichierRepertoire {
      * @param pathtorootorig         the pathtorootorig
      * @throws SQLException the sql exception
      */
-    public static void renommerUnRepertoire( String idLocal, String relativerepertoiredest , String pathtorootorig) throws SQLException {
-        String repertoiredest = normalizePath(Context.getAbsolutePathFirst()  + relativerepertoiredest);
+    public static void renommerUnRepertoire(String idLocal, String relativerepertoiredest, String pathtorootorig) throws SQLException {
+        String repertoiredest = normalizePath(Context.getAbsolutePathFirst() + relativerepertoiredest);
         String repertoiresource = normalizePath(Context.getAbsolutePathFirst() + pathtorootorig);
         File directory = new File(repertoiresource);
         File directorydest = new File(repertoiredest);
-        if (repertoiresource.compareTo(repertoiredest)!=0) {
+        if (repertoiresource.compareTo(repertoiredest) != 0) {
             if (directory.isDirectory()) {
                 directory.renameTo(directorydest);
                 RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest);
@@ -209,11 +212,11 @@ public class ActionfichierRepertoire {
      */
     public static void rename_file(String file_id_local, String lc_idx_filename, String rename, String pathFromRoot) throws SQLException, IOException {
         String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + rename);
-        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename );
+        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename);
         File fsource = new File(source);
         File fdest = new File(dest);
 
-        if (source.compareTo(dest)!=0) {
+        if (source.compareTo(dest) != 0) {
             boolean ret = true;
             ret &= (RequeteSql.sqlrenamefile(
                     file_id_local,

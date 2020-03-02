@@ -650,7 +650,7 @@ public class MainFrameController {
 
                 boolean newrep = true;
                 for (int i = 0; i < listRep.size(); i++) {
-                    if (folder_id_local.compareTo(listRep.get(i).getFolder_id_local()) == 0) {
+                    if (folder_id_local.compareTo(listRep.get(i).getFolderIdLocal()) == 0) {
                         newrep = false;
                         break;
                     }
@@ -703,7 +703,7 @@ public class MainFrameController {
             //action sur les elements
             for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
-                String lc_idx_filename = listEle.get(i).getLc_idx_filename();
+                String lc_idx_filename = listEle.get(i).getLcIdxFilename();
                 String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lc_idx_filename);
                 listEle.get(i).renameto(rename);
                 listEle.get(i).moveto(listRep.get(idxenc));
@@ -724,7 +724,7 @@ public class MainFrameController {
                         rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
                     }
                 }
-                rename = ActionfichierRepertoire.normalizePath(rename+"/");
+                rename = ActionfichierRepertoire.normalizePath(rename + "/");
                 boolean repexist = false;
                 for (int y = 0; y < listRep.size(); y++) {
                     if (listRep.get(y).getPathFromRoot().compareTo(rename) == 0) {
