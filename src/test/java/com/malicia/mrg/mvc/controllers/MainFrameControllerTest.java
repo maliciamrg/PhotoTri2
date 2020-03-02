@@ -33,45 +33,7 @@ public class MainFrameControllerTest {
     }
 
     @Test
-    public void testregroupeEleRepHorsBazarbyGroup() {
-        try {
-            List<GrpPhoto> groupDePhoto = controller.regroupeEleRepHorsBazarbyGroup(Context.getRepBazar(),Context.getKidz());
-            System.out.println(Ressources.listetostring(groupDePhoto));
-            assertTrue(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-    }
-
-    @Test
-    public void testgetEleBazar() {
-        try {
-            java.util.List<ElePhoto> elementsPhoto = controller.getEleBazar(Context.getRepBazar());
-            System.out.println(Ressources.listetostring(elementsPhoto));
-            assertTrue(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-    }
-
-    @Test
-    public void testregroupeEleRepNewbyGroup() {
-        try {
-            java.util.List<GrpPhoto> groupDePhoto = controller.regroupeEleRepNewbyGroup(Context.getKidsModelList());
-            System.out.println(Ressources.listetostring(groupDePhoto));
-            assertTrue(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-    }
-
-    @Test
     public void testactionRangerlebazar() {
-        Context.setDryRun(true);
-        controller.actionRangerlebazar();
         assertTrue(true);
     }
 }

@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.photo.Ele;
 import com.malicia.mrg.photo.ElePhoto;
@@ -86,28 +87,6 @@ public class MainFrameController {
     }
 
     /**
-     * Select le repertoire physique new.
-     * sélectionner le répertoire ou sont les photo new
-     * modifier et sauvegarde dans le properties
-     */
-    private void selectLeRepertoirePhysiqueNew() {
-        LOGGER.info("selectLeRepertoirePhysiqueNew");
-
-        LOGGER.info("-");
-        LOGGER.info("-");
-
-        //Create a file chooser
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
-        if (file != null) {
-            LOGGER.info("selectedFile:" + file.getAbsolutePath());
-            Context.setRepertoireNew(file.getAbsolutePath());
-        }
-        Context.savePropertiesParameters(Context.currentContext);
-    }
-
-    /**
      * Boucle supression repertoire physique boolean.
      *
      * @param dir the dir
@@ -134,28 +113,6 @@ public class MainFrameController {
 
         }
         return 0;
-    }
-
-    /**
-     * Gets imageicon resized.
-     *
-     * @param imagesJpg the images jpg
-     * @return the imageicon resized
-     */
-    private ImageIcon getImageiconResized(String imagesJpg) {
-        LOGGER.info(imagesJpg);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //this is your screen size
-        ImageIcon imageIcon = new ImageIcon(imagesJpg); //imports the image
-        imageIcon.getImage().flush();
-        int fact = imageIcon.getIconHeight() / (screenSize.height / 10);
-        ImageIcon imageIcon2 = null;
-        if (fact > 0) {
-            Image image = imageIcon.getImage(); // transform it
-            Image newimg = image.getScaledInstance(imageIcon.getIconWidth() / fact, imageIcon.getIconHeight() / fact, Image.SCALE_SMOOTH); // scale it the smooth way
-            imageIcon2 = new ImageIcon(newimg);
-            imageIcon2.getImage().flush();
-        }
-        return imageIcon2;
     }
 
     /**
@@ -750,11 +707,6 @@ public class MainFrameController {
             excptlog(e);
         }
     }
-
-    private String createnewname(String balisedollar, String pathnettoyer) {
-        return "";
-    }
-
 
     private String supprimerbalisedollar(String lc_idx_filename) {
         Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");

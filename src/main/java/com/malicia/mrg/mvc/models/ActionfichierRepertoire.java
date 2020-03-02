@@ -1,4 +1,4 @@
-package com.malicia.mrg.mvc.controllers;
+package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.RequeteSql;
@@ -227,16 +227,4 @@ public class ActionfichierRepertoire {
         }
     }
 
-    /**
-     * Compose le nom de repertoire relative au rootfolder
-     * <p>
-     * soustrait le rootfolde rau nom de repertoire pour maj dans la table libraryFolder
-     *
-     * @param rootFolder
-     * @param repertoiredest
-     * @return
-     */
-    private String composeRelativeRep(String rootFolder, String repertoiredest) {
-        return repertoiredest.replace(rootFolder, "");
-    }
 }

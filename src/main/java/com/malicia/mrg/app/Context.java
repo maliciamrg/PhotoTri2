@@ -78,15 +78,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Gets titre rejet.
-     *
-     * @return the titre rejet
-     */
-    public static String getTitreRejet() {
-        return titreRejet;
-    }
-
-    /**
      * Sets titre rejet.
      *
      * @param titreRejet the titre rejet
@@ -111,33 +102,6 @@ public class Context implements Serializable {
      */
     public static void setThresholdBazar(int thresholdBazar) {
         Context.thresholdBazar = thresholdBazar;
-    }
-
-    /**
-     * Gets popup.
-     *
-     * @return the popup
-     */
-    public static Popup getPopup() {
-        return popup;
-    }
-
-    /**
-     * Sets popup.
-     *
-     * @param popup the popup
-     */
-    public static void setPopup(Popup popup) {
-        Context.popup = popup;
-    }
-
-    /**
-     * Gets controllerpopup.
-     *
-     * @return the controllerpopup
-     */
-    public static PopUpController getControllerpopup() {
-        return controllerpopup;
     }
 
     /**
@@ -204,15 +168,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public static String getRoot() {
-        return root;
-    }
-
-    /**
      * Sets root.
      *
      * @param root the root
@@ -258,15 +213,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Gets base dir.
-     *
-     * @return the base dir
-     */
-    public static String getBaseDir() {
-        return baseDir;
-    }
-
-    /**
      * Sets base dir.
      *
      * @param baseDir the base dir
@@ -291,15 +237,6 @@ public class Context implements Serializable {
      */
     public static void setAbsolutePathFirst(String absolutePathFirst) {
         Context.absolutePathFirst = absolutePathFirst;
-    }
-
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    public static Context getInstance() {
-        return instance;
     }
 
     /**

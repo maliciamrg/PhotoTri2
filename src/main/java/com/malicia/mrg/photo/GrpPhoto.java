@@ -1,6 +1,6 @@
 package com.malicia.mrg.photo;
 
-import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
+import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

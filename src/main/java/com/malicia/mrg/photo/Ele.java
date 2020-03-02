@@ -1,6 +1,6 @@
 package com.malicia.mrg.photo;
 
-import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
+import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -54,24 +54,6 @@ public class Ele {
     }
 
     /**
-     * Gets path from root.
-     *
-     * @return the path from root
-     */
-    public String getPathFromRoot() {
-        return pathFromRoot;
-    }
-
-    /**
-     * Sets path from root.
-     *
-     * @param pathFromRoot the path from root
-     */
-    public void setPathFromRoot(String pathFromRoot) {
-        this.pathFromRoot = pathFromRoot;
-    }
-
-    /**
      * Gets idx.
      *
      * @return the idx
@@ -90,75 +72,12 @@ public class Ele {
     }
 
     /**
-     * Gets file id local.
-     *
-     * @return the file id local
-     */
-    public String getFileIdLocal() {
-        return fileIdLocal;
-    }
-
-    /**
-     * Sets file id local.
-     *
-     * @param fileIdLocal the file id local
-     */
-    public void setFileIdLocal(String fileIdLocal) {
-        this.fileIdLocal = fileIdLocal;
-    }
-
-    /**
      * Gets lc idx filename.
      *
      * @return the lc idx filename
      */
     public String getLcIdxFilename() {
         return lcIdxFilename;
-    }
-
-    /**
-     * Sets lc idx filename.
-     *
-     * @param lcIdxFilename the lc idx filename
-     */
-    public void setLcIdxFilename(String lcIdxFilename) {
-        this.lcIdxFilename = lcIdxFilename;
-    }
-
-    /**
-     * Gets folder id local.
-     *
-     * @return the folder id local
-     */
-    public String getFolderIdLocal() {
-        return folderIdLocal;
-    }
-
-    /**
-     * Sets folder id local.
-     *
-     * @param folderIdLocal the folder id local
-     */
-    public void setFolderIdLocal(String folderIdLocal) {
-        this.folderIdLocal = folderIdLocal;
-    }
-
-    /**
-     * Gets capture time.
-     *
-     * @return the capture time
-     */
-    public String getCaptureTime() {
-        return captureTime;
-    }
-
-    /**
-     * Sets capture time.
-     *
-     * @param captureTime the capture time
-     */
-    public void setCaptureTime(String captureTime) {
-        this.captureTime = captureTime;
     }
 
     /**

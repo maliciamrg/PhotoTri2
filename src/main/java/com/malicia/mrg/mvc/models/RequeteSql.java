@@ -1,7 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -23,100 +22,6 @@ public class RequeteSql {
 
     private RequeteSql() {
         throw new IllegalStateException("Utility class");
-    }
-
-    /**
-     * Sql combine all groupless in group by plage adherance.
-     *
-     * @param tempsAdherence the temps adherence
-     * @param repertoireNew  the repertoire new
-     */
-    public static void sqlCombineAllGrouplessInGroupByPlageAdherance(String tempsAdherence, String repertoireNew) {
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS Repertory;  ");
-//
-        //Pour chaque photo qui sont dans le repertoire %repertoireNew%
-        // calcul la plage d'aherance (+- tempsAdherence)
-        //
-        // Repertory
-        //      mint (adherence min) (in seconds)
-        //      maxt (adherence max) (in seconds)
-        //      pathFromRoot
-        //      absolutePath
-        //      captureTimeOrig
-        //      CameraModel
-        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE Repertory AS  " +
-                "select " +
-                " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
-                " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
-                " b.pathFromRoot , " +
-                " c.absolutePath , " +
-                " e.captureTime as captureTimeOrig , " +
-                " aiecm.value as CameraModel   " +
-                " from AgLibraryFile a  " +
-                "inner join AgLibraryFolder b  " +
-                "on a.folder = b.id_local  " +
-                "inner join AgLibraryRootFolder c  " +
-                "on b.rootFolder = c.id_local  " +
-                "inner join Adobe_images e  " +
-                "on a.id_local = e.rootFile  " +
-                "LEFT JOIN AgHarvestedExifMetadata ahem " +
-                "ON e.id_local = ahem.image " +
-                "LEFT JOIN AgInternedExifCameraModel aiecm " +
-                "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where " +
-                " b.pathFromRoot like \"%" + repertoireNew + "%\" " +
-                " ;");
-
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS NewPhoto;  ");
-
-        //Extraction des photo groupeless , dans le repertoire %repertoireNew%
-        //
-        // NewPhoto
-        //      captureTime (in seconds)
-        //      CameraModel
-        //      pathFromRoot
-        //      absolutePath
-        //      originalFilename
-        //      captureTimeOrig
-        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE NewPhoto AS  " +
-                "select  " +
-                " strftime('%s', e.captureTime) as captureTime , " +
-                " aiecm.value as CameraModel ," +
-                " b.pathFromRoot ," +
-                " c.absolutePath , " +
-                " a.lc_idx_filename as originalFilename ," +
-                " e.captureTime as captureTimeOrig " +
-                "from AgLibraryFile a  " +
-                "inner join AgLibraryFolder b  " +
-                "on a.folder = b.id_local  " +
-                "inner join AgLibraryRootFolder c  " +
-                "on b.rootFolder = c.id_local  " +
-                "inner join Adobe_images e  " +
-                "on a.id_local = e.rootFile  " +
-                "LEFT JOIN AgHarvestedExifMetadata ahem " +
-                "ON e.id_local = ahem.image " +
-                "LEFT JOIN AgInternedExifCameraModel aiecm " +
-                "ON ahem.cameraModelRef = aiecm.id_local " +
-                "Where b.pathFromRoot like \"%" + repertoireNew + "%" + "\";  ");
-
-        SQLiteJDBCDriverConnection.execute("DROP TABLE IF EXISTS SelectionRepertoire;  ");
-
-        //Extraction les combinansons
-        // photo groupless dans la plages d'adherence
-        // et meme CameraModel
-        //
-        // SelectionRepertoire
-        //      src (groupeless)
-        //      dest (groupe possible)
-        SQLiteJDBCDriverConnection.execute("CREATE TEMPORARY TABLE SelectionRepertoire AS  " +
-                "SELECT distinct  " +
-                " b.pathFromRoot || b.originalFilename as src , " +
-                " a.absolutePath || a.pathFromRoot as dest " +
-                "FROM Repertory a  " +
-                "inner join NewPhoto b  " +
-                "on b.captureTime between a.mint and a.maxt " +
-                "  and b.CameraModel = a.CameraModel " +
-                ";");
     }
 
     /**
@@ -303,88 +208,6 @@ public class RequeteSql {
     }
 
     /**
-     * Sql get table with idlocal result set.
-     *
-     * @return the result set
-     * @throws SQLException the sql exception
-     */
-    public static ResultSet sqlGetTableWithIdlocal() throws SQLException {
-        return SQLiteJDBCDriverConnection.select(
-                "select * from \n" +
-                        "(SELECT tbl_name FROM sqlite_master\n" +
-                        "WHERE type = 'table'\n" +
-                        "and sql like \"%id_global%\")" +
-                        ";");
-    }
-
-    /**
-     * Sql get max idlocal from tbl result set.
-     *
-     * @param tablename the tablename
-     * @return the result set
-     * @throws SQLException the sql exception
-     */
-    public static ResultSet sqlGetMaxIdlocalFromTbl(String tablename) throws SQLException {
-        return SQLiteJDBCDriverConnection.select(
-                "select max(id_local) from " +
-                        "\"" + tablename + "\" " +
-                        ";");
-    }
-
-
-    /**
-     * Liste exif new result set.
-     *
-     * @param repertoirePhoto the repertoire photo
-     * @return the result set
-     * @throws SQLException the sql exception
-     */
-    public static ResultSet listeExifNew(String repertoirePhoto) throws SQLException {
-        return SQLiteJDBCDriverConnection.select("SELECT AgLibraryFile.id_local, AgHarvestedExifMetadata.image, AgLibraryFile.lc_idx_filename, Adobe_images.aspectRatioCache, " +
-                "Adobe_images.bitDepth, Adobe_images.captureTime, Adobe_images.colorLabels, Adobe_images.fileFormat, Adobe_images.fileHeight, " +
-                "Adobe_images.fileWidth, Adobe_images.orientation, AgHarvestedExifMetadata.aperture, AgInternedExifCameraModel.value, " +
-                "AgHarvestedExifMetadata.dateDay, AgHarvestedExifMetadata.dateMonth, AgHarvestedExifMetadata.dateYear, AgHarvestedExifMetadata.flashFired, " +
-                "AgHarvestedExifMetadata.focalLength, AgHarvestedExifMetadata.gpsLatitude, AgHarvestedExifMetadata.gpsLongitude, AgHarvestedExifMetadata.isoSpeedRating, " +
-                "AgInternedExifLens.value, AgHarvestedExifMetadata.shutterSpeed, Adobe_AdditionalMetadata.xmp, Adobe_imageProperties.propertiesString, " +
-                "AgLibraryRootFolder.absolutePath, AgLibraryFolder.pathFromRoot, [AgLibraryRootFolder].[absolutePath] & [AgLibraryFolder].[pathFromRoot] AS absolutePath_pathFromRoot " +
-                "FROM (((((((AgLibraryFile " +
-                "LEFT JOIN Adobe_images " +
-                "ON AgLibraryFile.id_local = Adobe_images.rootFile) " +
-                "LEFT JOIN AgHarvestedExifMetadata " +
-                "ON Adobe_images.id_local = AgHarvestedExifMetadata.image) " +
-                "LEFT JOIN Adobe_imageProperties " +
-                "ON Adobe_images.id_local = Adobe_imageProperties.image) " +
-                "LEFT JOIN Adobe_AdditionalMetadata " +
-                "ON Adobe_images.id_local = Adobe_AdditionalMetadata.image) " +
-                "LEFT JOIN AgInternedExifCameraModel " +
-                "ON AgHarvestedExifMetadata.cameraModelRef = AgInternedExifCameraModel.id_local) " +
-                "LEFT JOIN AgInternedExifLens " +
-                "ON AgHarvestedExifMetadata.lensRef = AgInternedExifLens.id_local) " +
-                "LEFT JOIN AgLibraryFolder " +
-                "ON AgLibraryFile.folder = AgLibraryFolder.id_local) " +
-                "LEFT JOIN AgLibraryRootFolder " +
-                "ON AgLibraryFolder.rootFolder = AgLibraryRootFolder.id_local " +
-                "Where  AgLibraryFolder.pathFromRoot like \"" + repertoirePhoto + "%\" " +
-                "ORDER BY AgLibraryFile.id_local ;");
-
-    }
-
-    /**
-     * Selection repertoire result set.
-     *
-     * @return the result set
-     * @throws SQLException the sql exception
-     */
-    public static ResultSet selectionRepertoire() throws SQLException {
-        return SQLiteJDBCDriverConnection.select("SELECT a.dest  " +
-                ", count(*) as nb " +
-                "FROM SelectionRepertoire a " +
-                "group by  a.dest " +
-                ";");
-    }
-
-
-    /**
      * Gets path first.
      *
      * @return the path first
@@ -556,7 +379,6 @@ public class RequeteSql {
 //        return 0;
     }
 
-
     /**
      * Sql delete repertory int.
      *
@@ -664,23 +486,6 @@ public class RequeteSql {
 //                "from Adobe_variablesTable " +
 //                "where name =  \"Adobe_storeProviderID\" " +
 //                ";");
-    }
-
-    /**
-     * Sql set adobestore provider id.
-     *
-     * @param nextidglobal the nextidglobal
-     * @throws SQLException the sql exception
-     */
-    public static void sqlSetAdobestoreProviderID(String nextidglobal) throws SQLException {
-        String sql = "update Adobe_variablesTable   " +
-                " set value = \"" + nextidglobal + "\" " +
-                " where name =  \"Adobe_storeProviderID\" " +
-                "; ";
-        PreparedStatement pstmt = null;
-        pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
-        int ret = pstmt.executeUpdate();
-        pstmt = null;
     }
 
     /**

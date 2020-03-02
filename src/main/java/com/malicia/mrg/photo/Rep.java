@@ -1,6 +1,6 @@
 package com.malicia.mrg.photo;
 
-import com.malicia.mrg.mvc.controllers.ActionfichierRepertoire;
+import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
 
 import java.sql.SQLException;
 
@@ -20,7 +20,6 @@ public class Rep {
      * The Path from root.
      */
     String pathFromRoot;
-
 
     /**
      * Instantiates a new Rep.
@@ -45,30 +44,12 @@ public class Rep {
     }
 
     /**
-     * Sets idxrep.
-     *
-     * @param idxrep the idxrep
-     */
-    public void setIdxrep(int idxrep) {
-        this.idxrep = idxrep;
-    }
-
-    /**
      * Gets folder id local.
      *
      * @return the folder id local
      */
     public String getFolderIdLocal() {
         return folderIdLocal;
-    }
-
-    /**
-     * Sets folder id local.
-     *
-     * @param folderIdLocal the folder id local
-     */
-    public void setFolderIdLocal(String folderIdLocal) {
-        this.folderIdLocal = folderIdLocal;
     }
 
     /**
@@ -79,16 +60,6 @@ public class Rep {
     public String getPathFromRoot() {
         return pathFromRoot;
     }
-
-    /**
-     * Sets path from root.
-     *
-     * @param pathFromRoot the path from root
-     */
-    public void setPathFromRoot(String pathFromRoot) {
-        this.pathFromRoot = pathFromRoot;
-    }
-
 
     /**
      * Moveto.

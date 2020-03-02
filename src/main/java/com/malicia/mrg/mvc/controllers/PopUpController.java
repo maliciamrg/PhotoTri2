@@ -78,15 +78,6 @@ public class PopUpController {
     private HashMap<String, Object> Result = new HashMap<String, Object>();
 
     /**
-     * Gets popup stage.
-     *
-     * @return the popup stage
-     */
-    public static Stage getPopupStage() {
-        return popupStage;
-    }
-
-    /**
      * Sets popup stage.
      *
      * @param popupStage the popup stage
@@ -178,15 +169,6 @@ public class PopUpController {
         if (popupStage != null) {
             popupStage.close();
         }
-    }
-
-    /**
-     * Sets image one.
-     *
-     * @param src the src
-     */
-    public void setImageOne(Image src) {
-        imageOne.setImage(src);
     }
 
     /**

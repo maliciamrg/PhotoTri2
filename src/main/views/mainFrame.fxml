@@ -27,19 +27,8 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Actions">
                     <items>
-                        <Menu mnemonicParsing="false" text="Purge Repertoire">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryRepertoireNew"
-                                          text="[RepNew] Physique Vide (+logique lié)"/>
-                                <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique"
-                                          text="[All] Logique Vide"/>
-                            </items>
-                        </Menu>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
                         <Menu mnemonicParsing="false" text="Rep New">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#actionMovenewtogrpphotos"
-                                          text="move New To GrpPhotos"/>
                                 <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New"/>
                             </items>
                         </Menu>
