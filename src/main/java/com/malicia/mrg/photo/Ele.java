@@ -77,6 +77,7 @@ public class Ele {
      */
     public void moveto(Rep rep) throws IOException, SQLException {
         ActionfichierRepertoire.move_file(fileIdLocal, rep.getFolderIdLocal(), lcIdxFilename, pathFromRoot, rep.getPathFromRoot());
+        pathFromRoot=rep.getPathFromRoot();
     }
 
     /**

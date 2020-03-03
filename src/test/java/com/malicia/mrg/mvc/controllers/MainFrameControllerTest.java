@@ -8,6 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,7 +22,15 @@ public class MainFrameControllerTest {
     @BeforeMethod
     public void setUp() {
         System.out.println("BeforeMethod:setUp");
-        Context.setup();
+        try {
+            Context.setup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         controller = new MainFrameController();
         Context.setDryRun(false);
     }

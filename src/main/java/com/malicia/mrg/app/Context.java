@@ -29,6 +29,7 @@ public class Context implements Serializable {
      * The constant PATH_FROM_ROOT.
      */
     public static final String PATH_FROM_ROOT = "pathFromRoot";
+    public static final String ABSOLUTEPATH = "absolutePath";
     /**
      * The constant CAPTURE_TIME.
      */
@@ -59,6 +60,8 @@ public class Context implements Serializable {
     private static List<String> kidsModelList;
     private static PopUpController controllerpopup;
     private static Popup popup;
+    private static String repTech;
+    private static String repTmp;
 
     /**
      *
@@ -391,7 +394,7 @@ public class Context implements Serializable {
             LOGGER.severe(e.getMessage());
         }
 
-        setRepertoireNew(properties.getProperty("RepertoireNew"));
+        setRepertoireNew(properties.getProperty("repNew"));
         setTempsAdherence(properties.getProperty("TempsAdherence"));
         setCatalogLrcat(properties.getProperty("CatalogLrcat"));
         setUrlgitwiki(properties.getProperty("urlgitwiki"));
@@ -399,7 +402,8 @@ public class Context implements Serializable {
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setRepBazar(properties.getProperty("repBazar"));
         setRepRejet(properties.getProperty("repRejet"));
-        setTitreRejet(properties.getProperty("titreRejet"));
+        setRepTech(properties.getProperty("repTech"));
+        setRepTmp(properties.getProperty("repTmp"));
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
@@ -459,4 +463,19 @@ public class Context implements Serializable {
         return (Context) oi.readObject();
     }
 
+    public static void setRepTech(String repTech) {
+        Context.repTech = repTech;
+    }
+
+    public static String getRepTech() {
+        return repTech;
+    }
+
+    public static void setRepTmp(String repTmp) {
+        Context.repTmp = repTmp;
+    }
+
+    public static String getRepTmp() {
+        return repTmp;
+    }
 }

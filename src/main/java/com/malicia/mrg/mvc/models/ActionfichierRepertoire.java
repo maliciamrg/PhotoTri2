@@ -1,7 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.models.RequeteSql;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -63,34 +62,6 @@ public class ActionfichierRepertoire {
         return ret;
     }
 
-    /**
-     * Move file boolean.
-     *
-     * @param file_id_local    the file id local
-     * @param folder_id_local  the folder id local
-     * @param lc_idx_filename  the lc idx filename
-     * @param pathFromRootsrc  the path from rootsrc
-     * @param pathFromRootdest the path from rootdest
-     * @return the boolean
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public static boolean move_file(String file_id_local, String folder_id_local, String lc_idx_filename, String pathFromRootsrc, String pathFromRootdest) throws IOException, SQLException {
-        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRootsrc + lc_idx_filename);
-        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRootdest + lc_idx_filename);
-        File fsource = new File(source);
-        File fdest = new File(dest);
-        if (fsource.compareTo(fdest) != 0) {
-            boolean ret = true;
-            ret &= (RequeteSql.sqlmovefile(
-                    file_id_local,
-                    folder_id_local) > 0);
-            if (ret) {
-                Files.move(fsource.toPath(), fdest.toPath());
-            }
-        }
-        return true;
-    }
 
     /**
      * Move file boolean.
@@ -193,8 +164,19 @@ public class ActionfichierRepertoire {
         File directorydest = new File(repertoiredest);
         if (repertoiresource.compareTo(repertoiredest) != 0) {
             if (directory.isDirectory()) {
-                directory.renameTo(directorydest);
-                RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest);
+                if (!directory.exists()) {
+                    throw new IllegalStateException("non existance : " +  directory.toString());
+                }
+                if (directorydest.exists()) {
+                    throw new IllegalStateException("existance     : " +  directorydest.toString());
+                }
+                boolean ret = true;
+                LOGGER.info("renommerUnRepertoire l=" + idLocal + " -> " + relativerepertoiredest);
+                ret &= (RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest) > 0);
+                if (ret) {
+                    LOGGER.info("renommerUnRepertoire p=" + directory.toString() + " -> " + directorydest.toString());
+                    directory.renameTo(directorydest);
+                }
             }
         }
 
@@ -211,20 +193,66 @@ public class ActionfichierRepertoire {
      * @throws IOException  the io exception
      */
     public static void rename_file(String file_id_local, String lc_idx_filename, String rename, String pathFromRoot) throws SQLException, IOException {
-        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + rename);
         String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + lc_idx_filename);
+        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRoot + rename);
         File fsource = new File(source);
         File fdest = new File(dest);
 
         if (source.compareTo(dest) != 0) {
+            if (!fsource.exists()) {
+                throw new IllegalStateException("non existance : " +  fsource.toString());
+            }
+            if (fdest.exists()) {
+                throw new IllegalStateException("existance     : " +  fdest.toString());
+            }
             boolean ret = true;
+            LOGGER.info("rename_file l=" + file_id_local + " -> " + rename);
             ret &= (RequeteSql.sqlrenamefile(
                     file_id_local,
                     rename) > 0);
             if (ret) {
+                LOGGER.info("rename_file p=" + fsource.toString() + " -> " + fdest.toString());
                 Files.move(fsource.toPath(), fdest.toPath());
             }
         }
     }
 
+    /**
+     * Move file boolean.
+     *
+     * @param file_id_local    the file id local
+     * @param folder_id_local  the folder id local
+     * @param lc_idx_filename  the lc idx filename
+     * @param pathFromRootsrc  the path from rootsrc
+     * @param pathFromRootdest the path from rootdest
+     * @return the boolean
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public static boolean move_file(String file_id_local, String folder_id_local, String lc_idx_filename, String pathFromRootsrc, String pathFromRootdest) throws IOException, SQLException {
+        String source = normalizePath(Context.getAbsolutePathFirst() + pathFromRootsrc + lc_idx_filename);
+        String dest = normalizePath(Context.getAbsolutePathFirst() + pathFromRootdest + lc_idx_filename);
+        File fsource = new File(source);
+        File fdest = new File(dest);
+        if (fsource.compareTo(fdest) != 0) {
+            if (!fsource.exists()) {
+                throw new IllegalStateException("non existance : " +  fsource.toString());
+            }
+            if (fdest.exists()) {
+                throw new IllegalStateException("existance     : " +  fdest.toString());
+            }
+            boolean ret = true;
+            LOGGER.info("move_file l=" + file_id_local + " -> " + folder_id_local);
+
+            ret &= (RequeteSql.sqlmovefile(
+                    file_id_local,
+                    folder_id_local) > 0);
+            if (ret) {
+                LOGGER.info("move_file p=" + fsource.toString() + " -> " + fdest.toString());
+
+                Files.move(fsource.toPath(), fdest.toPath());
+            }
+        }
+        return true;
+    }
 }

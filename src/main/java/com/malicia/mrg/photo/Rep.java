@@ -67,8 +67,9 @@ public class Rep {
      * @param rename the rename
      * @throws SQLException the sql exception
      */
-    public void moveto(String rename) throws SQLException {
+    public void renameTo(String rename) throws SQLException {
         ActionfichierRepertoire.renommerUnRepertoire(folderIdLocal, rename, pathFromRoot);
+        pathFromRoot = rename;
     }
 
 }

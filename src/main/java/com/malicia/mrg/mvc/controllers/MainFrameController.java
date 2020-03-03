@@ -209,7 +209,7 @@ public class MainFrameController {
             long mint = rsele.getLong("mint");
             long maxt = rsele.getLong("maxt");
             String src = rsele.getString("src");
-            String absPath = rsele.getString( Context.PATH_FROM_ROOT);
+            String absPath = rsele.getString(Context.PATH_FROM_ROOT);
 
 
             //Constitution des groupes de photo standard
@@ -415,7 +415,7 @@ public class MainFrameController {
         try {
             while (rs.next()) {
                 String name = rs.getString("name");
-                absolutePath.put(name, rs.getString(Context.PATH_FROM_ROOT));
+                this.absolutePath.put(name, rs.getString(Context.ABSOLUTEPATH));
                 rootSelected.getItems().add(name);
             }
             rootSelected.setValue(rootSelected.getItems().get(0));
@@ -558,21 +558,16 @@ public class MainFrameController {
      */
     public void actionRangerNew() {
         try {
-            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
-
-            java.util.List<Ele> listEle = new ArrayList();
-            java.util.List<Rep> listRep = new ArrayList();
-
-            long maxprev = 0;
             int idxBazar = 1;// idx 1 pour le bazar
-            int idx = 1; // idx 1 pour le bazar
-            int idxrep = 0;
 
+            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
+            java.util.List<Ele> listEle = new ArrayList();
+            long maxprev = 0;
+            int idx = 1; // idx 1 pour le bazar
             while (rsele.next()) {
 
                 // Recuperer les info de l'elements
                 String fileIdLocal = rsele.getString("file_id_local");
-                String folderIdLocal = rsele.getString("folder_id_local");
                 String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
                 String lcIdxFilename = rsele.getString("lc_idx_filename");
                 long mint = rsele.getLong("mint");
@@ -584,6 +579,18 @@ public class MainFrameController {
                 maxprev = maxt;
 
                 listEle.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
+
+            }
+
+
+            ResultSet rsrep = RequeteSql.sqlgetListrepnew();
+            java.util.List<Rep> listRep = new ArrayList();
+            int idxrep = 0;
+            while (rsrep.next()) {
+
+                // Recuperer les info de l'elements
+                String folderIdLocal = rsrep.getString("folder_id_local");
+                String pathFromRoot = rsrep.getString(Context.PATH_FROM_ROOT);
 
                 boolean newrep = true;
                 for (Rep rep : listRep) {
@@ -598,6 +605,8 @@ public class MainFrameController {
                 }
 
             }
+
+            LOGGER.info("idx=" + idx + " idxrep=" + idxrep);
 
             //recalcul des idx pour les ele pour envoyer dans le bazar
             // idx 1 pour le bazar
@@ -631,6 +640,10 @@ public class MainFrameController {
                 }
 
             }
+
+            LOGGER.info("idx=" + idx + " idxrep=" + idxrep);
+
+
             //test si assez de repertoire
             if (idx > idxrep) {
                 throw new IllegalStateException("Créer " + (idx - idxrep) + " repertoire tech dans lightroom");
@@ -640,14 +653,13 @@ public class MainFrameController {
             for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
                 String lcIdxFilename = listEle.get(i).getLcIdxFilename();
-                String rename = "$grp" + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lcIdxFilename);
+                String rename = ("$"+ Context.getRepTmp() + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lcIdxFilename)).toLowerCase();
                 listEle.get(i).renameto(rename);
                 listEle.get(i).moveto(listRep.get(idxenc));
             }
 
             //preparation action sur les repertoires
-            java.util.List<Rep> listRepAsup = new ArrayList();
-            java.util.List<String> listRepRename = new ArrayList();
+            String uniqueID = UUID.randomUUID().toString();
             for (int i = 0; i < listRep.size(); i++) {
                 int idxenc = listRep.get(i).getIdxrep();
                 String rename;
@@ -655,30 +667,15 @@ public class MainFrameController {
                     rename = Context.getRepertoireNew() + File.separator + Context.getRepBazar();
                 } else {
                     if (i <= idx) {
-                        rename = Context.getRepertoireNew() + File.separator + "$grp" + String.format("%05d", idxenc) + "$";
+                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTmp() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
                     } else {
-                        rename = Context.getRepertoireNew() + File.separator + "$tec" + String.format("%05d", idxenc) + "$";
+                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTech() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
                     }
                 }
                 rename = ActionfichierRepertoire.normalizePath(rename + "/");
-                boolean repexist = false;
-                for (Rep rep : listRep) {
-                    if (rep.getPathFromRoot().compareTo(rename) == 0) {
-                        repexist = true;
-                        listRepAsup.add(rep);
-                        break;
-                    }
-                }
-                if (!repexist) {
-                    listRepRename.add(rename);
-                }
+                listRep.get(i).renameTo(rename);
             }
-            listRep.removeAll(listRepAsup);
 
-            //action sur les repertoire
-            for (int i = 0; i < listRep.size(); i++) {
-                listRep.get(i).moveto(listRepRename.get(i));
-            }
 
 
         } catch (SQLException | IOException e) {
@@ -738,7 +735,7 @@ public class MainFrameController {
                     }
                 }
                 if (Context.getDryRun()) {
-                    LOGGER.log(Level.INFO, elementsPhoto.get(iele));
+                    LOGGER.log(Level.INFO, elementsPhoto.get(iele).toString());
                 } else {
                     HashMap<String, Object> ret = showPopupWindow(elePhotocurrent);
                     if (ret != null && ret.get(PopUpController.retourCode).toString().compareTo(PopUpController.valstoprun) == 0) {
@@ -886,7 +883,7 @@ public class MainFrameController {
                     try {
                         selectLeRepertoireRootduFichierLigthroom(rootSelected.getItems().get((Integer) number2).toString());
                     } catch (IOException e) {
-                        LOGGER.log(Level.INFO,e.toString());
+                        LOGGER.log(Level.INFO, e.toString());
                     }
                 }
             }

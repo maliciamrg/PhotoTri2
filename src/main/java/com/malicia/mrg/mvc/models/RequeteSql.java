@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -144,6 +145,16 @@ public class RequeteSql {
                         "order by captureTime asc;");
     }
 
+    public static ResultSet sqlgetListrepnew() throws SQLException {
+        return SQLiteJDBCDriverConnection.select(
+                "select " +
+                        "b.id_local as folder_id_local , " +
+                        "b.pathFromRoot  " +
+                        "from AgLibraryFolder b   " +
+                        "Where b.pathFromRoot like \"%" + Context.getRepertoireNew() + "%\" " +
+                        ";");
+    }
+
     /**
      * Gets path first.
      *
@@ -170,20 +181,17 @@ public class RequeteSql {
      * @param idLocal        the id local
      * @param newpathfromroot the root folder
      * @throws SQLException the sql exception
+     * @return
      */
-    public static void updateRepertoryName(String idLocal, String newpathfromroot) throws SQLException {
-        String sql = " Update AgLibraryFolder " +
-                " set pathFromRoot = ? " +
-                " where id_local = ? " +
-                " ; ";
-
-        PreparedStatement pstmt = null;
-
-        pstmt = SQLiteJDBCDriverConnection.conn.prepareStatement(sql);
-        pstmt.setString(1, newpathfromroot);
-        pstmt.setString(2, idLocal);
-        pstmt.executeUpdate();
-
+    public static int updateRepertoryName(String idLocal, String newpathfromroot) throws SQLException {
+        String sql;
+        sql = "" +
+                "update AgLibraryFolder " +
+                "set pathFromRoot =  \"" + newpathfromroot + "\" " +
+                "where id_local =  " + idLocal + " " +
+                ";";
+        LOGGER.info(sql);
+        return SQLiteJDBCDriverConnection.conn.prepareStatement(sql).executeUpdate();
     }
 
     /**
@@ -502,7 +510,9 @@ public class RequeteSql {
         String sql;
         sql = "" +
                 "update AgLibraryFile " +
-                "set lc_idx_filename =  \"" + rename + "\" " +
+                "set lc_idx_filename =  \"" + rename.toLowerCase() + "\" " +
+                "  , idx_filename =  \"" + rename + "\" " +
+                "  , basename =  \"" + FilenameUtils.getBaseName(rename) + "\" " +
                 "where id_local =  " + fileIdLocal + " " +
                 ";";
         LOGGER.info(sql);

@@ -18,7 +18,15 @@ public class RessourcesTest {
     @BeforeMethod
     public void setUp() {
         System.out.println("BeforeMethod:setUp");
-        Context.setup();
+        try {
+            Context.setup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         controller = new MainFrameController();
         Context.setDryRun(false);
     }
