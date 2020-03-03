@@ -560,138 +560,41 @@ public class MainFrameController {
         try {
             int idxBazar = 1;// idx 1 pour le bazar
 
-            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
-            java.util.List<Ele> listEle = new ArrayList();
-            long maxprev = 0;
-            int idx = 1; // idx 1 pour le bazar
-            while (rsele.next()) {
+            GetListeElements getListeElements = new GetListeElements(idxBazar).invoke();
+            List<Ele> listEle = getListeElements.getListEle();
+            int idx = getListeElements.getIdx();
 
-                // Recuperer les info de l'elements
-                String fileIdLocal = rsele.getString("file_id_local");
-                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
-                String lcIdxFilename = rsele.getString("lc_idx_filename");
-                long mint = rsele.getLong("mint");
-                long maxt = rsele.getLong("maxt");
-
-                if (mint > maxprev || idx == idxBazar) {// idx 1 pour le bazar
-                    idx += 1;
-                }
-                maxprev = maxt;
-
-                listEle.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
-
-            }
-
-
-            ResultSet rsrep = RequeteSql.sqlgetListrepnew();
-            java.util.List<Rep> listRep = new ArrayList();
-            int idxrep = 0;
-            while (rsrep.next()) {
-
-                // Recuperer les info de l'elements
-                String folderIdLocal = rsrep.getString("folder_id_local");
-                String pathFromRoot = rsrep.getString(Context.PATH_FROM_ROOT);
-
-                boolean newrep = true;
-                for (Rep rep : listRep) {
-                    if (folderIdLocal.compareTo(rep.getFolderIdLocal()) == 0) {
-                        newrep = false;
-                        break;
-                    }
-                }
-                if (newrep) {
-                    idxrep += 1;
-                    listRep.add(new Rep(idxrep, folderIdLocal, pathFromRoot));
-                }
-
-            }
+            GetListeRepertoires getListeRepertoires = new GetListeRepertoires(Context.getRepertoireNew()).invoke();
+            List<Rep> listRep = getListeRepertoires.getListRep();
+            int idxrep = getListeRepertoires.getIdxrep();
+            int idxrepertoireNew = getListeRepertoires.getIdxrepertoireNew();
 
             LOGGER.info("idx=" + idx + " idxrep=" + idxrep);
 
-            //recalcul des idx pour les ele pour envoyer dans le bazar
-            // idx 1 pour le bazar
-            int nbidx = 1;
-            for (int i = 1; i < listEle.size(); i++) {
-                int idxprev = listEle.get(i - 1).getIdx();
-                int idxenc = listEle.get(i).getIdx();
-                if (idxenc == idxprev) {
-                    nbidx += 1;
-                } else {
-                    if (nbidx < Context.getThresholdBazar()) {
-                        for (int y = 1; y <= nbidx; y++) {
-                            listEle.get(i - y).setIdx(idxBazar);
-                        }
-                    }
-                    nbidx = 1;
-                }
-            }
-
-            //compactage des idx
-            idx = 2;//idx 1 pour bazar
-            int idxprev = listEle.get(0).getIdx();
-            for (Ele ele : listEle) {
-                int idxenc = ele.getIdx();
-                if (idxenc > 1) {
-                    if (idxenc != idxprev) {
-                        idx += 1;
-                    }
-                    ele.setIdx(idx);
-                    idxprev = idxenc;
-                }
-
-            }
+            idx = new CompactageListeElements(idxBazar, listEle).invoke();
 
             LOGGER.info("idx=" + idx + " idxrep=" + idxrep);
-
 
             //test si assez de repertoire
             if (idx > idxrep) {
                 throw new IllegalStateException("Créer " + (idx - idxrep) + " repertoire tech dans lightroom");
             }
 
+            new MoveEletoNewroot(listEle, listRep, idxrepertoireNew).invoke();
+
+            new CreateReperetoireNew(idxBazar, idx, listRep).invoke();
+
             //action sur les elements
+            //deplacement dans le repertoire correspondant
             for (int i = 0; i < listEle.size(); i++) {
                 int idxenc = listEle.get(i).getIdx();
-                String lcIdxFilename = listEle.get(i).getLcIdxFilename();
-                String rename = ("$"+ Context.getRepTmp() + String.format("%05d", idxenc) + "_" + String.format("%05d", i) + "$" + supprimerbalisedollar(lcIdxFilename)).toLowerCase();
-                listEle.get(i).renameto(rename);
                 listEle.get(i).moveto(listRep.get(idxenc));
             }
-
-            //preparation action sur les repertoires
-            String uniqueID = UUID.randomUUID().toString();
-            for (int i = 0; i < listRep.size(); i++) {
-                int idxenc = listRep.get(i).getIdxrep();
-                String rename;
-                if (idxBazar == idx) {
-                    rename = Context.getRepertoireNew() + File.separator + Context.getRepBazar();
-                } else {
-                    if (i <= idx) {
-                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTmp() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
-                    } else {
-                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTech() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
-                    }
-                }
-                rename = ActionfichierRepertoire.normalizePath(rename + "/");
-                listRep.get(i).renameTo(rename);
-            }
-
-
 
         } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
-    }
-
-    private String supprimerbalisedollar(String lcIdxFilename) {
-        Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
-        Matcher matcher = pattern.matcher(lcIdxFilename);
-        if (matcher.find()) {
-            return matcher.group(2);
-        }
-        return "";
-
     }
 
     /**
@@ -891,4 +794,212 @@ public class MainFrameController {
         initialize();
     }
 
+    private class GetListeElements {
+        private int idxBazar;
+        private List<Ele> listEle;
+        private int idx;
+
+        public GetListeElements(int idxBazar) {
+            this.idxBazar = idxBazar;
+        }
+
+        public List<Ele> getListEle() {
+            return listEle;
+        }
+
+        public int getIdx() {
+            return idx;
+        }
+
+        public GetListeElements invoke() throws SQLException {
+            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
+            listEle = new ArrayList();
+            long maxprev = 0;
+            idx = 1;
+            while (rsele.next()) {
+
+                // Recuperer les info de l'elements
+                String fileIdLocal = rsele.getString("file_id_local");
+                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+                String lcIdxFilename = rsele.getString("lc_idx_filename");
+                long mint = rsele.getLong("mint");
+                long maxt = rsele.getLong("maxt");
+
+                if (mint > maxprev || idx == idxBazar) {// idx 1 pour le bazar
+                    idx += 1;
+                }
+                maxprev = maxt;
+
+                listEle.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
+
+            }
+            return this;
+        }
+    }
+
+    private class GetListeRepertoires {
+        private List<Rep> listRep;
+        private int idxrep;
+        private int idxrepertoireNew;
+        private String repertoireNew;
+        public GetListeRepertoires(String repertoireNew) {
+            this.repertoireNew = repertoireNew;
+        }
+
+        public int getIdxrepertoireNew() {
+            return idxrepertoireNew;
+        }
+
+        public List<Rep> getListRep() {
+            return listRep;
+        }
+
+        public int getIdxrep() {
+            return idxrep;
+        }
+
+        public GetListeRepertoires invoke() throws SQLException {
+            ResultSet rsrep = RequeteSql.sqlgetListrepnew();
+            listRep = new ArrayList();
+            idxrep = 0;
+            while (rsrep.next()) {
+
+                // Recuperer les info de l'elements
+                String folderIdLocal = rsrep.getString("folder_id_local");
+                String pathFromRoot = rsrep.getString(Context.PATH_FROM_ROOT);
+
+                boolean newrep = true;
+                for (Rep rep : listRep) {
+                    if (folderIdLocal.compareTo(rep.getFolderIdLocal()) == 0) {
+                        newrep = false;
+                        break;
+                    }
+                }
+                if (newrep) {
+                    idxrep += 1;
+                    listRep.add(new Rep(idxrep, folderIdLocal, pathFromRoot));
+                }
+                if (ActionfichierRepertoire.normalizePath(pathFromRoot) == ActionfichierRepertoire.normalizePath(File.separator + repertoireNew + File.separator)) {
+                    idxrepertoireNew = idxrep;
+                }
+            }
+            return this;
+        }
+    }
+
+    private class CompactageListeElements {
+        private int idxBazar;
+        private List<Ele> listEle;
+
+        public CompactageListeElements(int idxBazar, List<Ele> listEle) {
+            this.idxBazar = idxBazar;
+            this.listEle = listEle;
+        }
+
+        public int invoke() {
+            int idx;//recalcul des idx pour les ele pour envoyer dans le bazar
+            // idx 1 pour le bazar
+            int nbidx = 1;
+            for (int i = 1; i < listEle.size(); i++) {
+                int idxprev = listEle.get(i - 1).getIdx();
+                int idxenc = listEle.get(i).getIdx();
+                if (idxenc == idxprev) {
+                    nbidx += 1;
+                } else {
+                    if (nbidx < Context.getThresholdBazar()) {
+                        for (int y = 1; y <= nbidx; y++) {
+                            listEle.get(i - y).setIdx(idxBazar);
+                        }
+                    }
+                    nbidx = 1;
+                }
+            }
+
+            //compactage des idx
+            idx = 0;//idx 1 pour bazar
+            int idxprev = listEle.get(0).getIdx();
+            for (Ele ele : listEle) {
+                int idxenc = ele.getIdx();
+                if (idxenc != idxBazar) {
+                    if (idxenc != idxprev) {
+                        idx += 1;
+                        if (idx == idxBazar) {
+                            idx += 1;
+                        }
+                    }
+                    ele.setIdx(idx);
+                    idxprev = idxenc;
+                }
+
+            }
+            return idx;
+        }
+    }
+
+    private class CreateReperetoireNew {
+        private int idxBazar;
+        private int idx;
+        private List<Rep> listRep;
+
+        public CreateReperetoireNew(int idxBazar, int idx, List<Rep> listRep) {
+            this.idxBazar = idxBazar;
+            this.idx = idx;
+            this.listRep = listRep;
+        }
+
+        public void invoke() throws SQLException {
+            //preparation action sur les repertoires
+            String uniqueID = UUID.randomUUID().toString();
+            for (int i = 0; i < listRep.size(); i++) {
+                int idxenc = listRep.get(i).getIdxrep();
+                String rename;
+                if (idxBazar == idx) {
+                    rename = Context.getRepertoireNew() + File.separator + Context.getRepBazar();
+                } else {
+                    if (i <= idx) {
+                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTmp() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
+                    } else {
+                        rename = Context.getRepertoireNew() + File.separator + "$" + Context.getRepTech() + String.format("%05d", idxenc) + "_" + uniqueID + "$";
+                    }
+                }
+                rename = ActionfichierRepertoire.normalizePath(rename + "/");
+                listRep.get(i).renameTo(rename);
+            }
+        }
+    }
+
+    private class MoveEletoNewroot {
+        private List<Ele> listEle;
+        private List<Rep> listRep;
+        private int idxrepertoireNew;
+
+        public MoveEletoNewroot(List<Ele> listEle, List<Rep> listRep, int idxrepertoireNew) {
+            this.listEle = listEle;
+            this.listRep = listRep;
+            this.idxrepertoireNew = idxrepertoireNew;
+        }
+
+        public void invoke() throws IOException, SQLException {
+            //action sur les elements
+            //deplacement dans le repertoire Context.getRepertoireNew() #idxrepertoireNew
+            for (int i = 0; i < listEle.size(); i++) {
+                String uniqueID = UUID.randomUUID().toString();
+                int idxenc = listEle.get(i).getIdx();
+                String lcIdxFilename = listEle.get(i).getLcIdxFilename();
+                String rename = ("$" + Context.getRepTmp() + String.format("%05d", idxenc) + "_" + uniqueID + "$" + supprimerbalisedollar(lcIdxFilename)).toLowerCase();
+                listEle.get(i).renameto(rename);
+                listEle.get(i).moveto(listRep.get(idxrepertoireNew));
+            }
+        }
+
+        private String supprimerbalisedollar(String lcIdxFilename) {
+            Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
+            Matcher matcher = pattern.matcher(lcIdxFilename);
+            if (matcher.find()) {
+                return matcher.group(2);
+            }
+            return "";
+
+        }
+    }
 }
