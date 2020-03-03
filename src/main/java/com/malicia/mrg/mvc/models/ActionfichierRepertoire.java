@@ -170,14 +170,14 @@ public class ActionfichierRepertoire {
                 if (directorydest.exists()) {
                     throw new IllegalStateException("existance     : " +  directorydest.toString());
                 }
-                boolean ret = true;
-                LOGGER.info("renommerUnRepertoire l=" + idLocal + " -> " + relativerepertoiredest);
-                ret &= (RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest) > 0);
-                if (ret) {
+       //         boolean ret = true;
+      //          LOGGER.info("renommerUnRepertoire l=" + idLocal + " -> " + relativerepertoiredest);
+      //          ret &= (RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest) > 0);
+       //         if (ret) {
                     LOGGER.info("renommerUnRepertoire p=" + directory.toString() + " -> " + directorydest.toString());
                     directory.renameTo(directorydest);
                 }
-            }
+      //      }
         }
 
     }
@@ -207,13 +207,13 @@ public class ActionfichierRepertoire {
             }
             boolean ret = true;
             LOGGER.info("rename_file l=" + file_id_local + " -> " + rename);
-            ret &= (RequeteSql.sqlrenamefile(
-                    file_id_local,
-                    rename) > 0);
-            if (ret) {
+//            ret &= (RequeteSql.sqlrenamefile(
+//                    file_id_local,
+//                    rename) > 0);
+//            if (ret) {
                 LOGGER.info("rename_file p=" + fsource.toString() + " -> " + fdest.toString());
                 Files.move(fsource.toPath(), fdest.toPath());
-            }
+//            }
         }
     }
 
@@ -244,14 +244,14 @@ public class ActionfichierRepertoire {
             boolean ret = true;
             LOGGER.info("move_file l=" + file_id_local + " -> " + folder_id_local);
 
-            ret &= (RequeteSql.sqlmovefile(
-                    file_id_local,
-                    folder_id_local) > 0);
-            if (ret) {
+//            ret &= (RequeteSql.sqlmovefile(
+//                    file_id_local,
+//                    folder_id_local) > 0);
+//            if (ret) {
                 LOGGER.info("move_file p=" + fsource.toString() + " -> " + fdest.toString());
 
                 Files.move(fsource.toPath(), fdest.toPath());
-            }
+//            }
         }
         return true;
     }

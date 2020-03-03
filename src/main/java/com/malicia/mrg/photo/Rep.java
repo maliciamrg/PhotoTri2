@@ -1,8 +1,10 @@
 package com.malicia.mrg.photo;
 
+import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
 
 import java.sql.SQLException;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * The type Rep.
@@ -20,6 +22,7 @@ public class Rep {
      * The Path from root.
      */
     String pathFromRoot;
+    private String path;
 
     /**
      * Instantiates a new Rep.
@@ -32,6 +35,11 @@ public class Rep {
         this.idxrep = idxrep;
         this.folderIdLocal = folderIdLocal;
         this.pathFromRoot = pathFromRoot;
+    }
+
+    public Rep(String path) {
+        this.path = path;
+        this.pathFromRoot = ActionfichierRepertoire.normalizePath(path).replace(ActionfichierRepertoire.normalizePath(Context.getAbsolutePathFirst()),"");
     }
 
     /**

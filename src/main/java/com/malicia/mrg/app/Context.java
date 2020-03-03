@@ -61,7 +61,7 @@ public class Context implements Serializable {
     private static PopUpController controllerpopup;
     private static Popup popup;
     private static String repTech;
-    private static String repTmp;
+    private static String repGrp;
 
     /**
      *
@@ -403,7 +403,7 @@ public class Context implements Serializable {
         setRepBazar(properties.getProperty("repBazar"));
         setRepRejet(properties.getProperty("repRejet"));
         setRepTech(properties.getProperty("repTech"));
-        setRepTmp(properties.getProperty("repTmp"));
+        setRepGrp(properties.getProperty("repGrp"));
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
@@ -471,11 +471,11 @@ public class Context implements Serializable {
         return repTech;
     }
 
-    public static void setRepTmp(String repTmp) {
-        Context.repTmp = repTmp;
+    public static void setRepGrp(String repGrp) {
+        Context.repGrp = repGrp;
     }
 
-    public static String getRepTmp() {
-        return repTmp;
+    public static String getRepGrp() {
+        return repGrp;
     }
 }
