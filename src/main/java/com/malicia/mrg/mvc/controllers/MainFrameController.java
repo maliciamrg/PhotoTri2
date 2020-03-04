@@ -562,37 +562,54 @@ public class MainFrameController {
         try {
             int idxBazar = 1;// idx 1 pour le bazar
 
-            GetListeElements getListeElements = new GetListeElements(idxBazar).invoke();
-            List<Ele> listEle = getListeElements.getListEle();
-            int idx = getListeElements.getIdx();
+            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
+            List<Ele> listEle = new ArrayList();
+            List<Ele> listEletmp = new ArrayList();
+            long maxprev = 0;
+            int idx = 0;
+            while (rsele.next()) {
 
-            GetListeRepertoires getListeRepertoires = new GetListeRepertoires(Context.getRepertoireNew()).invoke();
-            List<Rep> listRep = getListeRepertoires.getListRep();
-            int idxrep = listRep.size();
+                // Recuperer les info de l'elements
+                String fileIdLocal = rsele.getString("file_id_local");
+                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+                String lcIdxFilename = rsele.getString("lc_idx_filename");
+                long mint = rsele.getLong("mint");
+                long maxt = rsele.getLong("maxt");
 
-            LOGGER.info("idx=" + idx + " idxrep=" + idxrep);
+                if (mint > maxprev) {
+                    if (listEletmp.size() > Context.getThresholdBazar()) {
+                        for (int i = 0; i < listEletmp.size(); i++) {
+                            listEletmp.get(i).setIdx(idx);
+                        }
+                        idx += 1;
+                        if (idx == idxBazar) {
+                            idx += 1;
+                        }
+                    }
+                    regrouper(listEletmp);
 
-            //test si assez de repertoire
-            if (idx > idxrep) {
-                throw new IllegalStateException("Créer " + (idx - idxrep) + " repertoire tech dans lightroom");
+                    listEletmp = new ArrayList();
+                }
+                maxprev = maxt;
+
+                listEletmp.add(new Ele(idxBazar, fileIdLocal, lcIdxFilename, pathFromRoot));
+
             }
-
-
-            new CreateReperetoireNew(idxBazar, idx, listRep).invoke();
-
-            new MoveEletoNewroot(listEle , listRep).invoke();
-
-//            //action sur les elements
-//            //deplacement dans le repertoire correspondant
-//            for (int i = 0; i < listEle.size(); i++) {
-//                int idxenc = listEle.get(i).getIdx();
-//                listEle.get(i).moveto(listRep.get(idxenc));
-//            }
+            listEle.addAll(listEletmp);
 
         } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
             excptlog(e);
         }
+    }
+
+    private void regrouper(List<Ele> listEletmp) {
+        String uniqueID = UUID.randomUUID().toString();
+        String directoryName = Context.getAbsolutePathFirst()+ Context.getRepertoireNew() + uniqueID;
+        ActionfichierRepertoire.mkdir(directoryName);
+        String source = normalizePath(Context.getAbsolutePathFirst() + listEletmp.get(i).getpathFromRoot + lcIdxFilename);
+        ActionfichierRepertoire.move_file(list)
+
     }
 
     /**
@@ -810,40 +827,6 @@ public class MainFrameController {
         }
 
         public GetListeElements invoke() throws SQLException {
-            ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
-            listEle = new ArrayList();
-            List<Ele> listEletmp = new ArrayList();
-            long maxprev = 0;
-            idx = 0;
-            while (rsele.next()) {
-
-                // Recuperer les info de l'elements
-                String fileIdLocal = rsele.getString("file_id_local");
-                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
-                String lcIdxFilename = rsele.getString("lc_idx_filename");
-                long mint = rsele.getLong("mint");
-                long maxt = rsele.getLong("maxt");
-
-                if (mint > maxprev) {
-                    if (listEletmp.size() > Context.getThresholdBazar()) {
-                        for (int i = 0; i < listEletmp.size(); i++) {
-                            listEletmp.get(i).setIdx(idx);
-                        }
-                        idx += 1;
-                        if (idx == idxBazar) {
-                            idx += 1;
-                        }
-                    }
-                    listEle.addAll(listEletmp);
-
-                    listEletmp = new ArrayList();
-                }
-                maxprev = maxt;
-
-                listEletmp.add(new Ele(idxBazar, fileIdLocal, lcIdxFilename, pathFromRoot));
-
-            }
-            listEle.addAll(listEletmp);
             return this;
         }
     }
