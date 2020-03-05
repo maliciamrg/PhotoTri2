@@ -58,21 +58,21 @@ public class SQLiteJDBCDriverConnection {
      * @param sql the sql
      * @return the boolean
      */
-    public static boolean execute(String sql) {
+    public static boolean execute(String sql) throws SQLException {
 
 
         Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
+//        try {
+        stmt = conn.createStatement();
 
-            LOGGER.finest(sql);
+        LOGGER.fine(sql);
 
-            return stmt.execute(sql);
+        return stmt.execute(sql);
 
-        } catch (SQLException e) {
-            LOGGER.severe(e.getMessage());
-        }
-        return false;
+//        } catch (SQLException e) {
+//            LOGGER.severe(e.getMessage());
+//        }
+//        return false;
     }
 
     /**
@@ -88,11 +88,11 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt = null;
 //        try {
         stmt = conn.createStatement();
-        LOGGER.finest(sql);
+        LOGGER.fine(sql);
 
         // forcage display du resultset
         ResultSet resultSet = stmt.executeQuery(sql);
-//            display_resultset(resultSet);
+        display_resultset(resultSet);
 
         return stmt.executeQuery(sql);
 
@@ -113,7 +113,7 @@ public class SQLiteJDBCDriverConnection {
         for (int i = 1; i <= columnsNumber; i++) {
             colname += String.format("%-20s", rsmd.getColumnName(i)) + " + ";
         }
-        LOGGER.info(colname);
+        LOGGER.fine(colname);
 
 
         while (resultSetAff.next()) {
@@ -121,7 +121,7 @@ public class SQLiteJDBCDriverConnection {
             for (int i = 1; i <= columnsNumber; i++) {
                 columnValue += String.format("%-20s", resultSetAff.getString(i)) + " + ";
             }
-            LOGGER.info(columnValue);
+            LOGGER.fine(columnValue);
         }
 
     }
@@ -131,19 +131,20 @@ public class SQLiteJDBCDriverConnection {
      *
      * @param sql the sql
      * @return the int
+     * @throws SQLException the sql exception
      */
-    public int executeUpdate(String sql) {
+    public static int executeUpdate(String sql) throws SQLException {
 
 
         Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
+//        try {
+        stmt = conn.createStatement();
+        LOGGER.fine(sql);
+        return stmt.executeUpdate(sql);
 
-            return stmt.executeUpdate(sql);
-
-        } catch (SQLException e) {
-            LOGGER.severe(e.getMessage());
-        }
-        return 0;
+//        } catch (SQLException e) {
+//            LOGGER.severe(e.getMessage());
+//        }
+//        return 0;
     }
 }

@@ -79,6 +79,7 @@ public class MainFrameController {
     private CheckBox chkDryRun;
     @FXML
     private TextArea userlogInfo;
+    private int ndDelTotal;
 
     /**
      * Instantiates a new Main frame controller.
@@ -90,8 +91,6 @@ public class MainFrameController {
     /**
      * Boucle supression repertoire physique boolean.
      *
-     * @param dir the dir
-     * @return the boolean
      */
     private int boucleSupressionRepertoire(File dir) throws IOException, SQLException {
         boolean returnVal = false;
@@ -101,10 +100,10 @@ public class MainFrameController {
             for (int i = 0; i < children.length; i++) {
                 success += boucleSupressionRepertoire(new File(dir, children[i]));
             }
-
+            ndDelTotal += success;
             if (success == children.length) {
                 // The directory is now empty directory free so delete it
-                LOGGER.log(java.util.logging.Level.INFO, "delete repertory: {1} ", dir);
+//                LOGGER.log(java.util.logging.Level.INFO, "delete repertory: {1} ", dir);
                 returnVal = ActionfichierRepertoire.delete_dir(dir);
                 if (returnVal) {
                     return 1;
@@ -452,6 +451,10 @@ public class MainFrameController {
             //Create a file chooser
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
+//            fileChooser.setInitialDirectory((new File (Context.getCatalogLrcat())));
+            fileChooser.setInitialDirectory((new File (new File (Context.getCatalogLrcat()).getParent())));
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LRCAT files (*.lrcat)", "*.lrcat");
+            fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
             if (file != null) {
                 logecrireuserlogInfo("selectedFile:" + file.getAbsolutePath());
@@ -559,12 +562,34 @@ public class MainFrameController {
      * Move new to grp photos.
      */
     public void actionRangerNew() {
+
+        if (!Context.getAbsolutePathFirst().contains(Context.getRepertoireNew())) {
+            String msg = "nothing do , not in " + Context.getRepertoireNew() + " repertory ";
+            logecrireuserlogInfo(msg);
+            throw new IllegalStateException(msg);
+        }
+
         try {
             int idxBazar = 1;// idx 1 pour le bazar
 
+            //mise a plat du repertoire @new
+            ResultSet rseleAplat = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
+            while (rseleAplat.next()) {
+                if (rseleAplat.getString(Context.PATH_FROM_ROOT).compareTo("") != 0) {
+                    String source = normalizePath(Context.getAbsolutePathFirst() + rseleAplat.getString(Context.PATH_FROM_ROOT) + rseleAplat.getString("lc_idx_filename"));
+                    String uniqueID = UUID.randomUUID().toString();
+                    String rename = ("$" + uniqueID + "$" + supprimerbalisedollar(rseleAplat.getString("lc_idx_filename"))).toLowerCase();
+                    String destination = normalizePath(Context.getAbsolutePathFirst() + File.separator + rename);
+                    ActionfichierRepertoire.move_file(source, destination);
+                }
+            }
+
+            //Regroupement
             ResultSet rsele = RequeteSql.sqlgetListelementnewaclasser(Context.getTempsAdherence());
-            List<Ele> listEle = new ArrayList();
+            List<Ele> listEleBazar = new ArrayList();
             List<Ele> listEletmp = new ArrayList();
+            List<Ele> listElekidz = new ArrayList();
+            List<String> listkidsModel = Context.getKidsModelList();
             long maxprev = 0;
             int idx = 0;
             while (rsele.next()) {
@@ -573,29 +598,39 @@ public class MainFrameController {
                 String fileIdLocal = rsele.getString("file_id_local");
                 String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
                 String lcIdxFilename = rsele.getString("lc_idx_filename");
+                String cameraModel = rsele.getString("CameraModel");
                 long mint = rsele.getLong("mint");
                 long maxt = rsele.getLong("maxt");
 
-                if (mint > maxprev) {
-                    if (listEletmp.size() > Context.getThresholdBazar()) {
-                        for (int i = 0; i < listEletmp.size(); i++) {
-                            listEletmp.get(i).setIdx(idx);
+                if (listkidsModel.contains(cameraModel)) {
+                    listElekidz.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
+                } else {
+                    if (mint > maxprev) {
+
+                        if (listEletmp.size() > Context.getThresholdBazar()) {
+
+                            regrouper(listEletmp);
+
+                        } else {
+                            listEleBazar.addAll(listEletmp);
                         }
-                        idx += 1;
-                        if (idx == idxBazar) {
-                            idx += 1;
-                        }
+
+                        listEletmp = new ArrayList();
+
                     }
-                    regrouper(listEletmp);
+                    maxprev = maxt;
 
-                    listEletmp = new ArrayList();
+                    listEletmp.add(new Ele(idx, fileIdLocal, lcIdxFilename, pathFromRoot));
                 }
-                maxprev = maxt;
-
-                listEletmp.add(new Ele(idxBazar, fileIdLocal, lcIdxFilename, pathFromRoot));
 
             }
-            listEle.addAll(listEletmp);
+
+            regrouper(listEletmp);
+
+            regrouper(listElekidz, Context.getKidz());
+            regrouper(listEleBazar, Context.getRepBazar());
+
+            actionDeleteEmptyDirectoryRepertoireNew();
 
         } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
@@ -603,13 +638,25 @@ public class MainFrameController {
         }
     }
 
-    private void regrouper(List<Ele> listEletmp) {
-        String uniqueID = UUID.randomUUID().toString();
-        String directoryName = Context.getAbsolutePathFirst()+ Context.getRepertoireNew() + uniqueID;
-        ActionfichierRepertoire.mkdir(directoryName);
-        String source = normalizePath(Context.getAbsolutePathFirst() + listEletmp.get(i).getpathFromRoot + lcIdxFilename);
-        ActionfichierRepertoire.move_file(list)
+    private void regrouper(List<Ele> listEle, String repertoiredest) throws IOException, SQLException {
+        String directoryName = normalizePath(Context.getAbsolutePathFirst() + "$" + repertoiredest + "$");
 
+        ActionfichierRepertoire.mkdir(directoryName);
+
+        for (Ele ele : listEle) {
+            String source = normalizePath(Context.getAbsolutePathFirst() + ele.getPathFromRoot() + ele.getLcIdxFilename());
+            String uniqueID = UUID.randomUUID().toString();
+            String rename = ("$" + uniqueID + "$" + supprimerbalisedollar(ele.getLcIdxFilename())).toLowerCase();
+            String destination = normalizePath(directoryName + File.separator + rename);
+//            String destination = normalizePath(Context.getAbsolutePathFirst() + File.separator + rename);
+            ActionfichierRepertoire.move_file(source, destination);
+
+        }
+    }
+
+    private void regrouper(List<Ele> listEle) throws IOException, SQLException {
+        String uniqueID = UUID.randomUUID().toString();
+        regrouper(listEle, uniqueID);
     }
 
     /**
@@ -769,22 +816,23 @@ public class MainFrameController {
      * Delete empty directory.
      * <p>
      * suprimmer tout les repertoires vide (physique et logique)
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
      */
-    public void actionDeleteEmptyDirectoryRepertoireNew() {
-        try {
-            if (Context.getDryRun()) {
-                logecrireuserlogInfo("deleteEmptyDirectory : DryRun = " + Context.getDryRun());
-            } else {
-                File directory = new File(Context.getAbsolutePathFirst() + Context.getRepertoireNew() + File.separator);
+    public void actionDeleteEmptyDirectoryRepertoireNew() throws IOException, SQLException {
 
-                int ndDelTotal = 0;
-                ndDelTotal = boucleSupressionRepertoire(directory);
-                logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
-            }
-        } catch (IOException | SQLException e) {
-            logecrireuserlogInfo(e.toString());
-            excptlog(e);
+        if (!Context.getAbsolutePathFirst().contains(Context.getRepertoireNew())) {
+            String msg = "nothing do , not in " + Context.getRepertoireNew() + " repertory ";
+            logecrireuserlogInfo(msg);
+            throw new IllegalStateException(msg);
         }
+
+        File directory = new File(Context.getAbsolutePathFirst() + File.separator);
+        ndDelTotal=0;
+        boucleSupressionRepertoire(directory);
+        logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
+
     }
 
     /**
@@ -809,23 +857,54 @@ public class MainFrameController {
         initialize();
     }
 
+    private String supprimerbalisedollar(String lcIdxFilename) {
+        Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
+        Matcher matcher = pattern.matcher(lcIdxFilename);
+        if (matcher.find()) {
+            return matcher.group(2);
+        }
+        return "";
+
+    }
+
     private class GetListeElements {
         private int idxBazar;
         private List<Ele> listEle;
         private int idx;
 
+        /**
+         * Instantiates a new Get liste elements.
+         *
+         * @param idxBazar the idx bazar
+         */
         public GetListeElements(int idxBazar) {
             this.idxBazar = idxBazar;
         }
 
+        /**
+         * Gets list ele.
+         *
+         * @return the list ele
+         */
         public List<Ele> getListEle() {
             return listEle;
         }
 
+        /**
+         * Gets idx.
+         *
+         * @return the idx
+         */
         public int getIdx() {
             return idx;
         }
 
+        /**
+         * Invoke get liste elements.
+         *
+         * @return the get liste elements
+         * @throws SQLException the sql exception
+         */
         public GetListeElements invoke() throws SQLException {
             return this;
         }
@@ -837,31 +916,55 @@ public class MainFrameController {
         private int idxrepertoireNew;
         private String repertoireNew;
 
+        /**
+         * Instantiates a new Get liste repertoires.
+         *
+         * @param repertoireNew the repertoire new
+         */
         public GetListeRepertoires(String repertoireNew) {
             this.repertoireNew = repertoireNew;
         }
 
+        /**
+         * Gets idxrepertoire new.
+         *
+         * @return the idxrepertoire new
+         */
         public int getIdxrepertoireNew() {
             return idxrepertoireNew;
         }
 
+        /**
+         * Gets list rep.
+         *
+         * @return the list rep
+         */
         public List<Rep> getListRep() {
             return listRep;
         }
 
+        /**
+         * Gets idxrep.
+         *
+         * @return the idxrep
+         */
         public int getIdxrep() {
             return idxrep;
         }
 
+        /**
+         * Invoke get liste repertoires.
+         *
+         * @return the get liste repertoires
+         * @throws SQLException the sql exception
+         */
         public GetListeRepertoires invoke() throws SQLException {
             listRep = new ArrayList();
-            File monDossier=new File( normalizePath(Context.getAbsolutePathFirst() + repertoireNew) );
-            File[] liste=monDossier.listFiles();
+            File monDossier = new File(normalizePath(Context.getAbsolutePathFirst() + repertoireNew));
+            File[] liste = monDossier.listFiles();
 
-            for(File elementListe : liste)
-            {
-                if(elementListe.isDirectory())
-                {
+            for (File elementListe : liste) {
+                if (elementListe.isDirectory()) {
                     listRep.add(new Rep(elementListe.toString()));
                 }
             }
@@ -871,18 +974,29 @@ public class MainFrameController {
         }
     }
 
-
     private class CreateReperetoireNew {
         private int idxBazar;
         private int idx;
         private List<Rep> listRep;
 
+        /**
+         * Instantiates a new Create reperetoire new.
+         *
+         * @param idxBazar the idx bazar
+         * @param idx      the idx
+         * @param listRep  the list rep
+         */
         public CreateReperetoireNew(int idxBazar, int idx, List<Rep> listRep) {
             this.idxBazar = idxBazar;
             this.idx = idx;
             this.listRep = listRep;
         }
 
+        /**
+         * Invoke.
+         *
+         * @throws SQLException the sql exception
+         */
         public void invoke() throws SQLException {
             //preparation action sur les repertoires
             for (int i = 0; i < listRep.size(); i++) {
@@ -909,17 +1023,36 @@ public class MainFrameController {
         private List<Rep> listRep;
         private int idxrepertoireNew;
 
+        /**
+         * Instantiates a new Move eleto newroot.
+         *
+         * @param listEle          the list ele
+         * @param listRep          the list rep
+         * @param idxrepertoireNew the idxrepertoire new
+         */
         public MoveEletoNewroot(List<Ele> listEle, List<Rep> listRep, int idxrepertoireNew) {
             this.listEle = listEle;
             this.listRep = listRep;
             this.idxrepertoireNew = idxrepertoireNew;
         }
 
+        /**
+         * Instantiates a new Move eleto newroot.
+         *
+         * @param listEle the list ele
+         * @param listRep the list rep
+         */
         public MoveEletoNewroot(List<Ele> listEle, List<Rep> listRep) {
             this.listEle = listEle;
             this.listRep = listRep;
         }
 
+        /**
+         * Invoke.
+         *
+         * @throws IOException  the io exception
+         * @throws SQLException the sql exception
+         */
         public void invoke() throws IOException, SQLException {
             //action sur les elements
             //deplacement dans le repertoire Context.getRepertoireNew() #idxrepertoireNew
@@ -933,14 +1066,6 @@ public class MainFrameController {
             }
         }
 
-        private String supprimerbalisedollar(String lcIdxFilename) {
-            Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
-            Matcher matcher = pattern.matcher(lcIdxFilename);
-            if (matcher.find()) {
-                return matcher.group(2);
-            }
-            return "";
 
-        }
     }
 }

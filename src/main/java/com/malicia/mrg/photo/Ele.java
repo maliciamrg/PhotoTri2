@@ -21,6 +21,15 @@ public class Ele {
      * The Lc idx filename.
      */
     private String lcIdxFilename;
+
+    public String getPathFromRoot() {
+        return pathFromRoot;
+    }
+
+    public void setPathFromRoot(String pathFromRoot) {
+        this.pathFromRoot = pathFromRoot;
+    }
+
     /**
      * The Path from root.
      */

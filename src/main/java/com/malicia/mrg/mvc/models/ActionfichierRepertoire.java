@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,11 +38,9 @@ public class ActionfichierRepertoire {
      */
     public static boolean delete_dir(File dir) throws IOException, SQLException {
         boolean ret = true;
-        ret &= (RequeteSql.sqlDeleteRepertory(RequeteSql.retrieverootfolder(dir.toString()), dir.toString()) > 0);
-        if (ret) {
-            Files.delete(dir.toPath());
-        }
-        LOGGER.log(Level.INFO, "delete_dir: {0} = {1} ", new String[]{String.valueOf(dir), String.valueOf(ret)});
+        Files.delete(dir.toPath());
+//        RequeteSql.sqlDeleteRepertory(RequeteSql.retrieverootfolder(dir.toString()), dir.toString();
+        LOGGER.log(Level.INFO, "delete_dir: {0} ", new String[]{String.valueOf(dir)});
         return ret;
     }
 
@@ -165,19 +164,19 @@ public class ActionfichierRepertoire {
         if (repertoiresource.compareTo(repertoiredest) != 0) {
             if (directory.isDirectory()) {
                 if (!directory.exists()) {
-                    throw new IllegalStateException("non existance : " +  directory.toString());
+                    throw new IllegalStateException("non existance : " + directory.toString());
                 }
                 if (directorydest.exists()) {
-                    throw new IllegalStateException("existance     : " +  directorydest.toString());
+                    throw new IllegalStateException("existance     : " + directorydest.toString());
                 }
-       //         boolean ret = true;
-      //          LOGGER.info("renommerUnRepertoire l=" + idLocal + " -> " + relativerepertoiredest);
-      //          ret &= (RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest) > 0);
-       //         if (ret) {
-                    LOGGER.info("renommerUnRepertoire p=" + directory.toString() + " -> " + directorydest.toString());
-                    directory.renameTo(directorydest);
-                }
-      //      }
+                //         boolean ret = true;
+                //          LOGGER.info("renommerUnRepertoire l=" + idLocal + " -> " + relativerepertoiredest);
+                //          ret &= (RequeteSql.updateRepertoryName(idLocal, relativerepertoiredest) > 0);
+                //         if (ret) {
+                LOGGER.info("renommerUnRepertoire p=" + directory.toString() + " -> " + directorydest.toString());
+                directory.renameTo(directorydest);
+            }
+            //      }
         }
 
     }
@@ -200,10 +199,10 @@ public class ActionfichierRepertoire {
 
         if (source.compareTo(dest) != 0) {
             if (!fsource.exists()) {
-                throw new IllegalStateException("non existance : " +  fsource.toString());
+                throw new IllegalStateException("non existance : " + fsource.toString());
             }
             if (fdest.exists()) {
-                throw new IllegalStateException("existance     : " +  fdest.toString());
+                throw new IllegalStateException("existance     : " + fdest.toString());
             }
             boolean ret = true;
             LOGGER.info("rename_file l=" + file_id_local + " -> " + rename);
@@ -211,8 +210,8 @@ public class ActionfichierRepertoire {
 //                    file_id_local,
 //                    rename) > 0);
 //            if (ret) {
-                LOGGER.info("rename_file p=" + fsource.toString() + " -> " + fdest.toString());
-                Files.move(fsource.toPath(), fdest.toPath());
+            LOGGER.info("rename_file p=" + fsource.toString() + " -> " + fdest.toString());
+            Files.move(fsource.toPath(), fdest.toPath());
 //            }
         }
     }
@@ -236,10 +235,10 @@ public class ActionfichierRepertoire {
         File fdest = new File(dest);
         if (fsource.compareTo(fdest) != 0) {
             if (!fsource.exists()) {
-                throw new IllegalStateException("non existance : " +  fsource.toString());
+                throw new IllegalStateException("non existance : " + fsource.toString());
             }
             if (fdest.exists()) {
-                throw new IllegalStateException("existance     : " +  fdest.toString());
+                throw new IllegalStateException("existance     : " + fdest.toString());
             }
             boolean ret = true;
             LOGGER.info("move_file l=" + file_id_local + " -> " + folder_id_local);
@@ -248,11 +247,39 @@ public class ActionfichierRepertoire {
 //                    file_id_local,
 //                    folder_id_local) > 0);
 //            if (ret) {
-                LOGGER.info("move_file p=" + fsource.toString() + " -> " + fdest.toString());
+            LOGGER.info("move_file p=" + fsource.toString() + " -> " + fdest.toString());
 
-                Files.move(fsource.toPath(), fdest.toPath());
+            Files.move(fsource.toPath(), fdest.toPath());
 //            }
         }
         return true;
+    }
+
+    public static void mkdir(String directoryName) throws SQLException {
+        File fdirectoryName = new File(directoryName);
+        if (!fdirectoryName.exists()) {
+            fdirectoryName.mkdir();
+        }
+        ResultSet ret = RequeteSql.sqlGetIdlocalfolderfrompath(directoryName);
+        if (ret.isClosed()){
+            RequeteSql.sqlMkdirRepertory(directoryName);
+        }
+    }
+
+    public static void move_file(String source, String destination) throws IOException, SQLException {
+        File fsource = new File(source);
+        File fdest = new File(destination);
+        if (fsource.compareTo(fdest) != 0) {
+            if (!fsource.exists()) {
+                throw new IllegalStateException("non existance : " + fsource.toString());
+            }
+            if (fdest.exists()) {
+                throw new IllegalStateException("existance     : " + fdest.toString());
+            }
+            boolean ret = true;
+            LOGGER.info("move_file p=" + fsource.toString() + " -> " + fdest.toString());
+            Files.move(fsource.toPath(), fdest.toPath());
+            RequeteSql.sqlmovefile(source,destination);
+        }
     }
 }
