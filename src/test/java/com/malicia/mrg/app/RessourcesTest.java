@@ -40,13 +40,7 @@ public class RessourcesTest {
 
     @Test
     public void testGetResourceFiles() {
-        try {
-            List<String> bigR = Ressources.getResourceFiles("");
-            System.out.println(Ressources.listetostring(bigR));
-            assertTrue(true);
-        } catch ( IOException e) {
-            e.printStackTrace();
             assertTrue(false);
-        }
+
     }
 }

@@ -2,15 +2,12 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.Ressources;
-import com.malicia.mrg.photo.ElePhoto;
-import com.malicia.mrg.photo.GrpPhoto;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;

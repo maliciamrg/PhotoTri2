@@ -1,9 +1,7 @@
 package com.malicia.mrg.mvc.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -12,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Pop up controller.
@@ -21,39 +20,39 @@ public class PopUpController {
     /**
      * The constant retourCode.
      */
-    public static final String retourCode = "retourCode";
+    public static final String RETOUR_CODE = "retourCode";
     /**
      * The constant valstoprun.
      */
-    public static final String valstoprun = "stopRun";
+    public static final String VALSTOPRUN = "stopRun";
     /**
      * The constant valnext.
      */
-    public static final String valnext = "next";
+    public static final String VALNEXT = "next";
     /**
      * The constant valselect.
      */
-    public static final String valselect = "select";
+    public static final String VALSELECT = "select";
     /**
      * The constant idimageOne.
      */
-    public static final String idimageOne = "imageOne";
+    public static final String IMAGE_ONE = "imageOne";
     /**
      * The constant idimage2UL.
      */
-    public static final String idimage2UL = "image2UL";
+    public static final String IMAGE_2_UL = "image2UL";
     /**
      * The constant idimage2UR.
      */
-    public static final String idimage2UR = "image2UR";
+    public static final String IMAGE_2_UR = "image2UR";
     /**
      * The constant idimage2LL.
      */
-    public static final String idimage2LL = "image2LL";
+    public static final String IMAGE_2_LL = "image2LL";
     /**
      * The constant idimage2LR.
      */
-    public static final String idimage2LR = "image2LR";
+    public static final String IMAGE_2_LR = "image2LR";
     private static final java.util.logging.Logger LOGGER;
     private static Stage popupStage;
 
@@ -61,8 +60,6 @@ public class PopUpController {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
-    @FXML
-    private Button BtnCancel;
     @FXML
     private ImageView imageOne;
     @FXML
@@ -75,7 +72,7 @@ public class PopUpController {
     private ImageView image2LR;
     @FXML
     private Label lblinfo;
-    private HashMap<String, Object> Result = new HashMap<String, Object>();
+    private HashMap<String, Object> result = new HashMap<>();
 
     /**
      * Sets popup stage.
@@ -85,34 +82,7 @@ public class PopUpController {
     public static void setPopupStage(Stage popupStage) {
         PopUpController.popupStage = popupStage;
     }
-//
-//    /**
-//     * Converts an image to another format
-//     *
-//     * @param inputImagePath  Path of the source image
-//     * @param outputImagePath Path of the destination image
-//     * @param formatName      the format to be converted to, one of: jpeg, png,
-//     *                        bmp, wbmp, and gif
-//     * @return true if successful, false otherwise
-//     * @throws IOException if errors occur during writing
-//     */
-//    public static boolean convertFormat(String inputImagePath,
-//                                        String outputImagePath, String formatName) throws IOException {
-//        FileInputStream inputStream = new FileInputStream(inputImagePath);
-//        FileOutputStream outputStream = new FileOutputStream(outputImagePath);
-//
-//        // reads input image from file
-//        BufferedImage inputImage = ImageIO.read(inputStream);
-//
-//        // writes to the output image in specified format
-//        boolean result = ImageIO.write(inputImage, formatName, outputStream);
-//
-//        // needs to close the streams
-//        outputStream.close();
-//        inputStream.close();
-//
-//        return result;
-//    }
+
 
     /**
      * Sets lblinfo.
@@ -128,8 +98,8 @@ public class PopUpController {
      *
      * @return the result
      */
-    public HashMap<String, Object> getResult() {
-        return Result;
+    public Map<String, Object> getResult() {
+        return result;
     }
 
     /**
@@ -139,26 +109,25 @@ public class PopUpController {
      */
     @FXML
     public void handle(KeyEvent key) {
-        System.out.println("Event handled! : " + key.getCharacter());
         switch (key.getCode()) {
             case RIGHT:
-                Result.put(retourCode, valnext);
+                result.put(RETOUR_CODE, VALNEXT);
                 closeStage();
                 break;
             case DOWN:
-                Result.put(retourCode, valselect);
+                result.put(RETOUR_CODE, VALSELECT);
                 closeStage();
                 break;
-//            default:
-//                throw new IllegalStateException("Unexpected value: " + key.getCode());
+            default:
+                break;
         }
     }
 
     /**
      * Action btn cancel.
      */
-    public void ActionBtnCancel() {
-        Result.put(retourCode, valstoprun);
+    public void actionBtnCancel() {
+        result.put(RETOUR_CODE, VALSTOPRUN);
         closeStage();
     }
 
@@ -186,10 +155,8 @@ public class PopUpController {
 
         switch (ext) {
             case "avi":
-//                throw new IllegalStateException("Unexpected extension: " + ext);
                 break;
             case "arw":
-//                throw new IllegalStateException("Unexpected extension: " + ext);
                 break;
             default:
                 File file = new File(src);
@@ -198,19 +165,19 @@ public class PopUpController {
 
 
                 switch (nomimage) {
-                    case idimageOne:
+                    case IMAGE_ONE:
                         imageOne.setImage(image);
                         break;
-                    case idimage2UL:
+                    case IMAGE_2_UL:
                         image2UL.setImage(image);
                         break;
-                    case idimage2UR:
+                    case IMAGE_2_UR:
                         image2UR.setImage(image);
                         break;
-                    case idimage2LL:
+                    case IMAGE_2_LL:
                         image2LL.setImage(image);
                         break;
-                    case idimage2LR:
+                    case IMAGE_2_LR:
                         image2LR.setImage(image);
                         break;
                     default:
@@ -218,26 +185,5 @@ public class PopUpController {
                 }
         }
     }
-
-//    public BufferedImage convertRenderedImage(RenderedImage img) {
-//        if (img instanceof BufferedImage) {
-//            return (BufferedImage) img;
-//        }
-//        ColorModel cm = img.getColorModel();
-//        int width = img.getWidth();
-//        int height = img.getHeight();
-//        WritableRaster raster = cm.createCompatibleWritableRaster(width, height);
-//        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//        Hashtable properties = new Hashtable();
-//        String[] keys = img.getPropertyNames();
-//        if (keys != null) {
-//            for (int i = 0; i < keys.length; i++) {
-//                properties.put(keys[i], img.getProperty(keys[i]));
-//            }
-//        }
-//        BufferedImage result = new BufferedImage(cm, raster, isAlphaPremultiplied, properties);
-//        img.copyData(raster);
-//        return result;
-//    }
 
 }

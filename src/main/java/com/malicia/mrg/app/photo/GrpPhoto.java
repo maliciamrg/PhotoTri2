@@ -1,6 +1,6 @@
-package com.malicia.mrg.photo;
+package com.malicia.mrg.app.photo;
 
-import com.malicia.mrg.mvc.models.ActionfichierRepertoire;
+import com.malicia.mrg.app.ActionfichierRepertoire;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,24 +54,6 @@ public class GrpPhoto {
     }
 
     /**
-     * Sets eledest.
-     *
-     * @param eledest the eledest
-     */
-    public void setEledest(List<String> eledest) {
-        this.eledest = eledest;
-    }
-
-    /**
-     * Gets camera model grp.
-     *
-     * @return the camera model grp
-     */
-    public String getCameraModelGrp() {
-        return cameraModelGrp;
-    }
-
-    /**
      * Gets eledt.
      *
      * @return the eledt
@@ -106,7 +88,6 @@ public class GrpPhoto {
     public List<String> getElesrc() {
         return elesrc;
     }
-
 
     @Override
     public String toString() {
@@ -263,7 +244,6 @@ public class GrpPhoto {
     public boolean isdateNull() {
         return (mintGrp == -2082848400 || mintGrp == 0);
     }
-
 
     /**
      * Add eledest.

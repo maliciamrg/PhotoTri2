@@ -13,10 +13,17 @@ public class SQLiteJDBCDriverConnection {
     /**
      * The constant conn.
      */
-    public static Connection conn;
+    private static Connection conn;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    /**
+     * Instantiates a new Sq lite jdbc driver connection.
+     */
+    private SQLiteJDBCDriverConnection() {
+        throw new IllegalStateException("Utility class");
     }
 
     /**
@@ -25,7 +32,7 @@ public class SQLiteJDBCDriverConnection {
      * @param sqlliteDatabase the sqllite database
      */
     public static void connect(String sqlliteDatabase) {
-        LOGGER.info("connect to database : " + sqlliteDatabase);
+        LOGGER.info(() -> "connect to database : " + sqlliteDatabase);
         conn = null;
         try {
             // db parameters
@@ -57,22 +64,19 @@ public class SQLiteJDBCDriverConnection {
      *
      * @param sql the sql
      * @return the boolean
+     * @throws SQLException the sql exception
      */
     public static boolean execute(String sql) throws SQLException {
 
-
         Statement stmt = null;
-//        try {
-        stmt = conn.createStatement();
+        try {
+            stmt = conn.createStatement();
+            LOGGER.fine(sql);
+            return stmt.execute(sql);
+        } finally {
+            conn.close();
+        }
 
-        LOGGER.fine(sql);
-
-        return stmt.execute(sql);
-
-//        } catch (SQLException e) {
-//            LOGGER.severe(e.getMessage());
-//        }
-//        return false;
     }
 
     /**
@@ -86,42 +90,40 @@ public class SQLiteJDBCDriverConnection {
 
 
         Statement stmt = null;
-//        try {
+
         stmt = conn.createStatement();
         LOGGER.fine(sql);
 
         // forcage display du resultset
         ResultSet resultSet = stmt.executeQuery(sql);
-        display_resultset(resultSet);
+        displayResultset(resultSet);
 
         return stmt.executeQuery(sql);
 
 
-//        } catch (SQLException e) {
-//            LOGGER.severe(e.getMessage());
-//        }
-//        return null;
     }
 
-    private static void display_resultset(ResultSet resultSet) throws SQLException {
+    private static void displayResultset(ResultSet resultSet) throws SQLException {
         ResultSet resultSetAff = resultSet;
 
         ResultSetMetaData rsmd = resultSetAff.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
 
-        String colname = " + ";
+        StringBuilder colname = new StringBuilder();
+        colname.append(" + ");
         for (int i = 1; i <= columnsNumber; i++) {
-            colname += String.format("%-20s", rsmd.getColumnName(i)) + " + ";
+            colname.append(String.format("%-20s", rsmd.getColumnName(i)) + " + ");
         }
-        LOGGER.fine(colname);
+        LOGGER.fine(() -> "" + colname.toString());
 
 
         while (resultSetAff.next()) {
-            String columnValue = " + ";
+            StringBuilder columnValue = new StringBuilder();
+            columnValue.append(" + ");
             for (int i = 1; i <= columnsNumber; i++) {
-                columnValue += String.format("%-20s", resultSetAff.getString(i)) + " + ";
+                columnValue.append(String.format("%-20s", resultSetAff.getString(i)) + " + ");
             }
-            LOGGER.fine(columnValue);
+            LOGGER.fine(() -> "" + columnValue.toString());
         }
 
     }
@@ -137,14 +139,11 @@ public class SQLiteJDBCDriverConnection {
 
 
         Statement stmt = null;
-//        try {
+
         stmt = conn.createStatement();
         LOGGER.fine(sql);
         return stmt.executeUpdate(sql);
 
-//        } catch (SQLException e) {
-//            LOGGER.severe(e.getMessage());
-//        }
-//        return 0;
+
     }
 }

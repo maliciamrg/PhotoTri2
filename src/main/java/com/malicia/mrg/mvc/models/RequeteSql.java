@@ -1,5 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
+import com.malicia.mrg.app.ActionfichierRepertoire;
 import com.malicia.mrg.app.Context;
 import org.apache.commons.io.FilenameUtils;
 
@@ -101,7 +102,6 @@ public class RequeteSql {
     /**
      * Sqlget listelementrejetaranger result set.
      *
-     * @param tempsAdherence the temps adherence
      * @return the result set
      * @throws SQLException the sql exception
      */
@@ -153,22 +153,6 @@ public class RequeteSql {
     }
 
     /**
-     * Sqlget listrepnew result set.
-     *
-     * @return the result set
-     * @throws SQLException the sql exception
-     */
-    public static ResultSet sqlgetListrepnew() throws SQLException {
-        return SQLiteJDBCDriverConnection.select(
-                "select " +
-                        "b.id_local as folder_id_local , " +
-                        "b.pathFromRoot  " +
-                        "from AgLibraryFolder b   " +
-                        "Where b.pathFromRoot like \"%" + Context.getRepertoireNew() + "%\" " +
-                        ";");
-    }
-
-    /**
      * Gets path first.
      *
      * @return the path first
@@ -186,25 +170,6 @@ public class RequeteSql {
         }
 
         return "";
-    }
-
-    /**
-     * Update repertory name.
-     *
-     * @param idLocal         the id local
-     * @param newpathfromroot the root folder
-     * @return int
-     * @throws SQLException the sql exception
-     */
-    public static int updateRepertoryName(String idLocal, String newpathfromroot) throws SQLException {
-        String sql;
-        sql = "" +
-                "update AgLibraryFolder " +
-                "set pathFromRoot =  \"" + newpathfromroot + "\" " +
-                "where id_local =  " + idLocal + " " +
-                ";";
-        LOGGER.info(sql);
-        return SQLiteJDBCDriverConnection.executeUpdate(sql);
     }
 
     /**
@@ -334,32 +299,6 @@ public class RequeteSql {
     }
 
     /**
-     * Sql delete repertory int.
-     *
-     * @param rootfolder     the rootfolder
-     * @param pathasupprimer the pathasupprimer
-     * @return the int
-     * @throws SQLException the sql exception
-     */
-    public static int sqlDeleteRepertory(String rootfolder, String pathasupprimer) throws SQLException {
-        String sql = "" +
-                "delete from AgLibraryFolder " +
-                "where rootfolder = \"" + rootfolder + "\" " +
-                "and " +
-                "( " +
-                "select absolutePath " +
-                "from AgLibraryRootFolder " +
-                "where id_local = \"" + rootfolder + "\" " +
-                "LIMIT 1 " +
-                ") " +
-                " || pathFromRoot = \"" + ActionfichierRepertoire.normalizePath(pathasupprimer + "/") + "\" " +
-                "";
-
-        return SQLiteJDBCDriverConnection.executeUpdate(sql);
-
-    }
-
-    /**
      * Retrieverootfolder string.
      *
      * @param path the path
@@ -367,30 +306,6 @@ public class RequeteSql {
      * @throws SQLException the sql exception
      */
     public static String retrieverootfolder(String path) throws SQLException {
-
-        ResultSet result = SQLiteJDBCDriverConnection.select("" +
-                "select id_local " +
-                "from AgLibraryRootFolder " +
-                "where \"" + ActionfichierRepertoire.normalizePath(path) + "\" " +
-                "like absolutePath || \"_%\"  ; " +
-                "");
-
-
-        while (result.next()) {
-            return result.getString("id_local");
-        }
-
-        return "";
-    }
-
-    /**
-     * Retrieveidfolder string.
-     *
-     * @param path the path
-     * @return the string
-     * @throws SQLException the sql exception
-     */
-    public static String retrieveidfolder(String path) throws SQLException {
 
         ResultSet result = SQLiteJDBCDriverConnection.select("" +
                 "select id_local " +
@@ -573,26 +488,6 @@ public class RequeteSql {
     }
 
     /**
-     * Sqlrenamefile int.
-     *
-     * @param fileIdLocal the file id local
-     * @param rename      the rename
-     * @return the int
-     * @throws SQLException the sql exception
-     */
-    public static int sqlrenamefile(String fileIdLocal, String rename) throws SQLException {
-        String sql;
-        sql = "" +
-                "update AgLibraryFile " +
-                "set lc_idx_filename =  \"" + rename.toLowerCase() + "\" " +
-                "  , idx_filename =  \"" + rename + "\" " +
-                "  , basename =  \"" + FilenameUtils.getBaseName(rename) + "\" " +
-                "where id_local =  " + fileIdLocal + " " +
-                ";";
-        return SQLiteJDBCDriverConnection.executeUpdate(sql);
-    }
-
-    /**
      * Sql mkdir repertory int.
      *
      * @param directoryName the directory name
@@ -602,7 +497,9 @@ public class RequeteSql {
     public static int sqlMkdirRepertory(String directoryName) throws SQLException {
         String pathFromRoot = normalizePath(directoryName.replace(Context.getAbsolutePathFirst(), "") + File.separator);
         long idlocal = RequeteSql.sqlGetPrevIdlocalforFolder();
-        if (idlocal==0) {throw new IllegalStateException("no more idlocal empty for folder");}
+        if (idlocal == 0) {
+            throw new IllegalStateException("no more idlocal empty for folder");
+        }
 //        RequeteSql.sqlSetAdobeentityIDCounter(idlocal);
         String rootFolder = RequeteSql.retrieverootfolder(directoryName);
         String sql;
@@ -634,8 +531,8 @@ public class RequeteSql {
                 idLocalCalcul = id_local;
                 first = false;
             } else {
-                idLocalCalcul -=1;
-                if (idLocalCalcul > id_local){
+                idLocalCalcul -= 1;
+                if (idLocalCalcul > id_local) {
                     return idLocalCalcul;
                 }
             }
@@ -643,6 +540,12 @@ public class RequeteSql {
         return idLocalCalcul;
     }
 
+    /**
+     * Normalize path string.
+     *
+     * @param path the path
+     * @return the string
+     */
     public static String normalizePath(String path) {
         return path.replaceAll("\\\\", "/");
     }

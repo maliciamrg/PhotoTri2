@@ -2,10 +2,8 @@ package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
-import com.malicia.mrg.mvc.controllers.PopUpController;
 import com.malicia.mrg.mvc.models.RequeteSql;
 import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -29,22 +27,26 @@ public class Context implements Serializable {
      * The constant PATH_FROM_ROOT.
      */
     public static final String PATH_FROM_ROOT = "pathFromRoot";
+    /**
+     * The constant ABSOLUTEPATH.
+     */
     public static final String ABSOLUTEPATH = "absolutePath";
     /**
      * The constant CAPTURE_TIME.
      */
     public static final String CAPTURE_TIME = "captureTime";
+    /**
+     * The constant LC_IDX_FILENAME.
+     */
+    public static final String LC_IDX_FILENAME = "lc_idx_filename";
     private static final long serialVersionUID = 1L;
-    private static final Context instance = new Context();
     private static final Logger LOGGER;
     /**
      * The constant currentContext.
      */
-    public static Context currentContext = new Context();
+    private static Context currentContext = new Context();
     private static MainFrameController controller;
-    private static String root;
     private static Stage primaryStage;
-    private static String baseDir;
     private static String absolutePathFirst;
     private static boolean dryrun = true;
     private static String repertoireNew = "";
@@ -53,21 +55,34 @@ public class Context implements Serializable {
     private static String urlgitwiki = "";
     private static String repBazar = "";
     private static String repRejet = "";
-    private static String titreRejet = "";
     private static int thresholdBazar = 0;
     private static String kidz = "";
     private static String noDate = "";
     private static List<String> kidsModelList;
-    private static PopUpController controllerpopup;
-    private static Popup popup;
-    private static String repTech;
-    private static String repGrp;
 
     /**
      *
      */
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    /**
+     * Gets current context.
+     *
+     * @return the current context
+     */
+    public static Context getCurrentContext() {
+        return currentContext;
+    }
+
+    /**
+     * Sets current context.
+     *
+     * @param currentContext the current context
+     */
+    public static void setCurrentContext(Context currentContext) {
+        Context.currentContext = currentContext;
     }
 
     /**
@@ -89,15 +104,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Sets titre rejet.
-     *
-     * @param titreRejet the titre rejet
-     */
-    public static void setTitreRejet(String titreRejet) {
-        Context.titreRejet = titreRejet;
-    }
-
-    /**
      * Gets threshold bazar.
      *
      * @return the threshold bazar
@@ -113,15 +119,6 @@ public class Context implements Serializable {
      */
     public static void setThresholdBazar(int thresholdBazar) {
         Context.thresholdBazar = thresholdBazar;
-    }
-
-    /**
-     * Sets controllerpopup.
-     *
-     * @param controllerpopup the controllerpopup
-     */
-    public static void setControllerpopup(PopUpController controllerpopup) {
-        Context.controllerpopup = controllerpopup;
     }
 
     /**
@@ -179,15 +176,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Sets root.
-     *
-     * @param root the root
-     */
-    public static void setRoot(String root) {
-        Context.root = root;
-    }
-
-    /**
      * Gets primary stage.
      *
      * @return the primary stage
@@ -221,15 +209,6 @@ public class Context implements Serializable {
      */
     public static void setController(MainFrameController controller) {
         Context.controller = controller;
-    }
-
-    /**
-     * Sets base dir.
-     *
-     * @param baseDir the base dir
-     */
-    public static void setBaseDir(String baseDir) {
-        Context.baseDir = baseDir;
     }
 
     /**
@@ -402,12 +381,9 @@ public class Context implements Serializable {
         setKidsModelList(Arrays.asList(properties.getProperty("kidzModel").split(",")));
         setRepBazar(properties.getProperty("repBazar"));
         setRepRejet(properties.getProperty("repRejet"));
-        setRepTech(properties.getProperty("repTech"));
-        setRepGrp(properties.getProperty("repGrp"));
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
-        setBaseDir(properties.getProperty("BaseDir"));
     }
 
     /**
@@ -463,19 +439,4 @@ public class Context implements Serializable {
         return (Context) oi.readObject();
     }
 
-    public static void setRepTech(String repTech) {
-        Context.repTech = repTech;
-    }
-
-    public static String getRepTech() {
-        return repTech;
-    }
-
-    public static void setRepGrp(String repGrp) {
-        Context.repGrp = repGrp;
-    }
-
-    public static String getRepGrp() {
-        return repGrp;
-    }
 }
