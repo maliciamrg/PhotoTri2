@@ -1,7 +1,7 @@
 package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.Ressources;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

@@ -66,6 +66,7 @@ public class Context implements Serializable {
     private static SQLiteJDBCDriverConnection lrcat_book;
     private static SQLiteJDBCDriverConnection lrcat_legacy;
     private static SQLiteJDBCDriverConnection lrcat_inbox;
+    private static String catalogLrcat___kidz;
 
     /**
      *
@@ -405,6 +406,7 @@ public class Context implements Serializable {
         setCatalogLrcat__Inbox(properties.getProperty("CatalogLrcat__Inbox"));
         setCatalogLrcat___Book(properties.getProperty("CatalogLrcat___Book"));
         setCatalogLrcat_Legacy(properties.getProperty("CatalogLrcat_Legacy"));
+        setCatalogLrcat___kidz(properties.getProperty("CatalogLrcat___Kidz"));
 
         setTempsAdherence(properties.getProperty("TempsAdherence"));
 
@@ -494,5 +496,13 @@ public class Context implements Serializable {
 
     public static void setCatalogLrcat_Legacy(String catalogLrcat_Legacy) {
         CatalogLrcat_Legacy = catalogLrcat_Legacy;
+    }
+
+    public static String getCatalogLrcat___kidz() {
+        return catalogLrcat___kidz;
+    }
+
+    public static void setCatalogLrcat___kidz(String catalogLrcat___kidz) {
+        Context.catalogLrcat___kidz = catalogLrcat___kidz;
     }
 }
