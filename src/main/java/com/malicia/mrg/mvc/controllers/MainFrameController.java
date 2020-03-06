@@ -199,7 +199,7 @@ public class MainFrameController {
     private void initialize() {
         LOGGER.info("initialize");
 
-        databaselrcat.setText(Context.getCatalogLrcat());
+        databaselrcat.setText(Context.getCatalogLrcat____New());
         lbTempsAdherence.setText("Temps d'adherence : " + Context.getTempsAdherence());
         lbRepertoireNew.setText("Pattern du Repertoire New : " + Context.getRepertoireNew());
         chkDryRun.setSelected(Context.getDryRun());
@@ -251,13 +251,13 @@ public class MainFrameController {
             //Create a file chooser
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
-            fileChooser.setInitialDirectory((new File(new File(Context.getCatalogLrcat()).getParent())));
+            fileChooser.setInitialDirectory((new File(new File(Context.getCatalogLrcat____New()).getParent())));
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("LRCAT files (*.lrcat)", "*.lrcat");
             fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(Context.getPrimaryStage());
             if (file != null) {
                 logecrireuserlogInfo("selectedFile:" + file.getAbsolutePath());
-                Context.setCatalogLrcat(file.getAbsolutePath());
+                Context.setCatalogLrcat____New(file.getAbsolutePath());
                 initalizerootselection();
             }
             Context.savePropertiesParameters(Context.getCurrentContext());
@@ -276,7 +276,7 @@ public class MainFrameController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String formattedDate = sdf.format(date);
 
-        String ori = Context.getCatalogLrcat();
+        String ori = Context.getCatalogLrcat____New();
         File fori = new File(ori);
         String dupdest = fori.getParent() + "\\" + formattedDate + "_" + fori.getName();
         File dest = new File(dupdest);

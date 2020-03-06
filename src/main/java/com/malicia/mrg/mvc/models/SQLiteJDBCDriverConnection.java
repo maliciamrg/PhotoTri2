@@ -9,21 +9,20 @@ import java.util.logging.Logger;
  * @author sqlitetutorial.net
  */
 public class SQLiteJDBCDriverConnection {
-    private static final Logger LOGGER;
+    private final Logger LOGGER;
     /**
      * The constant conn.
      */
-    private static Connection conn;
-
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
+    private Connection conn;
 
     /**
      * Instantiates a new Sq lite jdbc driver connection.
+     *
+     * @param catalogLrcat the catalog lrcat
      */
-    private SQLiteJDBCDriverConnection() {
-        throw new IllegalStateException("Utility class");
+    public SQLiteJDBCDriverConnection(String catalogLrcat) {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        connect(catalogLrcat);
     }
 
     /**
@@ -31,7 +30,7 @@ public class SQLiteJDBCDriverConnection {
      *
      * @param sqlliteDatabase the sqllite database
      */
-    public static void connect(String sqlliteDatabase) {
+    public void connect(String sqlliteDatabase) {
         LOGGER.info(() -> "connect to database : " + sqlliteDatabase);
         conn = null;
         try {
@@ -49,7 +48,7 @@ public class SQLiteJDBCDriverConnection {
     /**
      * Disconnect.
      */
-    public static void disconnect() {
+    public void disconnect() {
         try {
             if (conn != null) {
                 conn.close();
@@ -66,7 +65,7 @@ public class SQLiteJDBCDriverConnection {
      * @return the boolean
      * @throws SQLException the sql exception
      */
-    public static boolean execute(String sql) throws SQLException {
+    public boolean execute(String sql) throws SQLException {
 
         Statement stmt = null;
         try {
@@ -86,7 +85,7 @@ public class SQLiteJDBCDriverConnection {
      * @return the result set
      * @throws SQLException the sql exception
      */
-    public static ResultSet select(String sql) throws SQLException {
+    public ResultSet select(String sql) throws SQLException {
 
 
         Statement stmt = null;
@@ -103,7 +102,27 @@ public class SQLiteJDBCDriverConnection {
 
     }
 
-    private static void displayResultset(ResultSet resultSet) throws SQLException {
+    /**
+     * select all rows in the warehouses table
+     *
+     * @param sql the sql
+     * @return the int
+     * @throws SQLException the sql exception
+     */
+    public int executeUpdate(String sql) throws SQLException {
+
+
+        Statement stmt = null;
+
+        stmt = conn.createStatement();
+        LOGGER.fine(sql);
+        return stmt.executeUpdate(sql);
+
+
+    }
+
+
+    private void displayResultset(ResultSet resultSet) throws SQLException {
         ResultSet resultSetAff = resultSet;
 
         ResultSetMetaData rsmd = resultSetAff.getMetaData();
@@ -128,22 +147,4 @@ public class SQLiteJDBCDriverConnection {
 
     }
 
-    /**
-     * select all rows in the warehouses table
-     *
-     * @param sql the sql
-     * @return the int
-     * @throws SQLException the sql exception
-     */
-    public static int executeUpdate(String sql) throws SQLException {
-
-
-        Statement stmt = null;
-
-        stmt = conn.createStatement();
-        LOGGER.fine(sql);
-        return stmt.executeUpdate(sql);
-
-
-    }
 }
