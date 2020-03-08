@@ -16,10 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -301,8 +298,44 @@ public class MainFrameController {
     }
 
     /**
+     * import new photos.
+     */
+    public void actionImportNew() {
+
+        try {
+
+            // open ligthroom catalog New
+            Context.getLrcat_new().disconnect();
+            Process process = Runtime.getRuntime().exec("cmd /c  " +"\"" + Context.getLrcatSource().get("New").toString() + "\"");
+
+            StringBuilder output = new StringBuilder();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+            }
+            Context.getLrcat_new().connect(Context.getLrcatSource().get("New").toString());
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                logecrireuserlogInfo("Success! = open : " + Context.getLrcatSource().get("New").toString());
+                logecrireuserlogInfo("Output : " + output);
+            } else {
+                logecrireuserlogInfo("Erreur = " + exitVal  + " | " + Context.getLrcatSource().get("New").toString());
+            }
+
+        } catch (Exception e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
+    }
+
+    /**
      * Move new to grp photos.
      */
+
     public void actionRangerNew() {
 
         try {

@@ -27,6 +27,7 @@
                 <Menu mnemonicParsing="false" text="Workflow">
 
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer to New" />
                         <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Choisir Repertoire" />
