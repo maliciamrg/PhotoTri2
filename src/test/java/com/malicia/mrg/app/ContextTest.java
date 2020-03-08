@@ -12,7 +12,7 @@ import static org.testng.Assert.assertTrue;
 public class ContextTest {
 
     @Test
-    public void testSetup() {
+    public void testSetup() throws SQLException {
         try {
             Context.setup();
         } catch (IOException e) {
@@ -22,6 +22,6 @@ public class ContextTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        assertNotNull(Context.getAbsolutePathFirst());
+        assertNotNull(Context.getLrcat_new().getabsolutePathFirst());
     }
 }

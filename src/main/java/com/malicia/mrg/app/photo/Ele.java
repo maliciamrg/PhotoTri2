@@ -12,16 +12,28 @@ public class Ele {
      * The Path from root.
      */
     private String pathFromRoot;
+    private String absolutePath;
 
     /**
      * Instantiates a new Ele.
      *
      * @param lcIdxFilename the lc idx filename
      * @param pathFromRoot  the path from root
+     * @param absolutePath  the absolute path
      */
-    public Ele( String lcIdxFilename, String pathFromRoot) {
+    public Ele(String lcIdxFilename, String pathFromRoot, String absolutePath) {
         this.lcIdxFilename = lcIdxFilename;
         this.pathFromRoot = pathFromRoot;
+        this.absolutePath = absolutePath;
+    }
+
+    /**
+     * Gets absolute path.
+     *
+     * @return the absolute path
+     */
+    public String getAbsolutePath() {
+        return absolutePath;
     }
 
     /**

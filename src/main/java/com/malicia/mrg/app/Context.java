@@ -2,13 +2,13 @@ package com.malicia.mrg.app;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
-import com.malicia.mrg.mvc.models.RequeteSql;
-import com.malicia.mrg.mvc.models.SQLiteJDBCDriverConnection;
+import com.malicia.mrg.mvc.models.dblrsql;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.LogManager;
@@ -40,21 +40,16 @@ public class Context implements Serializable {
      */
     public static final String LC_IDX_FILENAME = "lc_idx_filename";
     private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER;
+    private static Logger LOGGER;
     /**
      * The constant currentContext.
      */
     private static Context currentContext = new Context();
     private static MainFrameController controller;
     private static Stage primaryStage;
-    private static String absolutePathFirst;
     private static boolean dryrun = true;
     private static String repertoireNew = "";
     private static String tempsAdherence = "";
-    private static String CatalogLrcat____New = "";
-    private static String CatalogLrcat__Inbox = "";
-    private static String CatalogLrcat___Book = "";
-    private static String CatalogLrcat_Legacy = "";
     private static String urlgitwiki = "";
     private static String repBazar = "";
     private static String repRejet = "";
@@ -62,33 +57,66 @@ public class Context implements Serializable {
     private static String kidz = "";
     private static String noDate = "";
     private static List<String> kidsModelList;
-    private static SQLiteJDBCDriverConnection lrcat_new;
-    private static SQLiteJDBCDriverConnection lrcat_book;
-    private static SQLiteJDBCDriverConnection lrcat_legacy;
-    private static SQLiteJDBCDriverConnection lrcat_inbox;
-    private static String catalogLrcat___kidz;
+    private static HashMap<String, String> lrcatSource = new HashMap();
+    private static HashMap lrcat = new HashMap();
+    private static String repCatlogSauve;
 
-    /**
-     *
-     */
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    public static SQLiteJDBCDriverConnection getLrcat_new() {
-        return lrcat_new;
+    /**
+     * Gets lrcat.
+     *
+     * @return the lrcat
+     */
+    public static HashMap getLrcat() {
+        return lrcat;
     }
 
-    public static SQLiteJDBCDriverConnection getLrcat_book() {
-        return lrcat_book;
+    /**
+     * Gets lrcat new.
+     *
+     * @return the lrcat new
+     */
+    public static dblrsql getLrcat_new() {
+        return (dblrsql) lrcat.get("new");
     }
 
-    public static SQLiteJDBCDriverConnection getLrcat_legacy() {
-        return lrcat_legacy;
+    /**
+     * Gets lrcat book.
+     *
+     * @return the lrcat book
+     */
+    public static dblrsql getLrcat_book() {
+        return (dblrsql) lrcat.get("book");
     }
 
-    public static SQLiteJDBCDriverConnection getLrcat_inbox() {
-        return lrcat_inbox;
+    /**
+     * Gets lrcat legacy.
+     *
+     * @return the lrcat legacy
+     */
+    public static dblrsql getLrcat_legacy() {
+        return (dblrsql) lrcat.get("legacy");
+    }
+
+    /**
+     * Gets lrcat inbox.
+     *
+     * @return the lrcat inbox
+     */
+    public static dblrsql getLrcat_inbox() {
+        return (dblrsql) lrcat.get("inbox");
+    }
+
+    /**
+     * Gets lrcat kidz.
+     *
+     * @return the lrcat kidz
+     */
+    public static dblrsql getLrcat_kidz() {
+        return (dblrsql) lrcat.get("kidz");
     }
 
     /**
@@ -236,24 +264,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Gets absolute path first.
-     *
-     * @return the absolute path first
-     */
-    public static String getAbsolutePathFirst() {
-        return absolutePathFirst;
-    }
-
-    /**
-     * Sets absolute path first.
-     *
-     * @param absolutePathFirst the absolute path first
-     */
-    public static void setAbsolutePathFirst(String absolutePathFirst) {
-        Context.absolutePathFirst = absolutePathFirst;
-    }
-
-    /**
      * Gets bazar.
      *
      * @return the bazar
@@ -372,11 +382,11 @@ public class Context implements Serializable {
             Context.initPropertiesParameters();
         }
 
-        Context.lrcat_new = new SQLiteJDBCDriverConnection(Context.getCatalogLrcat____New());
-        Context.lrcat_book = new SQLiteJDBCDriverConnection(Context.getCatalogLrcat___Book());
-        Context.lrcat_inbox = new SQLiteJDBCDriverConnection(Context.getCatalogLrcat__Inbox());
-        Context.lrcat_legacy = new SQLiteJDBCDriverConnection(Context.getCatalogLrcat_Legacy());
-        Context.setAbsolutePathFirst(RequeteSql.getabsolutePathFirst());
+        lrcat.put("new", new dblrsql(lrcatSource.get("New")));
+        lrcat.put("book", new dblrsql(lrcatSource.get("Book")));
+        lrcat.put("inbox", new dblrsql(lrcatSource.get("Inbox")));
+        lrcat.put("legacy", new dblrsql(lrcatSource.get("Legacy")));
+        lrcat.put("kidz", new dblrsql(lrcatSource.get("Kidz")));
 
     }
 
@@ -402,11 +412,12 @@ public class Context implements Serializable {
 
         setUrlgitwiki(properties.getProperty("urlgitwiki"));
 
-        setCatalogLrcat____New(properties.getProperty("CatalogLrcat____New"));
-        setCatalogLrcat__Inbox(properties.getProperty("CatalogLrcat__Inbox"));
-        setCatalogLrcat___Book(properties.getProperty("CatalogLrcat___Book"));
-        setCatalogLrcat_Legacy(properties.getProperty("CatalogLrcat_Legacy"));
-        setCatalogLrcat___kidz(properties.getProperty("CatalogLrcat___Kidz"));
+
+        lrcatSource.put("New", properties.getProperty("CatalogLrcat____New"));
+        lrcatSource.put("Inbox", properties.getProperty("CatalogLrcat__Inbox"));
+        lrcatSource.put("Book", properties.getProperty("CatalogLrcat___Book"));
+        lrcatSource.put("Legacy", properties.getProperty("CatalogLrcat_Legacy"));
+        lrcatSource.put("Kidz", properties.getProperty("CatalogLrcat___Kidz"));
 
         setTempsAdherence(properties.getProperty("TempsAdherence"));
 
@@ -417,27 +428,11 @@ public class Context implements Serializable {
         setRepRejet(properties.getProperty("repRejet"));
         setNoDate(properties.getProperty("repNoDate"));
         setKidz(properties.getProperty("repKidz"));
+        setRepCatlogSauve(properties.getProperty("RepCatlogSauve"));
 
         setThresholdBazar(Integer.parseInt(properties.getProperty("thresholdBazar")));
     }
 
-    /**
-     * Gets catalog lrcat.
-     *
-     * @return the catalog lrcat
-     */
-    public static String getCatalogLrcat____New() {
-        return CatalogLrcat____New;
-    }
-
-    /**
-     * Sets catalog lrcat.
-     *
-     * @param catalogLrcat____New the catalog lrcat
-     */
-    public static void setCatalogLrcat____New(String catalogLrcat____New) {
-        Context.CatalogLrcat____New = catalogLrcat____New;
-    }
 
     /**
      * Save properties parameters.
@@ -474,35 +469,40 @@ public class Context implements Serializable {
         return (Context) oi.readObject();
     }
 
-    public static String getCatalogLrcat__Inbox() {
-        return CatalogLrcat__Inbox;
+
+    /**
+     * Gets lrcat source.
+     *
+     * @return the lrcat source
+     */
+    public static HashMap getLrcatSource() {
+        return lrcatSource;
     }
 
-    public static void setCatalogLrcat__Inbox(String catalogLrcat__Inbox) {
-        CatalogLrcat__Inbox = catalogLrcat__Inbox;
+    /**
+     * Sets lrcat source.
+     *
+     * @param lrcatSource the lrcat source
+     */
+    public static void setLrcatSource(HashMap lrcatSource) {
+        Context.lrcatSource = lrcatSource;
     }
 
-    public static String getCatalogLrcat___Book() {
-        return CatalogLrcat___Book;
+    /**
+     * Gets rep catlog sauve.
+     *
+     * @return the rep catlog sauve
+     */
+    public static String getRepCatlogSauve() {
+        return repCatlogSauve;
     }
 
-    public static void setCatalogLrcat___Book(String catalogLrcat___Book) {
-        CatalogLrcat___Book = catalogLrcat___Book;
-    }
-
-    public static String getCatalogLrcat_Legacy() {
-        return CatalogLrcat_Legacy;
-    }
-
-    public static void setCatalogLrcat_Legacy(String catalogLrcat_Legacy) {
-        CatalogLrcat_Legacy = catalogLrcat_Legacy;
-    }
-
-    public static String getCatalogLrcat___kidz() {
-        return catalogLrcat___kidz;
-    }
-
-    public static void setCatalogLrcat___kidz(String catalogLrcat___kidz) {
-        Context.catalogLrcat___kidz = catalogLrcat___kidz;
+    /**
+     * Sets rep catlog sauve.
+     *
+     * @param repCatlogSauve the rep catlog sauve
+     */
+    public static void setRepCatlogSauve(String repCatlogSauve) {
+        Context.repCatlogSauve = repCatlogSauve;
     }
 }
