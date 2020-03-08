@@ -68,7 +68,7 @@ public class ActionfichierRepertoire {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public static void moveFile(String source, String destination) throws IOException, SQLException {
+    public static void moveFile(String source, String destination) throws IOException {
         File fsource = new File(source);
         File fdest = new File(destination);
         if (fsource.compareTo(fdest) != 0) {

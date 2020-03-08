@@ -116,7 +116,7 @@ public class Context implements Serializable {
      * @return the lrcat kidz
      */
     public static dblrsql getLrcat_kidz() {
-        return (dblrsql) lrcat.get("kidz");
+        return (dblrsql) lrcat.get("new");
     }
 
     /**

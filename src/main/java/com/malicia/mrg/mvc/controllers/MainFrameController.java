@@ -343,7 +343,7 @@ public class MainFrameController {
             moveAllNewEleToRacineNew();
 
             //Regroupement
-            ResultSet rsele = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence());
+            ResultSet rsele = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(),Context.getLrcat_new().retrieverootfolderfromname(Context.getRepertoireNew()));
             List<Ele> listEleBazar = new ArrayList();
             List<Ele> listEletmp = new ArrayList();
             List<Ele> listElekidz = new ArrayList();
@@ -396,7 +396,7 @@ public class MainFrameController {
 
     private void moveAllNewEleToRacineNew() throws SQLException, IOException {
         //mise a plat du repertoire @new
-        ResultSet rseleAplat = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence());
+        ResultSet rseleAplat = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(), Context.getLrcat_new().retrieverootfolderfromname(Context.getRepertoireNew()));
         while (rseleAplat.next()) {
             if (rseleAplat.getString(Context.PATH_FROM_ROOT).compareTo("") != 0) {
                 String absolutePath = Context.getLrcat_new().getabsolutePath(rseleAplat.getString("rootFolder"));
@@ -411,7 +411,7 @@ public class MainFrameController {
     }
 
     private void regrouper(dblrsql dblrdest, List<Ele> listEle, String repertoiredest) throws IOException, SQLException {
-        String destdirectoryName = normalizePath(dblrdest.getabsolutePathFirst() + "$" + repertoiredest + "$");
+        String destdirectoryName = normalizePath(dblrdest.getabsolutePathfromname(Context.getRepertoireNew()) + "$" + repertoiredest + "$");
 
         dblrdest.sqlMkdirRepertory(destdirectoryName);
 
@@ -571,7 +571,7 @@ public class MainFrameController {
      */
     public void actionDeleteEmptyDirectoryRepertoireNew() throws IOException, SQLException {
 
-        File directory = new File(Context.getLrcat_new().getabsolutePathFirst() + File.separator);
+        File directory = new File(Context.getLrcat_new().getabsolutePathfromname(Context.getRepertoireNew()) + File.separator );
         ndDelTotal = 0;
         boucleSupressionRepertoire(directory);
         logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));

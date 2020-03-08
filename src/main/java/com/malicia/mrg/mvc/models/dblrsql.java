@@ -95,10 +95,11 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
      * Sqlget listelementnewaclasser result set.
      *
      * @param tempsAdherence the temps adherence
+     * @param idrootFolder
      * @return the result set
      * @throws SQLException the sql exception
      */
-    public ResultSet sqlgetListelementnewaclasser(String tempsAdherence) throws SQLException {
+    public ResultSet sqlgetListelementnewaclasser(String tempsAdherence, String idrootFolder) throws SQLException {
         return select(
                 "select a.id_local as file_id_local, " +
                         "b.id_local as folder_id_local , " +
@@ -119,7 +120,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
                         "ON e.id_local = ahem.image " +
                         "LEFT JOIN AgInternedExifCameraModel aiecm " +
                         "ON ahem.cameraModelRef = aiecm.id_local " +
-                        //                    "Where b.pathFromRoot like \"%" + Context.getRepertoireNew() + "%\" " +
+                        "Where b.rootFolder =  " + idrootFolder + " " +
                         "order by captureTime asc;");
 
 
@@ -137,27 +138,6 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
                 "select absolutePath " +
                 "from AgLibraryRootFolder " +
                 "where id_local = " + rootFolder + " " +
-                ";");
-
-        while (rs.next()) {
-            return rs.getString("absolutePath");
-        }
-
-        return "";
-    }
-
-    /**
-     * Gets path first.
-     *
-     * @param rootFolder
-     * @return the path first
-     * @throws SQLException the sql exception
-     */
-    public String getabsolutePathFirst() throws SQLException {
-        ResultSet rs = select("" +
-                "select absolutePath " +
-                "from AgLibraryRootFolder " +
-                "limit 1 " +
                 ";");
 
         while (rs.next()) {
@@ -186,22 +166,28 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
      * @throws SQLException the sql exception
      * @throws IOException  the io exception
      */
-    public int sqlmovefile(String source, String destination) throws SQLException, IOException {
+    public void sqlmovefile(String source, String destination) throws IOException, SQLException {
         ActionfichierRepertoire.moveFile(source, destination);
+
         File fdest = new File(destination);
-        String folderIdLocal = sqlGetIdlocalfolderfrompath(fdest.getParent()).getString(1);
-        String fileIdLocal = sqlGetIdlocalfilefrompath(source).getString(1);
-        String sql;
-        sql = "" +
-                "update AgLibraryFile " +
-                "set folder =  " + folderIdLocal + " ," +
-                " baseName =  '" + FilenameUtils.getBaseName(destination) + "' , " +
-                " idx_filename =  '" + fdest.getName() + "' , " +
-                " lc_idx_filename =  '" + fdest.getName().toLowerCase() + "'  " +
-                "where id_local =  " + fileIdLocal + " " +
-                ";";
-        LOGGER.info(sql);
-        return executeUpdate(sql);
+        String folderIdLocal = null;
+        folderIdLocal = sqlGetIdlocalfolderfrompath(fdest.getParent()).getString(1);
+        ResultSet rsid = sqlGetIdlocalfilefrompath(source);
+        if (!rsid.isClosed()) {
+            String fileIdLocal = rsid.getString(1);
+            String sql;
+            sql = "" +
+                    "update AgLibraryFile " +
+                    "set folder =  " + folderIdLocal + " ," +
+                    " baseName =  '" + FilenameUtils.getBaseName(destination) + "' , " +
+                    " idx_filename =  '" + fdest.getName() + "' , " +
+                    " lc_idx_filename =  '" + fdest.getName().toLowerCase() + "'  " +
+                    "where id_local =  " + fileIdLocal + " " +
+                    ";";
+            LOGGER.info(sql);
+            executeUpdate(sql);
+        }
+
     }
 
     /**
@@ -284,6 +270,35 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
         return "";
     }
 
+    public String getabsolutePathfromname(String name)throws SQLException {
+        ResultSet rs = select("" +
+                "select absolutePath " +
+                "from AgLibraryRootFolder " +
+                "where \"" + name + "\" = name   ; " +
+                ";");
+
+        while (rs.next()) {
+            return rs.getString("absolutePath");
+        }
+
+        return "";
+    }
+
+    public String retrieverootfolderfromname(String name) throws SQLException {
+
+        ResultSet result = select("" +
+                "select id_local " +
+                "from AgLibraryRootFolder " +
+                "where \"" + name + "\" = name   ; " +
+                "");
+
+
+        while (result.next()) {
+            return result.getString("id_local");
+        }
+
+        return "";
+    }
     /**
      * Sql get idlocalfolderfrompath result set.
      *
@@ -416,7 +431,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
         ResultSet ret = this.sqlGetIdlocalfolderfrompath(directoryName);
         if (ret.isClosed()) {
 
-            String pathFromRoot = normalizePath(directoryName.replace(this.getabsolutePathFirst(), "") + File.separator);
+            String pathFromRoot = normalizePath(directoryName.replace(this.getabsolutePathfromname(Context.getRepertoireNew()), "") + File.separator);
             long idlocal = sqlGetPrevIdlocalforFolder();
             if (idlocal == 0) {
                 throw new IllegalStateException("no more idlocal empty for folder");
@@ -447,9 +462,10 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
         ResultSet rs = select(sql);
         boolean first = true;
         long idLocalCalcul = 0;
+        long id_local = 0;
         while (rs.next()) {
             // Recuperer les info de l'elements
-            long id_local = rs.getLong("id_local");
+            id_local = rs.getLong("id_local");
             if (first) {
                 idLocalCalcul = id_local;
                 first = false;
@@ -459,6 +475,10 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
                     return idLocalCalcul;
                 }
             }
+        }
+        // 0 ou 1 repertoire dans AgLibraryFolder
+        if (idLocalCalcul == id_local) {
+            idLocalCalcul = (id_local / 2) + 1;
         }
         return idLocalCalcul;
     }
