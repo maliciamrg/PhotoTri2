@@ -6,7 +6,7 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.Ele;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
-import com.malicia.mrg.mvc.models.dblrsql;
+import com.malicia.mrg.mvc.models.CatLrcat;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -111,7 +111,7 @@ public class MainFrameController {
 
 
             //Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, Context.getRepertoireNew() + "/"));
+            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, Context.getRepNew() + "/"));
 
 
         }
@@ -244,7 +244,7 @@ public class MainFrameController {
                         int nbdel = 0;
                         int nbdeltotal = 0;
                         do {
-                            nbdel = ((dblrsql) v).sqlDeleteRepertory();
+                            nbdel = ((CatLrcat) v).sqlDeleteRepertory();
                             nbdeltotal += nbdel;
                         }
                         while (nbdel > 0);
@@ -271,7 +271,7 @@ public class MainFrameController {
         Context.getLrcat().forEach((k, v) -> {
 
                     try {
-                        dblrsql dblr = (dblrsql) v;
+                        CatLrcat dblr = (CatLrcat) v;
                         ResultSet rsele = dblr.sqlgetListelementrejetaranger();
 
                         while (rsele.next()) {
@@ -343,7 +343,7 @@ public class MainFrameController {
             moveAllNewEleToRacineNew();
 
             //Regroupement
-            ResultSet rsele = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(),Context.getLrcat_new().retrieverootfolderfromname(Context.getRepertoireNew()));
+            ResultSet rsele = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(),Context.getLrcat_new().retrieverootfolderfromname(Context.getRepNew()));
             List<Ele> listEleBazar = new ArrayList();
             List<Ele> listEletmp = new ArrayList();
             List<Ele> listElekidz = new ArrayList();
@@ -396,7 +396,7 @@ public class MainFrameController {
 
     private void moveAllNewEleToRacineNew() throws SQLException, IOException {
         //mise a plat du repertoire @new
-        ResultSet rseleAplat = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(), Context.getLrcat_new().retrieverootfolderfromname(Context.getRepertoireNew()));
+        ResultSet rseleAplat = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(), Context.getLrcat_new().retrieverootfolderfromname(Context.getRepNew()));
         while (rseleAplat.next()) {
             if (rseleAplat.getString(Context.PATH_FROM_ROOT).compareTo("") != 0) {
                 String absolutePath = Context.getLrcat_new().getabsolutePath(rseleAplat.getString("rootFolder"));
@@ -410,8 +410,8 @@ public class MainFrameController {
         }
     }
 
-    private void regrouper(dblrsql dblrdest, List<Ele> listEle, String repertoiredest) throws IOException, SQLException {
-        String destdirectoryName = normalizePath(dblrdest.getabsolutePathfromname(Context.getRepertoireNew()) + "$" + repertoiredest + "$");
+    private void regrouper(CatLrcat dblrdest, List<Ele> listEle, String repertoiredest) throws IOException, SQLException {
+        String destdirectoryName = normalizePath(dblrdest.getabsolutePathfromname(Context.getRepNew()) + "$" + repertoiredest + "$");
 
         dblrdest.sqlMkdirRepertory(destdirectoryName);
 
@@ -424,7 +424,7 @@ public class MainFrameController {
         }
     }
 
-    private void regrouper(dblrsql dblrdest, List<Ele> listEle) throws IOException, SQLException {
+    private void regrouper(CatLrcat dblrdest, List<Ele> listEle) throws IOException, SQLException {
         String uniqueID = UUID.randomUUID().toString();
         regrouper(dblrdest, listEle, uniqueID);
     }
@@ -571,7 +571,7 @@ public class MainFrameController {
      */
     public void actionDeleteEmptyDirectoryRepertoireNew() throws IOException, SQLException {
 
-        File directory = new File(Context.getLrcat_new().getabsolutePathfromname(Context.getRepertoireNew()) + File.separator );
+        File directory = new File(Context.getLrcat_new().getabsolutePathfromname(Context.getRepNew()) + File.separator );
         ndDelTotal = 0;
         boucleSupressionRepertoire(directory);
         logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));

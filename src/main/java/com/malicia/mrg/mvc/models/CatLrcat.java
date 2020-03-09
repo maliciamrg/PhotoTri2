@@ -16,11 +16,11 @@ import java.util.logging.Logger;
 /**
  * The type Requete sql.
  */
-public class dblrsql extends SQLiteJDBCDriverConnection {
+public class CatLrcat extends SQLiteJDBCDriverConnection {
 
-    private static final Logger LOGGER;
+    private final Logger LOGGER;
 
-    static {
+    {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
@@ -29,7 +29,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
      *
      * @param catalogLrcat the catalog lrcat
      */
-    public dblrsql(String catalogLrcat) {
+    public CatLrcat(String catalogLrcat) {
         super(catalogLrcat);
     }
 
@@ -39,7 +39,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
      * @param path the path
      * @return the string
      */
-    private static String normalizePath(String path) {
+    private String normalizePath(String path) {
         return path.replaceAll("\\\\", "/");
     }
 
@@ -86,7 +86,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
-                        "Where b.pathFromRoot not like \"" + Context.getRepertoireNew() + "%" + "\"" +
+                        "Where b.pathFromRoot not like \"" + Context.getRepNew() + "%" + "\"" +
                         "  and b.pathFromRoot like \"%" + Context.getRepRejet() + "%\" " +
                         " ;");
     }
@@ -270,7 +270,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
         return "";
     }
 
-    public String getabsolutePathfromname(String name)throws SQLException {
+    public String getabsolutePathfromname(String name) throws SQLException {
         ResultSet rs = select("" +
                 "select absolutePath " +
                 "from AgLibraryRootFolder " +
@@ -299,6 +299,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
 
         return "";
     }
+
     /**
      * Sql get idlocalfolderfrompath result set.
      *
@@ -431,7 +432,7 @@ public class dblrsql extends SQLiteJDBCDriverConnection {
         ResultSet ret = this.sqlGetIdlocalfolderfrompath(directoryName);
         if (ret.isClosed()) {
 
-            String pathFromRoot = normalizePath(directoryName.replace(this.getabsolutePathfromname(Context.getRepertoireNew()), "") + File.separator);
+            String pathFromRoot = normalizePath(directoryName.replace(this.getabsolutePathfromname(Context.getRepNew()), "") + File.separator);
             long idlocal = sqlGetPrevIdlocalforFolder();
             if (idlocal == 0) {
                 throw new IllegalStateException("no more idlocal empty for folder");
