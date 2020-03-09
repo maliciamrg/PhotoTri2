@@ -35,7 +35,6 @@ public class Main extends Application {
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
         Context.setController(controller);
-        controller.first();
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.setTitle("Photo Tri2");
         primaryStage.show();

@@ -1,6 +1,6 @@
 package com.malicia.mrg.app.photo;
 
-import com.malicia.mrg.app.ActionfichierRepertoire;
+import com.malicia.mrg.mvc.models.SystemFiles;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -148,7 +148,7 @@ public class GrpPhoto {
             if (!testInterval(mint, maxt)) return false;
         }
 
-        forceadd(cameraModel, captureTime, mint, maxt, ActionfichierRepertoire.normalizePath(elesrc));
+        forceadd(cameraModel, captureTime, mint, maxt, SystemFiles.normalizePath(elesrc));
 
         return true;
     }

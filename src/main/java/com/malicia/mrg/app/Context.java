@@ -1,7 +1,8 @@
 package com.malicia.mrg.app;
 
 import com.malicia.mrg.mvc.controllers.MainFrameController;
-import com.malicia.mrg.mvc.models.CatLrcat;
+import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
+import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -36,6 +37,15 @@ public class Context implements Serializable {
      */
     public static final String LC_IDX_FILENAME = "lc_idx_filename";
     private static final long serialVersionUID = 1L;
+    public static ResourceBundle appParam;
+    public static CatalogLrcat lrcat;
+    public static AgLibraryRootFolder repLegacy;
+    public static AgLibraryRootFolder repbookEvents;
+    public static AgLibraryRootFolder repbookHolidays;
+    public static AgLibraryRootFolder repbookShooting;
+    public static AgLibraryRootFolder repEncours;
+    public static AgLibraryRootFolder repKidz;
+    public static AgLibraryRootFolder repNew;
     private static Logger LOGGER;
     /**
      * The constant currentContext.
@@ -44,9 +54,6 @@ public class Context implements Serializable {
     private static MainFrameController controller;
     private static Stage primaryStage;
     private static HashMap<String, String> lrcatSource = new HashMap();
-    private static HashMap lrcat = new HashMap();
-
-    public static ResourceBundle appParam;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -114,6 +121,7 @@ public class Context implements Serializable {
 
         Context.initPropertiesParameters();
 
+        lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 
     }
 
@@ -124,7 +132,7 @@ public class Context implements Serializable {
         LOGGER.info("initPropertiesParameters");
 
         appParam = ResourceBundle.getBundle("config");
-        Enumeration <String> keys = appParam.getKeys();
+        Enumeration<String> keys = appParam.getKeys();
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
             String value = appParam.getString(key);
@@ -188,4 +196,15 @@ public class Context implements Serializable {
         Context.lrcatSource = lrcatSource;
     }
 
+    public static List<String> getKidsModelList() {
+        return Arrays.asList(appParam.getString("listeModelKidz").split(","));
+    }
+
+    public static int getThresholdBazar() {
+        return Integer.parseInt(appParam.getString("thresholdBazar"));
+    }
+
+    public static String getUrlgitwiki() {
+        return Context.appParam.getString("urlgitwiki");
+    }
 }

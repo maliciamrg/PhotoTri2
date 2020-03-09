@@ -1,12 +1,11 @@
 package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
-import com.malicia.mrg.app.ActionfichierRepertoire;
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.photo.Ele;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
-import com.malicia.mrg.mvc.models.CatLrcat;
+import com.malicia.mrg.mvc.models.SystemFiles;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,13 +22,13 @@ import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static com.malicia.mrg.app.ActionfichierRepertoire.normalizePath;
+import static com.malicia.mrg.app.Context.lrcat;
 
 
 /**
@@ -43,44 +42,16 @@ public class MainFrameController {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
-    /**
-     * The Absolute path.
-     */
-    Map<String, String> absolutePath = new HashMap<>();
+
     @FXML
     private TextArea userlogInfo;
-    private int ndDelTotal;
 
     /**
      * Instantiates a new Main frame controller.
      */
     public MainFrameController() {
         LOGGER.info("mainFrameController");
-    }
-
-    /**
-     * Boucle supression repertoire physique boolean.
-     */
-    private int boucleSupressionRepertoire(File dir) throws IOException, SQLException {
-        boolean returnVal = false;
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            int success = 0;
-            for (int i = 0; i < children.length; i++) {
-                success += boucleSupressionRepertoire(new File(dir, children[i]));
-            }
-            ndDelTotal += success;
-            if (success == children.length) {
-                // The directory is now empty directory free so delete it
-                returnVal = ActionfichierRepertoire.deleteDir(dir);
-                if (returnVal) {
-                    return 1;
-                }
-
-            }
-
-        }
-        return 0;
+        initialize();
     }
 
     /**
@@ -94,7 +65,7 @@ public class MainFrameController {
 
 //            constitution des groupes
 
-        ResultSet rsele = Context.getLrcat_new().sqleleRepBazar(Context.getTempsAdherence(), repBazar);
+        ResultSet rsele =  lrcat.rep.get("repNew").sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
 
         java.util.List<ElePhoto> listElePhoto = new ArrayList();
 
@@ -108,10 +79,11 @@ public class MainFrameController {
             long maxt = rsele.getLong("maxt");
             String src = rsele.getString("src");
             String absPath = rsele.getString(Context.PATH_FROM_ROOT);
+            String file_id_local = rsele.getString("file_id_local");
 
 
             //Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, Context.getRepNew() + "/"));
+            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath,  lrcat.rep.get("repNew").name + "/",file_id_local));
 
 
         }
@@ -132,7 +104,7 @@ public class MainFrameController {
 
 //            constitution des groupes
 //        grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn() + grpphotoenc.getNomRepetrtoire()
-        ResultSet rsgrp = Context.getLrcat_new().sqlGroupByPlageAdheranceHorsRepBazar(Context.getTempsAdherence(), repBazar, repKidz);
+        ResultSet rsgrp =lrcat.rep.get("repNew").sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
 
         GrpPhoto grpPhotoEnc = new GrpPhoto();
 
@@ -186,18 +158,6 @@ public class MainFrameController {
 
 
     /**
-     * Select le repertoire rootdu fichier ligthroom.
-     * <p>
-     * selecttioner le repertoire root sur lequelle les actions seront baser
-     * modifier et sauvegarde dans le properties
-     *
-     * @param rootName the root name
-     */
-    private void selectLeRepertoireRootduFichierLigthroom(String rootName) throws IOException {
-        Context.savePropertiesParameters(Context.getCurrentContext());
-    }
-
-    /**
      * Action makeadulpicatelrcatwithdate.
      */
     public void actionMakeadulpicatelrcatwithdate() {
@@ -205,24 +165,21 @@ public class MainFrameController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String formattedDate = sdf.format(date);
 
-        Context.getLrcatSource().forEach((k, v) -> {
-                    String ori = v.toString();
-                    File fori = new File(ori);
-                    String dupdest = Context.getRepCatlogSauve() + "\\save_lrcat_" + formattedDate + "\\" + fori.getName();
-                    File dest = new File(dupdest);
-                    try {
-                        ActionfichierRepertoire.mkdir(new File(dupdest).getParent());
+        java.io.File fori = new java.io.File(lrcat.cheminfichierLrcat);
+        String dupdest = Context.appParam.getString("RepCatlogSauve") + "\\save_lrcat_" + formattedDate + "\\" + fori.getName();
+        java.io.File dest = new java.io.File(dupdest);
+        try {
+            SystemFiles.mkdir(new java.io.File(dupdest).getParent());
 
-                        if (fori.exists()) {
-                            Files.copy(fori.toPath(), dest.toPath());
-                            logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
-                        }
-                    } catch (IOException e) {
-                        logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
-                        excptlog(e);
-                    }
-                }
-        );
+            if (fori.exists()) {
+                Files.copy(fori.toPath(), dest.toPath());
+                logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
+            }
+        } catch (IOException e) {
+            logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
+            excptlog(e);
+        }
+
     }
 
     private void excptlog(Exception theException) {
@@ -239,24 +196,14 @@ public class MainFrameController {
      * Boucle delete repertoire logique.
      */
     public void actionDeleteRepertoireLogique() {
-        Context.getLrcat().forEach((k, v) -> {
-                    try {
-                        int nbdel = 0;
-                        int nbdeltotal = 0;
-                        do {
-                            nbdel = ((CatLrcat) v).sqlDeleteRepertory();
-                            nbdeltotal += nbdel;
-                        }
-                        while (nbdel > 0);
+        try {
+            int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
+            logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+        } catch (SQLException e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
 
-                        logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
-                    } catch (SQLException e) {
-                        logecrireuserlogInfo(e.toString());
-                        excptlog(e);
-                    }
-                }
-
-        );
     }
 
     private void logecrireuserlogInfo(String msg) {
@@ -268,33 +215,16 @@ public class MainFrameController {
      * Move new to grp photos.
      */
     public void actionRangerRejet() {
-        Context.getLrcat().forEach((k, v) -> {
 
-                    try {
-                        CatLrcat dblr = (CatLrcat) v;
-                        ResultSet rsele = dblr.sqlgetListelementrejetaranger();
+        try {
 
-                        while (rsele.next()) {
+            lrcat.rangerRejet();
 
-                            // Recuperer les info de l'elements
-                            String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
-                            String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
-                            String rootFolder = rsele.getString("rootFolder");
-                            String absolutePath = dblr.getabsolutePath(rsele.getString("rootFolder"));
+        } catch (SQLException | IOException e) {
+            logecrireuserlogInfo(e.toString());
+            excptlog(e);
+        }
 
-                            String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
-                            String dest = source + ".rejet";
-
-
-                            dblr.sqlmovefile(source, dest);
-
-                        }
-                    } catch (SQLException | IOException e) {
-                        logecrireuserlogInfo(e.toString());
-                        excptlog(e);
-                    }
-                }
-        );
     }
 
     /**
@@ -305,8 +235,8 @@ public class MainFrameController {
         try {
 
             // open ligthroom catalog New
-            Context.getLrcat_new().disconnect();
-            Process process = Runtime.getRuntime().exec("cmd /c  " +"\"" + Context.getLrcatSource().get("New").toString() + "\"");
+            lrcat.disconnect();
+            Process process = Runtime.getRuntime().exec("cmd /c  " + "\"" + Context.getLrcatSource().get("New").toString() + "\"");
 
             StringBuilder output = new StringBuilder();
 
@@ -317,13 +247,14 @@ public class MainFrameController {
             while ((line = reader.readLine()) != null) {
                 output.append(line + "\n");
             }
-            Context.getLrcat_new().connect(Context.getLrcatSource().get("New").toString());
+            lrcat.reconnect();
+
             int exitVal = process.waitFor();
             if (exitVal == 0) {
                 logecrireuserlogInfo("Success! = open : " + Context.getLrcatSource().get("New").toString());
                 logecrireuserlogInfo("Output : " + output);
             } else {
-                logecrireuserlogInfo("Erreur = " + exitVal  + " | " + Context.getLrcatSource().get("New").toString());
+                logecrireuserlogInfo("Erreur = " + exitVal + " | " + Context.getLrcatSource().get("New").toString());
             }
 
         } catch (Exception e) {
@@ -340,53 +271,13 @@ public class MainFrameController {
 
         try {
 
-            moveAllNewEleToRacineNew();
+            lrcat.rep.get("repNew").FlatRootFolder();
 
-            //Regroupement
-            ResultSet rsele = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(),Context.getLrcat_new().retrieverootfolderfromname(Context.getRepNew()));
-            List<Ele> listEleBazar = new ArrayList();
-            List<Ele> listEletmp = new ArrayList();
-            List<Ele> listElekidz = new ArrayList();
-            List<String> listkidsModel = Context.getKidsModelList();
-            long maxprev = 0;
-            while (rsele.next()) {
+            lrcat.rep.get("repNew").RegoupFileByAdherence();
 
-                // Recuperer les info de l'elements
-                String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
-                String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
-                String absolutePath = Context.getLrcat_new().getabsolutePath(rsele.getString("rootFolder"));
-                String cameraModel = rsele.getString("CameraModel");
-                long mint = rsele.getLong("mint");
-                long maxt = rsele.getLong("maxt");
+            int ndDelTotal = lrcat.rep.get("repNew").DeleteEmptyDirectory();
+            logecrireuserlogInfo("delete all from " + lrcat.rep.get("repNew").name + " : " + String.format("%05d", ndDelTotal));
 
-                if (listkidsModel.contains(cameraModel)) {
-                    listElekidz.add(new Ele(lcIdxFilename, pathFromRoot, absolutePath));
-                } else {
-                    if (mint > maxprev) {
-
-                        if (listEletmp.size() > Context.getThresholdBazar()) {
-
-                            regrouper(Context.getLrcat_new(), listEletmp);
-
-                        } else {
-                            listEleBazar.addAll(listEletmp);
-                        }
-
-                        listEletmp = new ArrayList();
-
-                    }
-                    maxprev = maxt;
-                    listEletmp.add(new Ele(lcIdxFilename, pathFromRoot, absolutePath));
-                }
-
-            }
-
-            regrouper(Context.getLrcat_new(), listEletmp);
-
-            regrouper(Context.getLrcat_kidz(), listElekidz, Context.getKidz());
-            regrouper(Context.getLrcat_new(), listEleBazar, Context.getRepBazar());
-
-            actionDeleteEmptyDirectoryRepertoireNew();
 
         } catch (SQLException | IOException e) {
             logecrireuserlogInfo(e.toString());
@@ -394,40 +285,6 @@ public class MainFrameController {
         }
     }
 
-    private void moveAllNewEleToRacineNew() throws SQLException, IOException {
-        //mise a plat du repertoire @new
-        ResultSet rseleAplat = Context.getLrcat_new().sqlgetListelementnewaclasser(Context.getTempsAdherence(), Context.getLrcat_new().retrieverootfolderfromname(Context.getRepNew()));
-        while (rseleAplat.next()) {
-            if (rseleAplat.getString(Context.PATH_FROM_ROOT).compareTo("") != 0) {
-                String absolutePath = Context.getLrcat_new().getabsolutePath(rseleAplat.getString("rootFolder"));
-
-                String source = normalizePath(absolutePath + rseleAplat.getString(Context.PATH_FROM_ROOT) + rseleAplat.getString(Context.LC_IDX_FILENAME));
-                String uniqueID = UUID.randomUUID().toString();
-                String rename = ("$" + uniqueID + "$" + supprimerbalisedollar(rseleAplat.getString(Context.LC_IDX_FILENAME))).toLowerCase();
-                String destination = normalizePath(absolutePath + File.separator + rename);
-                Context.getLrcat_new().sqlmovefile(source, destination);
-            }
-        }
-    }
-
-    private void regrouper(CatLrcat dblrdest, List<Ele> listEle, String repertoiredest) throws IOException, SQLException {
-        String destdirectoryName = normalizePath(dblrdest.getabsolutePathfromname(Context.getRepNew()) + "$" + repertoiredest + "$");
-
-        dblrdest.sqlMkdirRepertory(destdirectoryName);
-
-        for (Ele ele : listEle) {
-            String source = normalizePath(ele.getAbsolutePath() + ele.getPathFromRoot() + ele.getLcIdxFilename());
-            String uniqueID = UUID.randomUUID().toString();
-            String rename = ("$" + uniqueID + "$" + supprimerbalisedollar(ele.getLcIdxFilename())).toLowerCase();
-            String destination = normalizePath(destdirectoryName + File.separator + rename);
-            Context.getLrcat_new().sqlmovefile(source, destination);
-        }
-    }
-
-    private void regrouper(CatLrcat dblrdest, List<Ele> listEle) throws IOException, SQLException {
-        String uniqueID = UUID.randomUUID().toString();
-        regrouper(dblrdest, listEle, uniqueID);
-    }
 
     /**
      * Move chaque photo du bazar dans un groupe.
@@ -436,10 +293,10 @@ public class MainFrameController {
     public void actionRangerlebazar() {
         try {
 
-            LOGGER.info(() -> "actionRangerlebazar : dryRun = " + Context.getDryRun());
+            LOGGER.info(() -> "actionRangerlebazar " );
 
-            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.getRepBazar(), Context.getKidz());
-            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.getRepBazar());
+            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.appParam.getString("ssrepBazar"), Context.appParam.getString("repKidz"));
+            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.appParam.getString("ssrepBazar"));
             for (int iele = 0; iele < elementsPhoto.size(); iele++) {
                 ElePhoto elePhotocurrent = elementsPhoto.get(iele);
                 elePhotocurrent.getMint();
@@ -449,14 +306,12 @@ public class MainFrameController {
                         elePhotocurrent.addgroupDePhotoCandidat(groupDePhoto.get(igrp));
                     }
                 }
-                if (Context.getDryRun()) {
-                    LOGGER.log(Level.INFO, elementsPhoto.get(iele).toString());
-                } else {
+
                     Map<String, Object> ret = showPopupWindow(elePhotocurrent);
                     if (ret != null && ret.get(PopUpController.RETOUR_CODE).toString().compareTo(PopUpController.VALSTOPRUN) == 0) {
                         throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.VALSTOPRUN);
                     }
-                }
+
             }
         } catch (Exception e) {
             logecrireuserlogInfo(e.toString());
@@ -530,10 +385,10 @@ public class MainFrameController {
                 case PopUpController.VALSTOPRUN:
                     return ret;
                 case PopUpController.VALSELECT:
-                    File source = new File(elePhotocurrent.getSrc());
+                    java.io.File source = new java.io.File(elePhotocurrent.getSrc());
                     String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
-                    String destination = directoryName + File.separator + source.toPath().getFileName();
-                    Context.getLrcat_new().sqlmovefile(elePhotocurrent.getSrc(), destination);
+                    String destination = directoryName + java.io.File.separator + source.toPath().getFileName();
+                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination,lrcat.rep.get("repNew").id_local,elePhotocurrent.getFileidlocal());
                     return ret;
                 case PopUpController.VALNEXT:
                     break;
@@ -561,41 +416,9 @@ public class MainFrameController {
         logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
-    /**
-     * Delete empty directory.
-     * <p>
-     * suprimmer tout les repertoires vide (physique)
-     *
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public void actionDeleteEmptyDirectoryRepertoireNew() throws IOException, SQLException {
 
-        File directory = new File(Context.getLrcat_new().getabsolutePathfromname(Context.getRepNew()) + File.separator );
-        ndDelTotal = 0;
-        boucleSupressionRepertoire(directory);
-        logecrireuserlogInfo("delete all from " + directory + " : " + String.format("%05d", ndDelTotal));
-
+    public void actionDeleteEmptyDirectoryRepertoireNew(ActionEvent actionEvent) throws IOException, SQLException {
+        int ndDelTotal = lrcat.deleteEmptyDirectory();
+        logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
     }
-
-    /**
-     * First.
-     *
-     * @throws SQLException the sql exception
-     */
-    public void first() throws SQLException {
-
-        initialize();
-    }
-
-    private String supprimerbalisedollar(String lcIdxFilename) {
-        Pattern pattern = Pattern.compile("(\\$.*\\$)*(.*)");
-        Matcher matcher = pattern.matcher(lcIdxFilename);
-        if (matcher.find()) {
-            return matcher.group(2);
-        }
-        return "";
-
-    }
-
 }

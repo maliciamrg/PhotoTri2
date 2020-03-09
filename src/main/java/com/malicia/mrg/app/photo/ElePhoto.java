@@ -14,6 +14,7 @@ public class ElePhoto {
     private String src;
     private String absPath;
     private String rep;
+    private String fileidlocal;
     private List<GrpPhoto> grpPhotoCandidat = new ArrayList<>();
 
     /**
@@ -26,13 +27,14 @@ public class ElePhoto {
      * @param absPath     the abs path
      * @param rep         the rep
      */
-    public ElePhoto(long captureTime, long mint, long maxt, String src, String absPath, String rep) {
+    public ElePhoto(long captureTime, long mint, long maxt, String src, String absPath, String rep,String fileidlocal) {
         this.captureTime = captureTime;
         this.mint = mint;
         this.maxt = maxt;
         this.src = src;
         this.absPath = absPath;
         this.rep = rep;
+        this.fileidlocal = fileidlocal;
     }
 
     @Override
@@ -100,5 +102,13 @@ public class ElePhoto {
             listeletostring.append("     " + grpPhotoCandidat.get(i).toString() + "\n");
         }
         return listeletostring.toString();
+    }
+
+    public String getFileidlocal() {
+        return fileidlocal;
+    }
+
+    public void setFileidlocal(String fileidlocal) {
+        this.fileidlocal = fileidlocal;
     }
 }

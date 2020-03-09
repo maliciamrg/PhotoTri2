@@ -9,11 +9,16 @@ import java.util.logging.Logger;
  * @author sqlitetutorial.net
  */
 public class SQLiteJDBCDriverConnection {
-    private final Logger LOGGER;
+
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
     /**
      * The constant conn.
      */
-    private Connection conn;
+    private static Connection conn;
 
     /**
      * Instantiates a new Sq lite jdbc driver connection.
@@ -21,7 +26,6 @@ public class SQLiteJDBCDriverConnection {
      * @param catalogLrcat the catalog lrcat
      */
     public SQLiteJDBCDriverConnection(String catalogLrcat) {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         connect(catalogLrcat);
     }
 

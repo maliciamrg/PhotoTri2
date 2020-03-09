@@ -1,4 +1,4 @@
-package com.malicia.mrg.app;
+package com.malicia.mrg.mvc.models;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * The type Actionfichier repertoire.
  */
-public class ActionfichierRepertoire {
+public class SystemFiles {
 
     private static final Logger LOGGER;
 
@@ -18,7 +18,7 @@ public class ActionfichierRepertoire {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    private ActionfichierRepertoire() {
+    private SystemFiles() {
         throw new IllegalStateException("Utility class");
     }
 
