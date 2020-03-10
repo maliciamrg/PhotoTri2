@@ -4,11 +4,12 @@ package com.malicia.mrg.mvc.models;
  * The type Ele.
  */
 public class AgLibraryFile {
+    public static final String REP_NEW = "repNew";
     /**
      * The Lc idx filename.
      */
     private String lcIdxFilename;
-    private String file_id_local;
+    private String fileIdLocal;
     private AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
     private String absolutePath;
@@ -18,19 +19,19 @@ public class AgLibraryFile {
      * @param absolutePath        the absolute path
      * @param pathFromRoot        the path from root
      * @param lcIdxFilename       the lc idx filename
-     * @param file_id_local
+     * @param fileIdLocal
      * @param agLibraryRootFolder
      */
-    public AgLibraryFile(String absolutePath, String pathFromRoot, String lcIdxFilename, String file_id_local, AgLibraryRootFolder agLibraryRootFolder) {
+    public AgLibraryFile(String absolutePath, String pathFromRoot, String lcIdxFilename, String fileIdLocal, AgLibraryRootFolder agLibraryRootFolder) {
         this.absolutePath = absolutePath;
         this.pathFromRoot = pathFromRoot;
         this.lcIdxFilename = lcIdxFilename;
-        this.file_id_local = file_id_local;
+        this.fileIdLocal = fileIdLocal;
         this.agLibraryRootFolder = agLibraryRootFolder;
     }
 
-    public String getFile_id_local() {
-        return file_id_local;
+    public String getFileIdLocal() {
+        return fileIdLocal;
     }
 
     public AgLibraryRootFolder getAgLibraryRootFolder() {

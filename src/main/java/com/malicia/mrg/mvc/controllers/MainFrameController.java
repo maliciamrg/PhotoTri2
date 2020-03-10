@@ -4,6 +4,7 @@ import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
+import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.SystemFiles;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.logging.Level;
 
 import static com.malicia.mrg.app.Context.lrcat;
 
@@ -70,7 +71,7 @@ public class MainFrameController {
 
 //            constitution des groupes
 
-        ResultSet rsele = lrcat.rep.get("repNew").sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
+        ResultSet rsele = lrcat.rep.get(AgLibraryFile.REP_NEW).sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
 
         java.util.List<ElePhoto> listElePhoto = new ArrayList();
 
@@ -84,11 +85,11 @@ public class MainFrameController {
             long maxt = rsele.getLong("maxt");
             String src = rsele.getString("src");
             String absPath = rsele.getString(Context.PATH_FROM_ROOT);
-            String file_id_local = rsele.getString("file_id_local");
+            String fileIdLocal = rsele.getString("fileIdLocal");
 
 
             //Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, lrcat.rep.get("repNew").name + "/", file_id_local));
+            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, lrcat.rep.get(AgLibraryFile.REP_NEW).name + "/", fileIdLocal));
 
 
         }
@@ -109,7 +110,7 @@ public class MainFrameController {
 
 //            constitution des groupes
 //        grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn() + grpphotoenc.getNomRepetrtoire()
-        ResultSet rsgrp = lrcat.rep.get("repNew").sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
+        ResultSet rsgrp = lrcat.rep.get(AgLibraryFile.REP_NEW).sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
 
         GrpPhoto grpPhotoEnc = new GrpPhoto();
 
@@ -126,18 +127,18 @@ public class MainFrameController {
             String src = rsgrp.getString("src");
             String pathFromRoot = rsgrp.getString(Context.PATH_FROM_ROOT);
             String absPath = rsgrp.getString(Context.PATH_FROM_ROOT);
-            String folder_id_local = rsgrp.getString("id_local");
+            String folderIdLocal = rsgrp.getString("id_local");
 
 
             //Constitution des groupes de photo standard
-            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folder_id_local)) {
+            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folderIdLocal)) {
 
 
                 listGrpPhoto.add(grpPhotoEnc);
 
 
                 grpPhotoEnc = new GrpPhoto();
-                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folder_id_local)) {
+                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folderIdLocal)) {
                     throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                 }
             }
@@ -224,7 +225,7 @@ public class MainFrameController {
             }
         } catch (IOException e) {
             popupalertException(e);
-            e.printStackTrace();
+            excptlog(e);
         }
 
         lrcat.reconnect();
@@ -271,11 +272,11 @@ public class MainFrameController {
 
         String contentText = ex.toString();
 
-        popupalert(contentText,exceptionText);
+        popupalert(contentText, exceptionText);
 
     }
 
-    private void popupalert( String contentText,String exceptionText) {
+    private void popupalert(String contentText, String exceptionText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
         alert.setHeaderText("Exception Dialog");
@@ -349,12 +350,12 @@ public class MainFrameController {
 
         try {
 
-            lrcat.rep.get("repNew").FlatRootFolder();
+            lrcat.rep.get(AgLibraryFile.REP_NEW).FlatRootFolder();
 
-            lrcat.rep.get("repNew").RegoupFileByAdherence();
+            lrcat.rep.get(AgLibraryFile.REP_NEW).RegoupFileByAdherence();
 
-            int ndDelTotal = lrcat.rep.get("repNew").DeleteEmptyDirectory();
-            logecrireuserlogInfo("delete all from " + lrcat.rep.get("repNew").name + " : " + String.format("%05d", ndDelTotal));
+            int ndDelTotal = lrcat.rep.get(AgLibraryFile.REP_NEW).DeleteEmptyDirectory();
+            logecrireuserlogInfo("delete all from " + lrcat.rep.get(AgLibraryFile.REP_NEW).name + " : " + String.format("%05d", ndDelTotal));
 
 
         } catch (SQLException | IOException e) {
@@ -415,7 +416,7 @@ public class MainFrameController {
         controllerpopup.setImage(PopUpController.IMAGE_ONE, elePhotocurrent.getSrc());
 
         for (int i = 0; i < elePhotocurrent.getGrpPhotoCandidat().size(); i++) {
-            LOGGER.info(elePhotocurrent.toString());
+            LOGGER.log(Level.INFO, () -> "" + elePhotocurrent.toString());
             GrpPhoto grpphotoenc = elePhotocurrent.getGrpPhotoCandidat().get(i);
             List<String> grpphotoele = grpphotoenc.getElesrc();
             controllerpopup.setLblinfo("" + (i + 1) + "/" + elePhotocurrent.getGrpPhotoCandidat().size() + " : " + grpphotoenc.getPathFromRootComumn());
@@ -466,7 +467,7 @@ public class MainFrameController {
                     java.io.File source = new java.io.File(elePhotocurrent.getSrc());
                     String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
                     String destination = directoryName + java.io.File.separator + source.toPath().getFileName();
-                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination, grpphotoenc.getFolder_id_local(), elePhotocurrent.getFileidlocal());
+                    lrcat.rep.get(AgLibraryFile.REP_NEW).sqlmovefile(elePhotocurrent.getSrc(), destination, grpphotoenc.getFolderIdLocal(), elePhotocurrent.getFileidlocal());
                     return ret;
                 case PopUpController.VALNEXT:
                     break;
@@ -492,35 +493,6 @@ public class MainFrameController {
         if (result.isPresent()) {
             return result.get();
         }
-
-        return "";
-    }
-
-    private String showChoiceOneWindow(List<String> listeChoice, boolean test) {
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("listeChoice Dialog");
-        alert.setHeaderText("listeChoice Dialog");
-        alert.setContentText("Please choice one");
-
-
-        ListView listview = new ListView<String>();
-        listview.getItems().addAll(listeChoice);
-        listview.setEditable(false);
-
-        listview.setMaxWidth(Double.MAX_VALUE);
-        listview.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(listview, Priority.ALWAYS);
-        GridPane.setHgrow(listview, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(listview, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
 
         return "";
     }
@@ -551,11 +523,11 @@ public class MainFrameController {
         }
     }
 
-    public void actionopenligthroom() {
+    public void actionopenligthroom() throws InterruptedException {
         try {
             lrcat.openLigthroomLrcatandWait();
             initialize();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -565,7 +537,7 @@ public class MainFrameController {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            popupalert("spyfirst" + retlist.get(retlist.size()-1) , retourtext);
+            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
         } catch (SQLException e) {
             popupalertException(e);
             excptlog(e);

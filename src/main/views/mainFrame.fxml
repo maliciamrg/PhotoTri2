@@ -12,10 +12,8 @@
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate"
-                                  text="Faire une Copy de Sauvegarde"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate"
-                                  text="Restaurer la dernier Copy de Sauvegarde"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde"/>
                         <MenuItem mnemonicParsing="false" text="_Close"/>
                         <MenuItem mnemonicParsing="false" text="_Save"/>
                         <MenuItem mnemonicParsing="false" text="_Save As…"/>

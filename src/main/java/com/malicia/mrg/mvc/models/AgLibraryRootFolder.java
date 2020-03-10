@@ -403,7 +403,7 @@ public class AgLibraryRootFolder {
             String rename = (((AddprefixFile) ? "$" + UUID.randomUUID().toString() + "$" : "") + supprimerbalisedollar(file.getLcIdxFilename())).toLowerCase();
             String destination = normalizePath(destdirectoryName + java.io.File.separator + rename);
 
-            sqlmovefile(source, destination, Folder_id_local, file.getFile_id_local());
+            sqlmovefile(source, destination, Folder_id_local, file.getFileIdLocal());
 
         }
     }

@@ -50,7 +50,6 @@ public class Context implements Serializable {
     /**
      * The constant currentContext.
      */
-    private static Context currentContext = new Context();
     private static MainFrameController controller;
     private static Stage primaryStage;
     private static HashMap<String, String> lrcatSource = new HashMap();
@@ -103,7 +102,7 @@ public class Context implements Serializable {
      * @throws ClassNotFoundException the class not found exception
      * @throws SQLException           the sql exception
      */
-    public static void setup() throws IOException, ClassNotFoundException, SQLException {
+    public static void setup() throws IOException,  SQLException {
 
         InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(stream);
@@ -136,7 +135,7 @@ public class Context implements Serializable {
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
             String value = appParam.getString(key);
-            System.out.println(key + ": " + value);
+            LOGGER.info(key + ": " + value);
         }
 
     }
