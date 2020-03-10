@@ -127,17 +127,18 @@ public class MainFrameController {
             String src = rsgrp.getString("src");
             String pathFromRoot = rsgrp.getString(Context.PATH_FROM_ROOT);
             String absPath = rsgrp.getString(Context.PATH_FROM_ROOT);
+            String folder_id_local = rsgrp.getString("id_local");
 
 
             //Constitution des groupes de photo standard
-            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/")) {
+            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folder_id_local)) {
 
 
                 listGrpPhoto.add(grpPhotoEnc);
 
 
                 grpPhotoEnc = new GrpPhoto();
-                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/")) {
+                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folder_id_local)) {
                     throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
                 }
             }
@@ -263,17 +264,23 @@ public class MainFrameController {
     }
 
     private void popupalertException(Exception ex) {
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Exception Dialog");
-        alert.setContentText(ex.toString());
-
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
         String exceptionText = sw.toString();
+
+        String contentText = ex.toString();
+
+        popupalert(contentText,exceptionText);
+
+    }
+
+    private void popupalert( String contentText,String exceptionText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Dialog");
+        alert.setHeaderText("Exception Dialog");
+        alert.setContentText(contentText);
 
         javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
 
@@ -295,7 +302,6 @@ public class MainFrameController {
         alert.getDialogPane().setExpandableContent(expContent);
 
         alert.showAndWait();
-
     }
 
 
@@ -461,7 +467,7 @@ public class MainFrameController {
                     java.io.File source = new java.io.File(elePhotocurrent.getSrc());
                     String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
                     String destination = directoryName + java.io.File.separator + source.toPath().getFileName();
-                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination, lrcat.rep.get("repNew").id_local, elePhotocurrent.getFileidlocal());
+                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination, grpphotoenc.getFolder_id_local(), elePhotocurrent.getFileidlocal());
                     return ret;
                 case PopUpController.VALNEXT:
                     break;
@@ -536,7 +542,7 @@ public class MainFrameController {
     }
 
 
-    public void actionDeleteEmptyDirectoryRepertoireNew() {
+    public void actionDeleteEmptyDirectoryPhysique() {
         try {
             int ndDelTotal = lrcat.deleteEmptyDirectory();
             logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
@@ -554,5 +560,17 @@ public class MainFrameController {
             popupalertException(e);
             excptlog(e);
         }
+    }
+
+    public void spyfirst10() {
+        try {
+            String retourtext = lrcat.spyfirst10();
+            List<String> retlist = Arrays.asList(retourtext.split("\n"));
+            popupalert("spyfirst10" + retlist.get(retlist.size()-1) , retourtext);
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+
     }
 }

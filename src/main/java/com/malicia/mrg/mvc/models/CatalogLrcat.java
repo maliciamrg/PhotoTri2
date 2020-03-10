@@ -6,17 +6,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
-import static com.malicia.mrg.app.Context.lrcat;
-import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
 
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
@@ -47,19 +42,19 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         File cltg = new File(cheminfichierLrcat);
         nomFichier = cltg.getName();
         dateFichier = cltg.lastModified();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - hh:mm:ss");
-        dateFichierHR =dateFormat.format(dateFichier);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+        dateFichierHR = dateFormat.format(dateFichier);
     }
 
     private void addrootFolder(String nomRep) throws SQLException {
-        AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this,Context.appParam.getString(nomRep));
+        AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, Context.appParam.getString(nomRep));
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
                 "where name = '" + Context.appParam.getString(nomRep) + "' " +
                 ";");
         while (rs.next()) {
-            tmpRootLib.id_local = rs.getString("id_local");
+            tmpRootLib.rootfolderidlocal = rs.getString("id_local");
             tmpRootLib.absolutePath = rs.getString("absolutePath");
             tmpRootLib.name = rs.getString("name");
             rep.put(nomRep, tmpRootLib);
@@ -85,8 +80,8 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         int nbdel = 0;
         int nbdeltotal = 0;
         do {
-                nbdel = sqlDeleteRepertory();
-                nbdeltotal += nbdel;
+            nbdel = sqlDeleteRepertory();
+            nbdeltotal += nbdel;
         }
         while (nbdel > 0);
 
@@ -117,7 +112,6 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
                 "and  c.pathFromRoot  is  NULL " +
                 "group by  b.pathFromRoot " +
                 " ); ";
-        PreparedStatement pstmt = null;
         return executeUpdate(sql);
 
     }
@@ -133,6 +127,46 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         return nbdeltotal;
 
+    }
+
+    public String spyfirst10() throws SQLException {
+        String sql = "select * FROM AgLibraryFolder " +
+                "ORDER by id_local desc " +
+                "; ";
+        select(sql);
+        sql = "select * FROM AgLibraryFile " +
+                "ORDER by id_local desc " +
+                "; ";
+        select(sql);
+        sql =  "select " +
+                "c.absolutePath , " +
+                "b.pathFromRoot , " +
+                "a.lc_idx_filename as lc_idx_filename , " +
+                "c.id_local as path_id_local , " +
+                "b.id_local as folder_id_local , " +
+                "a.id_local as file_id_local  , " +
+                "b.rootFolder " +
+                "from AgLibraryFile a  " +
+                "inner join AgLibraryFolder b   " +
+                " on a.folder = b.id_local  " +
+                "inner join AgLibraryRootFolder c   " +
+                " on b.rootFolder = c.id_local  " +
+                ";";
+        ResultSet rs = select(sql);
+        String txtret = "";
+        int nb = 0;
+        int ko = 0;
+        while (rs.next()) {
+            File filepath = new File(rs.getString("absolutePath") + rs.getString("pathFromRoot") + rs.getString("lc_idx_filename"));
+            nb +=1;
+            if (!filepath.exists()) {
+                txtret += "ko = " + filepath.toString() + "\n";
+                ko +=1;
+            }
+
+        }
+        txtret += " nb = " + nb + " : ko = " + ko + "\n";
+        return txtret;
     }
 
 

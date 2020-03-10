@@ -24,6 +24,16 @@ public class GrpPhoto {
     private String pathFromRootComumn;
     private String forceGroup = "";
 
+    public String getFolder_id_local() {
+        return folder_id_local;
+    }
+
+    public void setFolder_id_local(String folder_id_local) {
+        this.folder_id_local = folder_id_local;
+    }
+
+    private String folder_id_local;
+
     /**
      * Instantiates a new Grp photo.
      */
@@ -131,9 +141,11 @@ public class GrpPhoto {
      * @param elesrc             the elesrc
      * @param absolutepath       the absolutepath
      * @param pathfromrootcomumn the pathfromrootcomumn
+     * @param folder_id_local
      * @return the boolean
      */
-    public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn) {
+    public boolean add(String cameraModel, double captureTime, long mint, long maxt, String elesrc, String absolutepath, String pathfromrootcomumn, String folder_id_local) {
+        this.folder_id_local = folder_id_local;
 
         boolean first;
         first = absolutePath == null;

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class AgLibraryRootFolder {
 
     private final Logger LOGGER;
-    public String id_local;
+    public String rootfolderidlocal;
     public String absolutePath;
     public String name;
     private CatalogLrcat parentLrcat;
@@ -48,11 +48,13 @@ public class AgLibraryRootFolder {
             String file_id_local = rseleAplat.getString("file_id_local");
 
             if (pathfromroot.compareTo("") != 0) {
+                String Folder_id_local = String.valueOf(getIdlocalforpathFromRoot(""));
+
                 String source = normalizePath(absolutePath + pathfromroot + filename);
 
                 String rename = ("$" + UUID.randomUUID().toString() + "$" + supprimerbalisedollar(filename)).toLowerCase();
                 String destination = normalizePath(absolutePath + rename);
-                sqlmovefile(source, destination, id_local, file_id_local);
+                sqlmovefile(source , destination, Folder_id_local, file_id_local);
             }
 
         }
@@ -96,7 +98,7 @@ public class AgLibraryRootFolder {
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
-                        "Where b.rootFolder =  " + id_local + " " +
+                        "Where b.rootFolder =  " + rootfolderidlocal + " " +
                         "  and b.pathFromRoot like \"%" + Context.appParam.getString("ssrepRejet") + "%\" " +
                         " ;");
     }
@@ -129,8 +131,10 @@ public class AgLibraryRootFolder {
                         "ON e.id_local = ahem.image " +
                         "LEFT JOIN AgInternedExifCameraModel aiecm " +
                         "ON ahem.cameraModelRef = aiecm.id_local " +
-                        "Where b.rootFolder =  " + id_local + " " +
-                        "order by captureTime asc;");
+                        "Where b.rootFolder =  " + rootfolderidlocal + " " +
+                        "order by captureTime asc " +
+                        "limit 10 " +
+                        ";");
 
 
     }
@@ -188,6 +192,7 @@ public class AgLibraryRootFolder {
         //      captureTimeOrig
         return parentLrcat.select(
                 "select  " +
+                        " b.id_local " +
                         " strftime('%s', e.captureTime) as captureTime , " +
                         " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt , " +
@@ -260,32 +265,53 @@ public class AgLibraryRootFolder {
      * @return the int
      * @throws SQLException the sql exception
      */
-    public void sqlMkdirRepertory(String directoryName) throws SQLException {
+    public String sqlMkdirRepertory(String directoryName) throws SQLException {
 
         SystemFiles.mkdir(directoryName);
 
 
         String pathFromRoot = normalizePath(directoryName.replace(absolutePath, "") + File.separator);
-        long idlocal = parentLrcat.sqlGetPrevIdlocalforFolder();
+
+
+//test if folder deja exist
+        long idlocal  = getIdlocalforpathFromRoot(pathFromRoot);
+
         if (idlocal == 0) {
-            throw new IllegalStateException("no more idlocal empty for folder");
-        }
+            idlocal = parentLrcat.sqlGetPrevIdlocalforFolder();
+            if (idlocal == 0) {
+                throw new IllegalStateException("no more idlocal empty for folder");
+            }
 //        sqlSetAdobeentityIDCounter(idlocal);
 
-        String sql;
-        sql = "INSERT INTO AgLibraryFolder" +
-                "(id_local, " +
-                "id_global, " +
-                "pathFromRoot, " +
-                "rootFolder) " +
-                "VALUES " +
-                "('" + idlocal + "', " +
-                "'" + UUID.randomUUID().toString().toUpperCase() + "', " +
-                "'" + pathFromRoot + "', " +
-                "'" + id_local + "')" +
-                ";";
-        parentLrcat.executeUpdate(sql);
+            String sql;
+            sql = "INSERT INTO AgLibraryFolder" +
+                    "(id_local, " +
+                    "id_global, " +
+                    "pathFromRoot, " +
+                    "rootFolder) " +
+                    "VALUES " +
+                    "('" + idlocal + "', " +
+                    "'" + UUID.randomUUID().toString().toUpperCase() + "', " +
+                    "'" + pathFromRoot + "', " +
+                    "'" + rootfolderidlocal + "')" +
+                    ";";
+            parentLrcat.executeUpdate(sql);
+        }
 
+        return String.valueOf(idlocal);
+    }
+
+    public long getIdlocalforpathFromRoot(String pathFromRoot) throws SQLException {
+        ResultSet rsexist = parentLrcat.select(
+                "select id_local from AgLibraryFolder where " +
+                        " pathFromRoot = " + "'" + pathFromRoot + "' " +
+                        " and rootFolder = " + "'" + rootfolderidlocal + "' " +
+                        "");
+        long idlocal = 0;
+        while (rsexist.next()) {
+            idlocal = rsexist.getLong("id_local");
+        }
+        return idlocal;
     }
 
 
@@ -336,7 +362,11 @@ public class AgLibraryRootFolder {
             }
 
         }
-        listGrpEletmp.add(listEletmp);
+        if (listEletmp.size() > Context.getThresholdBazar()) {
+            listGrpEletmp.add(listEletmp);
+        } else {
+            listFileBazar.addAll(listEletmp);
+        }
 
 
         //deplacement des group d'elements
@@ -365,7 +395,7 @@ public class AgLibraryRootFolder {
         String destdirectoryName = normalizePath(absolutePath + repertoiredest);
         LOGGER.info("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName);
 
-        sqlMkdirRepertory(destdirectoryName);
+        String Folder_id_local = sqlMkdirRepertory(destdirectoryName);
 
         for (AgLibraryFile file : listFile) {
 
@@ -373,7 +403,7 @@ public class AgLibraryRootFolder {
             String rename = (((AddprefixFile) ? "$" + UUID.randomUUID().toString() + "$" : "") + supprimerbalisedollar(file.getLcIdxFilename())).toLowerCase();
             String destination = normalizePath(destdirectoryName + java.io.File.separator + rename);
 
-            sqlmovefile(source, destination, id_local, file.getFile_id_local());
+            sqlmovefile(source, destination, Folder_id_local, file.getFile_id_local());
 
         }
     }
@@ -423,12 +453,13 @@ public class AgLibraryRootFolder {
             String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
             String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
             String file_id_local = rsele.getString("file_id_local");
+            String folder_id_local = rsele.getString("folder_id_local");
 
             String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
             String dest = source + ".rejet";
 
 
-            sqlmovefile(source, dest, id_local, file_id_local);
+            sqlmovefile(source, dest, folder_id_local, file_id_local);
 
         }
     }
