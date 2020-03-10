@@ -28,7 +28,6 @@ public class RessourcesTest {
             e.printStackTrace();
         }
         controller = new MainFrameController();
-        Context.setDryRun(false);
     }
 
     @AfterMethod

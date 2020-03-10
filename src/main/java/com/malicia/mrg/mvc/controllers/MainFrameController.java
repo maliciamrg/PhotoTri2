@@ -10,23 +10,29 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
+import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
 
@@ -61,11 +67,11 @@ public class MainFrameController {
      * @return the ele bazar
      * @throws SQLException the sql exception
      */
-    public java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
+    private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
 
 //            constitution des groupes
 
-        ResultSet rsele =  lrcat.rep.get("repNew").sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
+        ResultSet rsele = lrcat.rep.get("repNew").sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
 
         java.util.List<ElePhoto> listElePhoto = new ArrayList();
 
@@ -83,7 +89,7 @@ public class MainFrameController {
 
 
             //Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath,  lrcat.rep.get("repNew").name + "/",file_id_local));
+            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, lrcat.rep.get("repNew").name + "/", file_id_local));
 
 
         }
@@ -100,11 +106,11 @@ public class MainFrameController {
      * @return the java . util . list
      * @throws SQLException the sql exception
      */
-    public java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar, String repKidz) throws SQLException {
+    private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar, String repKidz) throws SQLException {
 
 //            constitution des groupes
 //        grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn() + grpphotoenc.getNomRepetrtoire()
-        ResultSet rsgrp =lrcat.rep.get("repNew").sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
+        ResultSet rsgrp = lrcat.rep.get("repNew").sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
 
         GrpPhoto grpPhotoEnc = new GrpPhoto();
 
@@ -153,7 +159,7 @@ public class MainFrameController {
         if (Context.getPrimaryStage() != null) {
             Context.getPrimaryStage().sizeToScene();
         }
-
+        Context.getPrimaryStage().setTitle(lrcat.getname());
     }
 
 
@@ -177,10 +183,55 @@ public class MainFrameController {
             }
         } catch (IOException e) {
             logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
+            popupalertException(e);
             excptlog(e);
         }
 
     }
+
+    /**
+     * Action makeadulpicatelrcatwithdate.
+     */
+    public void actionRestaureLastDuplicate() {
+
+        lrcat.disconnect();
+
+        String basedir = Context.appParam.getString("RepCatlogSauve");
+
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setIncludes(new String[]{"save_lrcat_" + "*" + "/" + lrcat.nomFichier});
+        scanner.setBasedir(basedir);
+        scanner.setCaseSensitive(false);
+        scanner.scan();
+        List<String> files = Arrays.asList(scanner.getIncludedFiles());
+
+        String theone = showChoiceOneWindow("Quel catalog restaurer ?", "catalog", files);
+        String selectfile = basedir + File.separator + theone;
+
+
+        java.io.File fori = new java.io.File(selectfile);
+        java.io.File fdest = new java.io.File(lrcat.cheminfichierLrcat);
+
+        try {
+            if (fori.isFile() && fori.exists()) {
+                if (fdest.isFile() && fdest.exists()) {
+                    Files.delete(fdest.toPath());
+                    Files.copy(fori.toPath(), fdest.toPath());
+                    logecrireuserlogInfo("restaure lrcat de :" + selectfile);
+                }
+            } else {
+                logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
+            }
+        } catch (IOException e) {
+            popupalertException(e);
+            e.printStackTrace();
+        }
+
+        lrcat.reconnect();
+
+        initialize();
+    }
+
 
     private void excptlog(Exception theException) {
         StringWriter stringWritter = new StringWriter();
@@ -200,7 +251,7 @@ public class MainFrameController {
             int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
             logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
         } catch (SQLException e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
 
@@ -210,6 +261,43 @@ public class MainFrameController {
         userlogInfo.appendText(msg + "\n");
         LOGGER.info(msg);
     }
+
+    private void popupalertException(Exception ex) {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Dialog");
+        alert.setHeaderText("Exception Dialog");
+        alert.setContentText(ex.toString());
+
+        // Create expandable Exception.
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+
+    }
+
 
     /**
      * Move new to grp photos.
@@ -221,7 +309,7 @@ public class MainFrameController {
             lrcat.rangerRejet();
 
         } catch (SQLException | IOException e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
 
@@ -234,31 +322,16 @@ public class MainFrameController {
 
         try {
 
-            // open ligthroom catalog New
-            lrcat.disconnect();
-            Process process = Runtime.getRuntime().exec("cmd /c  " + "\"" + Context.getLrcatSource().get("New").toString() + "\"");
+            int exitVal = lrcat.openLigthroomLrcatandWait();
 
-            StringBuilder output = new StringBuilder();
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line + "\n");
-            }
-            lrcat.reconnect();
-
-            int exitVal = process.waitFor();
             if (exitVal == 0) {
-                logecrireuserlogInfo("Success! = open : " + Context.getLrcatSource().get("New").toString());
-                logecrireuserlogInfo("Output : " + output);
+                logecrireuserlogInfo("Success! = open : " + lrcat.cheminfichierLrcat);
             } else {
-                logecrireuserlogInfo("Erreur = " + exitVal + " | " + Context.getLrcatSource().get("New").toString());
+                logecrireuserlogInfo("Erreur = " + exitVal + " | " + lrcat.cheminfichierLrcat);
             }
 
         } catch (Exception e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
     }
@@ -280,7 +353,7 @@ public class MainFrameController {
 
 
         } catch (SQLException | IOException e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
     }
@@ -293,7 +366,7 @@ public class MainFrameController {
     public void actionRangerlebazar() {
         try {
 
-            LOGGER.info(() -> "actionRangerlebazar " );
+            LOGGER.info(() -> "actionRangerlebazar ");
 
             java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.appParam.getString("ssrepBazar"), Context.appParam.getString("repKidz"));
             java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.appParam.getString("ssrepBazar"));
@@ -307,14 +380,14 @@ public class MainFrameController {
                     }
                 }
 
-                    Map<String, Object> ret = showPopupWindow(elePhotocurrent);
-                    if (ret != null && ret.get(PopUpController.RETOUR_CODE).toString().compareTo(PopUpController.VALSTOPRUN) == 0) {
-                        throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.VALSTOPRUN);
-                    }
+                Map<String, Object> ret = showPopupWindow(elePhotocurrent);
+                if (ret != null && ret.get(PopUpController.RETOUR_CODE).toString().compareTo(PopUpController.VALSTOPRUN) == 0) {
+                    throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.VALSTOPRUN);
+                }
 
             }
         } catch (Exception e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
     }
@@ -388,7 +461,7 @@ public class MainFrameController {
                     java.io.File source = new java.io.File(elePhotocurrent.getSrc());
                     String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
                     String destination = directoryName + java.io.File.separator + source.toPath().getFileName();
-                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination,lrcat.rep.get("repNew").id_local,elePhotocurrent.getFileidlocal());
+                    lrcat.rep.get("repNew").sqlmovefile(elePhotocurrent.getSrc(), destination, lrcat.rep.get("repNew").id_local, elePhotocurrent.getFileidlocal());
                     return ret;
                 case PopUpController.VALNEXT:
                     break;
@@ -401,6 +474,52 @@ public class MainFrameController {
         return controllerpopup.getResult();
     }
 
+
+    private String showChoiceOneWindow(String quelchoice, String nomelement, List<String> listeChoice) {
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(listeChoice.get(listeChoice.size() - 1), listeChoice);
+        dialog.setTitle("Choice Dialog");
+        dialog.setHeaderText(quelchoice);
+        dialog.setContentText(nomelement);
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        return "";
+    }
+
+    private String showChoiceOneWindow(List<String> listeChoice, boolean test) {
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("listeChoice Dialog");
+        alert.setHeaderText("listeChoice Dialog");
+        alert.setContentText("Please choice one");
+
+
+        ListView listview = new ListView<String>();
+        listview.getItems().addAll(listeChoice);
+        listview.setEditable(false);
+
+        listview.setMaxWidth(Double.MAX_VALUE);
+        listview.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(listview, Priority.ALWAYS);
+        GridPane.setHgrow(listview, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(listview, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+
+        return "";
+    }
+
     /**
      * Abouturl.
      */
@@ -410,15 +529,30 @@ public class MainFrameController {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
             }
         } catch (IOException | URISyntaxException e) {
-            logecrireuserlogInfo(e.toString());
+            popupalertException(e);
             excptlog(e);
         }
         logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
 
-    public void actionDeleteEmptyDirectoryRepertoireNew(ActionEvent actionEvent) throws IOException, SQLException {
-        int ndDelTotal = lrcat.deleteEmptyDirectory();
-        logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
+    public void actionDeleteEmptyDirectoryRepertoireNew() {
+        try {
+            int ndDelTotal = lrcat.deleteEmptyDirectory();
+            logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
+        } catch (IOException | SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    public void actionopenligthroom() {
+        try {
+            lrcat.openLigthroomLrcatandWait();
+            initialize();
+        } catch (IOException | InterruptedException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 }

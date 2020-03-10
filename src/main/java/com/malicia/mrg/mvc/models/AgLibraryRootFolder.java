@@ -5,7 +5,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
 
 /**
  * The type Requete sql.
@@ -167,7 +164,6 @@ public class AgLibraryRootFolder {
     }
 
 
-
     /**
      * Sql group by plage adherance hors rep bazar result set.
      *
@@ -269,26 +265,26 @@ public class AgLibraryRootFolder {
         SystemFiles.mkdir(directoryName);
 
 
-            String pathFromRoot = normalizePath(directoryName.replace(absolutePath, "") + File.separator);
-            long idlocal = parentLrcat.sqlGetPrevIdlocalforFolder();
-            if (idlocal == 0) {
-                throw new IllegalStateException("no more idlocal empty for folder");
-            }
+        String pathFromRoot = normalizePath(directoryName.replace(absolutePath, "") + File.separator);
+        long idlocal = parentLrcat.sqlGetPrevIdlocalforFolder();
+        if (idlocal == 0) {
+            throw new IllegalStateException("no more idlocal empty for folder");
+        }
 //        sqlSetAdobeentityIDCounter(idlocal);
 
-            String sql;
-            sql = "INSERT INTO AgLibraryFolder" +
-                    "(id_local, " +
-                    "id_global, " +
-                    "pathFromRoot, " +
-                    "rootFolder) " +
-                    "VALUES " +
-                    "('" + idlocal + "', " +
-                    "'" + UUID.randomUUID().toString().toUpperCase() + "', " +
-                    "'" + pathFromRoot + "', " +
-                    "'" + id_local + "')" +
-                    ";";
-            parentLrcat.executeUpdate(sql);
+        String sql;
+        sql = "INSERT INTO AgLibraryFolder" +
+                "(id_local, " +
+                "id_global, " +
+                "pathFromRoot, " +
+                "rootFolder) " +
+                "VALUES " +
+                "('" + idlocal + "', " +
+                "'" + UUID.randomUUID().toString().toUpperCase() + "', " +
+                "'" + pathFromRoot + "', " +
+                "'" + id_local + "')" +
+                ";";
+        parentLrcat.executeUpdate(sql);
 
     }
 
@@ -367,7 +363,7 @@ public class AgLibraryRootFolder {
 
     private void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile) throws SQLException, IOException {
         String destdirectoryName = normalizePath(absolutePath + repertoiredest);
-        LOGGER.info("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName );
+        LOGGER.info("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName);
 
         sqlMkdirRepertory(destdirectoryName);
 
@@ -432,7 +428,7 @@ public class AgLibraryRootFolder {
             String dest = source + ".rejet";
 
 
-            sqlmovefile(source, dest,id_local,file_id_local);
+            sqlmovefile(source, dest, id_local, file_id_local);
 
         }
     }

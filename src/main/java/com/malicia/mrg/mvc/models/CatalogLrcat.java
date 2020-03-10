@@ -2,24 +2,36 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.malicia.mrg.app.Context.lrcat;
 import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
 
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
-    public Map<String, AgLibraryRootFolder> rep;
+    public long dateFichier;
+    public String dateFichierHR;
+    public String nomFichier;
+    public Map<String, AgLibraryRootFolder> rep = new HashMap();
     public String cheminfichierLrcat = "";
 
     public CatalogLrcat(String catalogLrcat) throws SQLException {
         super(catalogLrcat);
-        cheminfichierLrcat = catalogLrcat;
+
+        refreshdataLrcat(catalogLrcat);
+
         addrootFolder("repLegacy");
         addrootFolder("repbookEvents");
         addrootFolder("repbookHolidays");
@@ -30,12 +42,21 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     }
 
-    public void addrootFolder(String nomRep) throws SQLException {
+    private void refreshdataLrcat(String catalogLrcat) {
+        cheminfichierLrcat = catalogLrcat;
+        File cltg = new File(cheminfichierLrcat);
+        nomFichier = cltg.getName();
+        dateFichier = cltg.lastModified();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - hh:mm:ss");
+        dateFichierHR =dateFormat.format(dateFichier);
+    }
+
+    private void addrootFolder(String nomRep) throws SQLException {
         AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this,Context.appParam.getString(nomRep));
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
-                "where name = " + Context.appParam.getString(nomRep) + " " +
+                "where name = '" + Context.appParam.getString(nomRep) + "' " +
                 ";");
         while (rs.next()) {
             tmpRootLib.id_local = rs.getString("id_local");
@@ -47,6 +68,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     public void reconnect() {
         this.connect(cheminfichierLrcat);
+        refreshdataLrcat(cheminfichierLrcat);
     }
 
 
@@ -79,7 +101,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
      * @return the int
      * @throws SQLException the sql exception
      */
-    public int sqlDeleteRepertory() throws SQLException {
+    private int sqlDeleteRepertory() throws SQLException {
 
         //compte le nombre de photo presente dans la base poour le repertoire
 
@@ -140,5 +162,32 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             idLocalCalcul = (id_local / 2) + 1;
         }
         return idLocalCalcul;
+    }
+
+    public int openLigthroomLrcatandWait() throws IOException, InterruptedException {
+        // open ligthroom catalog
+        disconnect();
+
+        Process process = Runtime.getRuntime().exec("cmd /c  " + "\"" + cheminfichierLrcat + "\"");
+
+        StringBuilder output = new StringBuilder();
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            output.append(line + "\n");
+        }
+
+
+        int exitVal = process.waitFor();
+
+        reconnect();
+        return exitVal;
+    }
+
+    public String getname() {
+        return nomFichier + " " + dateFichierHR;
     }
 }

@@ -29,7 +29,6 @@ public class MainFrameControllerTest {
             e.printStackTrace();
         }
         controller = new MainFrameController();
-        Context.setDryRun(false);
     }
 
     @AfterMethod
