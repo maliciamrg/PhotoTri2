@@ -133,7 +133,7 @@ public class AgLibraryRootFolder {
                         "ON ahem.cameraModelRef = aiecm.id_local " +
                         "Where b.rootFolder =  " + rootfolderidlocal + " " +
                         "order by captureTime asc " +
-                        "limit 10 " +
+//                        "limit 10 " +
                         ";");
 
 

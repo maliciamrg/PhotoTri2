@@ -5,7 +5,6 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
 import com.malicia.mrg.mvc.models.SystemFiles;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -562,11 +561,11 @@ public class MainFrameController {
         }
     }
 
-    public void spyfirst10() {
+    public void spyfirst() {
         try {
-            String retourtext = lrcat.spyfirst10();
+            String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            popupalert("spyfirst10" + retlist.get(retlist.size()-1) , retourtext);
+            popupalert("spyfirst" + retlist.get(retlist.size()-1) , retourtext);
         } catch (SQLException e) {
             popupalertException(e);
             excptlog(e);

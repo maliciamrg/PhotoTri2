@@ -129,7 +129,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     }
 
-    public String spyfirst10() throws SQLException {
+    public String spyfirst() throws SQLException {
         String sql = "select * FROM AgLibraryFolder " +
                 "ORDER by id_local desc " +
                 "; ";
@@ -165,7 +165,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             }
 
         }
-        txtret += " nb = " + nb + " : ko = " + ko + "\n";
+        txtret += " nb logique = " + nb + " : absent physique = " + ko + "\n";
         return txtret;
     }
 

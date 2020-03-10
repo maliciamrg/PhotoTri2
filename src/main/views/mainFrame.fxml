@@ -50,7 +50,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets"/>
                         <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge [RepNew] Physique Vide "/>
                         <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide"/>
-                        <MenuItem mnemonicParsing="false" onAction="#spyfirst10" text="display table sur 10"/>
+                        <MenuItem mnemonicParsing="false" onAction="#spyfirst" text="Ecart logique/physique"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
