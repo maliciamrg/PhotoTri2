@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox prefHeight="773.0" prefWidth="1202.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>
@@ -52,7 +52,104 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="487.0" prefWidth="771.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="708.0" prefWidth="1127.0" VBox.vgrow="ALWAYS">
+            <children>
+                <BorderPane layoutX="274.0" layoutY="18.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                    <center>
+                        <AnchorPane>
+                            <children>
+                                <Label prefHeight="17.0" prefWidth="135.0" text="Label" />
+                                <Label layoutX="148.0" prefHeight="17.0" prefWidth="135.0" text="Label" />
+                                <Label layoutX="309.0" prefHeight="17.0" prefWidth="135.0" text="Label" />
+                            </children>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
+            <AnchorPane layoutX="14.0" layoutY="14.0">
+               <children>
+                      <ChoiceBox layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
+                      <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                          <center>
+                              <AnchorPane prefHeight="644.0" prefWidth="228.0">
+                                  <children>
+                                      <BorderPane layoutX="13.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="13.0" layoutY="166.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="13.0" layoutY="318.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="13.0" layoutY="470.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                  </children>
+                              </AnchorPane>
+                          </center>
+                      </BorderPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="274.0" layoutY="57.0" prefHeight="685.0" prefWidth="810.0">
+               <children>
+                      <BorderPane layoutY="40.0">
+                          <center>
+                              <AnchorPane>
+                                  <children>
+                                      <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="606.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="75.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="531.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                          <center>
+                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                          </center>
+                                      </BorderPane>
+                                      <Label layoutX="339.0" layoutY="144.0" prefHeight="17.0" prefWidth="96.0" text="Label" />
+                                  </children>
+                              </AnchorPane>
+                          </center>
+                      </BorderPane>
+                      <BorderPane layoutX="9.0">
+                          <center>
+                              <AnchorPane>
+                                  <children>
+                                      <ComboBox prefHeight="25.0" prefWidth="185.0" />
+                                      <ComboBox layoutX="193.0" prefHeight="25.0" prefWidth="185.0" />
+                                      <ComboBox layoutX="388.0" prefHeight="25.0" prefWidth="185.0" />
+                                      <ComboBox layoutX="586.0" prefHeight="25.0" prefWidth="185.0" />
+                                  </children>
+                              </AnchorPane>
+                          </center>
+                      </BorderPane>
+                      <Button layoutX="739.0" layoutY="627.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button" />
+               </children>
+            </AnchorPane>
+            </children>
         </AnchorPane>
         <HBox prefHeight="6.0" prefWidth="640.0" />
     </children>
