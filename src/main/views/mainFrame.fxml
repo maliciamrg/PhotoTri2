@@ -2,73 +2,58 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<VBox prefHeight="403.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="773.0" prefWidth="1202.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde"/>
-                        <MenuItem mnemonicParsing="false" text="_Close"/>
-                        <MenuItem mnemonicParsing="false" text="_Save"/>
-                        <MenuItem mnemonicParsing="false" text="_Save As…"/>
-                        <MenuItem mnemonicParsing="false" text="_Revert"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="_Preferences…"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="_Quit"/>
-                        <MenuItem mnemonicParsing="false" text="Unspecified Action"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde" />
+                        <MenuItem mnemonicParsing="false" text="_Close" />
+                        <MenuItem mnemonicParsing="false" text="_Save" />
+                        <MenuItem mnemonicParsing="false" text="_Save As…" />
+                        <MenuItem mnemonicParsing="false" text="_Revert" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="_Preferences…" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="_Quit" />
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Workflow">
 
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer to New"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Choisir Repertoire"/>
-                        <MenuItem mnemonicParsing="false" text="Nommer Repertoire"/>
-                        <MenuItem mnemonicParsing="false" text="1er passe Rejet flou"/>
-                        <MenuItem mnemonicParsing="false" text="2eme passe Notes"/>
-                        <MenuItem mnemonicParsing="false" text="3eme passe Affinage"/>
-                        <MenuItem mnemonicParsing="false" text="4eme passe Tag"/>
-                        <MenuItem mnemonicParsing="false" text="Exporter vers Catalog lrcat"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="Trier le Bazar"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer to New" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionCycleTraitementPhoto" text="Cycle de traitement photo" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="Trier le Bazar" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Maintenance">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Controler les Nb de photo de chaque repertoire"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets"/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge [RepNew] Physique Vide "/>
-                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide"/>
-                        <MenuItem mnemonicParsing="false" onAction="#spyfirst" text="Ecart logique/physique"/>
+                        <MenuItem mnemonicParsing="false" text="Controler les Nb de photo de chaque repertoire" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge [RepNew] Physique Vide " />
+                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Ecart logique/physique" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl"
-                                  text="About PhotoTri2"/>
+                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="93.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
-            <children>
-                <TextArea fx:id="userlogInfo" editable="false" layoutX="8.0" layoutY="155.0" prefHeight="200.0"
-                          prefWidth="754.0">
-                    <font>
-                        <Font size="10.0"/>
-                    </font>
-                </TextArea>
-            </children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="487.0" prefWidth="771.0" VBox.vgrow="ALWAYS">
         </AnchorPane>
-        <HBox prefHeight="6.0" prefWidth="640.0"/>
+        <HBox prefHeight="6.0" prefWidth="640.0" />
     </children>
 </VBox>

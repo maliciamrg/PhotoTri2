@@ -49,9 +49,6 @@ public class MainFrameController {
     }
 
 
-    @FXML
-    private TextArea userlogInfo;
-
     /**
      * Instantiates a new Main frame controller.
      */
@@ -198,34 +195,40 @@ public class MainFrameController {
         lrcat.disconnect();
 
         String basedir = Context.appParam.getString("RepCatlogSauve");
+        String patterncherche = "save_lrcat_" + "*" + "/" + lrcat.nomFichier;
 
         DirectoryScanner scanner = new DirectoryScanner();
-        scanner.setIncludes(new String[]{"save_lrcat_" + "*" + "/" + lrcat.nomFichier});
+        scanner.setIncludes(new String[]{patterncherche});
         scanner.setBasedir(basedir);
         scanner.setCaseSensitive(false);
         scanner.scan();
         List<String> files = Arrays.asList(scanner.getIncludedFiles());
 
-        String theone = showChoiceOneWindow("Quel catalog restaurer ?", "catalog", files);
-        String selectfile = basedir + File.separator + theone;
+        if (files.size() != 0) {
+
+            String theone = showChoiceOneWindow("Quel catalog restaurer ?", "catalog", files);
+            String selectfile = basedir + File.separator + theone;
 
 
-        java.io.File fori = new java.io.File(selectfile);
-        java.io.File fdest = new java.io.File(lrcat.cheminfichierLrcat);
+            java.io.File fori = new java.io.File(selectfile);
+            java.io.File fdest = new java.io.File(lrcat.cheminfichierLrcat);
 
-        try {
-            if (fori.isFile() && fori.exists()) {
-                if (fdest.isFile() && fdest.exists()) {
-                    Files.delete(fdest.toPath());
-                    Files.copy(fori.toPath(), fdest.toPath());
-                    logecrireuserlogInfo("restaure lrcat de :" + selectfile);
+            try {
+                if (fori.isFile() && fori.exists()) {
+                    if (fdest.isFile() && fdest.exists()) {
+                        Files.delete(fdest.toPath());
+                        Files.copy(fori.toPath(), fdest.toPath());
+                        logecrireuserlogInfo("restaure lrcat de :" + selectfile);
+                    }
+                } else {
+                    logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
                 }
-            } else {
-                logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
+            } catch (IOException e) {
+                popupalertException(e);
+                excptlog(e);
             }
-        } catch (IOException e) {
-            popupalertException(e);
-            excptlog(e);
+        } else {
+            logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche );
         }
 
         lrcat.reconnect();
@@ -259,7 +262,12 @@ public class MainFrameController {
     }
 
     private void logecrireuserlogInfo(String msg) {
-        userlogInfo.appendText(msg + "\n");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText("Information Dialog");
+        alert.setContentText(msg);
+        alert.showAndWait();
+
         LOGGER.info(msg);
     }
 
@@ -533,7 +541,7 @@ public class MainFrameController {
         }
     }
 
-    public void spyfirst() {
+    public void actionSpyfirst() {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
@@ -542,6 +550,10 @@ public class MainFrameController {
             popupalertException(e);
             excptlog(e);
         }
+
+    }
+
+    public void actionCycleTraitementPhoto() {
 
     }
 }
