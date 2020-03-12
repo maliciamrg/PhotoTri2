@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -20,8 +22,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
-import java.awt.Label;
-import java.awt.MenuItem;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
