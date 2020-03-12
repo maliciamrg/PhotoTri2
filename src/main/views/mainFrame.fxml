@@ -3,154 +3,188 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde" />
-                        <MenuItem mnemonicParsing="false" text="_Close" />
-                        <MenuItem mnemonicParsing="false" text="_Save" />
-                        <MenuItem mnemonicParsing="false" text="_Save As…" />
-                        <MenuItem mnemonicParsing="false" text="_Revert" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="_Preferences…" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="_Quit" />
-                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde"/>
+                        <MenuItem mnemonicParsing="false" text="_Close"/>
+                        <MenuItem mnemonicParsing="false" text="_Save"/>
+                        <MenuItem mnemonicParsing="false" text="_Save As…"/>
+                        <MenuItem mnemonicParsing="false" text="_Revert"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="_Preferences…"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="_Quit"/>
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Workflow">
 
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer to New" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionCycleTraitementPhoto" text="Cycle de traitement photo" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="Trier le Bazar" />
+                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer to New"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Ranger New"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionCycleTraitementPhoto" text="Cycle de traitement photo"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="Trier le Bazar"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Maintenance">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Controler les Nb de photo de chaque repertoire" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge [RepNew] Physique Vide " />
-                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide" />
-                        <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Ecart logique/physique" />
+                        <MenuItem mnemonicParsing="false" text="Controler les Nb de photo de chaque repertoire"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge [RepNew] Physique Vide "/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide"/>
+                        <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Ecart logique/physique"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2" />
+                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2"/>
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="708.0" prefWidth="1127.0" VBox.vgrow="ALWAYS">
             <children>
-                <BorderPane layoutX="274.0" layoutY="18.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                    <center>
-                        <AnchorPane>
+                <BorderPane layoutX="274.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                    <top>
+                        <AnchorPane prefHeight="3.0" prefWidth="775.0" BorderPane.alignment="CENTER">
                             <children>
-                                <Label prefHeight="17.0" prefWidth="135.0" text="Label" />
-                                <Label layoutX="148.0" prefHeight="17.0" prefWidth="135.0" text="Label" />
-                                <Label layoutX="309.0" prefHeight="17.0" prefWidth="135.0" text="Label" />
+                                <Label fx:id="lbnbeleRep1" text="Label"/>
+                                <Label fx:id="lbnbphotoRep1" layoutX="77.0" text="Label"/>
+                                <Label fx:id="lbstatusRep1" layoutX="719.0" text="Label"/>
+                                <Label fx:id="lbratiophotoaconcerver1" layoutX="156.0" text="Label"/>
+                                <Label fx:id="lbnbphotoapurger1" layoutX="231.0" text="Label"/>
+                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="388.0" text="Label"/>
+                                <Label fx:id="lbnbetrationuneetoile1" layoutX="439.0" text="Label"/>
+                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="483.0" text="Label"/>
+                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="528.0" text="Label"/>
+                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="577.0" text="Label"/>
+                                <Label fx:id="lbnbetrationcinqetoile1" layoutX="622.0" text="Label"/>
                             </children>
                         </AnchorPane>
-                    </center>
+                    </top>
+                    <bottom>
+                        <AnchorPane prefHeight="3.0" prefWidth="775.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <Label fx:id="nbeleRep" text="Label"/>
+                                <Label fx:id="nbphotoRep" layoutX="77.0" text="Label"/>
+                                <Label fx:id="statusRep" layoutX="719.0" text="Label"/>
+                                <Label fx:id="ratiophotoaconcerver" layoutX="156.0" text="Label"/>
+                                <Label fx:id="nbphotoapurger" layoutX="231.0" text="Label"/>
+                                <Label fx:id="nbetrationzeroetoile" layoutX="388.0" text="Label"/>
+                                <Label fx:id="nbetrationuneetoile" layoutX="439.0" text="Label"/>
+                                <Label fx:id="nbetrationdeuxetoile" layoutX="483.0" text="Label"/>
+                                <Label fx:id="nbetrationtroisetoile" layoutX="528.0" text="Label"/>
+                                <Label fx:id="nbetrationquatreetoile" layoutX="577.0" text="Label"/>
+                                <Label fx:id="nbetrationcinqetoile" layoutX="622.0" text="Label"/>
+                            </children>
+                        </AnchorPane>
+                    </bottom>
                 </BorderPane>
-            <AnchorPane layoutX="14.0" layoutY="14.0">
-               <children>
-                      <ChoiceBox layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
-                      <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                          <center>
-                              <AnchorPane prefHeight="644.0" prefWidth="228.0">
-                                  <children>
-                                      <BorderPane layoutX="13.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="13.0" layoutY="166.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="13.0" layoutY="318.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="13.0" layoutY="470.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                  </children>
-                              </AnchorPane>
-                          </center>
-                      </BorderPane>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="274.0" layoutY="57.0" prefHeight="685.0" prefWidth="810.0">
-               <children>
-                      <BorderPane layoutY="40.0">
-                          <center>
-                              <AnchorPane>
-                                  <children>
-                                      <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="606.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="75.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="531.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                          <center>
-                                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                          </center>
-                                      </BorderPane>
-                                      <Label layoutX="339.0" layoutY="144.0" prefHeight="17.0" prefWidth="96.0" text="Label" />
-                                  </children>
-                              </AnchorPane>
-                          </center>
-                      </BorderPane>
-                      <BorderPane layoutX="9.0">
-                          <center>
-                              <AnchorPane>
-                                  <children>
-                                      <ComboBox prefHeight="25.0" prefWidth="185.0" />
-                                      <ComboBox layoutX="193.0" prefHeight="25.0" prefWidth="185.0" />
-                                      <ComboBox layoutX="388.0" prefHeight="25.0" prefWidth="185.0" />
-                                      <ComboBox layoutX="586.0" prefHeight="25.0" prefWidth="185.0" />
-                                  </children>
-                              </AnchorPane>
-                          </center>
-                      </BorderPane>
-                      <Button layoutX="739.0" layoutY="627.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button" />
-               </children>
-            </AnchorPane>
+                <AnchorPane layoutX="14.0" layoutY="14.0">
+                    <children>
+                        <ChoiceBox fx:id="repChoose" layoutX="2.0" prefHeight="25.0" prefWidth="226.0"/>
+                        <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                            <center>
+                                <AnchorPane prefHeight="644.0" prefWidth="228.0">
+                                    <children>
+                                        <BorderPane layoutX="13.0" layoutY="14.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imager1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="13.0" layoutY="166.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imager2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="13.0" layoutY="318.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imager3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="13.0" layoutY="470.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imager4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                    </children>
+                                </AnchorPane>
+                            </center>
+                        </BorderPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane layoutX="258.0" layoutY="62.0" prefHeight="685.0" prefWidth="810.0">
+                    <children>
+                        <BorderPane layoutY="40.0">
+                            <center>
+                                <AnchorPane>
+                                    <children>
+                                        <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="606.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="75.0" layoutY="76.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="531.0" layoutY="76.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0"
+                                                    style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" pickOnBounds="true" preserveRatio="true"/>
+                                            </center>
+                                        </BorderPane>
+                                        <Label fx:id="imagedestinationcorbeilleorstar" alignment="CENTER" layoutX="289.0" layoutY="144.0" prefHeight="17.0"
+                                               prefWidth="230.0" text="Label"/>
+                                        <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="172.0" prefHeight="17.0" prefWidth="230.0" text="Label"/>
+                                    </children>
+                                </AnchorPane>
+                            </center>
+                        </BorderPane>
+                        <BorderPane layoutX="9.0">
+                            <center>
+                                <AnchorPane>
+                                    <children>
+                                        <ComboBox fx:id="selectcat" prefHeight="25.0" prefWidth="185.0"/>
+                                        <ComboBox fx:id="selectevents" layoutX="193.0" prefHeight="25.0" prefWidth="185.0"/>
+                                        <ComboBox fx:id="selectlieux" layoutX="388.0" prefHeight="25.0" prefWidth="185.0"/>
+                                        <ComboBox fx:id="selectperson" layoutX="586.0" prefHeight="25.0" prefWidth="185.0"/>
+                                    </children>
+                                </AnchorPane>
+                            </center>
+                        </BorderPane>
+                        <Button layoutX="739.0" layoutY="627.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button"/>
+                    </children>
+                </AnchorPane>
             </children>
         </AnchorPane>
-        <HBox prefHeight="6.0" prefWidth="640.0" />
+        <HBox prefHeight="6.0" prefWidth="640.0"/>
     </children>
 </VBox>

@@ -54,7 +54,7 @@ public class PopUpController {
      */
     public static final String IMAGE_2_LR = "image2LR";
     private static final java.util.logging.Logger LOGGER;
-    private static Stage popupStage;
+    private static Stage  popupStage;
 
     static {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);

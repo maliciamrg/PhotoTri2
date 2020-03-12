@@ -6,19 +6,22 @@ import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.SystemFiles;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
+import java.awt.Label;
+import java.awt.MenuItem;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +51,84 @@ public class MainFrameController {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
+    @FXML
+    private MenuItem about;
+    @FXML
+    private Label lbnbeleRep1;
+    @FXML
+    private Label lbnbphotoRep1;
+    @FXML
+    private Label lbstatusRep1;
+    @FXML
+    private Label lbratiophotoaconcerver1;
+    @FXML
+    private Label lbnbphotoapurger1;
+    @FXML
+    private Label lbnbetrationzeroetoile1;
+    @FXML
+    private Label lbnbetrationuneetoile1;
+    @FXML
+    private Label lbnbetrationdeuxetoile1;
+    @FXML
+    private Label lbnbetrationtroisetoile1;
+    @FXML
+    private Label lbnbetrationquatreetoile1;
+    @FXML
+    private Label lbnbetrationcinqetoile1;
+    @FXML
+    private Label nbeleRep;
+    @FXML
+    private Label nbphotoRep;
+    @FXML
+    private Label statusRep;
+    @FXML
+    private Label ratiophotoaconcerver;
+    @FXML
+    private Label nbphotoapurger;
+    @FXML
+    private Label nbetrationzeroetoile;
+    @FXML
+    private Label nbetrationuneetoile;
+    @FXML
+    private Label nbetrationdeuxetoile;
+    @FXML
+    private Label nbetrationtroisetoile;
+    @FXML
+    private Label nbetrationquatreetoile;
+    @FXML
+    private Label nbetrationcinqetoile;
+    @FXML
+    private ChoiceBox<?> repChoose;
+    @FXML
+    private ImageView imager1;
+    @FXML
+    private ImageView imager2;
+    @FXML
+    private ImageView imager3;
+    @FXML
+    private ImageView imager4;
+    @FXML
+    private ImageView imageM2;
+    @FXML
+    private ImageView imageP2;
+    @FXML
+    private ImageView imageM1;
+    @FXML
+    private ImageView imageP1;
+    @FXML
+    private ImageView imageOne;
+    @FXML
+    private Label imagedestinationcorbeilleorstar;
+    @FXML
+    private Label imagedestinationinformation;
+    @FXML
+    private ComboBox<?> selectcat;
+    @FXML
+    private ComboBox<?> selectevents;
+    @FXML
+    private ComboBox<?> selectlieux;
+    @FXML
+    private ComboBox<?> selectperson;
 
     /**
      * Instantiates a new Main frame controller.
@@ -163,8 +244,11 @@ public class MainFrameController {
 
     /**
      * Action makeadulpicatelrcatwithdate.
+     *
+     * @param event the event
      */
-    public void actionMakeadulpicatelrcatwithdate() {
+    @FXML
+    void actionMakeadulpicatelrcatwithdate(ActionEvent event) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String formattedDate = sdf.format(date);
@@ -189,8 +273,11 @@ public class MainFrameController {
 
     /**
      * Action makeadulpicatelrcatwithdate.
+     *
+     * @param event the event
      */
-    public void actionRestaureLastDuplicate() {
+    @FXML
+    void actionRestaureLastDuplicate(ActionEvent event) {
 
         lrcat.disconnect();
 
@@ -228,7 +315,7 @@ public class MainFrameController {
                 excptlog(e);
             }
         } else {
-            logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche );
+            logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
         }
 
         lrcat.reconnect();
@@ -249,8 +336,11 @@ public class MainFrameController {
 
     /**
      * Boucle delete repertoire logique.
+     *
+     * @param event the event
      */
-    public void actionDeleteRepertoireLogique() {
+    @FXML
+    void actionDeleteRepertoireLogique(ActionEvent event) {
         try {
             int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
             logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
@@ -315,8 +405,11 @@ public class MainFrameController {
 
     /**
      * Move new to grp photos.
+     *
+     * @param event the event
      */
-    public void actionRangerRejet() {
+    @FXML
+    void actionRangerRejet(ActionEvent event) {
 
         try {
 
@@ -331,8 +424,11 @@ public class MainFrameController {
 
     /**
      * import new photos.
+     *
+     * @param event the event
      */
-    public void actionImportNew() {
+    @FXML
+    void actionImportNew(ActionEvent event) {
 
         try {
 
@@ -352,9 +448,11 @@ public class MainFrameController {
 
     /**
      * Move new to grp photos.
+     *
+     * @param event the event
      */
-
-    public void actionRangerNew() {
+    @FXML
+    void actionRangerNew(ActionEvent event) {
 
         try {
 
@@ -376,8 +474,11 @@ public class MainFrameController {
     /**
      * Move chaque photo du bazar dans un groupe.
      * #interactif
+     *
+     * @param event the event
      */
-    public void actionRangerlebazar() {
+    @FXML
+    void actionRangerlebazar(ActionEvent event) {
         try {
 
             LOGGER.info(() -> "actionRangerlebazar ");
@@ -507,8 +608,11 @@ public class MainFrameController {
 
     /**
      * Abouturl.
+     *
+     * @param event the event
      */
-    public void actionAbouturl() {
+    @FXML
+    void actionAbouturl(ActionEvent event) {
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
@@ -521,7 +625,13 @@ public class MainFrameController {
     }
 
 
-    public void actionDeleteEmptyDirectoryPhysique() {
+    /**
+     * Action delete empty directory physique.
+     *
+     * @param event the event
+     */
+    @FXML
+    void actionDeleteEmptyDirectoryPhysique(ActionEvent event) {
         try {
             int ndDelTotal = lrcat.deleteEmptyDirectory();
             logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
@@ -531,17 +641,29 @@ public class MainFrameController {
         }
     }
 
-    public void actionopenligthroom() throws InterruptedException {
+    /**
+     * Actionopenligthroom.
+     *
+     * @param event the event
+     */
+    @FXML
+    void actionopenligthroom(ActionEvent event) {
         try {
             lrcat.openLigthroomLrcatandWait();
             initialize();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
-    public void actionSpyfirst() {
+    /**
+     * Action spyfirst.
+     *
+     * @param event the event
+     */
+    @FXML
+    void actionSpyfirst(ActionEvent event) {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
@@ -553,7 +675,13 @@ public class MainFrameController {
 
     }
 
-    public void actionCycleTraitementPhoto() {
+    /**
+     * Action cycle traitement photo.
+     *
+     * @param event the event
+     */
+    @FXML
+    void actionCycleTraitementPhoto(ActionEvent event) {
 
     }
 }
