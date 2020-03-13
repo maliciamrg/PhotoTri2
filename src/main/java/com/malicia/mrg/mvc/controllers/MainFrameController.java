@@ -5,7 +5,12 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
+import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -98,7 +103,7 @@ public class MainFrameController {
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
-    private ChoiceBox<?> repChoose;
+    private ChoiceBox<AgLibrarySubFolder> repChoose;
     @FXML
     private ImageView imager1;
     @FXML
@@ -682,6 +687,13 @@ public class MainFrameController {
      */
     @FXML
     void actionCycleTraitementPhoto(ActionEvent event) {
-
+        ObservableList<AgLibrarySubFolder> ret = lrcat.getlistofrepertorytoprocess();
+        repChoose.setItems(ret);
+        repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                System.out.println(repChoose.getItems().get((Integer) number2));
+            }
+        });
     }
 }

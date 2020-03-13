@@ -1,6 +1,8 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -223,5 +225,10 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     public String getname() {
         return nomFichier + " " + dateFichierHR;
+    }
+
+    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() {
+        ObservableList<AgLibrarySubFolder> ret = FXCollections.observableArrayList(new AgLibrarySubFolder("choix1"), new AgLibrarySubFolder("choix2"), new AgLibrarySubFolder("choix3"));
+        return ret;
     }
 }
