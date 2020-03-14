@@ -18,4 +18,24 @@ public class AgLibrarySubFolder {
     public javafx.scene.image.Image getimagepreview(int num){
 
     }
+
+    public String getcurrentcat() {
+
+
+    }
+
+    public String getcurrentevents() {
+
+
+    }
+
+    public String getcurrentlieux() {
+
+
+    }
+
+    public String getcurrentperson() {
+
+
+    }
 }

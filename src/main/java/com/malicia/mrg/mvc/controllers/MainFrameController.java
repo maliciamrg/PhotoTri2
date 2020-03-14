@@ -9,8 +9,6 @@ import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -134,6 +133,8 @@ public class MainFrameController {
     private ComboBox<String> selectlieux;
     @FXML
     private ComboBox<String> selectperson;
+
+    private AgLibrarySubFolder activeRep;
 
     /**
      * Instantiates a new Main frame controller.
@@ -692,11 +693,19 @@ public class MainFrameController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 System.out.println(repChoose.getItems().get((Integer) number2));
-                AgLibrarySubFolder rep = repChoose.getItems().get((Integer) number2);
-                imager1.setImage(rep.getimagepreview(1));
-                imager2.setImage(rep.getimagepreview(2));
-                imager3.setImage(rep.getimagepreview(3));
-                imager4.setImage(rep.getimagepreview(4));
+                activeRep = repChoose.getItems().get((Integer) number2);
+                imager1.setImage(activeRep.getimagepreview(1));
+                imager2.setImage(activeRep.getimagepreview(2));
+                imager3.setImage(activeRep.getimagepreview(3));
+                imager4.setImage(activeRep.getimagepreview(4));
+                selectcat.getSelectionModel().select(activeRep.getcurrentcat());
+                selectevents.getSelectionModel().select(activeRep.getcurrentevents());
+                selectlieux.getSelectionModel().select(activeRep.getcurrentlieux());
+                selectperson.getSelectionModel().select(activeRep.getcurrentperson());
+                activeRep.setactivephoto = 0;
+                refreshActivePhoto();
+                refreshvaleurphoto();
+                refreshcompteurRepertoire();
             }
         });
 
@@ -706,5 +715,58 @@ public class MainFrameController {
         selectperson.setItems(lrcat.getlistofpossibleperson());
     }
 
+    private void refreshcompteurRepertoire() {
+        nbeleRep.setText(activeRep.nbelerep());
+        nbphotoRep.setText(activeRep.nbphotoRep());
+        statusRep.setText(activeRep.statusRep());
+        ratiophotoaconcerver.setText(activeRep.ratiophotoaconcerver());
+        nbphotoapurger.setText(activeRep.nbphotoapurger());
+        nbetrationzeroetoile.setText(activeRep.nbetrationzeroetoile());
+        nbetrationuneetoile.setText(activeRep.nbetrationuneetoile());
+        nbetrationdeuxetoile.setText(activeRep.nbetrationdeuxetoile());
+        nbetrationtroisetoile.setText(activeRep.nbetrationtroisetoile());
+        nbetrationquatreetoile.setText(activeRep.nbetrationquatreetoile());
+        nbetrationcinqetoile.setText(activeRep.nbetrationcinqetoile());
+    }
 
+    private void refreshActivePhoto() {
+        imageOne.setImage(activeRep.getimagenumero(activeRep.getactivephoto));
+        imageM1.setImage(activeRep.getimagenumero(activeRep.getactivephoto - 1));
+        imageM2.setImage(activeRep.getimagenumero(activeRep.getactivephoto - 2));
+        imageP1.setImage(activeRep.getimagenumero(activeRep.getactivephoto + 1));
+        imageP2.setImage(activeRep.getimagenumero(activeRep.getactivephoto + 2));
+    }
+
+    private void refreshvaleurphoto() {
+        imagedestinationcorbeilleorstar.setText(activeRep.getactivephotovaleur());
+        imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle());
+    }
+
+
+    public void actionActivePhoto(KeyEvent keyEvent) {
+        switch (keyEvent.getCode()) {
+            case RIGHT:
+                activeRep.setactivephoto(activeRep.getactivephoto + 1);
+                refreshActivePhoto();
+                refreshvaleurphoto();
+                break;
+            case LEFT:
+                activeRep.setactivephoto(activeRep.getactivephoto - 1);
+                refreshActivePhoto();
+                refreshvaleurphoto();
+                break;
+            case UP:
+                activeRep.valeuractivephotoincrease();
+                refreshvaleurphoto();
+                refreshcompteurRepertoire();
+                break;
+            case DOWN:
+                activeRep.valeuractivephotodecrease();
+                refreshvaleurphoto();
+                refreshcompteurRepertoire();
+                break;
+            default:
+                break;
+        }
+    }
 }
