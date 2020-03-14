@@ -127,13 +127,13 @@ public class MainFrameController {
     @FXML
     private Label imagedestinationinformation;
     @FXML
-    private ComboBox<?> selectcat;
+    private ComboBox<String> selectcat;
     @FXML
-    private ComboBox<?> selectevents;
+    private ComboBox<String> selectevents;
     @FXML
-    private ComboBox<?> selectlieux;
+    private ComboBox<String> selectlieux;
     @FXML
-    private ComboBox<?> selectperson;
+    private ComboBox<String> selectperson;
 
     /**
      * Instantiates a new Main frame controller.
@@ -687,13 +687,24 @@ public class MainFrameController {
      */
     @FXML
     void actionCycleTraitementPhoto(ActionEvent event) {
-        ObservableList<AgLibrarySubFolder> ret = lrcat.getlistofrepertorytoprocess();
-        repChoose.setItems(ret);
+        repChoose.setItems(lrcat.getlistofrepertorytoprocess());
         repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 System.out.println(repChoose.getItems().get((Integer) number2));
+                AgLibrarySubFolder rep = repChoose.getItems().get((Integer) number2);
+                imager1.setImage(rep.getimagepreview(1));
+                imager2.setImage(rep.getimagepreview(2));
+                imager3.setImage(rep.getimagepreview(3));
+                imager4.setImage(rep.getimagepreview(4));
             }
         });
+
+        selectcat.setItems(lrcat.getlistofpossiblecat());
+        selectevents.setItems(lrcat.getlistofpossibleevent());
+        selectlieux.setItems(lrcat.getlistofpossiblelieux());
+        selectperson.setItems(lrcat.getlistofpossibleperson());
     }
+
+
 }

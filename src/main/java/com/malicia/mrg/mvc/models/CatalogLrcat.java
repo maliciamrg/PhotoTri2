@@ -231,4 +231,24 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         ObservableList<AgLibrarySubFolder> ret = FXCollections.observableArrayList(new AgLibrarySubFolder("choix1"), new AgLibrarySubFolder("choix2"), new AgLibrarySubFolder("choix3"));
         return ret;
     }
+
+    public ObservableList<String> getlistofpossiblecat() {
+
+
+    }
+
+    public ObservableList<String> getlistofpossibleevent() {
+
+
+    }
+
+    public ObservableList<String> getlistofpossiblelieux() {
+
+
+    }
+
+    public ObservableList<String> getlistofpossibleperson() {
+
+
+    }
 }
