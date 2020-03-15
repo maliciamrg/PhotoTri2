@@ -687,7 +687,7 @@ public class MainFrameController {
      * @param event the event
      */
     @FXML
-    void actionCycleTraitementPhoto(ActionEvent event) {
+    void actionCycleTraitementPhoto(ActionEvent event) throws SQLException {
         repChoose.setItems(lrcat.getlistofrepertorytoprocess());
         repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -702,7 +702,7 @@ public class MainFrameController {
                 selectevents.getSelectionModel().select(activeRep.getcurrentevents());
                 selectlieux.getSelectionModel().select(activeRep.getcurrentlieux());
                 selectperson.getSelectionModel().select(activeRep.getcurrentperson());
-                activeRep.setactivephoto = 0;
+                activeRep.setactivephoto(0);
                 refreshActivePhoto();
                 refreshvaleurphoto();
                 refreshcompteurRepertoire();
@@ -716,42 +716,42 @@ public class MainFrameController {
     }
 
     private void refreshcompteurRepertoire() {
-        nbeleRep.setText(activeRep.nbelerep());
-        nbphotoRep.setText(activeRep.nbphotoRep());
-        statusRep.setText(activeRep.statusRep());
-        ratiophotoaconcerver.setText(activeRep.ratiophotoaconcerver());
-        nbphotoapurger.setText(activeRep.nbphotoapurger());
-        nbetrationzeroetoile.setText(activeRep.nbetrationzeroetoile());
-        nbetrationuneetoile.setText(activeRep.nbetrationuneetoile());
-        nbetrationdeuxetoile.setText(activeRep.nbetrationdeuxetoile());
-        nbetrationtroisetoile.setText(activeRep.nbetrationtroisetoile());
-        nbetrationquatreetoile.setText(activeRep.nbetrationquatreetoile());
-        nbetrationcinqetoile.setText(activeRep.nbetrationcinqetoile());
+        nbeleRep.setText(activeRep.nbelerep);
+        nbphotoRep.setText(activeRep.nbphotoRep);
+        statusRep.setText(activeRep.statusRep);
+        ratiophotoaconcerver.setText(activeRep.ratiophotoaconcerver);
+        nbphotoapurger.setText(activeRep.nbphotoapurger);
+        nbetrationzeroetoile.setText(activeRep.nbetrationzeroetoile);
+        nbetrationuneetoile.setText(activeRep.nbetrationuneetoile);
+        nbetrationdeuxetoile.setText(activeRep.nbetrationdeuxetoile);
+        nbetrationtroisetoile.setText(activeRep.nbetrationtroisetoile);
+        nbetrationquatreetoile.setText(activeRep.nbetrationquatreetoile);
+        nbetrationcinqetoile.setText(activeRep.nbetrationcinqetoile);
     }
 
     private void refreshActivePhoto() {
-        imageOne.setImage(activeRep.getimagenumero(activeRep.getactivephoto));
-        imageM1.setImage(activeRep.getimagenumero(activeRep.getactivephoto - 1));
-        imageM2.setImage(activeRep.getimagenumero(activeRep.getactivephoto - 2));
-        imageP1.setImage(activeRep.getimagenumero(activeRep.getactivephoto + 1));
-        imageP2.setImage(activeRep.getimagenumero(activeRep.getactivephoto + 2));
+        imageOne.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum()));
+        imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() - 1));
+        imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() - 2));
+        imageP1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() + 1));
+        imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() + 2));
     }
 
     private void refreshvaleurphoto() {
-        imagedestinationcorbeilleorstar.setText(activeRep.getactivephotovaleur());
-        imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle());
+        imagedestinationcorbeilleorstar.setText(activeRep.activephotoValeur);
+        imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle(activeRep.activephotoValeur));
     }
 
 
     public void actionActivePhoto(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case RIGHT:
-                activeRep.setactivephoto(activeRep.getactivephoto + 1);
+                activeRep.setactivephoto(activeRep.getActivephotoNum() + 1);
                 refreshActivePhoto();
                 refreshvaleurphoto();
                 break;
             case LEFT:
-                activeRep.setactivephoto(activeRep.getactivephoto - 1);
+                activeRep.setactivephoto(activeRep.getActivephotoNum() - 1);
                 refreshActivePhoto();
                 refreshvaleurphoto();
                 break;

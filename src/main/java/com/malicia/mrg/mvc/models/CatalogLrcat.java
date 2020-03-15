@@ -140,7 +140,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
                 "ORDER by id_local desc " +
                 "; ";
         select(sql);
-        sql =  "select " +
+        sql = "select " +
                 "c.absolutePath , " +
                 "b.pathFromRoot , " +
                 "a.lc_idx_filename as lc_idx_filename , " +
@@ -160,10 +160,10 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         int ko = 0;
         while (rs.next()) {
             File filepath = new File(rs.getString("absolutePath") + rs.getString("pathFromRoot") + rs.getString("lc_idx_filename"));
-            nb +=1;
+            nb += 1;
             if (!filepath.exists()) {
                 txtret += "ko = " + filepath.toString() + "\n";
-                ko +=1;
+                ko += 1;
             }
 
         }
@@ -227,28 +227,27 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         return nomFichier + " " + dateFichierHR;
     }
 
-    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() {
-        ObservableList<AgLibrarySubFolder> ret = FXCollections.observableArrayList(new AgLibrarySubFolder("choix1"), new AgLibrarySubFolder("choix2"), new AgLibrarySubFolder("choix3"));
-        return ret;
+    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
+        ObservableList<AgLibrarySubFolder> listrep = null;
+        for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
+            listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
+        }
+        return listrep;
     }
 
     public ObservableList<String> getlistofpossiblecat() {
-
-
+        return FXCollections.observableArrayList(Context.appParam.getString("listeCat").split(","));
     }
 
     public ObservableList<String> getlistofpossibleevent() {
-
-
+        return FXCollections.observableArrayList(Context.appParam.getString("listeEvents").split(","));
     }
 
     public ObservableList<String> getlistofpossiblelieux() {
-
-
+        return FXCollections.observableArrayList(Context.appParam.getString("listeLieux").split(","));
     }
 
     public ObservableList<String> getlistofpossibleperson() {
-
-
+        return FXCollections.observableArrayList(Context.appParam.getString("listePerson").split(","));
     }
 }

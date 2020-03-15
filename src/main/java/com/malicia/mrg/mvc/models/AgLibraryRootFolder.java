@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class AgLibraryRootFolder {
     public String rootfolderidlocal;
     public String absolutePath;
     public String name;
-    private CatalogLrcat parentLrcat;
+    CatalogLrcat parentLrcat;
     private int nbDelTotal;
 
     {
@@ -462,6 +463,48 @@ public class AgLibraryRootFolder {
             sqlmovefile(source, dest, folder_id_local, file_id_local);
 
         }
+    }
+
+    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
+        ObservableList<AgLibrarySubFolder> ret = null;
+
+        ResultSet rsele = sqlgetListeRepertoire();
+
+        while (rsele.next()) {
+            // Recuperer les info de l'elements
+            String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+            String folder_id_local = rsele.getString("folder_id_local");
+
+            if (isRepertoryToProcess(Context.PATH_FROM_ROOT) ){
+                ret.add(new AgLibrarySubFolder(parentLrcat,name,pathFromRoot,folder_id_local));
+            }
+
+        }
+        return ret;
+    }
+
+    private boolean isRepertoryToProcess(String pathFromRoot) {
+        if(pathFromRoot.matches("\\$[0-9a-zA-Z-]*\\$\\/")){return true;};
+        if(pathFromRoot.matches("![0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")){return true;};
+        if(pathFromRoot.matches( "![0-9a-zA-Z- _]*\\/##[0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")){return true;};
+        return false;
+    }
+
+    /**
+     * Sqlget listelementrejetaranger result set.
+     *
+     * @return the result set
+     * @throws SQLException the sql exception
+     */
+    public ResultSet sqlgetListeRepertoire() throws SQLException {
+        return parentLrcat.select(
+                "select  " +
+                        "b.id_local as folder_id_local , " +
+                        "b.pathFromRoot , " +
+                        "b.rootFolder " +
+                        "from AgLibraryFolder b   " +
+                        "Where b.rootFolder =  " + rootfolderidlocal + " " +
+                        " ;");
     }
 }
 
