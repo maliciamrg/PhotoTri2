@@ -716,6 +716,7 @@ public class MainFrameController {
     }
 
     private void refreshcompteurRepertoire() {
+        activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.nbelerep);
         nbphotoRep.setText(activeRep.nbphotoRep);
         statusRep.setText(activeRep.statusRep);

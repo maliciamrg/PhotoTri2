@@ -120,7 +120,9 @@ public class AgLibraryRootFolder {
                         " aiecm.value as CameraModel , " +
                         " strftime('%s', DATETIME( e.captureTime,\"-" + tempsAdherence + "\")) as mint , " +
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt  , " +
-                        "b.rootFolder " +
+                        "b.rootFolder , " +
+                        "e.rating , " +
+                        "e.fileformat " +
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
@@ -339,8 +341,10 @@ public class AgLibraryRootFolder {
             String cameraModel = rsele.getString("CameraModel");
             long mint = rsele.getLong("mint");
             long maxt = rsele.getLong("maxt");
+            Double rating = rsele.getDouble("rating");
+            String fileformat = rsele.getString("fileformat");
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this);
+            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat) ;
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

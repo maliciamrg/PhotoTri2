@@ -11,7 +11,8 @@ public class AgLibraryFile {
     private String lcIdxFilename;
     private String fileIdLocal;
     private AgLibraryRootFolder agLibraryRootFolder;
-    private int starValue;
+    private double starValue;
+    private String fileformat;
     private String pathFromRoot;
     private String absolutePath;
     /**
@@ -23,13 +24,20 @@ public class AgLibraryFile {
      * @param fileIdLocal
      * @param agLibraryRootFolder
      */
-    public AgLibraryFile(String absolutePath, String pathFromRoot, String lcIdxFilename, String fileIdLocal, AgLibraryRootFolder agLibraryRootFolder,int starValue) {
+    public AgLibraryFile(String absolutePath,
+                         String pathFromRoot,
+                         String lcIdxFilename,
+                         String fileIdLocal,
+                         AgLibraryRootFolder agLibraryRootFolder,
+                         double starValue,
+                         String fileformat) {
         this.absolutePath = absolutePath;
         this.pathFromRoot = pathFromRoot;
         this.lcIdxFilename = lcIdxFilename;
         this.fileIdLocal = fileIdLocal;
         this.agLibraryRootFolder = agLibraryRootFolder;
         this.starValue = starValue;
+        this.fileformat = fileformat;
     }
 
     public String getFileIdLocal() {

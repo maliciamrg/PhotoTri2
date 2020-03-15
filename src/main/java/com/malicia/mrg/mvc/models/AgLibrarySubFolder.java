@@ -35,10 +35,13 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         while (rs.next()) {
             String file_id_local = rs.getString("file_id_local");
             String lcIdxFilename = rs.getString("lc_idx_filename");
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this));
+            Double rating = rs.getDouble("rating");
+            String fileformat = rs.getString("fileformat");
+            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename , file_id_local, this,rating , fileformat));
         }
 
-        nbelerep= "" + listFileSubFolder.size();
+        refreshCompteur();
+
 
     }
 
@@ -105,10 +108,22 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      */
     public ResultSet sqlgetListelementsubfolder() throws SQLException {
         return parentLrcat.select(
-                "select a.id_local as file_id_local, " +
+                "select a.id_local as file_id_local , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
+                        "e.rating , " +
+                        "e.fileformat " +
                         "from AgLibraryFile a  " +
+                        "inner join Adobe_images e  " +
+                        " on a.id_local = e.rootFile    " +
                         "Where a.folder =  \"" + folder_id_local + "\" " +
                         " ;");
+    }
+
+    public void refreshCompteur() {
+        for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
+            AgLibraryFile fi = listFileSubFolder.get(ifile);
+            if (fi.est)
+        }
+        nbelerep= "" + listFileSubFolder.size();
     }
 }
