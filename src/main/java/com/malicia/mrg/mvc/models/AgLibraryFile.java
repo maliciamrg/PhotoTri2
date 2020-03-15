@@ -11,7 +11,7 @@ public class AgLibraryFile {
     private String lcIdxFilename;
     private String fileIdLocal;
     private AgLibraryRootFolder agLibraryRootFolder;
-    private double starValue;
+    public double starValue;
     private String fileformat;
     private String pathFromRoot;
     private String absolutePath;
@@ -75,4 +75,11 @@ public class AgLibraryFile {
         return lcIdxFilename;
     }
 
+    public boolean estRejeter() {
+        return starValue<0;
+    }
+
+    public boolean estPhoto() {
+        return false;
+    }
 }

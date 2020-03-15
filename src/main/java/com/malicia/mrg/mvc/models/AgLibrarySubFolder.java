@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
-    public String nbelerep;
-    public String nbphotoRep;
+    public int nbelerep;
+    public int nbphotoRep;
     public String statusRep;
     public String ratiophotoaconcerver;
     public String nbphotoapurger;
@@ -120,10 +120,19 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void refreshCompteur() {
+        nbelerep=0;
+        nbphotoRep=0;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
-            if (fi.est)
+            if (!fi.estRejeter()){
+                nbelerep+=1;
+                if (fi.estPhoto()){
+                    nbphotoRep+=1;
+                    switch(fi.starValue){
+                        case
+                    }
+                }
+            }
         }
-        nbelerep= "" + listFileSubFolder.size();
     }
 }
