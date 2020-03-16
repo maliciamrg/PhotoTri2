@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
@@ -63,11 +64,11 @@
                                 <Label fx:id="lbstatusRep1" layoutX="719.0" text="Label" />
                                 <Label fx:id="lbratiophotoaconcerver1" layoutX="156.0" text="Label" />
                                 <Label fx:id="lbnbphotoapurger1" layoutX="231.0" text="Label" />
-                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="388.0" text="Label" />
-                                <Label fx:id="lbnbetrationuneetoile1" layoutX="439.0" text="Label" />
-                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="483.0" text="Label" />
-                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="528.0" text="Label" />
-                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="577.0" text="Label" />
+                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="288.0" text="Label" />
+                                <Label fx:id="lbnbetrationuneetoile1" layoutX="360.0" text="Label" />
+                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="419.0" text="Label" />
+                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="491.0" text="Label" />
+                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="554.0" text="Label" />
                                 <Label fx:id="lbnbetrationcinqetoile1" layoutX="622.0" text="Label" />
                             </children>
                         </AnchorPane>
@@ -80,11 +81,11 @@
                                 <Label fx:id="statusRep" layoutX="719.0" text="Label" />
                                 <Label fx:id="ratiophotoaconcerver" layoutX="156.0" text="Label" />
                                 <Label fx:id="nbphotoapurger" layoutX="231.0" text="Label" />
-                                <Label fx:id="nbetrationzeroetoile" layoutX="388.0" text="Label" />
-                                <Label fx:id="nbetrationuneetoile" layoutX="439.0" text="Label" />
-                                <Label fx:id="nbetrationdeuxetoile" layoutX="483.0" text="Label" />
-                                <Label fx:id="nbetrationtroisetoile" layoutX="528.0" text="Label" />
-                                <Label fx:id="nbetrationquatreetoile" layoutX="577.0" text="Label" />
+                                <Label fx:id="nbetrationzeroetoile" layoutX="291.0" text="Label" />
+                                <Label fx:id="nbetrationuneetoile" layoutX="360.0" text="Label" />
+                                <Label fx:id="nbetrationdeuxetoile" layoutX="421.0" text="Label" />
+                                <Label fx:id="nbetrationtroisetoile" layoutX="494.0" text="Label" />
+                                <Label fx:id="nbetrationquatreetoile" layoutX="559.0" text="Label" />
                                 <Label fx:id="nbetrationcinqetoile" layoutX="622.0" text="Label" />
                             </children>
                         </AnchorPane>
@@ -154,7 +155,10 @@
                                                 <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" onKeyTyped="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
-                                        <Label fx:id="imagedestinationcorbeilleorstar" alignment="CENTER" layoutX="289.0" layoutY="144.0" prefHeight="17.0" prefWidth="230.0" text="Label" />
+                                        <Label fx:id="imagedestinationcorbeilleorstar" alignment="CENTER" layoutX="289.0" layoutY="144.0" prefHeight="17.0" prefWidth="230.0" text="LabelK">
+                                 <font>
+                                    <Font name="Wingdings 2" size="12.0" />
+                                 </font></Label>
                                         <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="172.0" prefHeight="17.0" prefWidth="230.0" text="Label" />
                                     </children>
                                 </AnchorPane>

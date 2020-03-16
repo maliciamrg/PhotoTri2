@@ -49,16 +49,16 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     private void addrootFolder(String nomRep) throws SQLException {
-        AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, Context.appParam.getString(nomRep));
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
                 "where name = '" + Context.appParam.getString(nomRep) + "' " +
                 ";");
         while (rs.next()) {
-            tmpRootLib.rootfolderidlocal = rs.getString("id_local");
-            tmpRootLib.absolutePath = rs.getString("absolutePath");
-            tmpRootLib.name = rs.getString("name");
+            String rootfolderidlocal = rs.getString("id_local");
+            String absolutePath = rs.getString("absolutePath");
+            String name = rs.getString("name");
+            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this,name,rootfolderidlocal,absolutePath);
             rep.put(nomRep, tmpRootLib);
         }
     }
@@ -228,7 +228,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
-        ObservableList<AgLibrarySubFolder> listrep = null;
+        ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
             listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
         }

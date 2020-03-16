@@ -1,20 +1,24 @@
 package com.malicia.mrg.mvc.models;
 
+import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
+
 /**
  * The type Ele.
  */
 public class AgLibraryFile {
     public static final String REP_NEW = "repNew";
+    public boolean setedited;
+    public double starValue;
     /**
      * The Lc idx filename.
      */
     private String lcIdxFilename;
     private String fileIdLocal;
     private AgLibraryRootFolder agLibraryRootFolder;
-    public double starValue;
     private String fileformat;
     private String pathFromRoot;
     private String absolutePath;
+
     /**
      * Instantiates a new Ele.
      *
@@ -76,10 +80,21 @@ public class AgLibraryFile {
     }
 
     public boolean estRejeter() {
-        return starValue<0;
+        return starValue < 0;
     }
 
     public boolean estPhoto() {
-        return false;
+        switch (fileformat.toLowerCase()) {
+            case "avi":
+                return false;
+            case "arw":
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    public String getPath() {
+        return normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
     }
 }

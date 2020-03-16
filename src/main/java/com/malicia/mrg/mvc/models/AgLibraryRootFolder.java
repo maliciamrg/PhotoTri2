@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
 
@@ -32,9 +33,11 @@ public class AgLibraryRootFolder {
     }
 
 
-    public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder) {
+    public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath) {
         parentLrcat = catalogLrcat;
         name = NomRootFolder;
+        this.rootfolderidlocal = rootfolderidlocal;
+        this.absolutePath = absolutePath;
     }
 
 
@@ -470,7 +473,7 @@ public class AgLibraryRootFolder {
     }
 
     public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
-        ObservableList<AgLibrarySubFolder> ret = null;
+        ObservableList<AgLibrarySubFolder> ret = FXCollections.observableArrayList();
 
         ResultSet rsele = sqlgetListeRepertoire();
 
@@ -479,8 +482,8 @@ public class AgLibraryRootFolder {
             String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
             String folder_id_local = rsele.getString("folder_id_local");
 
-            if (isRepertoryToProcess(Context.PATH_FROM_ROOT) ){
-                ret.add(new AgLibrarySubFolder(parentLrcat,name,pathFromRoot,folder_id_local));
+            if (isRepertoryToProcess(pathFromRoot) ){
+                ret.add(new AgLibrarySubFolder(parentLrcat,name,pathFromRoot,folder_id_local,rootfolderidlocal, absolutePath ));
             }
 
         }
