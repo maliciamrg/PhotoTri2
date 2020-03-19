@@ -1,10 +1,13 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
@@ -73,22 +77,29 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 //        return "";
 //    }
 
-    public Image getimagepreview(int num) throws IOException {
+    public Image getimagepreview(int num) throws IOException, InterruptedException {
         int interval = (nbphotoRep / 5);
         return getimagenumero(getnextphotonumfrom(interval * num));
     }
 
-    public Image getimagenumero(int phototoshow) throws IOException {
+    public Image getimagenumero(int phototoshow) throws IOException, InterruptedException {
         String localUrl;
         if (phototoshow < 0 || phototoshow > listFileSubFolder.size() - 1) {
-            localUrl = Context.getLocalVoidPhotUrl();
+            localUrl = Context.getLocalVoidPhotoUrl();
         } else {
-            localUrl = new File(listFileSubFolder.get(phototoshow).getPath()).toURI().toString();
+            File file = new File(listFileSubFolder.get(phototoshow).getPath());
+            if (!file.exists()) {
+                localUrl = Context.getLocalVoidPhotoUrl();
+            } else {
+                localUrl = file.toURI().toURL().toExternalForm();
+            }
         }
-
         LOGGER.info(phototoshow + " " + localUrl);
-        InputStream input = new URL(localUrl).openStream();;
-        return new Image(input);
+        Image image = new Image(localUrl,false);
+//        TimeUnit.SECONDS.sleep(1);
+        if (image.isError()){       image = new Image(new URL(Context.getLocalErr404PhotUrl()).openStream());}
+//        MainFrameController.popupalert(phototoshow + " " + localUrl, image);
+        return image;
     }
 
     public String getactivephotovaleurlibelle() {
@@ -310,7 +321,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         if (activephotoNumsetZero < 0) {
             activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
         }
-        if (activephotoNumsetZero >listFileSubFolder.size() - 1) {
+        if (activephotoNumsetZero > listFileSubFolder.size() - 1) {
             activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
         }
 
@@ -332,14 +343,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             if (fil.estPhoto()) {
                 return phototoshow;
             }
-            phototoshow -=  1;
+            phototoshow -= 1;
         }
         return -1;
 
     }
 
     private int getnextphotonumfrom(int phototoshow) {
-        phototoshow +=  1;
+        phototoshow += 1;
 
         while (phototoshow <= listFileSubFolder.size() - 1) {
             AgLibraryFile fil = listFileSubFolder.get(phototoshow);

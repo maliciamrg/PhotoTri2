@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -406,6 +407,43 @@ public class MainFrameController {
         alert.showAndWait();
     }
 
+    public static void popupalert(String contentText, Image imageaaff) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Popup Info Image");
+
+        alert.setContentText(contentText);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(150);
+        imageView.setFitWidth(200);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setImage(imageaaff);
+//        alert.setGraphic(imageView);
+//        alert.getDialogPane().setMaxSize(2,2);
+
+
+
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setWrapText(false);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(imageView, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+
+    }
 
     /**
      * Move new to grp photos.
@@ -696,7 +734,7 @@ public class MainFrameController {
                         refreshActivePhoto();
                         refreshvaleurphoto();
                         setimagepreview();
-                    } catch (IOException e) {
+                    } catch (IOException | InterruptedException e) {
                         popupalertException(e);
                         excptlog(e);
                     }
@@ -717,7 +755,7 @@ public class MainFrameController {
         }
     }
 
-    public void setimagepreview() throws IOException {
+    public void setimagepreview() throws IOException, InterruptedException {
         LOGGER.info("setimagepreview");
         imager1.setImage(activeRep.getimagepreview(1));
         imager2.setImage(activeRep.getimagepreview(2));
@@ -740,7 +778,7 @@ public class MainFrameController {
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
     }
 
-    private void refreshActivePhoto() throws IOException {
+    private void refreshActivePhoto() throws IOException, InterruptedException {
         LOGGER.info("refresh");
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
@@ -781,7 +819,7 @@ public class MainFrameController {
                 default:
                     break;
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -792,7 +830,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -803,7 +841,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -814,7 +852,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -825,10 +863,14 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             popupalertException(e);
             excptlog(e);
         }
 
+    }
+
+    public void start() {
+        actionCycleTraitementPhoto();
     }
 }

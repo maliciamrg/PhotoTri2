@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 
 /**
@@ -21,7 +22,7 @@ public class Main extends Application {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException, URISyntaxException {
         Context.setup();
         launch(args);
     }
@@ -36,6 +37,7 @@ public class Main extends Application {
         MainFrameController controller = loader.getController();
         Context.setController(controller);
         primaryStage.setScene(new Scene(root, 1100, 770));
+        controller.start();
         primaryStage.show();
 
     }

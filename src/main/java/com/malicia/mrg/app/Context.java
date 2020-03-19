@@ -6,8 +6,8 @@ import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.LogManager;
@@ -55,14 +55,21 @@ public class Context implements Serializable {
     private static MainFrameController controller;
     private static Stage primaryStage;
     private static HashMap<String, String> lrcatSource = new HashMap();
-    private static String LocalVoidPhotUrl;
+    private static String LocalVoidPhotoUrl;
+
+    public static String getLocalErr404PhotUrl() {
+        return LocalErr404PhotUrl;
+    }
+
+
+    private static String LocalErr404PhotUrl;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    public static String getLocalVoidPhotUrl() {
-        return LocalVoidPhotUrl;
+    public static String getLocalVoidPhotoUrl() {
+        return LocalVoidPhotoUrl;
     }
 
     /**
@@ -108,7 +115,7 @@ public class Context implements Serializable {
      * @throws ClassNotFoundException the class not found exception
      * @throws SQLException           the sql exception
      */
-    public static void setup() throws IOException, SQLException {
+    public static void setup() throws IOException, SQLException, URISyntaxException {
 
         InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(stream);
@@ -133,7 +140,7 @@ public class Context implements Serializable {
     /**
      * Init properties parameters.
      */
-    public static void initPropertiesParameters() {
+    public static void initPropertiesParameters() throws URISyntaxException, MalformedURLException {
         LOGGER.info("initPropertiesParameters");
 
         appParam = ResourceBundle.getBundle("config");
@@ -146,7 +153,8 @@ public class Context implements Serializable {
 
 //        ClasspathFileListPrinter test = new ClasspathFileListPrinter((URLClassLoader) Context.class.getClassLoader());
 //        test.print();
-        LocalVoidPhotUrl = Context.class.getClassLoader().getResource("images.png").toString();
+        LocalVoidPhotoUrl = Context.class.getClassLoader().getResource("images.png").toURI().toURL().toExternalForm();
+        LocalErr404PhotUrl = Context.class.getClassLoader().getResource("err404.jpg").toURI().toURL().toExternalForm();
 
     }
 
