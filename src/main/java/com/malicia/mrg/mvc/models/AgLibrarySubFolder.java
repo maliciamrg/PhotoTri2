@@ -1,10 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.controllers.MainFrameController;
-import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
@@ -53,9 +49,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         ResultSet rs = sqlgetListelementsubfolder();
         while (rs.next()) {
             String file_id_local = rs.getString("file_id_local");
+            String file_id_global = rs.getString("id_global");
             String lcIdxFilename = rs.getString("lc_idx_filename");
             Double rating = rs.getDouble("rating");
             String fileformat = rs.getString("fileformat");
+            long captureTime = rs.getLong(Context.CAPTURE_TIME);
+
             listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat));
         }
         refreshCompteur();
@@ -89,7 +88,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         } else {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
             if (!file.exists()) {
-                localUrl = Context.getLocalVoidPhotoUrl();
+                localUrl = Context.getLocalErr404PhotoUrl();
             } else {
                 localUrl = file.toURI().toURL().toExternalForm();
             }
@@ -97,7 +96,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         LOGGER.info(phototoshow + " " + localUrl);
         Image image = new Image(localUrl,false);
 //        TimeUnit.SECONDS.sleep(1);
-        if (image.isError()){       image = new Image(new URL(Context.getLocalErr404PhotUrl()).openStream());}
+        if (image.isError()){       image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());}
 //        MainFrameController.popupalert(phototoshow + " " + localUrl, image);
         return image;
     }
@@ -153,9 +152,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public ResultSet sqlgetListelementsubfolder() throws SQLException {
         return parentLrcat.select(
                 "select a.id_local as file_id_local , " +
+                        "a.id_global , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
                         "e.rating , " +
-                        "e.fileformat " +
+                        "e.fileformat ," +
+                        "e.captureTime " +
                         "from AgLibraryFile a  " +
                         "inner join Adobe_images e  " +
                         " on a.id_local = e.rootFile    " +

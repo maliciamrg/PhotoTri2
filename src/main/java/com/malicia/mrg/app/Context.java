@@ -56,16 +56,19 @@ public class Context implements Serializable {
     private static Stage primaryStage;
     private static HashMap<String, String> lrcatSource = new HashMap();
     private static String LocalVoidPhotoUrl;
-
-    public static String getLocalErr404PhotUrl() {
-        return LocalErr404PhotUrl;
-    }
-
-
-    private static String LocalErr404PhotUrl;
+    private static String LocalErr404PhotoUrl;
+    private static String LocalErrPhotoUrl;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public static String getLocalErrPhotoUrl() {
+        return LocalErrPhotoUrl;
+    }
+
+    public static String getLocalErr404PhotoUrl() {
+        return LocalErr404PhotoUrl;
     }
 
     public static String getLocalVoidPhotoUrl() {
@@ -154,12 +157,9 @@ public class Context implements Serializable {
 //        ClasspathFileListPrinter test = new ClasspathFileListPrinter((URLClassLoader) Context.class.getClassLoader());
 //        test.print();
         LocalVoidPhotoUrl = Context.class.getClassLoader().getResource("images.png").toURI().toURL().toExternalForm();
-        LocalErr404PhotUrl = Context.class.getClassLoader().getResource("err404.jpg").toURI().toURL().toExternalForm();
-
+        LocalErr404PhotoUrl = Context.class.getClassLoader().getResource("err404.jpg").toURI().toURL().toExternalForm();
+        LocalErrPhotoUrl = Context.class.getClassLoader().getResource("error.jpg").toURI().toURL().toExternalForm();
     }
-
-
-
 
 
     /**
