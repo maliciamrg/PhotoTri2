@@ -85,7 +85,13 @@ public class AgLibraryFile {
 
     public boolean estPhoto() {
         switch (fileformat.toLowerCase()) {
+            case "video":
+                return false;
+            case "mp4":
+                return false;
             case "avi":
+                return false;
+            case "raw":
                 return false;
             case "arw":
                 return false;

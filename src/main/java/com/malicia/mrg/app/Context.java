@@ -6,6 +6,8 @@ import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.LogManager;
@@ -53,11 +55,15 @@ public class Context implements Serializable {
     private static MainFrameController controller;
     private static Stage primaryStage;
     private static HashMap<String, String> lrcatSource = new HashMap();
+    private static String LocalVoidPhotUrl;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    public static String getLocalVoidPhotUrl() {
+        return LocalVoidPhotUrl;
+    }
 
     /**
      * Gets primary stage.
@@ -102,7 +108,7 @@ public class Context implements Serializable {
      * @throws ClassNotFoundException the class not found exception
      * @throws SQLException           the sql exception
      */
-    public static void setup() throws IOException,  SQLException {
+    public static void setup() throws IOException, SQLException {
 
         InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(stream);
@@ -138,7 +144,14 @@ public class Context implements Serializable {
             LOGGER.info(key + ": " + value);
         }
 
+//        ClasspathFileListPrinter test = new ClasspathFileListPrinter((URLClassLoader) Context.class.getClassLoader());
+//        test.print();
+        LocalVoidPhotUrl = Context.class.getClassLoader().getResource("images.png").toString();
+
     }
+
+
+
 
 
     /**

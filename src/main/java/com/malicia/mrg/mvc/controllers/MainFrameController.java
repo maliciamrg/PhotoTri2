@@ -20,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -27,10 +28,7 @@ import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -64,7 +62,7 @@ public class MainFrameController {
     @FXML
     private Label lbstatusRep1;
     @FXML
-    private Label lbratiophotoaconcerver1;
+    private Label lbLabelratiophotoaconcerver1;
     @FXML
     private Label lbnbphotoapurger1;
     @FXML
@@ -683,35 +681,48 @@ public class MainFrameController {
 
     /**
      * Action cycle traitement photo.
-     *
-     * @param event the event
      */
     @FXML
-    void actionCycleTraitementPhoto(ActionEvent event) throws SQLException {
-        repChoose.setItems(lrcat.getlistofrepertorytoprocess());
-        repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                activeRep = repChoose.getItems().get((Integer) number2);
-                refreshcompteurRepertoire();
-                activeRep.setActivephotoNum(0);
-                refreshActivePhoto();
-                refreshvaleurphoto();
-                imager1.setImage(activeRep.getimagepreview(1));
-                imager2.setImage(activeRep.getimagepreview(2));
-                imager3.setImage(activeRep.getimagepreview(3));
-                imager4.setImage(activeRep.getimagepreview(4));
+    void actionCycleTraitementPhoto() {
+        try {
+            repChoose.setItems(lrcat.getlistofrepertorytoprocess());
+            repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                    activeRep = repChoose.getItems().get((Integer) number2);
+                    refreshcompteurRepertoire();
+                    activeRep.moveActivephotoNumTo(0);
+                    try {
+                        refreshActivePhoto();
+                        refreshvaleurphoto();
+                        setimagepreview();
+                    } catch (IOException e) {
+                        popupalertException(e);
+                        excptlog(e);
+                    }
 //                selectcat.getSelectionModel().select(activeRep.getcurrentcat());
 //                selectevents.getSelectionModel().select(activeRep.getcurrentevents());
 //                selectlieux.getSelectionModel().select(activeRep.getcurrentlieux());
 //                selectperson.getSelectionModel().select(activeRep.getcurrentperson());
-            }
-        });
+                }
+            });
 
-        selectcat.setItems(lrcat.getlistofpossiblecat());
-        selectevents.setItems(lrcat.getlistofpossibleevent());
-        selectlieux.setItems(lrcat.getlistofpossiblelieux());
-        selectperson.setItems(lrcat.getlistofpossibleperson());
+            selectcat.setItems(lrcat.getlistofpossiblecat());
+            selectevents.setItems(lrcat.getlistofpossibleevent());
+            selectlieux.setItems(lrcat.getlistofpossiblelieux());
+            selectperson.setItems(lrcat.getlistofpossibleperson());
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    public void setimagepreview() throws IOException {
+        LOGGER.info("setimagepreview");
+        imager1.setImage(activeRep.getimagepreview(1));
+        imager2.setImage(activeRep.getimagepreview(2));
+        imager3.setImage(activeRep.getimagepreview(3));
+        imager4.setImage(activeRep.getimagepreview(4));
     }
 
     private void refreshcompteurRepertoire() {
@@ -729,12 +740,13 @@ public class MainFrameController {
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
     }
 
-    private void refreshActivePhoto() {
-        imageOne.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum()));
-        imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() - 1));
-        imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() - 2));
-        imageP1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() + 1));
-        imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum() + 2));
+    private void refreshActivePhoto() throws IOException {
+        LOGGER.info("refresh");
+        imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
+        imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
+        imageOne.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(0)));
+        imageP1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(1)));
+        imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(2)));
     }
 
     private void refreshvaleurphoto() {
@@ -744,29 +756,79 @@ public class MainFrameController {
 
 
     public void actionActivePhoto(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case RIGHT:
-                activeRep.setActivephotoNum(activeRep.getActivephotoNum() + 1);
-                refreshActivePhoto();
-                refreshvaleurphoto();
-                break;
-            case LEFT:
-                activeRep.setActivephotoNum(activeRep.getActivephotoNum() - 1);
-                refreshActivePhoto();
-                refreshvaleurphoto();
-                break;
-            case UP:
-                activeRep.valeuractivephotoincrease();
-                refreshcompteurRepertoire();
-                refreshvaleurphoto();
-                break;
-            case DOWN:
-                activeRep.valeuractivephotodecrease();
-                refreshcompteurRepertoire();
-                refreshvaleurphoto();
-                break;
-            default:
-                break;
+        try {
+            switch (keyEvent.getCode()) {
+                case RIGHT:
+                    activeRep.moveActivephotoNumTo(+1);
+                    refreshActivePhoto();
+                    refreshvaleurphoto();
+                    break;
+                case LEFT:
+                    activeRep.moveActivephotoNumTo(-1);
+                    refreshActivePhoto();
+                    refreshvaleurphoto();
+                    break;
+                case UP:
+                    activeRep.valeuractivephotoincrease();
+                    refreshcompteurRepertoire();
+                    refreshvaleurphoto();
+                    break;
+                case DOWN:
+                    activeRep.valeuractivephotodecrease();
+                    refreshcompteurRepertoire();
+                    refreshvaleurphoto();
+                    break;
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
         }
+    }
+
+    public void actionActivePhotop2(MouseEvent mouseEvent) {
+        try {
+            activeRep.moveActivephotoNumTo(+2);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    public void actionActivePhotom2(MouseEvent mouseEvent) {
+        try {
+            activeRep.moveActivephotoNumTo(-2);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    public void actionActivePhotom1(MouseEvent mouseEvent) {
+        try {
+            activeRep.moveActivephotoNumTo(-1);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    public void actionActivePhotop1(MouseEvent mouseEvent) {
+        try {
+            activeRep.moveActivephotoNumTo(+1);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+
     }
 }

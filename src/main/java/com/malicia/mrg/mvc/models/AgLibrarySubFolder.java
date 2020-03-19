@@ -3,14 +3,20 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.scene.image.Image;
 
-import java.io.File;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
+    private final Logger LOGGER;
     List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
@@ -25,10 +31,17 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private String statusRep;
     private String pathFromRoot;
     private String folder_id_local;
-    private int activephotoNum;
+    private Map<Integer, Integer> activephotoNum;
+    private int activeNum;
     private int activephotoValeur;
+    private int zero = 2;
 
-    public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folder_id_local,String rootfolderidlocal, String absolutePath) throws SQLException {
+
+    {
+        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folder_id_local, String rootfolderidlocal, String absolutePath) throws SQLException {
         super(parentLrcat, name, rootfolderidlocal, absolutePath);
         this.pathFromRoot = pathFromRoot;
         this.folder_id_local = folder_id_local;
@@ -42,11 +55,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat));
         }
         refreshCompteur();
-    }
-
-    public Image getimagepreview(int num) {
-        int interval = (nbphotoRep / 5);
-        return getimagenumero(interval/num);
     }
 
 //    public String getcurrentcat() {
@@ -65,13 +73,22 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 //        return "";
 //    }
 
+    public Image getimagepreview(int num) throws IOException {
+        int interval = (nbphotoRep / 5);
+        return getimagenumero(getnextphotonumfrom(interval * num));
+    }
 
-    public Image getimagenumero(int getactivephoto) {
-        if (getactivephoto <0 ){getactivephoto=0;}
-        if (getactivephoto > listFileSubFolder.size()-1 ){getactivephoto=listFileSubFolder.size()-1 ;}
-        File file = new File(listFileSubFolder.get(getactivephoto).getPath());
-        String localUrl = file.toURI().toString();
-        return new javafx.scene.image.Image(localUrl);
+    public Image getimagenumero(int phototoshow) throws IOException {
+        String localUrl;
+        if (phototoshow < 0 || phototoshow > listFileSubFolder.size() - 1) {
+            localUrl = Context.getLocalVoidPhotUrl();
+        } else {
+            localUrl = new File(listFileSubFolder.get(phototoshow).getPath()).toURI().toString();
+        }
+
+        LOGGER.info(phototoshow + " " + localUrl);
+        InputStream input = new URL(localUrl).openStream();;
+        return new Image(input);
     }
 
     public String getactivephotovaleurlibelle() {
@@ -96,32 +113,25 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void valeuractivephotoincrease() {
-        if (listFileSubFolder.get(activephotoNum).starValue<5) {
-            listFileSubFolder.get(activephotoNum).starValue += 1;
+        if (listFileSubFolder.get(activeNum).starValue < 5) {
+            listFileSubFolder.get(activeNum).starValue += 1;
             modifierfile();
         }
     }
 
     public void modifierfile() {
-        activephotoValeur = (int) listFileSubFolder.get(activephotoNum).starValue;
-        listFileSubFolder.get(activephotoNum).setedited = true;
+        activephotoValeur = (int) listFileSubFolder.get(activeNum).starValue;
+        listFileSubFolder.get(activeNum).setedited = true;
 
     }
 
     public void valeuractivephotodecrease() {
-        if (listFileSubFolder.get(activephotoNum).starValue>-1) {
-            listFileSubFolder.get(activephotoNum).starValue -= 1;
+        if (listFileSubFolder.get(activeNum).starValue > -1) {
+            listFileSubFolder.get(activeNum).starValue -= 1;
             modifierfile();
         }
     }
 
-    public int getActivephotoNum() {
-        return activephotoNum;
-    }
-
-    public void setActivephotoNum(int activephotoNum) {
-        this.activephotoNum = activephotoNum;
-    }
 
     /**
      * Sqlget listelementrejetaranger result set.
@@ -145,12 +155,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public void refreshCompteur() {
         nbelerep = 0;
         nbphotoRep = 0;
-        nbetrationzeroetoile=0;
-        nbetrationuneetoile=0;
-        nbetrationdeuxetoile=0;
-        nbetrationtroisetoile=0;
-        nbetrationquatreetoile=0;
-        nbetrationcinqetoile=0;
+        nbetrationzeroetoile = 0;
+        nbetrationuneetoile = 0;
+        nbetrationdeuxetoile = 0;
+        nbetrationtroisetoile = 0;
+        nbetrationquatreetoile = 0;
+        nbetrationcinqetoile = 0;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
             if (!fi.estRejeter()) {
@@ -260,6 +270,87 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return getNbphotoRep() + " " + pathFromRoot ;
+        return getNbelerep() + " " + getNbphotoRep() + " " + pathFromRoot;
     }
+
+
+    public int getActivephotoNum(int i) {
+        return activephotoNum.get(zero + i);
+    }
+
+    public void moveActivephotoNumTo(int delta) {
+
+        Integer activephotoNumsetZero = 0;
+        if (delta != 0) {
+            activephotoNumsetZero = activephotoNum.get(zero);
+        }
+
+        activephotoNum = new HashMap<>();
+        switch (delta) {
+            case 0:
+                activephotoNumsetZero = getnextphotonumfrom(-1);
+                break;
+            case -1:
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                break;
+            case -2:
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                break;
+            case +1:
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                break;
+            case +2:
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                break;
+        }
+
+        //forcage activephotoNum zero sur une photo
+        if (activephotoNumsetZero < 0) {
+            activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+        }
+        if (activephotoNumsetZero >listFileSubFolder.size() - 1) {
+            activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+        }
+
+        activephotoNum.put(zero, activephotoNumsetZero);
+        activephotoNum.put(zero + 1, getnextphotonumfrom(activephotoNum.get(zero)));
+        activephotoNum.put(zero + 2, getnextphotonumfrom(activephotoNum.get(zero + 1)));
+        activephotoNum.put(zero - 1, getprevphotonumfrom(activephotoNum.get(zero)));
+        activephotoNum.put(zero - 2, getprevphotonumfrom(activephotoNum.get(zero - 1)));
+
+        activeNum = activephotoNum.get(zero);
+
+    }
+
+    private int getprevphotonumfrom(int phototoshow) {
+        phototoshow -= 1;
+
+        while (phototoshow >= 0) {
+            AgLibraryFile fil = listFileSubFolder.get(phototoshow);
+            if (fil.estPhoto()) {
+                return phototoshow;
+            }
+            phototoshow -=  1;
+        }
+        return -1;
+
+    }
+
+    private int getnextphotonumfrom(int phototoshow) {
+        phototoshow +=  1;
+
+        while (phototoshow <= listFileSubFolder.size() - 1) {
+            AgLibraryFile fil = listFileSubFolder.get(phototoshow);
+            if (fil.estPhoto()) {
+                return phototoshow;
+            }
+            phototoshow += 1;
+        }
+        return listFileSubFolder.size();
+
+    }
+
+
 }

@@ -59,17 +59,17 @@
                     <top>
                         <AnchorPane prefHeight="3.0" prefWidth="775.0" BorderPane.alignment="CENTER">
                             <children>
-                                <Label fx:id="lbnbeleRep1" text="Label" />
-                                <Label fx:id="lbnbphotoRep1" layoutX="77.0" text="Label" />
-                                <Label fx:id="lbstatusRep1" layoutX="719.0" text="Label" />
-                                <Label fx:id="lbratiophotoaconcerver1" layoutX="156.0" text="Label" />
-                                <Label fx:id="lbnbphotoapurger1" layoutX="231.0" text="Label" />
-                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="288.0" text="Label" />
-                                <Label fx:id="lbnbetrationuneetoile1" layoutX="360.0" text="Label" />
-                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="419.0" text="Label" />
-                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="491.0" text="Label" />
-                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="554.0" text="Label" />
-                                <Label fx:id="lbnbetrationcinqetoile1" layoutX="622.0" text="Label" />
+                                <Label fx:id="lbnbeleRep1" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
+                                <Label fx:id="lbnbphotoRep1" layoutX="77.0" text="nbPhoto" />
+                                <Label fx:id="lbstatusRep1" layoutX="719.0" text="Status" />
+                                <Label fx:id="lbratiophotoaconcerver1" layoutX="156.0" text="Aconserver" />
+                                <Label fx:id="lbnbphotoapurger1" layoutX="231.0" text="Apurger" />
+                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="288.0" text="zero etoile" />
+                                <Label fx:id="lbnbetrationuneetoile1" layoutX="360.0" text="1 etoile" />
+                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="419.0" text="2 etoiles" />
+                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="491.0" text="3 etoiles" />
+                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="554.0" text="4 etoiles" />
+                                <Label fx:id="lbnbetrationcinqetoile1" layoutX="622.0" text="5 etoiles" />
                             </children>
                         </AnchorPane>
                     </top>
@@ -130,29 +130,29 @@
                             <center>
                                 <AnchorPane>
                                     <children>
-                                        <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
                                         <BorderPane layoutX="606.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                                             <center>
-                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop2" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
-                                        <BorderPane layoutX="75.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                        <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                                             <center>
-                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="531.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom2" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
                                         <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                                             <center>
                                                 <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" onKeyTyped="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="75.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom1" pickOnBounds="true" preserveRatio="true" />
+                                            </center>
+                                        </BorderPane>
+                                        <BorderPane layoutX="531.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                                            <center>
+                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
                                         <Label fx:id="imagedestinationcorbeilleorstar" alignment="CENTER" layoutX="289.0" layoutY="144.0" prefHeight="17.0" prefWidth="230.0" text="LabelK">
