@@ -35,6 +35,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int activeNum;
     private int activephotoValeur;
     private int zero = 2;
+    private String catFolder;
 
 
     {
@@ -55,7 +56,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat));
+            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat, captureTime));
         }
         refreshCompteur();
     }
@@ -173,6 +174,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
+        nbphotoapurger=0;
+        statusRep = "---";
+        long dtfin =0;
+        long dtdeb= 99_999_999_999;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
             if (!fi.estRejeter()) {
@@ -200,13 +205,44 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                             break;
 
                     }
+                    long dt = fi.getCaptureTime();
+                    if(dt<dtdeb){dtdeb=dt;}
+                    if(dt>dtfin){dtfin=dt;}
                 }
             }
         }
-//
+
 //        nbphotoapurger;
+        nbphotoapurger=0;
+        long nbjourfolder = dtfin - dtdeb;
+        String nbmin;
+        String nbmax;
+        switch(catFolder){
+            case Context.appParam.getString("repbookEvents"):
+                nbmin = Context.appParam.getString("nbminiEvents");
+                nbmax = Context.appParam.getString("nbmaxEvents");
+                break;
+            case Context.appParam.getString("repbookHolidays"):
+                nbmin = Context.appParam.getString("nbminiHolidays");
+                nbmax = Context.appParam.getString("nbmaxHolidays");
+                break;
+            case Context.appParam.getString("repbookShooting"):
+                nbmin = Context.appParam.getString("nbminiShooting");
+                nbmax = Context.appParam.getString("nbmaxShooting");
+                break;
+        }
+        long limiteminfolder = nbmin * nbjourfolder;
+        long limitemaxfolder = nbmax * nbjourfolder;
+        if (nbphotoRep < limiteminfolder){nbphotoapurger=limiteminfolder-nbphotoRep;}
+        if (nbphotoRep > limitemaxfolder){nbphotoapurger=limitemaxfolder-nbphotoRep;}
+
 //        ratiophotoaconserver;
+        DecimalFormat df = new DecimalFormat("##.##%");
+        double percent = (nbphotoapurger / nbphotoRep);
+        ratiophotoaconserver = " " + String.format("%03!d", nbphotoapurger) + " = " + df.format(percent);
+
 //        statusRep;
+        if (nbphotoapurger ==0){ statusRep = "--OK--"};
     }
 
     public String nbetratiovaleur(int valeur) {

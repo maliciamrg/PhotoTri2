@@ -16,6 +16,12 @@ public class AgLibraryFile {
     private String fileIdLocal;
     private AgLibraryRootFolder agLibraryRootFolder;
     private String fileformat;
+
+    public long getCaptureTime() {
+        return captureTime;
+    }
+
+    private long captureTime;
     private String pathFromRoot;
     private String absolutePath;
 
@@ -34,7 +40,8 @@ public class AgLibraryFile {
                          String fileIdLocal,
                          AgLibraryRootFolder agLibraryRootFolder,
                          double starValue,
-                         String fileformat) {
+                         String fileformat,
+                         long captureTime) {
         this.absolutePath = absolutePath;
         this.pathFromRoot = pathFromRoot;
         this.lcIdxFilename = lcIdxFilename;
@@ -42,6 +49,7 @@ public class AgLibraryFile {
         this.agLibraryRootFolder = agLibraryRootFolder;
         this.starValue = starValue;
         this.fileformat = fileformat;
+        this.captureTime = captureTime;
     }
 
     public String getFileIdLocal() {
