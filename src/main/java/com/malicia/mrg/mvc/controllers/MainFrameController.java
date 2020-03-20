@@ -86,6 +86,8 @@ public class MainFrameController {
     @FXML
     private Label nbphotoRep;
     @FXML
+    private Label nbjourrep;
+    @FXML
     private Label statusRep;
     @FXML
     private Label ratiophotoaconcerver;
@@ -284,13 +286,6 @@ public class MainFrameController {
             Context.getPrimaryStage().sizeToScene();
         }
         Context.getPrimaryStage().setTitle(lrcat.getname());
-
-        selectcat.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                activeRep.setCatFolder(newValue);
-            }
-        });
 
     }
 
@@ -779,9 +774,10 @@ public class MainFrameController {
         activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRep());
-        statusRep.setText(activeRep.getStatusRep());
+        nbjourrep.setText(activeRep.getNbjourfolder());
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
         nbphotoapurger.setText(activeRep.getNbphotoapurger());
+        statusRep.setText(activeRep.getStatusRep());
         nbetrationzeroetoile.setText(activeRep.nbetratiovaleur(0));
         nbetrationuneetoile.setText(activeRep.nbetratiovaleur(1));
         nbetrationdeuxetoile.setText(activeRep.nbetratiovaleur(2));
@@ -883,6 +879,15 @@ public class MainFrameController {
     }
 
     public void start() {
+
+        selectcat.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                activeRep.setCatFolder(newValue);
+                refreshcompteurRepertoire();
+            }
+        });
+
         actionCycleTraitementPhoto();
     }
 }

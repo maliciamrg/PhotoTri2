@@ -16,6 +16,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
+    final int folderUncat = 0;
+    final int folderEvents = 1;
+    final int folderHolidays = 2;
+    final int folderShooting = 3;
     private final Logger LOGGER;
     List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
@@ -36,9 +40,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int activephotoValeur;
     private int zero = 2;
     private int catFolder;
-    final int folderEvents = 1;
-    final int folderHolidays = 2;
-    final int folderShooting = 3;
+    private long nbjourfolder;
 
     {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -63,6 +65,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         refreshCompteur();
     }
 
+    public String getNbjourfolder() {
+        return  " " + String.format("%03d", nbjourfolder) + " j ";
+    }
+
     public String getCatFolder() {
         switch (catFolder) {
             case folderEvents:
@@ -71,12 +77,15 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 return Context.appParam.getString("repbookEvents");
             case folderShooting:
                 return Context.appParam.getString("repbookEvents");
+            case folderUncat:
+                return "";
             default:
                 throw new IllegalStateException("Unexpected value: " + catFolder);
         }
     }
 
     public void setCatFolder(String catFoldertxt) {
+        catFolder = folderUncat;
         if (Context.appParam.getString("repbookEvents").compareTo(catFoldertxt) == 0) {
             catFolder = folderEvents;
         }
@@ -171,7 +180,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                         "a.lc_idx_filename as lc_idx_filename , " +
                         "e.rating , " +
                         "e.fileformat ," +
-                        "e.captureTime " +
+                        "strftime('%s', e.captureTime) as captureTime " +
                         "from AgLibraryFile a  " +
                         "inner join Adobe_images e  " +
                         " on a.id_local = e.rootFile    " +
@@ -188,10 +197,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
-        nbphotoapurger = 0;
+//        nbphotoapurger = 0;
         statusRep = "---";
         long dtfin = 0;
-        long dtdeb = 999999999;
+        long dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
             if (!fi.estRejeter()) {
@@ -232,38 +241,42 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
 //        nbphotoapurger;
         nbphotoapurger = 0;
-        long nbjourfolder = dtfin - dtdeb;
-        long nbmin = 0;
-        long nbmax = 0;
+        nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
+        Double nbmin ;
+        Double nbmax ;
         switch (catFolder) {
             case folderEvents:
-                nbmin = Long.getLong(Context.appParam.getString("nbminiEvents"));
-                nbmax = Long.getLong(Context.appParam.getString("nbmaxEvents"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiEvents"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxEvents"));
                 break;
             case folderHolidays:
-                nbmin = Long.getLong(Context.appParam.getString("nbminiHolidays"));
-                nbmax = Long.getLong(Context.appParam.getString("nbmaxHolidays"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiHolidays"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxHolidays"));
                 break;
             case folderShooting:
-                nbmin = Long.getLong(Context.appParam.getString("nbminiShooting"));
-                nbmax = Long.getLong(Context.appParam.getString("nbmaxShooting"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiShooting"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxShooting"));
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + catFolder);
+                nbmin = 0d;
+                nbmax = 999d;
+                break;
         }
-        long limiteminfolder = nbmin * nbjourfolder;
-        long limitemaxfolder = nbmax * nbjourfolder;
-        if (nbphotoRep < limiteminfolder) {
-            nbphotoapurger = (int) (limiteminfolder - nbphotoRep);
-        }
+        int limiteminfolder = (int) (nbmin * nbjourfolder);
+        int limitemaxfolder = (int) (nbmax * nbjourfolder);
         if (nbphotoRep > limitemaxfolder) {
-            nbphotoapurger = (int) (limitemaxfolder - nbphotoRep);
+            nbphotoapurger = (int) (nbphotoRep- limitemaxfolder);
         }
 
 //        ratiophotoaconserver;
         DecimalFormat df = new DecimalFormat("##.##%");
-        double percent = (nbphotoapurger / nbphotoRep);
-        ratiophotoaconserver = " " + String.format("%03!d", nbphotoapurger) + " = " + df.format(percent);
+        double percent;
+        if (nbphotoRep != 0) {
+            percent = 1-(nbphotoapurger / nbphotoRep);
+        } else {
+            percent = 0;
+        }
+        ratiophotoaconserver = "" + String.format("%03d", limiteminfolder) + " - " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
 
 //        statusRep;
         if (nbphotoapurger == 0) {
@@ -308,9 +321,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public String getRatiophotoaconserver() {
-        DecimalFormat df = new DecimalFormat("##.##%");
-        double percent = ((nbphotoRep - nbphotoapurger) / nbphotoRep);
-        return " " + String.format("%04d", (nbphotoRep - nbphotoapurger)) + " = " + df.format(percent);
+//        DecimalFormat df = new DecimalFormat("##.##%");
+//        double percent = ((nbphotoRep - nbphotoapurger) / nbphotoRep);
+//        return " " + String.format("%04d", (nbphotoRep - nbphotoapurger)) + " = " + df.format(percent);
+        return ratiophotoaconserver;
     }
 
     public String getNbphotoapurger() {

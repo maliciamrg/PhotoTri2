@@ -125,7 +125,8 @@ public class AgLibraryRootFolder {
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt  , " +
                         "b.rootFolder , " +
                         "e.rating , " +
-                        "e.fileformat " +
+                        "e.fileformat , " +
+                        "strftime('%s', e.captureTime) as captureTime " +
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
@@ -346,8 +347,9 @@ public class AgLibraryRootFolder {
             long maxt = rsele.getLong("maxt");
             Double rating = rsele.getDouble("rating");
             String fileformat = rsele.getString("fileformat");
+            long captureTime = rsele.getLong(Context.CAPTURE_TIME);
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat) ;
+            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat,captureTime) ;
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<VBox prefHeight="778.0" prefWidth="1113.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
-        <MenuBar prefHeight="0.0" prefWidth="640.0" VBox.vgrow="NEVER">
+        <MenuBar prefHeight="69.0" prefWidth="1113.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -53,50 +64,121 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="708.0" prefWidth="1127.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="753.0" prefWidth="1113.0" VBox.vgrow="ALWAYS">
             <children>
                 <BorderPane layoutX="274.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                    <top>
-                        <AnchorPane prefHeight="3.0" prefWidth="775.0" BorderPane.alignment="CENTER">
-                            <children>
-                                <Label fx:id="lbnbeleRep1" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
-                                <Label fx:id="lbnbphotoRep1" layoutX="77.0" text="nbPhoto" />
-                                <Label fx:id="lbstatusRep1" layoutX="719.0" text="Status" />
-                                <Label fx:id="lbratiophotoaconcerver1" layoutX="156.0" text="Aconserver" />
-                                <Label fx:id="lbnbphotoapurger1" layoutX="231.0" text="Apurger" />
-                                <Label fx:id="lbnbetrationzeroetoile1" layoutX="288.0" text="zero etoile" />
-                                <Label fx:id="lbnbetrationuneetoile1" layoutX="360.0" text="1 etoile" />
-                                <Label fx:id="lbnbetrationdeuxetoile1" layoutX="419.0" text="2 etoiles" />
-                                <Label fx:id="lbnbetrationtroisetoile1" layoutX="491.0" text="3 etoiles" />
-                                <Label fx:id="lbnbetrationquatreetoile1" layoutX="554.0" text="4 etoiles" />
-                                <Label fx:id="lbnbetrationcinqetoile1" layoutX="622.0" text="5 etoiles" />
-                            </children>
-                        </AnchorPane>
-                    </top>
                     <bottom>
-                        <AnchorPane prefHeight="3.0" prefWidth="775.0" BorderPane.alignment="CENTER">
-                            <children>
-                                <Label fx:id="nbeleRep" text="Label" />
-                                <Label fx:id="nbphotoRep" layoutX="77.0" text="Label" />
-                                <Label fx:id="statusRep" layoutX="719.0" text="Label" />
-                                <Label fx:id="ratiophotoaconcerver" layoutX="156.0" text="Label" />
-                                <Label fx:id="nbphotoapurger" layoutX="231.0" text="Label" />
-                                <Label fx:id="nbetrationzeroetoile" layoutX="291.0" text="Label" />
-                                <Label fx:id="nbetrationuneetoile" layoutX="360.0" text="Label" />
-                                <Label fx:id="nbetrationdeuxetoile" layoutX="421.0" text="Label" />
-                                <Label fx:id="nbetrationtroisetoile" layoutX="494.0" text="Label" />
-                                <Label fx:id="nbetrationquatreetoile" layoutX="559.0" text="Label" />
-                                <Label fx:id="nbetrationcinqetoile" layoutX="622.0" text="Label" />
-                            </children>
-                        </AnchorPane>
+                        <AnchorPane prefHeight="0.0" prefWidth="775.0" BorderPane.alignment="CENTER" />
                     </bottom>
+               <center>
+                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="775.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbeleRep1" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
+                                            <Label fx:id="nbeleRep" layoutX="7.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationzeroetoile1" text="zero etoile" />
+                                            <Label fx:id="nbetrationzeroetoile" layoutX="14.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbphotoRep1" text="nbPhoto" />
+                                            <Label fx:id="nbphotoRep" layoutX="9.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationuneetoile1" text="1 etoile" />
+                                            <Label fx:id="nbetrationuneetoile" layoutX="6.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                    <Label text="NbJour" />
+                                    <Label fx:id="nbjourrep" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationdeuxetoile1" text="2 etoiles" />
+                                            <Label fx:id="nbetrationdeuxetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbratiophotoaconcerver1" text="Aconserver" />
+                                            <Label fx:id="ratiophotoaconcerver" layoutX="15.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationtroisetoile1" text="3 etoiles" />
+                                            <Label fx:id="nbetrationtroisetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbphotoapurger1" text="Apurger" />
+                                            <Label fx:id="nbphotoapurger" layoutX="8.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationquatreetoile1" text="4 etoiles" />
+                                            <Label fx:id="nbetrationquatreetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbstatusRep1" text="Status" />
+                                            <Label fx:id="statusRep" layoutX="2.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                            <Label fx:id="lbnbetrationcinqetoile1" text="5 etoiles" />
+                                            <Label fx:id="nbetrationcinqetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                 </children>
+                              </Group>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </center>
                 </BorderPane>
                 <AnchorPane layoutX="14.0" layoutY="14.0">
                     <children>
                         <ChoiceBox fx:id="repChoose" layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
                         <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                            <center>
-                                <AnchorPane prefHeight="644.0" prefWidth="228.0">
+                     <top>
+                                <AnchorPane prefHeight="644.0" prefWidth="228.0" BorderPane.alignment="CENTER">
                                     <children>
                                         <BorderPane layoutX="13.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                                             <center>
@@ -120,11 +202,11 @@
                                         </BorderPane>
                                     </children>
                                 </AnchorPane>
-                            </center>
+                     </top>
                         </BorderPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane layoutX="258.0" layoutY="62.0" prefHeight="685.0" prefWidth="810.0">
+                <AnchorPane layoutX="258.0" layoutY="94.0" prefHeight="663.0" prefWidth="810.0">
                     <children>
                         <BorderPane layoutY="40.0">
                             <center>
@@ -160,6 +242,7 @@
                                     <Font name="Wingdings 2" size="12.0" />
                                  </font></Label>
                                         <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="172.0" prefHeight="17.0" prefWidth="230.0" text="Label" />
+                                    <Button layoutX="730.0" layoutY="544.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button" />
                                     </children>
                                 </AnchorPane>
                             </center>
@@ -176,11 +259,10 @@
                                 </AnchorPane>
                             </center>
                         </BorderPane>
-                        <Button layoutX="739.0" layoutY="627.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button" />
                     </children>
                 </AnchorPane>
             </children>
         </AnchorPane>
-        <HBox prefHeight="6.0" prefWidth="640.0" />
+        <HBox prefHeight="58.0" prefWidth="1113.0" />
     </children>
 </VBox>
