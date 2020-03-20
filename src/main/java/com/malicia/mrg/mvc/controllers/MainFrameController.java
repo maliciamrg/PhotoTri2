@@ -29,7 +29,10 @@ import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -143,6 +146,43 @@ public class MainFrameController {
         initialize();
     }
 
+    public static void popupalert(String contentText, Image imageaaff) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Popup Info Image");
+
+        alert.setContentText(contentText);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(150);
+        imageView.setFitWidth(200);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setImage(imageaaff);
+//        alert.setGraphic(imageView);
+//        alert.getDialogPane().setMaxSize(2,2);
+
+
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setWrapText(false);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(imageView, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+
+    }
+
     /**
      * Gets ele bazar.
      *
@@ -244,8 +284,15 @@ public class MainFrameController {
             Context.getPrimaryStage().sizeToScene();
         }
         Context.getPrimaryStage().setTitle(lrcat.getname());
-    }
 
+        selectcat.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                activeRep.setCatFolder(newValue);
+            }
+        });
+
+    }
 
     /**
      * Action makeadulpicatelrcatwithdate.
@@ -328,7 +375,6 @@ public class MainFrameController {
         initialize();
     }
 
-
     private void excptlog(Exception theException) {
         StringWriter stringWritter = new StringWriter();
         PrintWriter printWritter = new PrintWriter(stringWritter, true);
@@ -337,7 +383,6 @@ public class MainFrameController {
         stringWritter.flush();
         LOGGER.severe(() -> "theException = " + "\n" + stringWritter.toString());
     }
-
 
     /**
      * Boucle delete repertoire logique.
@@ -405,44 +450,6 @@ public class MainFrameController {
         alert.getDialogPane().setExpandableContent(expContent);
 
         alert.showAndWait();
-    }
-
-    public static void popupalert(String contentText, Image imageaaff) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Popup Info Image");
-
-        alert.setContentText(contentText);
-
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(150);
-        imageView.setFitWidth(200);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setImage(imageaaff);
-//        alert.setGraphic(imageView);
-//        alert.getDialogPane().setMaxSize(2,2);
-
-
-
-        TextArea textArea = new TextArea();
-        textArea.setEditable(false);
-        textArea.setWrapText(false);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(imageView, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
-
     }
 
     /**
@@ -729,6 +736,7 @@ public class MainFrameController {
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                     activeRep = repChoose.getItems().get((Integer) number2);
                     refreshcompteurRepertoire();
+                    refreshcomboxRepertoire();
                     activeRep.moveActivephotoNumTo(0);
                     try {
                         refreshActivePhoto();
@@ -753,6 +761,10 @@ public class MainFrameController {
             popupalertException(e);
             excptlog(e);
         }
+    }
+
+    private void refreshcomboxRepertoire() {
+        selectcat.getSelectionModel().select(activeRep.getCatFolder());
     }
 
     public void setimagepreview() throws IOException, InterruptedException {

@@ -35,8 +35,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int activeNum;
     private int activephotoValeur;
     private int zero = 2;
-    private String catFolder;
-
+    private int catFolder;
+    final int folderEvents = 1;
+    final int folderHolidays = 2;
+    final int folderShooting = 3;
 
     {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -61,21 +63,31 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         refreshCompteur();
     }
 
-//    public String getcurrentcat() {
-//        return "";
-//    }
-//
-//    public String getcurrentevents() {
-//        return "";
-//    }
-//
-//    public String getcurrentlieux() {
-//        return "";
-//    }
-//
-//    public String getcurrentperson() {
-//        return "";
-//    }
+    public String getCatFolder() {
+        switch (catFolder) {
+            case folderEvents:
+                return Context.appParam.getString("repbookEvents");
+            case folderHolidays:
+                return Context.appParam.getString("repbookEvents");
+            case folderShooting:
+                return Context.appParam.getString("repbookEvents");
+            default:
+                throw new IllegalStateException("Unexpected value: " + catFolder);
+        }
+    }
+
+    public void setCatFolder(String catFoldertxt) {
+        if (Context.appParam.getString("repbookEvents").compareTo(catFoldertxt) == 0) {
+            catFolder = folderEvents;
+        }
+        if (Context.appParam.getString("repbookHolidays").compareTo(catFoldertxt) == 0) {
+            catFolder = folderHolidays;
+        }
+        if (Context.appParam.getString("repbookShooting").compareTo(catFoldertxt) == 0) {
+            catFolder = folderShooting;
+        }
+    }
+
 
     public Image getimagepreview(int num) throws IOException, InterruptedException {
         int interval = (nbphotoRep / 5);
@@ -95,9 +107,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             }
         }
         LOGGER.info(phototoshow + " " + localUrl);
-        Image image = new Image(localUrl,false);
+        Image image = new Image(localUrl, false);
 //        TimeUnit.SECONDS.sleep(1);
-        if (image.isError()){       image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());}
+        if (image.isError()) {
+            image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
+        }
 //        MainFrameController.popupalert(phototoshow + " " + localUrl, image);
         return image;
     }
@@ -174,10 +188,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
-        nbphotoapurger=0;
+        nbphotoapurger = 0;
         statusRep = "---";
-        long dtfin =0;
-        long dtdeb= 99_999_999_999;
+        long dtfin = 0;
+        long dtdeb = 999999999;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
             if (!fi.estRejeter()) {
@@ -206,35 +220,45 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
                     }
                     long dt = fi.getCaptureTime();
-                    if(dt<dtdeb){dtdeb=dt;}
-                    if(dt>dtfin){dtfin=dt;}
+                    if (dt < dtdeb) {
+                        dtdeb = dt;
+                    }
+                    if (dt > dtfin) {
+                        dtfin = dt;
+                    }
                 }
             }
         }
 
 //        nbphotoapurger;
-        nbphotoapurger=0;
+        nbphotoapurger = 0;
         long nbjourfolder = dtfin - dtdeb;
-        String nbmin;
-        String nbmax;
-        switch(catFolder){
-            case Context.appParam.getString("repbookEvents"):
-                nbmin = Context.appParam.getString("nbminiEvents");
-                nbmax = Context.appParam.getString("nbmaxEvents");
+        long nbmin = 0;
+        long nbmax = 0;
+        switch (catFolder) {
+            case folderEvents:
+                nbmin = Long.getLong(Context.appParam.getString("nbminiEvents"));
+                nbmax = Long.getLong(Context.appParam.getString("nbmaxEvents"));
                 break;
-            case Context.appParam.getString("repbookHolidays"):
-                nbmin = Context.appParam.getString("nbminiHolidays");
-                nbmax = Context.appParam.getString("nbmaxHolidays");
+            case folderHolidays:
+                nbmin = Long.getLong(Context.appParam.getString("nbminiHolidays"));
+                nbmax = Long.getLong(Context.appParam.getString("nbmaxHolidays"));
                 break;
-            case Context.appParam.getString("repbookShooting"):
-                nbmin = Context.appParam.getString("nbminiShooting");
-                nbmax = Context.appParam.getString("nbmaxShooting");
+            case folderShooting:
+                nbmin = Long.getLong(Context.appParam.getString("nbminiShooting"));
+                nbmax = Long.getLong(Context.appParam.getString("nbmaxShooting"));
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + catFolder);
         }
         long limiteminfolder = nbmin * nbjourfolder;
         long limitemaxfolder = nbmax * nbjourfolder;
-        if (nbphotoRep < limiteminfolder){nbphotoapurger=limiteminfolder-nbphotoRep;}
-        if (nbphotoRep > limitemaxfolder){nbphotoapurger=limitemaxfolder-nbphotoRep;}
+        if (nbphotoRep < limiteminfolder) {
+            nbphotoapurger = (int) (limiteminfolder - nbphotoRep);
+        }
+        if (nbphotoRep > limitemaxfolder) {
+            nbphotoapurger = (int) (limitemaxfolder - nbphotoRep);
+        }
 
 //        ratiophotoaconserver;
         DecimalFormat df = new DecimalFormat("##.##%");
@@ -242,7 +266,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         ratiophotoaconserver = " " + String.format("%03!d", nbphotoapurger) + " = " + df.format(percent);
 
 //        statusRep;
-        if (nbphotoapurger ==0){ statusRep = "--OK--"};
+        if (nbphotoapurger == 0) {
+            statusRep = "--OK--";
+        }
     }
 
     public String nbetratiovaleur(int valeur) {
