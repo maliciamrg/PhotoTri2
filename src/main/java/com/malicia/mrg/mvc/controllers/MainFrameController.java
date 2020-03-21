@@ -21,7 +21,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -148,6 +147,12 @@ public class MainFrameController {
         initialize();
     }
 
+    /**
+     * Popupalert.
+     *
+     * @param contentText the content text
+     * @param imageaaff   the imageaaff
+     */
     public static void popupalert(String contentText, Image imageaaff) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Popup Info Image");
@@ -160,8 +165,6 @@ public class MainFrameController {
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
         imageView.setImage(imageaaff);
-//        alert.setGraphic(imageView);
-//        alert.getDialogPane().setMaxSize(2,2);
 
 
         TextArea textArea = new TextArea();
@@ -338,7 +341,7 @@ public class MainFrameController {
         scanner.scan();
         List<String> files = Arrays.asList(scanner.getIncludedFiles());
 
-        if (files.size() != 0) {
+        if (files.isEmpty()) {
 
             String theone = showChoiceOneWindow("Quel catalog restaurer ?", "catalog", files);
             String selectfile = basedir + File.separator + theone;
@@ -737,14 +740,10 @@ public class MainFrameController {
                         refreshActivePhoto();
                         refreshvaleurphoto();
                         setimagepreview();
-                    } catch (IOException | InterruptedException | SQLException e) {
+                    } catch (IOException | SQLException e) {
                         popupalertException(e);
                         excptlog(e);
                     }
-//                selectcat.getSelectionModel().select(activeRep.getcurrentcat());
-//                selectevents.getSelectionModel().select(activeRep.getcurrentevents());
-//                selectlieux.getSelectionModel().select(activeRep.getcurrentlieux());
-//                selectperson.getSelectionModel().select(activeRep.getcurrentperson());
                 }
             });
 
@@ -762,7 +761,13 @@ public class MainFrameController {
         selectcat.getSelectionModel().select(activeRep.getCatFolder());
     }
 
-    public void setimagepreview() throws IOException, InterruptedException, SQLException {
+    /**
+     * Sets .
+     *
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public void setimagepreview() throws IOException, SQLException {
         LOGGER.info("setimagepreview");
         imager1.setImage(activeRep.getimagepreview(1));
         imager2.setImage(activeRep.getimagepreview(2));
@@ -786,7 +791,7 @@ public class MainFrameController {
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
     }
 
-    private void refreshActivePhoto() throws IOException, InterruptedException, SQLException {
+    private void refreshActivePhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
@@ -801,6 +806,11 @@ public class MainFrameController {
     }
 
 
+    /**
+     * Action active photo.
+     *
+     * @param keyEvent the key event
+     */
     public void actionActivePhoto(KeyEvent keyEvent) {
         try {
             switch (keyEvent.getCode()) {
@@ -827,57 +837,72 @@ public class MainFrameController {
                 default:
                     break;
             }
-        } catch (IOException | InterruptedException | SQLException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
-    public void actionActivePhotop2(MouseEvent mouseEvent) {
+    /**
+     * Action active photop 2.
+     */
+    public void actionActivePhotop2() {
         try {
             activeRep.moveActivephotoNumTo(+2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException | SQLException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
-    public void actionActivePhotom2(MouseEvent mouseEvent) {
+    /**
+     * Action active photom 2.
+     */
+    public void actionActivePhotom2() {
         try {
             activeRep.moveActivephotoNumTo(-2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException | SQLException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
-    public void actionActivePhotom1(MouseEvent mouseEvent) {
+    /**
+     * Action active photom 1.
+     */
+    public void actionActivePhotom1() {
         try {
             activeRep.moveActivephotoNumTo(-1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException | SQLException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
-    public void actionActivePhotop1(MouseEvent mouseEvent) {
+    /**
+     * Action active photop 1.
+     */
+    public void actionActivePhotop1() {
         try {
             activeRep.moveActivephotoNumTo(+1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException | SQLException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
 
     }
 
+    /**
+     * Start.
+     */
     public void start() {
 
         selectcat.valueProperty().addListener(new ChangeListener<String>() {

@@ -289,7 +289,6 @@ public class AgLibraryRootFolder {
             if (idlocal == 0) {
                 throw new IllegalStateException("no more idlocal empty for folder");
             }
-//        sqlSetAdobeentityIDCounter(idlocal);
 
             String sql;
             sql = "INSERT INTO AgLibraryFolder" +
@@ -351,7 +350,7 @@ public class AgLibraryRootFolder {
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             String file_id_global = rsele.getString("id_global");
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat,captureTime,file_id_global) ;
+            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local , rating,fileformat,captureTime,file_id_global) ;
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);
