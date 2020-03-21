@@ -18,7 +18,7 @@ public class SQLiteJDBCDriverConnection {
     /**
      * The constant conn.
      */
-    private static Connection conn;
+    private Connection conn;
 
     /**
      * Instantiates a new Sq lite jdbc driver connection.
