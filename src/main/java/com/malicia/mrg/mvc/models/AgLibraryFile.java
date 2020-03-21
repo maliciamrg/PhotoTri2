@@ -22,17 +22,18 @@ public class AgLibraryFile {
     }
 
     private long captureTime;
+    private String file_id_global;
     private String pathFromRoot;
     private String absolutePath;
 
     /**
      * Instantiates a new Ele.
-     *
-     * @param absolutePath        the absolute path
+     *  @param absolutePath        the absolute path
      * @param pathFromRoot        the path from root
      * @param lcIdxFilename       the lc idx filename
      * @param fileIdLocal
      * @param agLibraryRootFolder
+     * @param file_id_global
      */
     public AgLibraryFile(String absolutePath,
                          String pathFromRoot,
@@ -41,7 +42,8 @@ public class AgLibraryFile {
                          AgLibraryRootFolder agLibraryRootFolder,
                          double starValue,
                          String fileformat,
-                         long captureTime) {
+                         long captureTime,
+                         String file_id_global) {
         this.absolutePath = absolutePath;
         this.pathFromRoot = pathFromRoot;
         this.lcIdxFilename = lcIdxFilename;
@@ -50,6 +52,7 @@ public class AgLibraryFile {
         this.starValue = starValue;
         this.fileformat = fileformat;
         this.captureTime = captureTime;
+        this.file_id_global = file_id_global;
     }
 
     public String getFileIdLocal() {
@@ -110,5 +113,13 @@ public class AgLibraryFile {
 
     public String getPath() {
         return normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
+    }
+
+    public String getFile_id_global() {
+        return file_id_global;
+    }
+
+    public void setFile_id_global(String file_id_global) {
+        this.file_id_global = file_id_global;
     }
 }

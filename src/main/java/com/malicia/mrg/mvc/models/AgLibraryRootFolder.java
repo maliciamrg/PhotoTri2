@@ -117,6 +117,7 @@ public class AgLibraryRootFolder {
     public ResultSet sqlgetListelementnewaclasser(String tempsAdherence) throws SQLException {
         return parentLrcat.select(
                 "select a.id_local as file_id_local, " +
+                        "a.id_global , " +
                         "b.id_local as folder_id_local , " +
                         "b.pathFromRoot , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
@@ -348,8 +349,9 @@ public class AgLibraryRootFolder {
             Double rating = rsele.getDouble("rating");
             String fileformat = rsele.getString("fileformat");
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
+            String file_id_global = rsele.getString("id_global");
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat,captureTime) ;
+            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, this , rating,fileformat,captureTime,file_id_global) ;
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

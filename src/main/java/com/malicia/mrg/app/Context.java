@@ -3,6 +3,7 @@ package com.malicia.mrg.app;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
+import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -48,6 +49,7 @@ public class Context implements Serializable {
     public static AgLibraryRootFolder repEncours;
     public static AgLibraryRootFolder repKidz;
     public static AgLibraryRootFolder repNew;
+    public static CatalogPreviews Previews;
     private static Logger LOGGER;
     /**
      * The constant currentContext.
@@ -137,6 +139,7 @@ public class Context implements Serializable {
         Context.initPropertiesParameters();
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
+        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
 
     }
 

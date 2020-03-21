@@ -737,7 +737,7 @@ public class MainFrameController {
                         refreshActivePhoto();
                         refreshvaleurphoto();
                         setimagepreview();
-                    } catch (IOException | InterruptedException e) {
+                    } catch (IOException | InterruptedException | SQLException e) {
                         popupalertException(e);
                         excptlog(e);
                     }
@@ -762,7 +762,7 @@ public class MainFrameController {
         selectcat.getSelectionModel().select(activeRep.getCatFolder());
     }
 
-    public void setimagepreview() throws IOException, InterruptedException {
+    public void setimagepreview() throws IOException, InterruptedException, SQLException {
         LOGGER.info("setimagepreview");
         imager1.setImage(activeRep.getimagepreview(1));
         imager2.setImage(activeRep.getimagepreview(2));
@@ -786,7 +786,7 @@ public class MainFrameController {
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
     }
 
-    private void refreshActivePhoto() throws IOException, InterruptedException {
+    private void refreshActivePhoto() throws IOException, InterruptedException, SQLException {
         LOGGER.info("refresh");
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
@@ -827,7 +827,7 @@ public class MainFrameController {
                 default:
                     break;
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -838,7 +838,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -849,7 +849,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -860,7 +860,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -871,7 +871,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }

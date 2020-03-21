@@ -3,9 +3,13 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -41,6 +45,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int zero = 2;
     private int catFolder;
     private long nbjourfolder;
+    private Blob RetBlob;
 
     {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -60,7 +65,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat, captureTime));
+            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat, captureTime,file_id_global));
         }
         refreshCompteur();
     }
@@ -98,25 +103,37 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
 
-    public Image getimagepreview(int num) throws IOException, InterruptedException {
+    public Image getimagepreview(int num) throws IOException, InterruptedException, SQLException {
         int interval = (nbphotoRep / 5);
         return getimagenumero(getnextphotonumfrom(interval * num));
     }
 
-    public Image getimagenumero(int phototoshow) throws IOException, InterruptedException {
+    public Image getimagenumero(int phototoshow) throws IOException, InterruptedException, SQLException {
+        Image image = null;
         String localUrl;
         if (phototoshow < 0 || phototoshow > listFileSubFolder.size() - 1) {
             localUrl = Context.getLocalVoidPhotoUrl();
+            image = new Image(localUrl, false);
         } else {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
-            if (!file.exists()) {
+            RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFile_id_global());
+            if (RetBlob == null) {
                 localUrl = Context.getLocalErr404PhotoUrl();
+                image = new Image(localUrl, false);
             } else {
                 localUrl = file.toURI().toURL().toExternalForm();
+                InputStream in = RetBlob.getBinaryStream();
+                image = new Image(in);
             }
+//            File file = new File(listFileSubFolder.get(phototoshow).getPath());
+//            if (!file.exists()) {
+//                localUrl = Context.getLocalErr404PhotoUrl();
+//            } else {
+//                localUrl = file.toURI().toURL().toExternalForm();
+//            }
+
         }
         LOGGER.info(phototoshow + " " + localUrl);
-        Image image = new Image(localUrl, false);
 //        TimeUnit.SECONDS.sleep(1);
         if (image.isError()) {
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
