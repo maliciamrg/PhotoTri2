@@ -6,61 +6,78 @@ import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
  * The type Ele.
  */
 public class AgLibraryFile {
+    /**
+     * The constant REP_NEW.
+     */
     public static final String REP_NEW = "repNew";
+    /**
+     * The Setedited.
+     */
     public boolean setedited;
+    /**
+     * The Star value.
+     */
     public double starValue;
     /**
      * The Lc idx filename.
      */
     private String lcIdxFilename;
     private String fileIdLocal;
-    private AgLibraryRootFolder agLibraryRootFolder;
+
+
     private String fileformat;
-
-    public long getCaptureTime() {
-        return captureTime;
-    }
-
     private long captureTime;
-    private String file_id_global;
+    private String fileIdGlobal;
     private String pathFromRoot;
     private String absolutePath;
 
     /**
      * Instantiates a new Ele.
-     *  @param absolutePath        the absolute path
+     *
+     * @param absolutePath        the absolute path
      * @param pathFromRoot        the path from root
      * @param lcIdxFilename       the lc idx filename
-     * @param fileIdLocal
-     * @param agLibraryRootFolder
-     * @param file_id_global
+     * @param fileIdLocal         the file id local
+     * @param agLibraryRootFolder the ag library root folder
+     * @param starValue           the star value
+     * @param fileformat          the fileformat
+     * @param captureTime         the capture time
+     * @param fileIdGlobal        the file id global
      */
     public AgLibraryFile(String absolutePath,
                          String pathFromRoot,
                          String lcIdxFilename,
                          String fileIdLocal,
-                         AgLibraryRootFolder agLibraryRootFolder,
                          double starValue,
                          String fileformat,
                          long captureTime,
-                         String file_id_global) {
+                         String fileIdGlobal) {
         this.absolutePath = absolutePath;
         this.pathFromRoot = pathFromRoot;
         this.lcIdxFilename = lcIdxFilename;
         this.fileIdLocal = fileIdLocal;
-        this.agLibraryRootFolder = agLibraryRootFolder;
         this.starValue = starValue;
         this.fileformat = fileformat;
         this.captureTime = captureTime;
-        this.file_id_global = file_id_global;
+        this.fileIdGlobal = fileIdGlobal;
     }
 
+    /**
+     * Gets capture time.
+     *
+     * @return the capture time
+     */
+    public long getCaptureTime() {
+        return captureTime;
+    }
+
+    /**
+     * Gets file id local.
+     *
+     * @return the file id local
+     */
     public String getFileIdLocal() {
         return fileIdLocal;
-    }
-
-    public AgLibraryRootFolder getAgLibraryRootFolder() {
-        return agLibraryRootFolder;
     }
 
     /**
@@ -90,10 +107,20 @@ public class AgLibraryFile {
         return lcIdxFilename;
     }
 
+    /**
+     * Est rejeter boolean.
+     *
+     * @return the boolean
+     */
     public boolean estRejeter() {
         return starValue < 0;
     }
 
+    /**
+     * Est photo boolean.
+     *
+     * @return the boolean
+     */
     public boolean estPhoto() {
         switch (fileformat.toLowerCase()) {
             case "video":
@@ -111,15 +138,21 @@ public class AgLibraryFile {
         }
     }
 
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
     public String getPath() {
         return normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
     }
 
-    public String getFile_id_global() {
-        return file_id_global;
-    }
-
-    public void setFile_id_global(String file_id_global) {
-        this.file_id_global = file_id_global;
+    /**
+     * Gets file id global.
+     *
+     * @return the file id global
+     */
+    public String getFileIdGlobal() {
+        return fileIdGlobal;
     }
 }

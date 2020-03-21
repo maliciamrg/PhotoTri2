@@ -3,8 +3,6 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +63,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, this, rating, fileformat, captureTime,file_id_global));
+            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, file_id_local, rating, fileformat, captureTime,file_id_global));
         }
         refreshCompteur();
     }
@@ -79,9 +77,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             case folderEvents:
                 return Context.appParam.getString("repbookEvents");
             case folderHolidays:
-                return Context.appParam.getString("repbookEvents");
+                return Context.appParam.getString("repbookHolidays");
             case folderShooting:
-                return Context.appParam.getString("repbookEvents");
+                return Context.appParam.getString("repbookShooting");
             case folderUncat:
                 return "";
             default:
@@ -108,7 +106,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         return getimagenumero(getnextphotonumfrom(interval * num));
     }
 
-    public Image getimagenumero(int phototoshow) throws IOException, InterruptedException, SQLException {
+    public Image getimagenumero(int phototoshow) throws IOException, SQLException {
         Image image = null;
         String localUrl;
         if (phototoshow < 0 || phototoshow > listFileSubFolder.size() - 1) {
@@ -116,7 +114,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             image = new Image(localUrl, false);
         } else {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
-            RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFile_id_global());
+            RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
             if (RetBlob == null) {
                 localUrl = Context.getLocalErr404PhotoUrl();
                 image = new Image(localUrl, false);
@@ -125,20 +123,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 InputStream in = RetBlob.getBinaryStream();
                 image = new Image(in);
             }
-//            File file = new File(listFileSubFolder.get(phototoshow).getPath());
-//            if (!file.exists()) {
-//                localUrl = Context.getLocalErr404PhotoUrl();
-//            } else {
-//                localUrl = file.toURI().toURL().toExternalForm();
-//            }
 
         }
         LOGGER.info(phototoshow + " " + localUrl);
-//        TimeUnit.SECONDS.sleep(1);
         if (image.isError()) {
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
         }
-//        MainFrameController.popupalert(phototoshow + " " + localUrl, image);
         return image;
     }
 
@@ -214,7 +204,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
-//        nbphotoapurger = 0;
         statusRep = "---";
         long dtfin = 0;
         long dtdeb = 2147483647;
@@ -256,7 +245,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             }
         }
 
-//        nbphotoapurger;
+        calculatenbphotapurger(dtfin, dtdeb);
+
+        calculStatusRep();
+
+    }
+
+    private void calculatenbphotapurger(long dtfin, long dtdeb) {
+        //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
         Double nbmin ;
@@ -285,7 +281,18 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             nbphotoapurger = (int) (nbphotoRep- limitemaxfolder);
         }
 
-//        ratiophotoaconserver;
+        getRatioPhotoAConserver(limiteminfolder, limitemaxfolder);
+    }
+
+    private void calculStatusRep() {
+        //        statusRep
+        if (nbphotoapurger == 0) {
+            statusRep = "--OK--";
+        }
+    }
+
+    private void getRatioPhotoAConserver(int limiteminfolder, int limitemaxfolder) {
+        //        ratiophotoaconserver
         DecimalFormat df = new DecimalFormat("##.##%");
         double percent;
         if (nbphotoRep != 0) {
@@ -294,11 +301,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             percent = 0;
         }
         ratiophotoaconserver = "" + String.format("%03d", limiteminfolder) + " - " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
-
-//        statusRep;
-        if (nbphotoapurger == 0) {
-            statusRep = "--OK--";
-        }
     }
 
     public String nbetratiovaleur(int valeur) {
@@ -338,9 +340,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public String getRatiophotoaconserver() {
-//        DecimalFormat df = new DecimalFormat("##.##%");
-//        double percent = ((nbphotoRep - nbphotoapurger) / nbphotoRep);
-//        return " " + String.format("%04d", (nbphotoRep - nbphotoapurger)) + " = " + df.format(percent);
         return ratiophotoaconserver;
     }
 
