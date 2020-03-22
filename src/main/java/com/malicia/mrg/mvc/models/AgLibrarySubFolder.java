@@ -5,9 +5,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -17,13 +15,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * The type Ag library sub folder.
+ */
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
+    /**
+     * The constant UNEXPECTED_VALUE.
+     */
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
+    /**
+     * The constant FOLDER_UNCAT.
+     */
     public static final int FOLDER_UNCAT = 0;
+    /**
+     * The constant FOLDER_EVENTS.
+     */
     public static final int FOLDER_EVENTS = 1;
+    /**
+     * The constant FOLDER_HOLIDAYS.
+     */
     public static final int FOLDER_HOLIDAYS = 2;
+    /**
+     * The constant FOLDER_SHOOTING.
+     */
     public static final int FOLDER_SHOOTING = 3;
     private final Logger LOGGER;
+    /**
+     * The List file sub folder.
+     */
     List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
@@ -47,6 +66,17 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private long dtdeb;
     private long dtfin;
 
+    /**
+     * Instantiates a new Ag library sub folder.
+     *
+     * @param parentLrcat       the parent lrcat
+     * @param name              the name
+     * @param pathFromRoot      the path from root
+     * @param folderIdLocal     the folder id local
+     * @param rootfolderidlocal the rootfolderidlocal
+     * @param absolutePath      the absolute path
+     * @throws SQLException the sql exception
+     */
     public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folderIdLocal, String rootfolderidlocal, String absolutePath) throws SQLException {
         super(parentLrcat, name, rootfolderidlocal, absolutePath);
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -62,15 +92,25 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime,fileIdGlobal));
+            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
         refreshCompteur();
     }
 
+    /**
+     * Gets nbjourfolder.
+     *
+     * @return the nbjourfolder
+     */
     public String getNbjourfolder() {
-        return  " " + String.format("%03d", nbjourfolder) + " j ";
+        return " " + String.format("%03d", nbjourfolder) + " j ";
     }
 
+    /**
+     * Gets cat folder.
+     *
+     * @return the cat folder
+     */
     public String getCatFolder() {
         switch (catFolder) {
             case FOLDER_EVENTS:
@@ -86,6 +126,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         }
     }
 
+    /**
+     * Sets cat folder.
+     *
+     * @param catFoldertxt the cat foldertxt
+     */
     public void setCatFolder(String catFoldertxt) {
         catFolder = FOLDER_UNCAT;
         if (Context.appParam.getString("repbookEvents").compareTo(catFoldertxt) == 0) {
@@ -100,11 +145,27 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
 
-    public Image getimagepreview(int num) throws IOException,  SQLException {
+    /**
+     * Gets .
+     *
+     * @param num the num
+     * @return the
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public Image getimagepreview(int num) throws IOException, SQLException {
         int interval = (nbphotoRep / 5);
         return getimagenumero(getnextphotonumfrom(interval * num));
     }
 
+    /**
+     * Gets .
+     *
+     * @param phototoshow the phototoshow
+     * @return the
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
     public Image getimagenumero(int phototoshow) throws IOException, SQLException {
         Image image = null;
         String localUrl;
@@ -113,15 +174,20 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             image = new Image(localUrl, false);
         } else {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
-            Blob retBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
-            if (retBlob == null) {
+//            InputStream in = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
+//            if (in == null) {
+            if (file.exists()) {
+                localUrl = file.toURI().toURL().toExternalForm();
+                LOGGER.info(localUrl);
+                image = new Image(localUrl, 400, 400, true, false, false);
+            } else {
                 localUrl = Context.getLocalErr404PhotoUrl();
                 image = new Image(localUrl, false);
-            } else {
-                localUrl = file.toURI().toURL().toExternalForm();
-                InputStream in = retBlob.getBinaryStream();
-                image = new Image(in);
             }
+//            } else {
+//                localUrl = file.toURI().toURL().toExternalForm();
+//                image = new Image(in);
+//            }
 
         }
         if (image.isError()) {
@@ -131,6 +197,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         return image;
     }
 
+    /**
+     * Gets .
+     *
+     * @return the
+     */
     public String getactivephotovaleurlibelle() {
         switch (activephotoValeur) {
             case -1:
@@ -152,6 +223,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         }
     }
 
+    /**
+     * Valeuractivephotoincrease.
+     */
     public void valeuractivephotoincrease() {
         if (listFileSubFolder.get(activeNum).starValue < 5) {
             listFileSubFolder.get(activeNum).starValue += 1;
@@ -159,12 +233,18 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         }
     }
 
+    /**
+     * Modifierfile.
+     */
     public void modifierfile() {
         activephotoValeur = (int) listFileSubFolder.get(activeNum).starValue;
         listFileSubFolder.get(activeNum).setedited = true;
 
     }
 
+    /**
+     * Valeuractivephotodecrease.
+     */
     public void valeuractivephotodecrease() {
         if (listFileSubFolder.get(activeNum).starValue > -1) {
             listFileSubFolder.get(activeNum).starValue -= 1;
@@ -194,6 +274,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                         " ;");
     }
 
+    /**
+     * Refresh compteur.
+     */
     public void refreshCompteur() {
         nbelerep = 0;
         nbphotoRep = 0;
@@ -259,8 +342,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
-        Double nbmin ;
-        Double nbmax ;
+        Double nbmin;
+        Double nbmax;
         switch (catFolder) {
             case FOLDER_EVENTS:
                 nbmin = Double.valueOf(Context.appParam.getString("nbminiEvents"));
@@ -282,14 +365,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         int limiteminfolder = (int) (nbmin * nbjourfolder);
         int limitemaxfolder = (int) (nbmax * nbjourfolder);
         if (nbphotoRep > limitemaxfolder) {
-            nbphotoapurger = (nbphotoRep- limitemaxfolder);
+            nbphotoapurger = (nbphotoRep - limitemaxfolder);
         }
 
         //        ratiophotoaconserver
         DecimalFormat df = new DecimalFormat("##.##%");
         double percent;
         if (nbphotoRep != 0) {
-            percent = 1-((double)nbphotoapurger / nbphotoRep);
+            percent = 1 - ((double) nbphotoapurger / nbphotoRep);
         } else {
             percent = 0;
         }
@@ -303,6 +386,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         }
     }
 
+    /**
+     * Nbetratiovaleur string.
+     *
+     * @param valeur the valeur
+     * @return the string
+     */
     public String nbetratiovaleur(int valeur) {
         int nb = 0;
         switch (valeur) {
@@ -328,28 +417,58 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);
         }
         DecimalFormat df = new DecimalFormat("##.##%");
-        double percent = (nb / nbphotoRep);
+        double percent;
+        if (nbphotoRep == 0) {
+            percent = 1;
+        } else {
+            percent = (nb / nbphotoRep);
+        }
         return " " + String.format("%02d", nb) + " = " + df.format(percent);
     }
 
+    /**
+     * Gets nbelerep.
+     *
+     * @return the nbelerep
+     */
     public String getNbelerep() {
         return " " + String.format("%04d", nbelerep);
     }
 
 
+    /**
+     * Gets nbphoto rep.
+     *
+     * @return the nbphoto rep
+     */
     public String getNbphotoRep() {
         return " " + String.format("%04d", nbphotoRep);
     }
 
+    /**
+     * Gets ratiophotoaconserver.
+     *
+     * @return the ratiophotoaconserver
+     */
     public String getRatiophotoaconserver() {
         return ratiophotoaconserver;
     }
 
+    /**
+     * Gets nbphotoapurger.
+     *
+     * @return the nbphotoapurger
+     */
     public String getNbphotoapurger() {
         return " " + String.format("%04d", nbphotoapurger);
     }
 
 
+    /**
+     * Gets activephoto valeur.
+     *
+     * @return the activephoto valeur
+     */
     public String getActivephotoValeur() {
         switch (activephotoValeur) {
             case -1:
@@ -371,6 +490,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         }
     }
 
+    /**
+     * Gets status rep.
+     *
+     * @return the status rep
+     */
     public String getStatusRep() {
         return statusRep;
     }
@@ -381,10 +505,21 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
 
+    /**
+     * Gets activephoto num.
+     *
+     * @param i the
+     * @return the activephoto num
+     */
     public int getActivephotoNum(int i) {
         return activephotoNum.get(zero + i);
     }
 
+    /**
+     * Move activephoto num to.
+     *
+     * @param delta the delta
+     */
     public void moveActivephotoNumTo(int delta) {
 
         Integer activephotoNumsetZero = 0;

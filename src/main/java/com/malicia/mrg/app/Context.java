@@ -139,7 +139,7 @@ public class Context implements Serializable {
         Context.initPropertiesParameters();
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
-        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
+//        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
 
     }
 

@@ -1,7 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import java.io.File;
-import java.sql.Blob;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -58,14 +58,14 @@ public class CatalogPreviews extends SQLiteJDBCDriverConnection {
      * @return the jpeg from uuid file
      * @throws SQLException the sql exception
      */
-    public Blob getJpegFromUuidFile(String uuidFile) throws SQLException {
+    public InputStream getJpegFromUuidFile(String uuidFile) throws SQLException {
         ResultSet rs = this.select("" +
                 "select jpegData " +
                 "from RootPixels " +
                 "where uuid = '" + uuidFile + "' " +
                 ";");
         while (rs.next()) {
-            return rs.getBlob("jpegData");
+            return rs.getBinaryStream("jpegData");
         }
         return null;
     }
