@@ -58,7 +58,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             String rootfolderidlocal = rs.getString("id_local");
             String absolutePath = rs.getString("absolutePath");
             String name = rs.getString("name");
-            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this,name,rootfolderidlocal,absolutePath);
+            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath);
             rep.put(nomRep, tmpRootLib);
         }
     }
