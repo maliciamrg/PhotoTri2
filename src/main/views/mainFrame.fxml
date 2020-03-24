@@ -214,7 +214,7 @@
                                         </BorderPane>
                                         <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                                             <center>
-                                                <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" onKeyTyped="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
                                         <BorderPane layoutX="75.0" layoutY="76.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
@@ -229,7 +229,7 @@
                                         </BorderPane>
                                         <Label fx:id="imagedestinationcorbeilleorstar" alignment="CENTER" layoutX="290.0" layoutY="76.0" prefHeight="17.0" prefWidth="230.0" text="LabelK">
                                  <font>
-                                    <Font name="Wingdings 2" size="12.0" />
+                                    <Font name="Wingdings 2" size="30.0" />
                                  </font></Label>
                                         <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="135.0" prefHeight="60.0" prefWidth="230.0" text="Label" />
                                     <Button layoutX="730.0" layoutY="544.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="67.0" text="Button" />
@@ -242,9 +242,9 @@
                                 <AnchorPane>
                                     <children>
                                         <ComboBox fx:id="selectcat" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectevents" editable="true" layoutX="193.0" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectlieux" editable="true" layoutX="388.0" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectperson" editable="true" layoutX="586.0" prefHeight="25.0" prefWidth="185.0" />
+                                        <ComboBox fx:id="selectevent" layoutX="193.0" prefHeight="25.0" prefWidth="185.0" />
+                                        <ComboBox fx:id="selectlieu" layoutX="388.0" prefHeight="25.0" prefWidth="185.0" />
+                                        <ComboBox fx:id="selectperson" layoutX="586.0" prefHeight="25.0" prefWidth="185.0" />
                                     </children>
                                 </AnchorPane>
                             </center>

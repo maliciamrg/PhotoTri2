@@ -132,9 +132,9 @@ public class MainFrameController {
     @FXML
     private ComboBox<String> selectcat;
     @FXML
-    private ComboBox<String> selectevents;
+    private ComboBox<String> selectevent;
     @FXML
-    private ComboBox<String> selectlieux;
+    private ComboBox<String> selectlieu;
     @FXML
     private ComboBox<String> selectperson;
 
@@ -814,21 +814,25 @@ public class MainFrameController {
                     activeRep.moveActivephotoNumTo(+1);
                     refreshActivePhoto();
                     refreshvaleurphoto();
+                    keyEvent.consume();
                     break;
                 case LEFT:
                     activeRep.moveActivephotoNumTo(-1);
                     refreshActivePhoto();
                     refreshvaleurphoto();
+                    keyEvent.consume();
                     break;
                 case UP:
                     activeRep.valeuractivephotoincrease();
                     refreshcompteurRepertoire();
                     refreshvaleurphoto();
+                    keyEvent.consume();
                     break;
                 case DOWN:
                     activeRep.valeuractivephotodecrease();
                     refreshcompteurRepertoire();
                     refreshvaleurphoto();
+                    keyEvent.consume();
                     break;
                 default:
                     break;
@@ -910,12 +914,14 @@ public class MainFrameController {
         });
 
         selectcat.setItems(lrcat.getlistofpossiblecat());
-        selectevents.setItems(lrcat.getlistofpossibleevent());
-        selectlieux.setItems(lrcat.getlistofpossiblelieux());
+        selectevent.setItems(lrcat.getlistofpossibleevent());
+        selectlieu.setItems(lrcat.getlistofpossiblelieux());
         selectperson.setItems(lrcat.getlistofpossibleperson());
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectevent, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectlieu, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectperson, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
 
         actionCycleTraitementPhoto();
     }

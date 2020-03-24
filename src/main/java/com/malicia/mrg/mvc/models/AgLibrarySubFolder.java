@@ -59,7 +59,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;
     private int activeNum;
-    private int activephotoValeur;
     private int zero = 2;
     private int catFolder;
     private long nbjourfolder;
@@ -203,7 +202,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the
      */
     public String getactivephotovaleurlibelle() {
-        switch (activephotoValeur) {
+        switch ((int) listFileSubFolder.get(activeNum).starValue) {
             case -1:
                 return Context.appParam.getString("valeurCorbeille");
             case 0:
@@ -219,7 +218,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             case 5:
                 return Context.appParam.getString("valeur5stars");
             default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + activephotoValeur);
+                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).starValue);
         }
     }
 
@@ -237,9 +236,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * Modifierfile.
      */
     public void modifierfile() {
-        activephotoValeur = (int) listFileSubFolder.get(activeNum).starValue;
         listFileSubFolder.get(activeNum).setedited = true;
-
     }
 
     /**
@@ -470,7 +467,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the activephoto valeur
      */
     public String getActivephotoValeur() {
-        switch (activephotoValeur) {
+        switch ((int) listFileSubFolder.get(activeNum).starValue) {
             case -1:
                 return "     3 3 3 ";
             case 0:
@@ -486,7 +483,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             case 5:
                 return " é é é é é ";
             default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + activephotoValeur);
+                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).starValue);
         }
     }
 
