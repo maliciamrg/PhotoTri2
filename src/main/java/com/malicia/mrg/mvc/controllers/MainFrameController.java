@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.app.FxUtilTest;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
@@ -746,11 +747,6 @@ public class MainFrameController {
                     }
                 }
             });
-
-            selectcat.setItems(lrcat.getlistofpossiblecat());
-            selectevents.setItems(lrcat.getlistofpossibleevent());
-            selectlieux.setItems(lrcat.getlistofpossiblelieux());
-            selectperson.setItems(lrcat.getlistofpossibleperson());
         } catch (SQLException e) {
             popupalertException(e);
             excptlog(e);
@@ -912,6 +908,14 @@ public class MainFrameController {
                 refreshcompteurRepertoire();
             }
         });
+
+        selectcat.setItems(lrcat.getlistofpossiblecat());
+        selectevents.setItems(lrcat.getlistofpossibleevent());
+        selectlieux.setItems(lrcat.getlistofpossiblelieux());
+        selectperson.setItems(lrcat.getlistofpossibleperson());
+
+//        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
 
         actionCycleTraitementPhoto();
     }
