@@ -138,6 +138,8 @@ public class MainFrameController {
     @FXML
     private Label imagedestinationinformation;
     @FXML
+    private Label datesub;
+    @FXML
     private ComboBox<String> selectcat;
     @FXML
     private ComboBox<String> selectevent;
@@ -784,6 +786,7 @@ public class MainFrameController {
                     refreshcompteurRepertoire();
                     refreshcomboxRepertoire();
                     activeRep.moveActivephotoNumTo(0);
+                    datesub.setText(activeRep.getDtdebHumain());
                     try {
                         refreshActivePhoto();
                         refreshvaleurphoto();

@@ -195,6 +195,7 @@
                                 </AnchorPane>
                             </top>
                         </BorderPane>
+                  <Label fx:id="datesub" alignment="CENTER" contentDisplay="CENTER" layoutX="101.0" layoutY="35.0" text="Label" />
                     </children>
                 </AnchorPane>
                 <AnchorPane layoutX="258.0" layoutY="94.0" prefHeight="663.0" prefWidth="810.0">

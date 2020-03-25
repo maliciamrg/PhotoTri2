@@ -9,10 +9,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -63,6 +61,13 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int zero = 2;
     private int catFolder;
     private long nbjourfolder;
+
+    public String getDtdebHumain() {
+        SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dtdebH = new Date(dtdeb * 1000);
+        return repDateFormat.format(dtdebH);
+    }
+
     private long dtdeb;
     private long dtfin;
     /**

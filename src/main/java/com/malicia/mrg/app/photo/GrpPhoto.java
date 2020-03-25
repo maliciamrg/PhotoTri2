@@ -227,7 +227,6 @@ public class GrpPhoto {
         } else {
             Date datemin = new Date(mintGrp * 1000);
             String datemintFormat = repDateFormat.format(datemin);
-
             Date datemaxt = new Date(maxtGrp * 1000);
             String datemaxtFormat = repDateFormat.format(datemaxt);
 
