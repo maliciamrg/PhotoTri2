@@ -17,18 +17,20 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
@@ -131,7 +133,7 @@ public class MainFrameController {
     @FXML
     private ImageView imageOne;
     @FXML
-    private Label imagedestinationcorbeilleorstar;
+    private Text imagedestinationcorbeilleorstar;
     @FXML
     private Label imagedestinationinformation;
     @FXML
@@ -144,6 +146,8 @@ public class MainFrameController {
     private ComboBox<String> selectperson;
     @FXML
     private Circle pointeur;
+    @FXML
+    private Button valid;
 
     private AgLibrarySubFolder activeRep;
 
@@ -663,6 +667,22 @@ public class MainFrameController {
     }
 
     /**
+     * ActionExecModification.
+     *
+     * @param event the event
+     */
+    @FXML
+    void ActionExecModification(ActionEvent event) {
+//        try {
+////
+////        } catch (IOException | URISyntaxException e) {
+////            popupalertException(e);
+////            excptlog(e);
+////        }
+////        logecrireuserlogInfo(Context.getUrlgitwiki());
+    }
+
+    /**
      * Abouturl.
      *
      * @param event the event
@@ -793,6 +813,7 @@ public class MainFrameController {
         nbetrationtroisetoile.setText(activeRep.nbetratiovaleur(3));
         nbetrationquatreetoile.setText(activeRep.nbetratiovaleur(4));
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
+        valid.setDisable(activeRep.getStatusRep() != AgLibrarySubFolder.OK);
     }
 
     private void refreshActivePhoto() throws IOException, SQLException {
@@ -806,7 +827,9 @@ public class MainFrameController {
 
     private void refreshvaleurphoto() {
         imagedestinationcorbeilleorstar.setText(activeRep.getActivephotoValeur());
-        imagedestinationcorbeilleorstar.setFont(new Font("Wingdings 2",30));
+        imagedestinationcorbeilleorstar.setFont(new Font("Wingdings", 30));
+        imagedestinationcorbeilleorstar.setSmooth(true);
+        imagedestinationcorbeilleorstar.setFontSmoothingType(FontSmoothingType.LCD);
         imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle());
     }
 
@@ -930,9 +953,9 @@ public class MainFrameController {
         selectperson.setItems(lrcat.getlistofpossibleperson());
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectevent, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectlieu, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectperson, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectevent, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectlieu, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectperson, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
 
         actionCycleTraitementPhoto();
     }

@@ -39,6 +39,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * The constant FOLDER_SHOOTING.
      */
     public static final int FOLDER_SHOOTING = 3;
+    public static final String OK = "--OK--";
     private final Logger LOGGER;
     /**
      * The List file sub folder.
@@ -379,7 +380,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private void calculStatusRep() {
         //        statusRep
         if (nbphotoapurger == 0) {
-            statusRep = "--OK--";
+            statusRep = OK;
         }
     }
 
@@ -469,19 +470,19 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public String getActivephotoValeur() {
         switch ((int) listFileSubFolder.get(activeNum).starValue) {
             case -1:
-                return "     3 3 3 ";
+                return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 ";
             case 0:
                 return "           ";
             case 1:
-                return " é         ";
+                return " ★         ";
             case 2:
-                return " é é       ";
+                return " ★ ★       ";
             case 3:
-                return " é é é     ";
+                return " ★ ★ ★     ";
             case 4:
-                return " é é é é   ";
+                return " ★ ★ ★ ★   ";
             case 5:
-                return " é é é é é ";
+                return " ★ ★ ★ ★ ★ ";
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).starValue);
         }
