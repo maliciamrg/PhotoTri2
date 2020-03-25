@@ -44,7 +44,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     /**
      * The List file sub folder.
      */
-    List<AgLibraryFile> listFileSubFolder;
+    public List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
     private int nbetrationzeroetoile;
@@ -65,7 +65,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
-
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -95,6 +94,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
         refreshCompteur();
+    }
+
+    public int getActiveNum() {
+        return activeNum;
     }
 
     /**
@@ -594,5 +597,20 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     }
 
+
+    public void setRotateActivephotoNumTo(int addRotate) {
+        listFileSubFolder.get(activeNum).setAddRotate(addRotate);
+    }
+
+    public int getRotateFromActivephotonum() {
+        return listFileSubFolder.get(activeNum).getAddRotate();
+    }
+
+    public int getRotateFromphotonum(int photonum) {
+        if (photonum < 0 || photonum > listFileSubFolder.size() - 1) {
+            return 0;
+        }
+        return listFileSubFolder.get(photonum).getAddRotate();
+    }
 
 }

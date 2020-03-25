@@ -240,13 +240,13 @@
                                                 <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
                                             </center>
                                         </BorderPane>
-                                        <Text fx:id="imagedestinationcorbeilleorstar" layoutX="290.0" layoutY="111.0" text="🕱" textAlignment="CENTER" wrappingWidth="230.0">
+                                        <Text fx:id="imagedestinationcorbeilleorstar" layoutX="290.0" layoutY="111.0" textAlignment="CENTER" wrappingWidth="230.0">
                                             <font>
                                                 <Font name="Arial" size="30.0" />
                                             </font>
                                         </Text>
                                         <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="135.0" prefHeight="60.0" prefWidth="230.0" />
-                                        <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#ActionExecModification" prefHeight="51.0" prefWidth="67.0" text="Button" />
+                                        <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#ActionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
                                         <Circle fx:id="pointeur" fill="#ff1f1f" layoutX="24.0" layoutY="408.0" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
                                     </children>
                                 </AnchorPane>

@@ -51,6 +51,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 import static com.malicia.mrg.app.Context.lrcat;
+import static com.malicia.mrg.app.Context.repEncours;
 
 
 /**
@@ -158,6 +159,23 @@ public class MainFrameController {
     public MainFrameController() {
         LOGGER.info("mainFrameController");
         initialize();
+    }
+
+    /**
+     * Popupalert.
+     *
+     * @param contentText the content text
+     */
+    public static void popupalertConfirmeModification(String contentText) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("do you confirme ?");
+        alert.setContentText(contentText);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            repEncours.ValidModification();
+        }
     }
 
     /**
@@ -673,6 +691,7 @@ public class MainFrameController {
      */
     @FXML
     void ActionExecModification(ActionEvent event) {
+        popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
 //        try {
 ////
 ////        } catch (IOException | URISyntaxException e) {
@@ -819,10 +838,19 @@ public class MainFrameController {
     private void refreshActivePhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
+        imageM2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-2)));
+
         imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
+        imageM1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-1)));
+
         imageOne.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(0)));
+        imageOne.setRotate(activeRep.getRotateFromActivephotonum());
+
         imageP1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(1)));
+        imageP1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(1)));
+
         imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(2)));
+        imageP2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(2)));
     }
 
     private void refreshvaleurphoto() {
@@ -863,6 +891,16 @@ public class MainFrameController {
                     activeRep.valeuractivephotodecrease();
                     refreshcompteurRepertoire();
                     refreshvaleurphoto();
+                    keyEvent.consume();
+                    break;
+                case Q:
+                    activeRep.setRotateActivephotoNumTo(+90);
+                    imageOne.setRotate(activeRep.getRotateFromActivephotonum());
+                    keyEvent.consume();
+                    break;
+                case D:
+                    activeRep.setRotateActivephotoNumTo(-90);
+                    imageOne.setRotate(activeRep.getRotateFromActivephotonum());
                     keyEvent.consume();
                     break;
                 default:

@@ -30,6 +30,7 @@ public class AgLibraryFile {
     private String fileIdGlobal;
     private String pathFromRoot;
     private String absolutePath;
+    private int addRotate;
 
     /**
      * Instantiates a new Ele.
@@ -60,6 +61,7 @@ public class AgLibraryFile {
         this.fileformat = fileformat;
         this.captureTime = captureTime;
         this.fileIdGlobal = fileIdGlobal;
+        this.addRotate = 0;
     }
 
     /**
@@ -154,5 +156,20 @@ public class AgLibraryFile {
      */
     public String getFileIdGlobal() {
         return fileIdGlobal;
+    }
+
+    public int getAddRotate() {
+        return addRotate;
+    }
+
+    public void setAddRotate(int addRotate) {
+        this.addRotate += addRotate;
+        if (this.addRotate > 180) {
+            this.addRotate = this.addRotate - 180;
+        } else {
+            if (this.addRotate < -180) {
+                this.addRotate = this.addRotate + 180;
+            }
+        }
     }
 }

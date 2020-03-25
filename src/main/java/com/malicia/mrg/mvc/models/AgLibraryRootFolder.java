@@ -516,6 +516,10 @@ public class AgLibraryRootFolder {
                         "Where b.rootFolder =  " + rootfolderidlocal + " " +
                         " ;");
     }
+
+    public void ValidModification() {
+
+    }
 }
 
 
