@@ -13,17 +13,22 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
@@ -137,8 +142,11 @@ public class MainFrameController {
     private ComboBox<String> selectlieu;
     @FXML
     private ComboBox<String> selectperson;
+    @FXML
+    private Circle pointeur;
 
     private AgLibrarySubFolder activeRep;
+
 
     /**
      * Instantiates a new Main frame controller.
@@ -798,9 +806,9 @@ public class MainFrameController {
 
     private void refreshvaleurphoto() {
         imagedestinationcorbeilleorstar.setText(activeRep.getActivephotoValeur());
+        imagedestinationcorbeilleorstar.setFont(new Font("Wingdings 2",30));
         imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle());
     }
-
 
     /**
      * Action active photo.
@@ -913,6 +921,9 @@ public class MainFrameController {
             }
         });
 
+        Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
+                (prop, oldNode, newNode) -> placeMarker(newNode));
+
         selectcat.setItems(lrcat.getlistofpossiblecat());
         selectevent.setItems(lrcat.getlistofpossibleevent());
         selectlieu.setItems(lrcat.getlistofpossiblelieux());
@@ -924,5 +935,17 @@ public class MainFrameController {
         FxUtilTest.autoCompleteComboBoxPlus(selectperson, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.toString().equals(typedText));
 
         actionCycleTraitementPhoto();
+    }
+
+    public void placeMarker(Node newNode) {
+        double nodeMinX = newNode.getLayoutBounds().getMinX();
+        double nodeMinY = newNode.getLayoutBounds().getMinY();
+        Point2D nodeInScene = newNode.localToScene(nodeMinX, nodeMinY);
+        Point2D nodeInMarkerLocal = pointeur.sceneToLocal(nodeInScene);
+        Point2D nodeInMarkerParent = pointeur.localToParent(nodeInMarkerLocal);
+
+        pointeur.relocate(nodeInMarkerParent.getX()
+                + pointeur.getLayoutBounds().getMinX(), nodeInMarkerParent.getY()
+                + pointeur.getLayoutBounds().getMinY());
     }
 }
