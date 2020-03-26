@@ -869,6 +869,7 @@ public class MainFrameController {
      *
      * @param keyEvent the key event
      */
+    @FXML
     public void actionActivePhoto(KeyEvent keyEvent) {
         try {
             switch (keyEvent.getCode()) {
@@ -918,6 +919,7 @@ public class MainFrameController {
     /**
      * Action active photop 2.
      */
+    @FXML
     public void actionActivePhotop2() {
         try {
             activeRep.moveActivephotoNumTo(+2);
@@ -932,6 +934,7 @@ public class MainFrameController {
     /**
      * Action active photom 2.
      */
+    @FXML
     public void actionActivePhotom2() {
         try {
             activeRep.moveActivephotoNumTo(-2);
@@ -946,6 +949,7 @@ public class MainFrameController {
     /**
      * Action active photom 1.
      */
+    @FXML
     public void actionActivePhotom1() {
         try {
             activeRep.moveActivephotoNumTo(-1);
@@ -960,6 +964,7 @@ public class MainFrameController {
     /**
      * Action active photop 1.
      */
+    @FXML
     public void actionActivePhotop1() {
         try {
             activeRep.moveActivephotoNumTo(+1);

@@ -122,11 +122,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public String getCatFolder() {
         switch (catFolder) {
             case FOLDER_EVENTS:
-                return Context.appParam.getString("repbookEvents");
+                return Context.appParam.getString("repbookCat1");
             case FOLDER_HOLIDAYS:
-                return Context.appParam.getString("repbookHolidays");
+                return Context.appParam.getString("repbookCat2");
             case FOLDER_SHOOTING:
-                return Context.appParam.getString("repbookShooting");
+                return Context.appParam.getString("repbookCat3");
             case FOLDER_UNCAT:
                 return "";
             default:
@@ -352,16 +352,16 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         Double nbmax;
         switch (catFolder) {
             case FOLDER_EVENTS:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiEvents"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxEvents"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat1"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat1"));
                 break;
             case FOLDER_HOLIDAYS:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiHolidays"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxHolidays"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat2"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat2"));
                 break;
             case FOLDER_SHOOTING:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiShooting"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxShooting"));
+                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat3"));
+                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat3"));
                 break;
             default:
                 nbmin = 0d;

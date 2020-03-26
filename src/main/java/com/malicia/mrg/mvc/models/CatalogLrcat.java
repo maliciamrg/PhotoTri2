@@ -228,7 +228,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
-            ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
+        ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
             listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
         }
@@ -236,7 +236,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<String> getlistofpossiblecat() {
-        return FXCollections.observableArrayList(Context.appParam.getString("listeCat").split(","));
+        return FXCollections.observableArrayList(Context.appParam.getString("repCat1").split(","));
     }
 
     public ObservableList<String> getlistofpossibleevent() {
