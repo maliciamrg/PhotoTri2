@@ -140,13 +140,13 @@ public class MainFrameController {
     @FXML
     private Label datesub;
     @FXML
-    private ComboBox<String> selectcat;
+    private ComboBox<String> selectrepCat;
     @FXML
-    private ComboBox<String> selectevent;
+    private ComboBox<String> selectssrepformatZ2;
     @FXML
-    private ComboBox<String> selectlieu;
+    private ComboBox<String> selectssrepformatZ3;
     @FXML
-    private ComboBox<String> selectperson;
+    private ComboBox<String> selectssrepformatZ4;
     @FXML
     private Circle pointeur;
     @FXML
@@ -804,7 +804,7 @@ public class MainFrameController {
     }
 
     private void refreshcomboxRepertoire() {
-        selectcat.getSelectionModel().select(activeRep.getCatFolder());
+        selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
     }
 
     /**
@@ -977,31 +977,26 @@ public class MainFrameController {
 
     }
 
+
+
+
     /**
      * Start.
      */
     public void start() {
 
-        selectcat.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                activeRep.setCatFolder(newValue);
-                refreshcompteurRepertoire();
-            }
-        });
-
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
-        selectcat.setItems(lrcat.getlistofpossiblecat());
-        selectevent.setItems(lrcat.getlistofpossibleevent());
-        selectlieu.setItems(lrcat.getlistofpossiblelieux());
-        selectperson.setItems(lrcat.getlistofpossibleperson());
+        selectrepCat.setItems(lrcat.getlistofpossiblecat());
+        selectssrepformatZ2.setItems(lrcat.getlistofpossibleevent());
+        selectssrepformatZ3.setItems(lrcat.getlistofpossiblelieux());
+        selectssrepformatZ4.setItems(lrcat.getlistofpossibleperson());
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectevent, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectlieu, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectperson, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
 
         actionCycleTraitementPhoto();
     }
@@ -1016,5 +1011,26 @@ public class MainFrameController {
         pointeur.relocate(nodeInMarkerParent.getX()
                 + pointeur.getLayoutBounds().getMinX(), nodeInMarkerParent.getY()
                 + pointeur.getLayoutBounds().getMinY());
+    }
+
+    public void actionrepCatChange(ActionEvent actionEvent) {
+        activeRep.setCatFolder(((ComboBox)actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
+    }
+
+    public void actionssrepformatZ1Change(ActionEvent actionEvent) {
+        activeRep.setrepformatZ(1,((ComboBox)actionEvent.getTarget()).getValue().toString());
+    }
+
+    public void actionssrepformatZ2Change(ActionEvent actionEvent) {
+        activeRep.setrepformatZ(2,((ComboBox)actionEvent.getTarget()).getValue().toString());
+    }
+
+    public void actionssrepformatZ3Change(ActionEvent actionEvent) {
+        activeRep.setrepformatZ(3,((ComboBox)actionEvent.getTarget()).getValue().toString());
+    }
+
+    public void actionssrepformatZ4Change(ActionEvent actionEvent) {
+        activeRep.setrepformatZ(4,((ComboBox)actionEvent.getTarget()).getValue().toString());
     }
 }

@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.app.repCat;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -21,22 +22,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * The constant UNEXPECTED_VALUE.
      */
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
-    /**
-     * The constant FOLDER_UNCAT.
-     */
-    public static final int FOLDER_UNCAT = 0;
-    /**
-     * The constant FOLDER_EVENTS.
-     */
-    public static final int FOLDER_EVENTS = 1;
-    /**
-     * The constant FOLDER_HOLIDAYS.
-     */
-    public static final int FOLDER_HOLIDAYS = 2;
-    /**
-     * The constant FOLDER_SHOOTING.
-     */
-    public static final int FOLDER_SHOOTING = 3;
     public static final String OK = "--OK--";
     private final Logger LOGGER;
     /**
@@ -59,8 +44,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private Map<Integer, Integer> activephotoNum;
     private int activeNum;
     private int zero = 2;
-    private int catFolder;
     private long nbjourfolder;
+    private repCat categorie;
 
     public String getDtdebHumain() {
         SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,18 +105,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the cat folder
      */
     public String getCatFolder() {
-        switch (catFolder) {
-            case FOLDER_EVENTS:
-                return Context.appParam.getString("repbookCat1");
-            case FOLDER_HOLIDAYS:
-                return Context.appParam.getString("repbookCat2");
-            case FOLDER_SHOOTING:
-                return Context.appParam.getString("repbookCat3");
-            case FOLDER_UNCAT:
-                return "";
-            default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + catFolder);
-        }
+        return categorie.getRepertoire();
     }
 
     /**
@@ -140,15 +114,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @param catFoldertxt the cat foldertxt
      */
     public void setCatFolder(String catFoldertxt) {
-        catFolder = FOLDER_UNCAT;
-        if (Context.appParam.getString("repbookEvents").compareTo(catFoldertxt) == 0) {
-            catFolder = FOLDER_EVENTS;
-        }
-        if (Context.appParam.getString("repbookHolidays").compareTo(catFoldertxt) == 0) {
-            catFolder = FOLDER_HOLIDAYS;
-        }
-        if (Context.appParam.getString("repbookShooting").compareTo(catFoldertxt) == 0) {
-            catFolder = FOLDER_SHOOTING;
+        categorie = null;
+        for(int key: Context.categories.keySet()){
+            if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt)==0) {
+                categorie=Context.categories.get(key);
+            }
         }
     }
 
@@ -182,8 +152,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             image = new Image(localUrl, false);
         } else {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
-//            InputStream in = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
-//            if (in == null) {
             if (file.exists()) {
                 localUrl = file.toURI().toURL().toExternalForm();
                 LOGGER.info(localUrl);
@@ -192,10 +160,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 localUrl = Context.getLocalErr404PhotoUrl();
                 image = new Image(localUrl, false);
             }
-//            } else {
-//                localUrl = file.toURI().toURL().toExternalForm();
-//                image = new Image(in);
-//            }
 
         }
         if (image.isError()) {
@@ -348,26 +312,13 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
-        Double nbmin;
-        Double nbmax;
-        switch (catFolder) {
-            case FOLDER_EVENTS:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat1"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat1"));
-                break;
-            case FOLDER_HOLIDAYS:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat2"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat2"));
-                break;
-            case FOLDER_SHOOTING:
-                nbmin = Double.valueOf(Context.appParam.getString("nbminiCat3"));
-                nbmax = Double.valueOf(Context.appParam.getString("nbmaxCat3"));
-                break;
-            default:
-                nbmin = 0d;
-                nbmax = 999d;
-                break;
+        Double nbmin= 0d;
+        Double nbmax= 999d;
+        if (categorie != null) {
+            nbmin = Double.valueOf(categorie.getNbminiphotobyday());
+            nbmax = Double.valueOf(categorie.getNbmaxphotobyday());
         }
+
         int limiteminfolder = (int) (nbmin * nbjourfolder);
         int limitemaxfolder = (int) (nbmax * nbjourfolder);
         if (nbphotoRep > limitemaxfolder) {
@@ -476,7 +427,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the activephoto valeur
      */
     public String getActivephotoValeur() {
-        switch ((int) listFileSubFolder.get(activeNum).starValue) {
+            switch ((int) listFileSubFolder.get(activeNum).starValue) {
             case -1:
                 return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 ";
             case 0:
@@ -618,4 +569,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         return listFileSubFolder.get(photonum).getAddRotate();
     }
 
+    public void setrepformatZ(int i, String valeur) {
+
+    }
 }

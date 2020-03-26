@@ -30,9 +30,9 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         refreshdataLrcat(catalogLrcat);
 
         addrootFolder("repLegacy");
-        addrootFolder("repbookEvents");
-        addrootFolder("repbookHolidays");
-        addrootFolder("repbookShooting");
+        addrootFolder("repCat1");
+        addrootFolder("repCat2");
+        addrootFolder("repCat3");
         addrootFolder("repEncours");
         addrootFolder("repKidz");
         addrootFolder("repNew");
@@ -236,7 +236,11 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<String> getlistofpossiblecat() {
-        return FXCollections.observableArrayList(Context.appParam.getString("repCat1").split(","));
+        ObservableList<String> repCat = FXCollections.observableArrayList();
+        repCat.add(Context.appParam.getString("repCat1"));
+        repCat.add(Context.appParam.getString("repCat2"));
+        repCat.add(Context.appParam.getString("repCat3"));
+        return repCat;
     }
 
     public ObservableList<String> getlistofpossibleevent() {

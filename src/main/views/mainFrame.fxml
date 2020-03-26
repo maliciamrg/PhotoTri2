@@ -204,10 +204,15 @@
                             <center>
                                 <AnchorPane>
                                     <children>
-                                        <ComboBox fx:id="selectcat" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectevent" layoutX="193.0" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectlieu" layoutX="388.0" prefHeight="25.0" prefWidth="185.0" />
-                                        <ComboBox fx:id="selectperson" layoutX="586.0" prefHeight="25.0" prefWidth="185.0" />
+                              <TilePane alignment="CENTER" layoutX="3.0" prefHeight="60.0" prefWidth="606.0">
+                                 <children>
+                                              <ComboBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="185.0" />
+                                              <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="185.0" />
+                                              <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="185.0" />
+                                              <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="185.0" />
+                                              <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="185.0" />
+                                 </children>
+                              </TilePane>
                                     </children>
                                 </AnchorPane>
                             </center>

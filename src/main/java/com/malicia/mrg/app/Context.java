@@ -49,6 +49,7 @@ public class Context implements Serializable {
     public static AgLibraryRootFolder repEncours;
     public static AgLibraryRootFolder repKidz;
     public static AgLibraryRootFolder repNew;
+    public static HashMap<Integer, repCat> categories = new HashMap();
     public static CatalogPreviews Previews;
     private static Logger LOGGER;
     /**
@@ -140,6 +141,15 @@ public class Context implements Serializable {
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 //        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
+
+        //array de catagories
+        int numcat = 1;
+        while (appParam.containsKey("repCat"+numcat))
+        {
+            categories.put(numcat ,new repCat(numcat, appParam.getString("repCat" + numcat), appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
+            numcat +=1;
+        }
+
 
     }
 
