@@ -1,5 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
+import com.adobe.xmp.impl.xpath.XMPPath;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.repCat;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      */
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
+    public static final String KO = "------";
     private final Logger LOGGER;
     /**
      * The List file sub folder.
@@ -48,6 +50,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
+    public static HashMap<Integer, String> repformatZ = new HashMap();
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -104,7 +107,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the cat folder
      */
     public String getCatFolder() {
-        return categorie.getRepertoire();
+        if (categorie != null) {
+            return categorie.getRepertoire();
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -256,7 +263,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
-        statusRep = "---";
+        statusRep = KO;
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
@@ -338,8 +345,19 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     private void calculStatusRep() {
         //        statusRep
-        if (nbphotoapurger == 0) {
-            statusRep = OK;
+        statusRep = OK;
+        for (Integer key : Context.formatZ.keySet()) {
+            if(!repformatZ.containsKey(key)){
+                statusRep = KO;
+                break;
+            }
+            if (repformatZ.get(key).compareTo("")==0){
+                statusRep = KO;
+                break;
+            }
+        }
+        if (nbphotoapurger != 0) {
+            statusRep = KO;
         }
     }
 
@@ -570,6 +588,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void setrepformatZ(int i, String valeur) {
-
+        repformatZ.put(i,valeur);
     }
+
 }
