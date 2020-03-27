@@ -46,13 +46,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int zero = 2;
     private long nbjourfolder;
     private repCat categorie;
-
-    public String getDtdebHumain() {
-        SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dtdebH = new Date(dtdeb * 1000);
-        return repDateFormat.format(dtdebH);
-    }
-
     private long dtdeb;
     private long dtfin;
     /**
@@ -86,6 +79,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         refreshCompteur();
     }
 
+    public String getDtdebHumain() {
+        SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dtdebH = new Date(dtdeb * 1000);
+        return repDateFormat.format(dtdebH);
+    }
+
     public int getActiveNum() {
         return activeNum;
     }
@@ -115,11 +114,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      */
     public void setCatFolder(String catFoldertxt) {
         categorie = null;
-        for(int key: Context.categories.keySet()){
-            if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt)==0) {
-                categorie=Context.categories.get(key);
+        for (int key : Context.categories.keySet()) {
+            if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
+                categorie = Context.categories.get(key);
             }
         }
+        refreshCompteur();
     }
 
 
@@ -312,8 +312,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
-        Double nbmin= 0d;
-        Double nbmax= 999d;
+        Double nbmin = 0d;
+        Double nbmax = 999d;
         if (categorie != null) {
             nbmin = Double.valueOf(categorie.getNbminiphotobyday());
             nbmax = Double.valueOf(categorie.getNbmaxphotobyday());
@@ -427,7 +427,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the activephoto valeur
      */
     public String getActivephotoValeur() {
-            switch ((int) listFileSubFolder.get(activeNum).starValue) {
+        switch ((int) listFileSubFolder.get(activeNum).starValue) {
             case -1:
                 return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 ";
             case 0:

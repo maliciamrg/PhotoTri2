@@ -29,13 +29,13 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         refreshdataLrcat(catalogLrcat);
 
-        addrootFolder("repLegacy");
-        addrootFolder("repCat1");
-        addrootFolder("repCat2");
-        addrootFolder("repCat3");
-        addrootFolder("repEncours");
-        addrootFolder("repKidz");
-        addrootFolder("repNew");
+        addrootFolder("repLegacy", Context.appParam.getString("repLegacy"));
+        addrootFolder("repEncours", Context.appParam.getString("repEncours"));
+        addrootFolder("repKidz", Context.appParam.getString("repKidz"));
+        addrootFolder("repNew", Context.appParam.getString("repNew"));
+        for (Integer key : Context.categories.keySet()) {
+            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire());
+        }
 
     }
 
@@ -48,11 +48,11 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         dateFichierHR = dateFormat.format(dateFichier);
     }
 
-    private void addrootFolder(String nomRep) throws SQLException {
+    private void addrootFolder(String nomRep, String appParamString) throws SQLException {
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
-                "where name = '" + Context.appParam.getString(nomRep) + "' " +
+                "where name = '" + appParamString + "' " +
                 ";");
         while (rs.next()) {
             String rootfolderidlocal = rs.getString("id_local");
@@ -236,11 +236,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<String> getlistofpossiblecat() {
-        ObservableList<String> repCat = FXCollections.observableArrayList();
-        repCat.add(Context.appParam.getString("repCat1"));
-        repCat.add(Context.appParam.getString("repCat2"));
-        repCat.add(Context.appParam.getString("repCat3"));
-        return repCat;
+        return FXCollections.observableArrayList(Context.appParam.getString("repCatx").split(","));
     }
 
     public ObservableList<String> getlistofpossibleevent() {

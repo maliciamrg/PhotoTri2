@@ -1020,17 +1020,21 @@ public class MainFrameController {
 
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(1,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(2,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(3,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(4,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 }

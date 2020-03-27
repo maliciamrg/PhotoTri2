@@ -139,17 +139,15 @@ public class Context implements Serializable {
 
         Context.initPropertiesParameters();
 
-        lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
-//        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
-
         //array de catagories
         int numcat = 1;
-        while (appParam.containsKey("repCat"+numcat))
-        {
-            categories.put(numcat ,new repCat(numcat, appParam.getString("repCat" + numcat), appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
+        for (String repCat : Context.appParam.getString("repCatx").split(",")) {
+            categories.put(numcat ,new repCat(numcat, repCat, appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
             numcat +=1;
         }
 
+        lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
+//        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
 
     }
 
