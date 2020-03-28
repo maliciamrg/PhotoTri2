@@ -263,7 +263,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbetrationtroisetoile = 0;
         nbetrationquatreetoile = 0;
         nbetrationcinqetoile = 0;
-        statusRep = KO;
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {

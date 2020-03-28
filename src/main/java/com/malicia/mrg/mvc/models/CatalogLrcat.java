@@ -236,18 +236,13 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public ObservableList<String> getlistofpossiblecat() {
-        return FXCollections.observableArrayList(Context.appParam.getString("repCatx").split(","));
+        return getlistofx("repCatx");
     }
 
-    public ObservableList<String> getlistofpossibleevent() {
-        return FXCollections.observableArrayList(Context.appParam.getString("listeEvents").split(","));
-    }
-
-    public ObservableList<String> getlistofpossiblelieux() {
-        return FXCollections.observableArrayList(Context.appParam.getString("listeLieux").split(","));
-    }
-
-    public ObservableList<String> getlistofpossibleperson() {
-        return FXCollections.observableArrayList(Context.appParam.getString("listePerson").split(","));
+    public ObservableList<String> getlistofx(String key) {
+        if (Context.appParam.containsKey(key)) {
+            return FXCollections.observableArrayList(Context.appParam.getString(key).split(","));
+        }
+        return FXCollections.observableArrayList();
     }
 }

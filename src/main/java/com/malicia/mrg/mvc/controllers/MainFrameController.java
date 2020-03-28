@@ -142,6 +142,8 @@ public class MainFrameController {
     @FXML
     private ComboBox<String> selectrepCat;
     @FXML
+    private ComboBox<String> selectssrepformatZ1;
+    @FXML
     private ComboBox<String> selectssrepformatZ2;
     @FXML
     private ComboBox<String> selectssrepformatZ3;
@@ -988,12 +990,15 @@ public class MainFrameController {
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
-        selectrepCat.setItems(lrcat.getlistofpossiblecat());
-        selectssrepformatZ2.setItems(lrcat.getlistofpossibleevent());
-        selectssrepformatZ3.setItems(lrcat.getlistofpossiblelieux());
-        selectssrepformatZ4.setItems(lrcat.getlistofpossibleperson());
+               selectrepCat.setItems(lrcat.getlistofpossiblecat());
+        selectssrepformatZ1.setItems(lrcat.getlistofx(Context.formatZ.get(1)));
+        selectssrepformatZ2.setItems(lrcat.getlistofx(Context.formatZ.get(2)));
+        selectssrepformatZ3.setItems(lrcat.getlistofx(Context.formatZ.get(3)));
+        selectssrepformatZ4.setItems(lrcat.getlistofx(Context.formatZ.get(4)));
+
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
