@@ -262,7 +262,14 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     public void setListeZ(int numListeZ) {
-        listeZ.put(numListeZ,lrcat.getlistofx(Context.formatZ.get(numListeZ)));
+        ObservableList<String> listetmp = lrcat.getlistofx(Context.formatZ.get(numListeZ));
+        listetmp.addAll(recupListOfZoneFromSsRepetertoireOfCategorie(numListeZ));
+        listeZ.put(numListeZ,listetmp);
+    }
+
+    private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) {
+        ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
+        return listeleFromCat;
     }
 
     public ObservableList<String> getListeZ(int numListeZ) {
