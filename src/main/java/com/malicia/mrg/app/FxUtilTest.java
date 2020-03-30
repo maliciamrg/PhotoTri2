@@ -13,10 +13,10 @@ public class FxUtilTest {
         boolean matches(String typedText, T objectToCompare);
     }
 
-    public static<T> void autoCompleteComboBoxPlus(ComboBox<T> comboBox, AutoCompleteComparator<T> comparatorMethod) {
+    public static<T> void autoCompleteComboBoxPlus(ComboBox<T> comboBox, AutoCompleteComparator<T> comparatorMethod, final boolean isEditable) {
         ObservableList<T> data = comboBox.getItems();
 
-        comboBox.setEditable(true);
+        comboBox.setEditable(isEditable);
         comboBox.getEditor().focusedProperty().addListener(observable -> {
             if (comboBox.getSelectionModel().getSelectedIndex() < 0) {
                 comboBox.getEditor().setText(null);

@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.malicia.mrg.app.Context.lrcat;
+
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
@@ -23,6 +25,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     public String nomFichier;
     public Map<String, AgLibraryRootFolder> rep = new HashMap();
     public String cheminfichierLrcat = "";
+    public Map<Integer, ObservableList<String>> listeZ = new HashMap();
 
     public CatalogLrcat(String catalogLrcat) throws SQLException {
         super(catalogLrcat);
@@ -242,7 +245,27 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     public ObservableList<String> getlistofx(String key) {
         if (Context.appParam.containsKey(key)) {
             return FXCollections.observableArrayList(Context.appParam.getString(key).split(","));
+        } else {
+            ObservableList<String> ret = FXCollections.observableArrayList();
+            String[] decript = key.split("%");
+            if (decript.length > 1) {
+                if (Context.appParam.containsKey(decript[1])) {
+                    return FXCollections.observableArrayList(Context.appParam.getString(decript[1]).split(","));
+                } else {
+                    ret.add(key);
+                }
+            } else {
+                ret.add(key);
+            }
+            return ret;
         }
-        return FXCollections.observableArrayList();
+    }
+
+    public void setListeZ(int numListeZ) {
+        listeZ.put(numListeZ,lrcat.getlistofx(Context.formatZ.get(numListeZ)));
+    }
+
+    public ObservableList<String> getListeZ(int numListeZ) {
+        return listeZ.get(numListeZ);
     }
 }

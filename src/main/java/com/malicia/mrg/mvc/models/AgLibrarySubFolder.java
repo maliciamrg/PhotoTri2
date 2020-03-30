@@ -3,6 +3,7 @@ package com.malicia.mrg.mvc.models;
 import com.adobe.xmp.impl.xpath.XMPPath;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.repCat;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -590,4 +591,17 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         repformatZ.put(i,valeur);
     }
 
+    public ObservableList<String> personalizelist(ObservableList<String> listeZ) {
+
+        listeZ.forEach((tab) -> {
+            String[] part = tab.split("%");
+            if (part.length > 1) {
+                if (part[1].compareTo("DATE") == 0) {
+                    listeZ.remove(tab);
+                    listeZ.add(this.getDtdebHumain());
+                }
+            }
+        });
+        return listeZ;
+    }
 }

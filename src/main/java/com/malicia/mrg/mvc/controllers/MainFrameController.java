@@ -33,6 +33,7 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
@@ -807,6 +808,10 @@ public class MainFrameController {
 
     private void refreshcomboxRepertoire() {
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
+        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.getListeZ(1)));
+        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.getListeZ(2)));
+        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.getListeZ(3)));
+        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.getListeZ(4)));
     }
 
     /**
@@ -980,8 +985,6 @@ public class MainFrameController {
     }
 
 
-
-
     /**
      * Start.
      */
@@ -990,18 +993,24 @@ public class MainFrameController {
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
-               selectrepCat.setItems(lrcat.getlistofpossiblecat());
-        selectssrepformatZ1.setItems(lrcat.getlistofx(Context.formatZ.get(1)));
-        selectssrepformatZ2.setItems(lrcat.getlistofx(Context.formatZ.get(2)));
-        selectssrepformatZ3.setItems(lrcat.getlistofx(Context.formatZ.get(3)));
-        selectssrepformatZ4.setItems(lrcat.getlistofx(Context.formatZ.get(4)));
+        selectrepCat.setItems(lrcat.getlistofpossiblecat());
+        lrcat.setListeZ(1);
+        lrcat.setListeZ(2);
+        lrcat.setListeZ(3);
+        lrcat.setListeZ(4);
+
+
+        selectssrepformatZ1.setItems(lrcat.getListeZ(1));
+        selectssrepformatZ2.setItems(lrcat.getListeZ(2));
+        selectssrepformatZ3.setItems(lrcat.getListeZ(3));
+        selectssrepformatZ4.setItems(lrcat.getListeZ(4));
 
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText));
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size()>1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size()>1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size()>1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size()>1);
 
         actionCycleTraitementPhoto();
     }
@@ -1019,27 +1028,27 @@ public class MainFrameController {
     }
 
     public void actionrepCatChange(ActionEvent actionEvent) {
-        activeRep.setCatFolder(((ComboBox)actionEvent.getTarget()).getValue().toString());
+        activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(2,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(4,((ComboBox)actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 }
