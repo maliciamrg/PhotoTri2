@@ -49,7 +49,7 @@ public class AgLibraryRootFolder {
 
             String pathfromroot = rseleAplat.getString(Context.PATH_FROM_ROOT);
             String filename = rseleAplat.getString(Context.LC_IDX_FILENAME);
-            String file_id_local = rseleAplat.getString("file_id_local");
+            String file_id_local = rseleAplat.getString(Context.FILE_ID_LOCAL);
 
             if (pathfromroot.compareTo("") != 0) {
                 String Folder_id_local = String.valueOf(getIdlocalforpathFromRoot(""));
@@ -341,7 +341,7 @@ public class AgLibraryRootFolder {
             // Recuperer les info de l'elements
             String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
             String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
-            String file_id_local = rsele.getString("file_id_local");
+            String file_id_local = rsele.getString(Context.FILE_ID_LOCAL);
             String cameraModel = rsele.getString("CameraModel");
             long mint = rsele.getLong("mint");
             long maxt = rsele.getLong("maxt");
@@ -463,7 +463,7 @@ public class AgLibraryRootFolder {
             // Recuperer les info de l'elements
             String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
             String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
-            String file_id_local = rsele.getString("file_id_local");
+            String file_id_local = rsele.getString(Context.FILE_ID_LOCAL);
             String folder_id_local = rsele.getString("folder_id_local");
 
             String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);

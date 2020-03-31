@@ -1,6 +1,5 @@
 package com.malicia.mrg.mvc.models;
 
-import com.adobe.xmp.impl.xpath.XMPPath;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.repCat;
 import javafx.collections.ObservableList;
@@ -26,6 +25,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
+    public static HashMap<Integer, String> repformatZ = new HashMap();
     private final Logger LOGGER;
     /**
      * The List file sub folder.
@@ -51,7 +51,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
-    public static HashMap<Integer, String> repformatZ = new HashMap();
+
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -347,11 +347,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         //        statusRep
         statusRep = OK;
         for (Integer key : Context.formatZ.keySet()) {
-            if(!repformatZ.containsKey(key)){
+            if (!repformatZ.containsKey(key)) {
                 statusRep = KO;
                 break;
             }
-            if (repformatZ.get(key).compareTo("")==0){
+            if (repformatZ.get(key).compareTo("") == 0) {
                 statusRep = KO;
                 break;
             }
@@ -588,12 +588,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void setrepformatZ(int i, String valeur) {
-        repformatZ.put(i,valeur);
+        repformatZ.put(i, valeur);
     }
 
     public ObservableList<String> personalizelist(ObservableList<String> listeZ) {
 
-        listeZ.forEach((tab) -> {
+        listeZ.forEach(tab -> {
             String[] part = tab.split("%");
             if (part.length > 1) {
                 if (part[1].compareTo("DATE") == 0) {

@@ -41,6 +41,7 @@ public class Context implements Serializable {
      */
     public static final String LC_IDX_FILENAME = "lc_idx_filename";
     private static final long serialVersionUID = 1L;
+    public static final String FILE_ID_LOCAL = "file_id_local";
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static AgLibraryRootFolder repLegacy;
