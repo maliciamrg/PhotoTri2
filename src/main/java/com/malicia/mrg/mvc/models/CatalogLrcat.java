@@ -268,7 +268,11 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
     private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) {
-        ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
+        ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
+        for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
+            listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
+        }
+        return listrep;
         return listeleFromCat;
     }
 
