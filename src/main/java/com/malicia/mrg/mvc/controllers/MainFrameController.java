@@ -806,9 +806,13 @@ public class MainFrameController {
     private void refreshcomboxRepertoire() {
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
         selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
+        selectssrepformatZ1.getEditor().setText(null);
         selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
+        selectssrepformatZ2.getEditor().setText(null);
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
+        selectssrepformatZ3.getEditor().setText(null);
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
+        selectssrepformatZ4.getEditor().setText(null);
     }
 
     /**
