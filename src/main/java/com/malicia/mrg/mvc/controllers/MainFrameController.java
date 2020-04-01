@@ -5,10 +5,7 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.FxUtilTest;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
-import com.malicia.mrg.mvc.models.AgLibraryFile;
-import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
-import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
-import com.malicia.mrg.mvc.models.SystemFiles;
+import com.malicia.mrg.mvc.models.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -808,10 +805,10 @@ public class MainFrameController {
 
     private void refreshcomboxRepertoire() {
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
-        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.getListeZ(1)));
-        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.getListeZ(2)));
-        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.getListeZ(3)));
-        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.getListeZ(4)));
+        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
+        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
+        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
+        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
     }
 
     /**
@@ -993,17 +990,17 @@ public class MainFrameController {
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
-        selectrepCat.setItems(lrcat.getlistofpossiblecat());
+        selectrepCat.setItems(Context.getlistofx("repCatx"));
         lrcat.setListeZ(1);
         lrcat.setListeZ(2);
         lrcat.setListeZ(3);
         lrcat.setListeZ(4);
 
 
-        selectssrepformatZ1.setItems(lrcat.getListeZ(1));
-        selectssrepformatZ2.setItems(lrcat.getListeZ(2));
-        selectssrepformatZ3.setItems(lrcat.getListeZ(3));
-        selectssrepformatZ4.setItems(lrcat.getListeZ(4));
+        selectssrepformatZ1.setItems(lrcat.listeZ.get(1));
+        selectssrepformatZ2.setItems(lrcat.listeZ.get(2));
+        selectssrepformatZ3.setItems(lrcat.listeZ.get(3));
+        selectssrepformatZ4.setItems(lrcat.listeZ.get(4));
 
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
