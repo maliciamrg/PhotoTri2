@@ -12,9 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static com.malicia.mrg.app.Context.formatZ;
 import static com.malicia.mrg.app.Context.lrcat;
 
 
@@ -32,12 +35,12 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         refreshdataLrcat(catalogLrcat);
 
-        addrootFolder("repLegacy", Context.appParam.getString("repLegacy"));
-        addrootFolder("repEncours", Context.appParam.getString("repEncours"));
-        addrootFolder("repKidz", Context.appParam.getString("repKidz"));
-        addrootFolder("repNew", Context.appParam.getString("repNew"));
+        addrootFolder("repLegacy", Context.appParam.getString("repLegacy"),AgLibraryRootFolder.TYPE_LEG);
+        addrootFolder("repEncours", Context.appParam.getString("repEncours"),AgLibraryRootFolder.TYPE_ENC);
+        addrootFolder("repKidz", Context.appParam.getString("repKidz"),AgLibraryRootFolder.TYPE_KID);
+        addrootFolder("repNew", Context.appParam.getString("repNew"),AgLibraryRootFolder.TYPE_NEW);
         for (Integer key : Context.categories.keySet()) {
-            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire());
+            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire(),AgLibraryRootFolder.TYPE_CAT);
         }
 
     }
@@ -51,7 +54,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         dateFichierHR = dateFormat.format(dateFichier);
     }
 
-    private void addrootFolder(String nomRep, String appParamString) throws SQLException {
+    private void addrootFolder(String nomRep, String appParamString, int typeRoot) throws SQLException {
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
@@ -61,7 +64,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             String rootfolderidlocal = rs.getString("id_local");
             String absolutePath = rs.getString("absolutePath");
             String name = rs.getString("name");
-            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath);
+            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath,typeRoot);
             rep.put(nomRep, tmpRootLib);
         }
     }
@@ -230,10 +233,12 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         return nomFichier + " " + dateFichierHR;
     }
 
-    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
+    public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess(List<Integer> typeToProcess) throws SQLException {
         ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
-            listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
+            if (typeToProcess.contains(entry.getValue().getTypeRoot())) {
+                listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
+            }
         }
         return listrep;
     }
@@ -261,18 +266,26 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         }
     }
 
-    public void setListeZ(int numListeZ) {
+    public void setListeZ(int numListeZ) throws SQLException {
         ObservableList<String> listetmp = lrcat.getlistofx(Context.formatZ.get(numListeZ));
         listetmp.addAll(recupListOfZoneFromSsRepetertoireOfCategorie(numListeZ));
         listeZ.put(numListeZ,listetmp);
     }
 
-    private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) {
-        ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
-        for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
-            listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
-        }
-        return listrep;
+    private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) throws SQLException {
+        ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
+
+        ObservableList<AgLibrarySubFolder> listSubCat = getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_CAT}));
+        listSubCat.forEach(subFolder -> {
+            String[] part = subFolder.getPathFromRoot().split(Context.appParam.getString("ssrepformatSep"));
+            if (part.length == formatZ.size()) {
+                String elez = part[numListeZ-1].replace("/", "");
+                if (!listeleFromCat.contains(elez)) {
+                    listeleFromCat.add(elez);
+                }
+            }
+        });
+
         return listeleFromCat;
     }
 

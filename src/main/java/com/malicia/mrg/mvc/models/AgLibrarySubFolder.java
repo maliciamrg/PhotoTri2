@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -42,6 +43,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
+
+    public String getPathFromRoot() {
+        return pathFromRoot;
+    }
+
     private String pathFromRoot;
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;
@@ -64,7 +70,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws SQLException the sql exception
      */
     public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folderIdLocal, String rootfolderidlocal, String absolutePath) throws SQLException {
-        super(parentLrcat, name, rootfolderidlocal, absolutePath);
+        super(parentLrcat, name, rootfolderidlocal, absolutePath,AgLibraryRootFolder.TYPE_INCONNU);
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
