@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -42,6 +43,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
+
+    public String getPathFromRoot() {
+        return pathFromRoot;
+    }
+
     private String pathFromRoot;
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;

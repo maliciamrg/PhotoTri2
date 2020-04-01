@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.malicia.mrg.app.Context.formatZ;
 import static com.malicia.mrg.app.Context.lrcat;
 
 
@@ -273,7 +274,18 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) throws SQLException {
         ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
-        ObservableList<AgLibrarySubFolder> ret = getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_CAT}));
+
+        ObservableList<AgLibrarySubFolder> listSubCat = getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_CAT}));
+        listSubCat.forEach(subFolder -> {
+            String[] part = subFolder.getPathFromRoot().split(Context.appParam.getString("ssrepformatSep"));
+            if (part.length == formatZ.size()) {
+                String elez = part[numListeZ-1].replace("/", "");
+                if (!listeleFromCat.contains(elez)) {
+                    listeleFromCat.add(elez);
+                }
+            }
+        });
+
         return listeleFromCat;
     }
 
