@@ -5,9 +5,14 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.FxUtilTest;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
-import com.malicia.mrg.mvc.models.*;
+import com.malicia.mrg.mvc.models.AgLibraryFile;
+import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
+import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
+import com.malicia.mrg.mvc.models.SystemFiles;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -778,7 +783,14 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
-            repChoose.setItems(lrcat.getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC})));
+            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC));
+            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
+            getlistofrepertorytoprocess.forEach(subFolder -> {
+                if (subFolder.getNbphotoRep() != 0) {
+                    getlistofrepertorytoprocessfiltred.add(subFolder);
+                }
+            });
+            repChoose.setItems(getlistofrepertorytoprocessfiltred);
             repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
@@ -832,7 +844,7 @@ public class MainFrameController {
     private void refreshcompteurRepertoire() {
         activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.getNbelerep());
-        nbphotoRep.setText(activeRep.getNbphotoRep());
+        nbphotoRep.setText(activeRep.getNbphotoRepHuman());
         nbjourrep.setText(activeRep.getNbjourfolder());
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
         nbphotoapurger.setText(activeRep.getNbphotoapurger());
@@ -1008,10 +1020,10 @@ public class MainFrameController {
 
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size()>1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size()>1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size()>1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size()>1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
+        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
 
         actionCycleTraitementPhoto();
     }

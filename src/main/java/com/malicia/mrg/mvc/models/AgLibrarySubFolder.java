@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -33,6 +32,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      */
     public List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
+
+    public int getNbphotoRep() {
+        return nbphotoRep;
+    }
+
     private int nbphotoRep;
     private int nbetrationzeroetoile;
     private int nbetrationuneetoile;
@@ -422,7 +426,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      *
      * @return the nbphoto rep
      */
-    public String getNbphotoRep() {
+    public String getNbphotoRepHuman() {
         return " " + String.format("%04d", nbphotoRep);
     }
 
@@ -482,7 +486,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return getNbelerep() + " " + getNbphotoRep() + " " + pathFromRoot;
+        return getNbelerep() + " " + getNbphotoRepHuman() + " " + pathFromRoot;
     }
 
 
