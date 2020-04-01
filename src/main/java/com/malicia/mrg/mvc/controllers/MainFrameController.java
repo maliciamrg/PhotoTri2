@@ -6,6 +6,7 @@ import com.malicia.mrg.app.FxUtilTest;
 import com.malicia.mrg.app.photo.ElePhoto;
 import com.malicia.mrg.app.photo.GrpPhoto;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
+import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
 import javafx.beans.value.ChangeListener;
@@ -33,7 +34,6 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
@@ -781,7 +781,7 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
-            repChoose.setItems(lrcat.getlistofrepertorytoprocess());
+            repChoose.setItems(lrcat.getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC})));
             repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
@@ -988,7 +988,7 @@ public class MainFrameController {
     /**
      * Start.
      */
-    public void start() {
+    public void start() throws SQLException {
 
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));

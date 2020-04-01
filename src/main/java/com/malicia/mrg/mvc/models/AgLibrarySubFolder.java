@@ -64,7 +64,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws SQLException the sql exception
      */
     public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folderIdLocal, String rootfolderidlocal, String absolutePath) throws SQLException {
-        super(parentLrcat, name, rootfolderidlocal, absolutePath);
+        super(parentLrcat, name, rootfolderidlocal, absolutePath,AgLibraryRootFolder.TYPE_INCONNU);
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;

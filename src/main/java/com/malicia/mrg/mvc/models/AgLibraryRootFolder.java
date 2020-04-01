@@ -21,9 +21,21 @@ import java.util.regex.Pattern;
  */
 public class AgLibraryRootFolder {
 
+    public static final int TYPE_INCONNU = 0;
+    public static final int TYPE_CAT = 3;
+    public static final int TYPE_ENC = 2;
+    public static final int TYPE_NEW = 1;
+    public static final int TYPE_LEG = 4;
+    public static final int TYPE_KID = 5;
     private final Logger LOGGER;
     public String rootfolderidlocal;
     public String absolutePath;
+
+    public int getTypeRoot() {
+        return typeRoot;
+    }
+
+    private int typeRoot;
     public String name;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
@@ -33,11 +45,12 @@ public class AgLibraryRootFolder {
     }
 
 
-    public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath) {
+    public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath, int typeRoot) {
         parentLrcat = catalogLrcat;
         name = NomRootFolder;
         this.rootfolderidlocal = rootfolderidlocal;
         this.absolutePath = absolutePath;
+        this.typeRoot = typeRoot;
     }
 
 
@@ -58,7 +71,7 @@ public class AgLibraryRootFolder {
 
                 String rename = ("$" + UUID.randomUUID().toString() + "$" + supprimerbalisedollar(filename)).toLowerCase();
                 String destination = normalizePath(absolutePath + rename);
-                sqlmovefile(source , destination, Folder_id_local, file_id_local);
+                sqlmovefile(source, destination, Folder_id_local, file_id_local);
             }
 
         }
@@ -282,7 +295,7 @@ public class AgLibraryRootFolder {
 
 
 //test if folder deja exist
-        long idlocal  = getIdlocalforpathFromRoot(pathFromRoot);
+        long idlocal = getIdlocalforpathFromRoot(pathFromRoot);
 
         if (idlocal == 0) {
             idlocal = parentLrcat.sqlGetPrevIdlocalforFolder();
@@ -350,7 +363,7 @@ public class AgLibraryRootFolder {
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             String file_id_global = rsele.getString("id_global");
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local , rating,fileformat,captureTime,file_id_global) ;
+            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);
@@ -485,8 +498,8 @@ public class AgLibraryRootFolder {
             String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
             String folder_id_local = rsele.getString("folder_id_local");
 
-            if (isRepertoryToProcess(pathFromRoot) ){
-                ret.add(new AgLibrarySubFolder(parentLrcat,name,pathFromRoot,folder_id_local,rootfolderidlocal, absolutePath ));
+            if (isRepertoryToProcess(pathFromRoot)) {
+                ret.add(new AgLibrarySubFolder(parentLrcat, name, pathFromRoot, folder_id_local, rootfolderidlocal, absolutePath));
             }
 
         }
@@ -494,9 +507,27 @@ public class AgLibraryRootFolder {
     }
 
     private boolean isRepertoryToProcess(String pathFromRoot) {
-        if(pathFromRoot.matches("\\$[0-9a-zA-Z-]*\\$\\/")){return true;};
-        if(pathFromRoot.matches("![0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")){return true;};
-        if(pathFromRoot.matches( "![0-9a-zA-Z- _]*\\/##[0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")){return true;};
+        switch (typeRoot) {
+            case TYPE_NEW:
+                //repertoire = (@New) $0a19d7c5-e829-4537-9d53-4743397c53d4$
+                if (pathFromRoot.matches("\\$[0-9a-zA-Z-]*\\$\\/")) {
+                    return true;
+                }
+            case TYPE_ENC:
+                //repertoire = (#En cours de Traitement) !1er Passe Passe les flags et !2eme Passe les notes
+                if (pathFromRoot.matches("![0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")) {
+                    return true;
+                }
+                //repertoire = (#En cours de Traitement) !3eme Passe Affinages\##%cat% et !4eme Passe TAGs\##%cat%
+                if (pathFromRoot.matches("![0-9a-zA-Z- _]*\\/##[0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")) {
+                    return true;
+                }
+            case TYPE_CAT:
+                //repertoire = (##%cat%)
+                if (pathFromRoot.matches("[0-9a-zA-Z- _]*\\/")) {
+                    return true;
+                }
+        }
         return false;
     }
 
