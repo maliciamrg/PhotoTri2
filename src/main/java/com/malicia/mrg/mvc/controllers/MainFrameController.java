@@ -117,6 +117,16 @@ public class MainFrameController {
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
+    private Label lbselectrepCat;
+    @FXML
+    private Label lbselectssrepformatZ1;
+    @FXML
+    private Label lbselectssrepformatZ2;
+    @FXML
+    private Label lbselectssrepformatZ3;
+    @FXML
+    private Label lbselectssrepformatZ4;
+    @FXML
     private ChoiceBox<AgLibrarySubFolder> repChoose;
     @FXML
     private ImageView imager1;
@@ -1006,16 +1016,20 @@ public class MainFrameController {
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
+        lbselectrepCat.setText("Categories");
         selectrepCat.setItems(Context.getlistofx("repCatx"));
         lrcat.setListeZ(1);
         lrcat.setListeZ(2);
         lrcat.setListeZ(3);
         lrcat.setListeZ(4);
 
-
+        lbselectssrepformatZ1.setText(Context.formatZ.get(1));
         selectssrepformatZ1.setItems(lrcat.listeZ.get(1));
+        lbselectssrepformatZ2.setText(Context.formatZ.get(2));
         selectssrepformatZ2.setItems(lrcat.listeZ.get(2));
+        lbselectssrepformatZ3.setText(Context.formatZ.get(3));
         selectssrepformatZ3.setItems(lrcat.listeZ.get(3));
+        lbselectssrepformatZ4.setText(Context.formatZ.get(4));
         selectssrepformatZ4.setItems(lrcat.listeZ.get(4));
 
 
