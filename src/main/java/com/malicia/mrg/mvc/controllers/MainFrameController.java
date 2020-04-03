@@ -27,6 +27,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -793,10 +794,10 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
-            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC,AgLibraryRootFolder.TYPE_CAT));
+            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT));
             ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
             getlistofrepertorytoprocess.forEach(subFolder -> {
-                if (subFolder.getNbphotoRep() != 0 && subFolder.getStatusRep()!=AgLibrarySubFolder.OK) {
+                if (subFolder.getNbphotoRep() != 0 && subFolder.getStatusRep() != AgLibrarySubFolder.OK) {
                     getlistofrepertorytoprocessfiltred.add(subFolder);
                 }
             });
@@ -827,14 +828,25 @@ public class MainFrameController {
 
     private void refreshcomboxRepertoire() {
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
+
         selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
-        selectssrepformatZ1.getEditor().setText(null);
         selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
-        selectssrepformatZ2.getEditor().setText(null);
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
-        selectssrepformatZ3.getEditor().setText(null);
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
-        selectssrepformatZ4.getEditor().setText(null);
+
+        String[] part = activeRep.getPathFromRoot().replaceAll("/","").split(Context.appParam.getString("ssrepformatSep"));
+        if (part.length > 0) {
+            selectssrepformatZ1.setValue(part[0]);
+            if (part.length > 1) {
+                selectssrepformatZ2.setValue(part[1]);
+                if (part.length > 2) {
+                    selectssrepformatZ3.setValue(part[2]);
+                    if (part.length > 3) {
+                        selectssrepformatZ4.setValue(part[3]);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1038,7 +1050,6 @@ public class MainFrameController {
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
-
 
 
         actionCycleTraitementPhoto();
