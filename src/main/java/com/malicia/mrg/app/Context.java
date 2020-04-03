@@ -4,6 +4,8 @@ import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.testng.collections.MultiMap;
 
@@ -247,5 +249,24 @@ public class Context implements Serializable {
 
     public static String getUrlgitwiki() {
         return Context.appParam.getString("urlgitwiki");
+    }
+
+    public static ObservableList<String> getlistofx(String key) {
+        if (appParam.containsKey(key)) {
+            return FXCollections.observableArrayList(appParam.getString(key).split(","));
+        } else {
+            ObservableList<String> ret = FXCollections.observableArrayList();
+            String[] decript = key.split("%");
+            if (decript.length > 1) {
+                if (appParam.containsKey(decript[1])) {
+                    return FXCollections.observableArrayList(appParam.getString(decript[1]).split(","));
+                } else {
+                    ret.add(key);
+                }
+            } else {
+                ret.add(key);
+            }
+            return ret;
+        }
     }
 }

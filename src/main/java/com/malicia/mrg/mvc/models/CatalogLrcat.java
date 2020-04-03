@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.malicia.mrg.app.Context.formatZ;
-import static com.malicia.mrg.app.Context.lrcat;
 
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
@@ -35,12 +34,12 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         refreshdataLrcat(catalogLrcat);
 
-        addrootFolder("repLegacy", Context.appParam.getString("repLegacy"),AgLibraryRootFolder.TYPE_LEG);
-        addrootFolder("repEncours", Context.appParam.getString("repEncours"),AgLibraryRootFolder.TYPE_ENC);
-        addrootFolder("repKidz", Context.appParam.getString("repKidz"),AgLibraryRootFolder.TYPE_KID);
-        addrootFolder("repNew", Context.appParam.getString("repNew"),AgLibraryRootFolder.TYPE_NEW);
+        addrootFolder("repLegacy", Context.appParam.getString("repLegacy"), AgLibraryRootFolder.TYPE_LEG);
+        addrootFolder("repEncours", Context.appParam.getString("repEncours"), AgLibraryRootFolder.TYPE_ENC);
+        addrootFolder("repKidz", Context.appParam.getString("repKidz"), AgLibraryRootFolder.TYPE_KID);
+        addrootFolder("repNew", Context.appParam.getString("repNew"), AgLibraryRootFolder.TYPE_NEW);
         for (Integer key : Context.categories.keySet()) {
-            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire(),AgLibraryRootFolder.TYPE_CAT);
+            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire(), AgLibraryRootFolder.TYPE_CAT);
         }
 
     }
@@ -64,7 +63,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             String rootfolderidlocal = rs.getString("id_local");
             String absolutePath = rs.getString("absolutePath");
             String name = rs.getString("name");
-            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath,typeRoot);
+            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath, typeRoot);
             rep.put(nomRep, tmpRootLib);
         }
     }
@@ -243,53 +242,25 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         return listrep;
     }
 
-    public ObservableList<String> getlistofpossiblecat() {
-        return getlistofx("repCatx");
-    }
-
-    public ObservableList<String> getlistofx(String key) {
-        if (Context.appParam.containsKey(key)) {
-            return FXCollections.observableArrayList(Context.appParam.getString(key).split(","));
-        } else {
-            ObservableList<String> ret = FXCollections.observableArrayList();
-            String[] decript = key.split("%");
-            if (decript.length > 1) {
-                if (Context.appParam.containsKey(decript[1])) {
-                    return FXCollections.observableArrayList(Context.appParam.getString(decript[1]).split(","));
-                } else {
-                    ret.add(key);
-                }
-            } else {
-                ret.add(key);
-            }
-            return ret;
-        }
-    }
-
     public void setListeZ(int numListeZ) throws SQLException {
-        ObservableList<String> listetmp = lrcat.getlistofx(Context.formatZ.get(numListeZ));
-        listetmp.addAll(recupListOfZoneFromSsRepetertoireOfCategorie(numListeZ));
-        listeZ.put(numListeZ,listetmp);
-    }
+        ObservableList<String> listetmp = Context.getlistofx(Context.formatZ.get(numListeZ));
 
-    private ObservableList<String> recupListOfZoneFromSsRepetertoireOfCategorie(int numListeZ) throws SQLException {
-        ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
-
-        ObservableList<AgLibrarySubFolder> listSubCat = getlistofrepertorytoprocess(Arrays.asList(new Integer[]{AgLibraryRootFolder.TYPE_CAT}));
-        listSubCat.forEach(subFolder -> {
-            String[] part = subFolder.getPathFromRoot().split(Context.appParam.getString("ssrepformatSep"));
-            if (part.length == formatZ.size()) {
-                String elez = part[numListeZ-1].replace("/", "");
-                if (!listeleFromCat.contains(elez)) {
-                    listeleFromCat.add(elez);
+        if (!(listetmp.size() == 1 && listetmp.get(0).startsWith("%") && listetmp.get(0).endsWith("%"))) {
+            ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
+            ObservableList<AgLibrarySubFolder> listSubCat = getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_CAT));
+            listSubCat.forEach(subFolder -> {
+                String[] part = subFolder.getPathFromRoot().split(Context.appParam.getString("ssrepformatSep"));
+                if (part.length == formatZ.size()) {
+                    String elez = " # " + part[numListeZ - 1].replace("/", "");
+                    if (!listeleFromCat.contains(elez)) {
+                        listeleFromCat.add(elez);
+                    }
                 }
-            }
-        });
+            });
+            listetmp.addAll(listeleFromCat);
+        }
 
-        return listeleFromCat;
+        listeZ.put(numListeZ, listetmp);
     }
 
-    public ObservableList<String> getListeZ(int numListeZ) {
-        return listeZ.get(numListeZ);
-    }
 }

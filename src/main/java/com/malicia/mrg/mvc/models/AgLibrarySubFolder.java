@@ -8,13 +8,14 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The type Ag library sub folder.
@@ -43,11 +44,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
-
-    public String getPathFromRoot() {
-        return pathFromRoot;
-    }
-
     private String pathFromRoot;
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;
@@ -57,23 +53,26 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
-
     /**
      * Instantiates a new Ag library sub folder.
      *
-     * @param parentLrcat       the parent lrcat
-     * @param name              the name
-     * @param pathFromRoot      the path from root
-     * @param folderIdLocal     the folder id local
-     * @param rootfolderidlocal the rootfolderidlocal
-     * @param absolutePath      the absolute path
+     * @param pathFromRoot        the path from root
+     * @param folderIdLocal       the folder id local
+     * @param agLibraryRootFolder
      * @throws SQLException the sql exception
      */
-    public AgLibrarySubFolder(CatalogLrcat parentLrcat, String name, String pathFromRoot, String folderIdLocal, String rootfolderidlocal, String absolutePath) throws SQLException {
-        super(parentLrcat, name, rootfolderidlocal, absolutePath,AgLibraryRootFolder.TYPE_INCONNU);
+    public AgLibrarySubFolder(String pathFromRoot, String folderIdLocal,AgLibraryRootFolder agLibraryRootFolder) throws SQLException {
+        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
+        if (agLibraryRootFolder.getTypeRoot()==AgLibraryRootFolder.TYPE_CAT) {
+            final Pattern pattern = Pattern.compile("##[A-Za-z0-9 -]*", Pattern.MULTILINE);
+            final Matcher matcher = pattern.matcher(this.absolutePath);
+            if (matcher.find()) {
+                setCatFolder(matcher.group(0));
+            }
+        }
         listFileSubFolder = new ArrayList();
         ResultSet rs = sqlgetListelementsubfolder();
         while (rs.next()) {
@@ -84,9 +83,17 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
+            listFileSubFolder.add(new AgLibraryFile(this.absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
         refreshCompteur();
+    }
+
+    public int getNbphotoRep() {
+        return nbphotoRep;
+    }
+
+    public String getPathFromRoot() {
+        return pathFromRoot;
     }
 
     public String getDtdebHumain() {
@@ -133,7 +140,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 categorie = Context.categories.get(key);
             }
         }
-        refreshCompteur();
     }
 
 
@@ -422,7 +428,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      *
      * @return the nbphoto rep
      */
-    public String getNbphotoRep() {
+    public String getNbphotoRepHuman() {
         return " " + String.format("%04d", nbphotoRep);
     }
 
@@ -482,7 +488,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return getNbelerep() + " " + getNbphotoRep() + " " + pathFromRoot;
+        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + getTypeRoot() + " " + pathFromRoot;
     }
 
 

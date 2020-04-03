@@ -36,7 +36,7 @@ public class Main extends Application {
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
         Context.setController(controller);
-        primaryStage.setScene(new Scene(root, 1100, 770));
+        primaryStage.setScene(new Scene(root, 1170, 850));
         controller.start();
         primaryStage.show();
 
