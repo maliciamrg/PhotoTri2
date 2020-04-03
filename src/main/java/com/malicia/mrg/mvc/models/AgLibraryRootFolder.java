@@ -499,7 +499,7 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
 
             if (isRepertoryToProcess(pathFromRoot)) {
-                ret.add(new AgLibrarySubFolder(parentLrcat, name, pathFromRoot, folder_id_local, rootfolderidlocal, absolutePath));
+                ret.add(new AgLibrarySubFolder(pathFromRoot, folder_id_local ,  this));
             }
 
         }

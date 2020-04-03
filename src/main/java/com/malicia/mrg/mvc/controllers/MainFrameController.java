@@ -793,10 +793,10 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
-            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC));
+            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC,AgLibraryRootFolder.TYPE_CAT));
             ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
             getlistofrepertorytoprocess.forEach(subFolder -> {
-                if (subFolder.getNbphotoRep() != 0) {
+                if (subFolder.getNbphotoRep() != 0 && subFolder.getStatusRep()!=AgLibrarySubFolder.OK) {
                     getlistofrepertorytoprocessfiltred.add(subFolder);
                 }
             });
@@ -1038,6 +1038,8 @@ public class MainFrameController {
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
         FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
+
+
 
         actionCycleTraitementPhoto();
     }
