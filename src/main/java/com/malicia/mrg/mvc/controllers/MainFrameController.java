@@ -6,8 +6,6 @@ import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -157,50 +154,9 @@ public class MainFrameController {
         alert.setContentText(contentText);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             repEncours.ValidModification();
         }
-    }
-
-    /**
-     * Popupalert.
-     *
-     * @param contentText the content text
-     * @param imageaaff   the imageaaff
-     */
-    public static void popupalert(String contentText, Image imageaaff) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Popup Info Image");
-
-        alert.setContentText(contentText);
-
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(150);
-        imageView.setFitWidth(200);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setImage(imageaaff);
-
-
-        TextArea textArea = new TextArea();
-        textArea.setEditable(false);
-        textArea.setWrapText(false);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(imageView, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
-
     }
 
     /**
@@ -212,17 +168,16 @@ public class MainFrameController {
         if (Context.getPrimaryStage() != null) {
             Context.getPrimaryStage().sizeToScene();
         }
+        assert Context.getPrimaryStage() != null;
         Context.getPrimaryStage().setTitle(lrcat.getname());
 
     }
 
     /**
      * Action makeadulpicatelrcatwithdate.
-     *
-     * @param event the event
      */
     @FXML
-    void actionMakeadulpicatelrcatwithdate(ActionEvent event) {
+    void actionMakeadulpicatelrcatwithdate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String formattedDate = sdf.format(date);
@@ -247,11 +202,9 @@ public class MainFrameController {
 
     /**
      * Action makeadulpicatelrcatwithdate.
-     *
-     * @param event the event
      */
     @FXML
-    void actionRestaureLastDuplicate(ActionEvent event) {
+    void actionRestaureLastDuplicate() {
 
         lrcat.disconnect();
 
@@ -267,7 +220,7 @@ public class MainFrameController {
 
         if (files.isEmpty()) {
 
-            String theone = showChoiceOneWindow("Quel catalog restaurer ?", "catalog", files);
+            String theone = showChoiceOneWindow(files);
             String selectfile = basedir + File.separator + theone;
 
 
@@ -308,11 +261,9 @@ public class MainFrameController {
 
     /**
      * Boucle delete repertoire logique.
-     *
-     * @param event the event
      */
     @FXML
-    void actionDeleteRepertoireLogique(ActionEvent event) {
+    void actionDeleteRepertoireLogique() {
         try {
             int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
             logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
@@ -376,11 +327,9 @@ public class MainFrameController {
 
     /**
      * Move new to grp photos.
-     *
-     * @param event the event
      */
     @FXML
-    void actionRangerRejet(ActionEvent event) {
+    void actionRangerRejet() {
 
         try {
 
@@ -395,11 +344,9 @@ public class MainFrameController {
 
     /**
      * import new photos.
-     *
-     * @param event the event
      */
     @FXML
-    void actionImportNew(ActionEvent event) {
+    void actionImportNew() {
 
         try {
 
@@ -419,11 +366,9 @@ public class MainFrameController {
 
     /**
      * Move new to grp photos.
-     *
-     * @param event the event
      */
     @FXML
-    void actionRangerNew(ActionEvent event) {
+    void actionRangerNew() {
 
         try {
 
@@ -445,53 +390,38 @@ public class MainFrameController {
     /**
      * Move chaque photo du bazar dans un groupe.
      * #interactif
-     *
-     * @param event the event
      */
     @FXML
-    void actionRangerlebazar(ActionEvent event) {
+    void actionRangerlebazar() {
+        popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
     }
 
-    private String showChoiceOneWindow(String quelchoice, String nomelement, List<String> listeChoice) {
+    private String showChoiceOneWindow(List<String> listeChoice) {
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(listeChoice.get(listeChoice.size() - 1), listeChoice);
         dialog.setTitle("Choice Dialog");
-        dialog.setHeaderText(quelchoice);
-        dialog.setContentText(nomelement);
+        dialog.setHeaderText("Quel catalog restaurer ?");
+        dialog.setContentText("catalog");
 
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            return result.get();
-        }
+        return result.orElse("");
 
-        return "";
     }
 
     /**
      * ActionExecModification.
-     *
-     * @param event the event
      */
     @FXML
-    void ActionExecModification(ActionEvent event) {
+    void actionExecModification() {
         popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
-//        try {
-////
-////        } catch (IOException | URISyntaxException e) {
-////            popupalertException(e);
-////            excptlog(e);
-////        }
-////        logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
     /**
      * Abouturl.
-     *
-     * @param event the event
      */
     @FXML
-    void actionAbouturl(ActionEvent event) {
+    void actionAbouturl() {
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
@@ -506,11 +436,9 @@ public class MainFrameController {
 
     /**
      * Action delete empty directory physique.
-     *
-     * @param event the event
      */
     @FXML
-    void actionDeleteEmptyDirectoryPhysique(ActionEvent event) {
+    void actionDeleteEmptyDirectoryPhysique() {
         try {
             int ndDelTotal = lrcat.deleteEmptyDirectory();
             logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
@@ -522,15 +450,13 @@ public class MainFrameController {
 
     /**
      * Actionopenligthroom.
-     *
-     * @param event the event
      */
     @FXML
-    void actionopenligthroom(ActionEvent event) {
+    void actionopenligthroom() {
         try {
             lrcat.openLigthroomLrcatandWait();
             initialize();
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -538,11 +464,9 @@ public class MainFrameController {
 
     /**
      * Action spyfirst.
-     *
-     * @param event the event
      */
     @FXML
-    void actionSpyfirst(ActionEvent event) {
+    void actionSpyfirst() {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
@@ -563,29 +487,11 @@ public class MainFrameController {
             ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT));
             ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
             getlistofrepertorytoprocess.forEach(subFolder -> {
-                if (subFolder.getNbphotoRep() != 0 && subFolder.getStatusRep() != AgLibrarySubFolder.OK) {
+                if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
                     getlistofrepertorytoprocessfiltred.add(subFolder);
                 }
             });
             repChoose.setItems(getlistofrepertorytoprocessfiltred);
-            repChoose.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                    activeRep = repChoose.getItems().get((Integer) number2);
-                    refreshcompteurRepertoire();
-                    refreshcomboxRepertoire();
-                    activeRep.moveActivephotoNumTo(0);
-                    datesub.setText(activeRep.getDtdebHumain());
-                    try {
-                        refreshActivePhoto();
-                        refreshvaleurphoto();
-                        setimagepreview();
-                    } catch (IOException | SQLException e) {
-                        popupalertException(e);
-                        excptlog(e);
-                    }
-                }
-            });
         } catch (SQLException e) {
             popupalertException(e);
             excptlog(e);
@@ -600,7 +506,7 @@ public class MainFrameController {
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
 
-        String[] part = activeRep.getPathFromRoot().replaceAll("/", "").split(Context.appParam.getString("ssrepformatSep"));
+        String[] part = activeRep.getPathFromRoot().replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         if (part.length > 0) {
             selectssrepformatZ1.setValue(part[0]);
             if (part.length > 1) {
@@ -643,7 +549,7 @@ public class MainFrameController {
         nbetrationtroisetoile.setText(activeRep.nbetratiovaleur(3));
         nbetrationquatreetoile.setText(activeRep.nbetratiovaleur(4));
         nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
-        valid.setDisable(activeRep.getStatusRep() != AgLibrarySubFolder.OK);
+        valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
     private void refreshActivePhoto() throws IOException, SQLException {
@@ -788,6 +694,8 @@ public class MainFrameController {
 
     /**
      * Start.
+     *
+     * @throws SQLException the sql exception
      */
     public void start() throws SQLException {
 
@@ -811,7 +719,6 @@ public class MainFrameController {
         selectssrepformatZ4.setItems(lrcat.listeZ.get(4));
 
 
-//        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
@@ -821,6 +728,11 @@ public class MainFrameController {
         actionCycleTraitementPhoto();
     }
 
+    /**
+     * Place marker.
+     *
+     * @param newNode the new node
+     */
     public void placeMarker(Node newNode) {
         double nodeMinX = newNode.getLayoutBounds().getMinX();
         double nodeMinY = newNode.getLayoutBounds().getMinY();
@@ -833,28 +745,69 @@ public class MainFrameController {
                 + pointeur.getLayoutBounds().getMinY());
     }
 
+    /**
+     * Actionrep cat change.
+     *
+     * @param actionEvent the action event
+     */
     public void actionrepCatChange(ActionEvent actionEvent) {
         activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
+    /**
+     * Actionssrepformat z 1 change.
+     *
+     * @param actionEvent the action event
+     */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
+    /**
+     * Actionssrepformat z 2 change.
+     *
+     * @param actionEvent the action event
+     */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
+    /**
+     * Actionssrepformat z 3 change.
+     *
+     * @param actionEvent the action event
+     */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
+    /**
+     * Actionssrepformat z 4 change.
+     *
+     * @param actionEvent the action event
+     */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
         activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
+    }
+
+    public void actionChoose(ActionEvent actionEvent) {
+        activeRep = ((AgLibrarySubFolder) actionEvent.getTarget());
+        refreshcompteurRepertoire();
+        refreshcomboxRepertoire();
+        activeRep.moveActivephotoNumTo(0);
+        datesub.setText(activeRep.getDtdebHumain());
+        try {
+            refreshActivePhoto();
+            refreshvaleurphoto();
+            setimagepreview();
+        } catch (IOException | SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 }

@@ -178,7 +178,7 @@
                 </BorderPane>
                 <AnchorPane layoutX="14.0" layoutY="14.0">
                     <children>
-                        <ChoiceBox fx:id="repChoose" layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
+                        <ChoiceBox fx:id="repChoose" onAction="#actionChoose" layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
                         <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
                             <top>
                                 <AnchorPane prefHeight="644.0" prefWidth="228.0" BorderPane.alignment="CENTER">
@@ -287,7 +287,7 @@
                                             </font>
                                         </Text>
                                         <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="135.0" prefHeight="60.0" prefWidth="230.0" />
-                                        <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#ActionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
+                                        <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
                                         <Circle fx:id="pointeur" fill="#ff1f1f" layoutX="24.0" layoutY="408.0" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
                                     </children>
                                 </AnchorPane>

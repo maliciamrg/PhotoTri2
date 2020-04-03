@@ -8,7 +8,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -22,17 +24,9 @@ import java.util.logging.Logger;
 public class Context implements Serializable {
 
     /**
-     * The constant CONTEXT_OBJECTS_TXT.
-     */
-    public static final String CONTEXT_OBJECTS_TXT = "myContextObjects.txt";
-    /**
      * The constant PATH_FROM_ROOT.
      */
     public static final String PATH_FROM_ROOT = "pathFromRoot";
-    /**
-     * The constant ABSOLUTEPATH.
-     */
-    public static final String ABSOLUTEPATH = "absolutePath";
     /**
      * The constant CAPTURE_TIME.
      */
@@ -45,13 +39,7 @@ public class Context implements Serializable {
     private static final long serialVersionUID = 1L;
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
-    public static AgLibraryRootFolder repLegacy;
-    public static AgLibraryRootFolder repbookEvents;
-    public static AgLibraryRootFolder repbookHolidays;
-    public static AgLibraryRootFolder repbookShooting;
     public static AgLibraryRootFolder repEncours;
-    public static AgLibraryRootFolder repKidz;
-    public static AgLibraryRootFolder repNew;
     public static HashMap<Integer, repCat> categories = new HashMap();
     public static HashMap<Integer, String> formatZ = new HashMap();
     private static Logger LOGGER;
@@ -60,25 +48,24 @@ public class Context implements Serializable {
      */
     private static MainFrameController controller;
     private static Stage primaryStage;
-    private static HashMap<String, String> lrcatSource = new HashMap();
-    private static String LocalVoidPhotoUrl;
-    private static String LocalErr404PhotoUrl;
-    private static String LocalErrPhotoUrl;
+    private static String localVoidPhotoUrl;
+    private static String localErr404PhotoUrl;
+    private static String localErrPhotoUrl;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
     public static String getLocalErrPhotoUrl() {
-        return LocalErrPhotoUrl;
+        return localErrPhotoUrl;
     }
 
     public static String getLocalErr404PhotoUrl() {
-        return LocalErr404PhotoUrl;
+        return localErr404PhotoUrl;
     }
 
     public static String getLocalVoidPhotoUrl() {
-        return LocalVoidPhotoUrl;
+        return localVoidPhotoUrl;
     }
 
     /**
@@ -100,15 +87,6 @@ public class Context implements Serializable {
     }
 
     /**
-     * Gets controller.
-     *
-     * @return the controller
-     */
-    public static MainFrameController getController() {
-        return controller;
-    }
-
-    /**
      * Sets controller.
      *
      * @param controller the controller
@@ -120,9 +98,8 @@ public class Context implements Serializable {
     /**
      * Sets .
      *
-     * @throws IOException            the io exception
-     * @throws ClassNotFoundException the class not found exception
-     * @throws SQLException           the sql exception
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
      */
     public static void setup() throws IOException, SQLException, URISyntaxException {
 
@@ -157,7 +134,6 @@ public class Context implements Serializable {
         }
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
-//        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
 
     }
 
@@ -175,67 +151,11 @@ public class Context implements Serializable {
             LOGGER.info(key + ": " + value);
         }
 
-//        ClasspathFileListPrinter test = new ClasspathFileListPrinter((URLClassLoader) Context.class.getClassLoader());
-//        test.print();
-        LocalVoidPhotoUrl = Context.class.getClassLoader().getResource("images.png").toURI().toURL().toExternalForm();
-        LocalErr404PhotoUrl = Context.class.getClassLoader().getResource("err404.jpg").toURI().toURL().toExternalForm();
-        LocalErrPhotoUrl = Context.class.getClassLoader().getResource("error.jpg").toURI().toURL().toExternalForm();
+        localVoidPhotoUrl = Objects.requireNonNull(Context.class.getClassLoader().getResource("images.png")).toURI().toURL().toExternalForm();
+        localErr404PhotoUrl = Objects.requireNonNull(Context.class.getClassLoader().getResource("err404.jpg")).toURI().toURL().toExternalForm();
+        localErrPhotoUrl = Objects.requireNonNull(Context.class.getClassLoader().getResource("error.jpg")).toURI().toURL().toExternalForm();
     }
 
-
-    /**
-     * Save properties parameters.
-     *
-     * @param ctx the ctx
-     * @throws IOException the io exception
-     */
-    public static void savePropertiesParameters(Context ctx) throws IOException {
-        LOGGER.info("savePropertiesParameters");
-        try (FileOutputStream f = new FileOutputStream(new File(CONTEXT_OBJECTS_TXT)); ObjectOutputStream o = new ObjectOutputStream(f)) {
-
-            // Write objects to file
-            o.writeObject(ctx);
-
-        } catch (FileNotFoundException e) {
-            LOGGER.info("File not found");
-        } catch (IOException e) {
-            LOGGER.info("Error initializing stream");
-        }
-
-    }
-
-    /**
-     * Load properties parameters context.
-     *
-     * @return the context
-     * @throws IOException            the io exception
-     * @throws ClassNotFoundException the class not found exception
-     */
-    public static Context loadPropertiesParameters() throws IOException, ClassNotFoundException {
-        FileInputStream fi = new FileInputStream(new File(CONTEXT_OBJECTS_TXT));
-        ObjectInputStream oi = new ObjectInputStream(fi);
-        // Read objects
-        return (Context) oi.readObject();
-    }
-
-
-    /**
-     * Gets lrcat source.
-     *
-     * @return the lrcat source
-     */
-    public static HashMap getLrcatSource() {
-        return lrcatSource;
-    }
-
-    /**
-     * Sets lrcat source.
-     *
-     * @param lrcatSource the lrcat source
-     */
-    public static void setLrcatSource(HashMap lrcatSource) {
-        Context.lrcatSource = lrcatSource;
-    }
 
     public static List<String> getKidsModelList() {
         return Arrays.asList(appParam.getString("listeModelKidz").split(","));

@@ -27,12 +27,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
-    public static HashMap<Integer, String> repformatZ = new HashMap();
-    private final Logger LOGGER;
+    private static Map<Integer, String> repformatZ = new HashMap();
+    private final Logger logger;
     /**
      * The List file sub folder.
      */
-    public List<AgLibraryFile> listFileSubFolder;
+    private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
     private int nbetrationzeroetoile;
@@ -53,6 +53,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
+
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -61,12 +62,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @param agLibraryRootFolder
      * @throws SQLException the sql exception
      */
-    public AgLibrarySubFolder(String pathFromRoot, String folderIdLocal,AgLibraryRootFolder agLibraryRootFolder) throws SQLException {
+    public AgLibrarySubFolder(String pathFromRoot, String folderIdLocal, AgLibraryRootFolder agLibraryRootFolder) throws SQLException {
         super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
-        if (agLibraryRootFolder.getTypeRoot()==AgLibraryRootFolder.TYPE_CAT) {
+        if (agLibraryRootFolder.getTypeRoot() == AgLibraryRootFolder.TYPE_CAT) {
             final Pattern pattern = Pattern.compile("##[A-Za-z0-9 -]*", Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(this.absolutePath);
             if (matcher.find()) {
@@ -174,7 +175,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
             if (file.exists()) {
                 localUrl = file.toURI().toURL().toExternalForm();
-                LOGGER.info(localUrl);
+                logger.info(localUrl);
                 image = new Image(localUrl, 400, 400, true, false, false);
             } else {
                 localUrl = Context.getLocalErr404PhotoUrl();
@@ -183,7 +184,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         }
         if (image.isError()) {
-            LOGGER.info(phototoshow + " " + localUrl);
+            logger.info("" + phototoshow + " " + localUrl);
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
         }
         return image;
@@ -195,7 +196,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the
      */
     public String getactivephotovaleurlibelle() {
-        switch ((int) listFileSubFolder.get(activeNum).starValue) {
+        switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
                 return Context.appParam.getString("valeurCorbeille");
             case 0:
@@ -211,7 +212,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             case 5:
                 return Context.appParam.getString("valeur5stars");
             default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).starValue);
+                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
     }
 
@@ -219,27 +220,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * Valeuractivephotoincrease.
      */
     public void valeuractivephotoincrease() {
-        if (listFileSubFolder.get(activeNum).starValue < 5) {
-            listFileSubFolder.get(activeNum).starValue += 1;
-            modifierfile();
-        }
-    }
-
-    /**
-     * Modifierfile.
-     */
-    public void modifierfile() {
-        listFileSubFolder.get(activeNum).setedited = true;
+        listFileSubFolder.get(activeNum).valeurIncrease();
     }
 
     /**
      * Valeuractivephotodecrease.
      */
     public void valeuractivephotodecrease() {
-        if (listFileSubFolder.get(activeNum).starValue > -1) {
-            listFileSubFolder.get(activeNum).starValue -= 1;
-            modifierfile();
-        }
+        listFileSubFolder.get(activeNum).valeurDecrease();
     }
 
 
@@ -296,7 +284,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     private void calculateStarAndDate(AgLibraryFile fi) {
-        switch ((int) fi.starValue) {
+        switch ((int) fi.getStarValue()) {
             case 0:
                 nbetrationzeroetoile += 1;
                 break;
@@ -316,7 +304,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 nbetrationcinqetoile += 1;
                 break;
             default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + (int) fi.starValue);
+                throw new IllegalStateException(UNEXPECTED_VALUE + (int) fi.getStarValue());
         }
         long dt = fi.getCaptureTime();
         if (dt < dtdeb) {
@@ -361,10 +349,11 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
                 statusRep = KO;
-                break;
             }
             if (repformatZ.get(key).compareTo("") == 0) {
                 statusRep = KO;
+            }
+            if (statusRep.compareTo(KO)==0){
                 break;
             }
         }
@@ -408,7 +397,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         if (nbphotoRep == 0) {
             percent = 1;
         } else {
-            percent = (nb / nbphotoRep);
+            percent = ((double) nb / nbphotoRep);
         }
         return " " + String.format("%02d", nb) + " = " + df.format(percent);
     }
@@ -457,7 +446,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @return the activephoto valeur
      */
     public String getActivephotoValeur() {
-        switch ((int) listFileSubFolder.get(activeNum).starValue) {
+        switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
                 return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 ";
             case 0:
@@ -473,7 +462,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             case 5:
                 return " ★ ★ ★ ★ ★ ";
             default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).starValue);
+                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
     }
 
@@ -607,11 +596,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         listeZ.forEach(tab -> {
             String[] part = tab.split("%");
-            if (part.length > 1) {
-                if (part[1].compareTo("DATE") == 0) {
-                    listeZ.remove(tab);
-                    listeZ.add(this.getDtdebHumain());
-                }
+            if (part.length > 1 && part[1].compareTo("DATE") == 0) {
+                listeZ.remove(tab);
+                listeZ.add(this.getDtdebHumain());
             }
         });
         return listeZ;

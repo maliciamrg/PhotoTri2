@@ -10,14 +10,31 @@ public class AgLibraryFile {
      * The constant REP_NEW.
      */
     public static final String REP_NEW = "repNew";
+
+    public boolean isSetedited() {
+        return setedited;
+    }
+
+    public void setSetedited(boolean setedited) {
+        this.setedited = setedited;
+    }
+
+    public double getStarValue() {
+        return starValue;
+    }
+
+    public void setStarValue(double starValue) {
+        this.starValue = starValue;
+    }
+
     /**
      * The Setedited.
      */
-    public boolean setedited;
+    private boolean setedited;
     /**
      * The Star value.
      */
-    public double starValue;
+    private double starValue;
     /**
      * The Lc idx filename.
      */
@@ -170,6 +187,20 @@ public class AgLibraryFile {
             if (this.addRotate < -180) {
                 this.addRotate = this.addRotate + 180;
             }
+        }
+    }
+
+    public void valeurDecrease() {
+        if ( starValue > -1) {
+            starValue -= 1;
+            setedited=true;
+        }
+    }
+
+    public void valeurIncrease() {
+        if (starValue < 5) {
+            starValue += 1;
+            setedited=true;
         }
     }
 }
