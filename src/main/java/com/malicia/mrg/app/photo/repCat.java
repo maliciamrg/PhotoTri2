@@ -1,4 +1,4 @@
-package com.malicia.mrg.app;
+package com.malicia.mrg.app.photo;
 
 public class repCat {
     private int numcat;

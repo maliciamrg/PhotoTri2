@@ -1,10 +1,7 @@
 package com.malicia.mrg.mvc.controllers;
 
-import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.FxUtilTest;
-import com.malicia.mrg.app.photo.ElePhoto;
-import com.malicia.mrg.app.photo.GrpPhoto;
+import com.malicia.mrg.app.util.ComboboxPlus;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
@@ -15,19 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -35,8 +27,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
@@ -47,12 +37,12 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.Optional;
 
 import static com.malicia.mrg.app.Context.lrcat;
 import static com.malicia.mrg.app.Context.repEncours;
@@ -69,30 +59,6 @@ public class MainFrameController {
         LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }
 
-    @FXML
-    private MenuItem about;
-    @FXML
-    private Label lbnbeleRep1;
-    @FXML
-    private Label lbnbphotoRep1;
-    @FXML
-    private Label lbstatusRep1;
-    @FXML
-    private Label lbLabelratiophotoaconcerver1;
-    @FXML
-    private Label lbnbphotoapurger1;
-    @FXML
-    private Label lbnbetrationzeroetoile1;
-    @FXML
-    private Label lbnbetrationuneetoile1;
-    @FXML
-    private Label lbnbetrationdeuxetoile1;
-    @FXML
-    private Label lbnbetrationtroisetoile1;
-    @FXML
-    private Label lbnbetrationquatreetoile1;
-    @FXML
-    private Label lbnbetrationcinqetoile1;
     @FXML
     private Label nbeleRep;
     @FXML
@@ -235,97 +201,6 @@ public class MainFrameController {
 
         alert.showAndWait();
 
-    }
-
-    /**
-     * Gets ele bazar.
-     *
-     * @param repBazar the rep bazar
-     * @return the ele bazar
-     * @throws SQLException the sql exception
-     */
-    private java.util.List<ElePhoto> getEleBazar(String repBazar) throws SQLException {
-
-//            constitution des groupes
-
-        ResultSet rsele = lrcat.rep.get(AgLibraryFile.REP_NEW).sqleleRepBazar(Context.appParam.getString("TempsAdherence"), repBazar);
-
-        java.util.List<ElePhoto> listElePhoto = new ArrayList();
-
-
-        while (rsele.next()) {
-
-
-            // Recuperer les info de l'elements
-            long captureTime = rsele.getLong(Context.CAPTURE_TIME);
-            long mint = rsele.getLong("mint");
-            long maxt = rsele.getLong("maxt");
-            String src = rsele.getString("src");
-            String absPath = rsele.getString(Context.PATH_FROM_ROOT);
-            String fileIdLocal = rsele.getString("fileIdLocal");
-
-
-            //Constitution des groupes de photo standard
-            listElePhoto.add(new ElePhoto(captureTime, mint, maxt, src, absPath, lrcat.rep.get(AgLibraryFile.REP_NEW).name + "/", fileIdLocal));
-
-
-        }
-
-
-        return listElePhoto;
-    }
-
-    /**
-     * Regroupe ele rep hors bazarby group java . util . list.
-     *
-     * @param repBazar the rep bazar
-     * @param repKidz  the rep kidz
-     * @return the java . util . list
-     * @throws SQLException the sql exception
-     */
-    private java.util.List<GrpPhoto> regroupeEleRepHorsBazarbyGroup(String repBazar, String repKidz) throws SQLException {
-
-//            constitution des groupes
-//        grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn() + grpphotoenc.getNomRepetrtoire()
-        ResultSet rsgrp = lrcat.rep.get(AgLibraryFile.REP_NEW).sqlGroupByPlageAdheranceHorsRepBazar(Context.appParam.getString("TempsAdherence"), repBazar, repKidz);
-
-        GrpPhoto grpPhotoEnc = new GrpPhoto();
-
-        java.util.List<GrpPhoto> listGrpPhoto = new ArrayList();
-
-
-        while (rsgrp.next()) {
-
-
-            // Recuperer les info de l'elements
-            long captureTime = rsgrp.getLong(Context.CAPTURE_TIME);
-            long mint = rsgrp.getLong("mint");
-            long maxt = rsgrp.getLong("maxt");
-            String src = rsgrp.getString("src");
-            String pathFromRoot = rsgrp.getString(Context.PATH_FROM_ROOT);
-            String absPath = rsgrp.getString(Context.PATH_FROM_ROOT);
-            String folderIdLocal = rsgrp.getString("id_local");
-
-
-            //Constitution des groupes de photo standard
-            if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folderIdLocal)) {
-
-
-                listGrpPhoto.add(grpPhotoEnc);
-
-
-                grpPhotoEnc = new GrpPhoto();
-                if (!grpPhotoEnc.add("", captureTime, mint, maxt, src, absPath, pathFromRoot + "/", folderIdLocal)) {
-                    throw new IllegalStateException("Erreur l'ors de l'ajout de l'element au group de photo ");
-                }
-            }
-
-
-        }
-        listGrpPhoto.add(grpPhotoEnc);
-
-
-        return listGrpPhoto;
     }
 
     /**
@@ -575,116 +450,7 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerlebazar(ActionEvent event) {
-        try {
-
-            LOGGER.info(() -> "actionRangerlebazar ");
-
-            java.util.List<GrpPhoto> groupDePhoto = regroupeEleRepHorsBazarbyGroup(Context.appParam.getString("ssrepBazar"), Context.appParam.getString("repKidz"));
-            java.util.List<ElePhoto> elementsPhoto = getEleBazar(Context.appParam.getString("ssrepBazar"));
-            for (int iele = 0; iele < elementsPhoto.size(); iele++) {
-                ElePhoto elePhotocurrent = elementsPhoto.get(iele);
-                elePhotocurrent.getMint();
-                elePhotocurrent.getMaxt();
-                for (int igrp = 0; igrp < groupDePhoto.size(); igrp++) {
-                    if (groupDePhoto.get(igrp).testInterval(elePhotocurrent.getMint(), elePhotocurrent.getMaxt())) {
-                        elePhotocurrent.addgroupDePhotoCandidat(groupDePhoto.get(igrp));
-                    }
-                }
-
-                Map<String, Object> ret = showPopupWindow(elePhotocurrent);
-                if (ret != null && ret.get(PopUpController.RETOUR_CODE).toString().compareTo(PopUpController.VALSTOPRUN) == 0) {
-                    throw new IllegalStateException("actionRangerlebazar->ctrlpopup:" + PopUpController.VALSTOPRUN);
-                }
-
-            }
-        } catch (Exception e) {
-            popupalertException(e);
-            excptlog(e);
-        }
     }
-
-    private Map<String, Object> showPopupWindow(ElePhoto elePhotocurrent) throws IOException, SQLException {
-
-        //Preparation technique de la popup
-        FXMLLoader loaderpopup = new FXMLLoader();
-        loaderpopup.setLocation(Main.class.getClassLoader().getResource("popUp.fxml"));
-        Parent rootpopup = loaderpopup.load();
-        PopUpController controllerpopup = loaderpopup.getController();
-        Scene scene = new Scene(rootpopup);
-        Stage popupStage = new Stage();
-        PopUpController.setPopupStage(popupStage);
-        popupStage.initOwner(Context.getPrimaryStage());
-        popupStage.initModality(Modality.WINDOW_MODAL);
-        popupStage.setScene(scene);
-
-        //Preparation fonctionelle de la popup
-        controllerpopup.setImage(PopUpController.IMAGE_ONE, elePhotocurrent.getSrc());
-
-        for (int i = 0; i < elePhotocurrent.getGrpPhotoCandidat().size(); i++) {
-            LOGGER.log(Level.INFO, () -> "" + elePhotocurrent.toString());
-            GrpPhoto grpphotoenc = elePhotocurrent.getGrpPhotoCandidat().get(i);
-            List<String> grpphotoele = grpphotoenc.getElesrc();
-            controllerpopup.setLblinfo("" + (i + 1) + "/" + elePhotocurrent.getGrpPhotoCandidat().size() + " : " + grpphotoenc.getPathFromRootComumn());
-            int nb = grpphotoele.size();
-            int id1 = 0;
-            int id2 = 0;
-            int id3 = 0;
-            int id4 = 0;
-
-            switch (nb) {
-                case 1:
-                    id1 = id2 = id3 = id4 = 0;
-                    break;
-                case 2:
-                    id1 = id2 = 0;
-                    id3 = id4 = 1;
-                    break;
-                case 3:
-                    id1 = id2 = 0;
-                    id3 = 1;
-                    id4 = 2;
-                    break;
-                case 4:
-                    id1 = 0;
-                    id2 = 1;
-                    id3 = 2;
-                    id4 = 3;
-                    break;
-                default:
-                    int delta = (nb - 1) / 3;
-                    id1 = 0;
-                    id2 = id1 + delta;
-                    id3 = id2 + delta;
-                    id4 = id3 + delta;
-                    break;
-            }
-            controllerpopup.setImage(PopUpController.IMAGE_2_LL, grpphotoele.get(id1));
-            controllerpopup.setImage(PopUpController.IMAGE_2_LR, grpphotoele.get(id2));
-            controllerpopup.setImage(PopUpController.IMAGE_2_UL, grpphotoele.get(id3));
-            controllerpopup.setImage(PopUpController.IMAGE_2_UR, grpphotoele.get(id4));
-            //execution popup
-            popupStage.showAndWait();
-            Map<String, Object> ret = controllerpopup.getResult();
-            switch (ret.get(PopUpController.RETOUR_CODE).toString()) {
-                case PopUpController.VALSTOPRUN:
-                    return ret;
-                case PopUpController.VALSELECT:
-                    java.io.File source = new java.io.File(elePhotocurrent.getSrc());
-                    String directoryName = grpphotoenc.getAbsolutePath() + grpphotoenc.getPathFromRootComumn();
-                    String destination = directoryName + java.io.File.separator + source.toPath().getFileName();
-                    lrcat.rep.get(AgLibraryFile.REP_NEW).sqlmovefile(elePhotocurrent.getSrc(), destination, grpphotoenc.getFolderIdLocal(), elePhotocurrent.getFileidlocal());
-                    return ret;
-                case PopUpController.VALNEXT:
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + ret.get(PopUpController.RETOUR_CODE).toString());
-            }
-        }
-
-
-        return controllerpopup.getResult();
-    }
-
 
     private String showChoiceOneWindow(String quelchoice, String nomelement, List<String> listeChoice) {
 
@@ -834,7 +600,7 @@ public class MainFrameController {
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
 
-        String[] part = activeRep.getPathFromRoot().replaceAll("/","").split(Context.appParam.getString("ssrepformatSep"));
+        String[] part = activeRep.getPathFromRoot().replaceAll("/", "").split(Context.appParam.getString("ssrepformatSep"));
         if (part.length > 0) {
             selectssrepformatZ1.setValue(part[0]);
             if (part.length > 1) {
@@ -1046,10 +812,10 @@ public class MainFrameController {
 
 
 //        FxUtilTest.autoCompleteComboBoxPlus(selectevents, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.getAge().toString().equals(typedText));
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
-        FxUtilTest.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
+        ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
+        ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ2, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ2.getItems().size() > 1);
+        ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ3, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ3.getItems().size() > 1);
+        ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
 
 
         actionCycleTraitementPhoto();

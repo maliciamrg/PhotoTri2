@@ -1,7 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.repCat;
+import com.malicia.mrg.app.photo.repCat;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 

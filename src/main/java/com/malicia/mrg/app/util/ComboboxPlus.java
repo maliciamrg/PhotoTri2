@@ -1,4 +1,4 @@
-package com.malicia.mrg.app;
+package com.malicia.mrg.app.util;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,7 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class FxUtilTest {
+public class ComboboxPlus {
 
     public interface AutoCompleteComparator<T> {
         boolean matches(String typedText, T objectToCompare);

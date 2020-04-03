@@ -1,13 +1,12 @@
 package com.malicia.mrg.app;
 
+import com.malicia.mrg.app.photo.repCat;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
-import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
-import org.testng.collections.MultiMap;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -42,8 +41,8 @@ public class Context implements Serializable {
      * The constant LC_IDX_FILENAME.
      */
     public static final String LC_IDX_FILENAME = "lc_idx_filename";
-    private static final long serialVersionUID = 1L;
     public static final String FILE_ID_LOCAL = "file_id_local";
+    private static final long serialVersionUID = 1L;
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static AgLibraryRootFolder repLegacy;
@@ -54,7 +53,7 @@ public class Context implements Serializable {
     public static AgLibraryRootFolder repKidz;
     public static AgLibraryRootFolder repNew;
     public static HashMap<Integer, repCat> categories = new HashMap();
-    public static CatalogPreviews Previews;
+    public static HashMap<Integer, String> formatZ = new HashMap();
     private static Logger LOGGER;
     /**
      * The constant currentContext.
@@ -65,7 +64,6 @@ public class Context implements Serializable {
     private static String LocalVoidPhotoUrl;
     private static String LocalErr404PhotoUrl;
     private static String LocalErrPhotoUrl;
-    public static HashMap<Integer, String> formatZ= new HashMap();
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -147,15 +145,15 @@ public class Context implements Serializable {
         //array de catagories
         int numcat = 1;
         for (String repCat : Context.appParam.getString("repCatx").split(",")) {
-            categories.put(numcat ,new repCat(numcat, repCat, appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
-            numcat +=1;
+            categories.put(numcat, new repCat(numcat, repCat, appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
+            numcat += 1;
         }
 
         //array des format de zones
         int numformatZ = 1;
         for (String ssrepformatZ : Context.appParam.getString("ssrepformatZx").split(",")) {
-            formatZ.put(numformatZ ,ssrepformatZ);
-            numformatZ +=1;
+            formatZ.put(numformatZ, ssrepformatZ);
+            numformatZ += 1;
         }
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
