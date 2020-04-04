@@ -1,7 +1,6 @@
 package com.malicia.mrg.app;
 
 import com.malicia.mrg.app.photo.repCat;
-import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.collections.FXCollections;
@@ -46,7 +45,6 @@ public class Context implements Serializable {
     /**
      * The constant currentContext.
      */
-    private static MainFrameController controller;
     private static Stage primaryStage;
     private static String localVoidPhotoUrl;
     private static String localErr404PhotoUrl;
@@ -86,14 +84,6 @@ public class Context implements Serializable {
         Context.primaryStage = primaryStage;
     }
 
-    /**
-     * Sets controller.
-     *
-     * @param controller the controller
-     */
-    public static void setController(MainFrameController controller) {
-        Context.controller = controller;
-    }
 
     /**
      * Sets .
