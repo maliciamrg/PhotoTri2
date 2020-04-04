@@ -242,21 +242,36 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         return listrep;
     }
 
+    public ObservableList<String> getlistofpathFromRoottoprocess(List<Integer> typeToProcess) throws SQLException {
+        ObservableList<String> listrep = FXCollections.observableArrayList();
+        for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
+            if (typeToProcess.contains(entry.getValue().getTypeRoot())) {
+                listrep.addAll(entry.getValue().getlistofpathFromRoottoprocess());
+            }
+        }
+        return listrep;
+    }
+
+
     public void setListeZ(int numListeZ) throws SQLException {
         ObservableList<String> listetmp = Context.getlistofx(Context.formatZ.get(numListeZ));
 
         if (!(listetmp.size() == 1 && listetmp.get(0).startsWith("%") && listetmp.get(0).endsWith("%"))) {
             ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
-            ObservableList<AgLibrarySubFolder> listSubCat = getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_CAT));
+
+            ObservableList<String> listSubCat = getlistofpathFromRoottoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_CAT));
             listSubCat.forEach(subFolder -> {
-                String[] part = subFolder.getPathFromRoot().split(Context.appParam.getString("ssrepformatSep"));
+
+                String[] part = subFolder.split(Context.appParam.getString("ssrepformatSep"));
                 if (part.length == formatZ.size()) {
                     String elez = " # " + part[numListeZ - 1].replace("/", "");
                     if (!listeleFromCat.contains(elez)) {
                         listeleFromCat.add(elez);
                     }
                 }
+
             });
+
             listetmp.addAll(listeleFromCat);
         }
 

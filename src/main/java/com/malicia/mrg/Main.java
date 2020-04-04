@@ -35,7 +35,6 @@ public class Main extends Application {
         loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
-        Context.setController(controller);
         primaryStage.setScene(new Scene(root, 1170, 850));
         controller.start();
         primaryStage.show();

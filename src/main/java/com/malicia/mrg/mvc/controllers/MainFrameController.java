@@ -506,19 +506,10 @@ public class MainFrameController {
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
 
-        String[] part = activeRep.getPathFromRoot().replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
-        if (part.length > 0) {
-            selectssrepformatZ1.setValue(part[0]);
-            if (part.length > 1) {
-                selectssrepformatZ2.setValue(part[1]);
-                if (part.length > 2) {
-                    selectssrepformatZ3.setValue(part[2]);
-                    if (part.length > 3) {
-                        selectssrepformatZ4.setValue(part[3]);
-                    }
-                }
-            }
-        }
+        selectssrepformatZ1.setValue(activeRep.getRepformatZ(1));
+        selectssrepformatZ2.setValue(activeRep.getRepformatZ(2));
+        selectssrepformatZ3.setValue(activeRep.getRepformatZ(3));
+        selectssrepformatZ4.setValue(activeRep.getRepformatZ(4));
     }
 
     /**
@@ -796,7 +787,7 @@ public class MainFrameController {
     }
 
     public void actionChoose(ActionEvent actionEvent) {
-        activeRep = ((AgLibrarySubFolder) actionEvent.getTarget());
+        activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
         refreshcompteurRepertoire();
         refreshcomboxRepertoire();
         activeRep.moveActivephotoNumTo(0);

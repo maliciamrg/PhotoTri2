@@ -488,6 +488,23 @@ public class AgLibraryRootFolder {
         }
     }
 
+    public ObservableList<String> getlistofpathFromRoottoprocess() throws SQLException {
+        ObservableList<String> ret = FXCollections.observableArrayList();
+
+        ResultSet rsele = sqlgetListeRepertoire();
+
+        while (rsele.next()) {
+            // Recuperer les info de l'elements
+            String pathFromRoot = rsele.getString(Context.PATH_FROM_ROOT);
+
+            if (isRepertoryToProcess(pathFromRoot)) {
+                ret.add(pathFromRoot);
+            }
+
+        }
+        return ret;
+    }
+
     public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess() throws SQLException {
         ObservableList<AgLibrarySubFolder> ret = FXCollections.observableArrayList();
 

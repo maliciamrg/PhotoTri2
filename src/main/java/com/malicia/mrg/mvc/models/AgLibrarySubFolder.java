@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.repCat;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 
@@ -27,8 +28,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
-    private static Map<Integer, String> repformatZ = new HashMap();
     private final Logger logger;
+    private Map<Integer, String> repformatZ = new HashMap();
     /**
      * The List file sub folder.
      */
@@ -53,7 +54,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
-
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -86,7 +86,27 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
             listFileSubFolder.add(new AgLibraryFile(this.absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
+
+        for (Integer key : Context.formatZ.keySet()) {
+            if (!repformatZ.containsKey(key)) {
+                repformatZ.put(key, "");
+            }
+        }
+
         refreshCompteur();
+
+        String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
+        int i;
+        for (i = 0; i < part.length; i++) {
+            if(personalizelist(parentLrcat.listeZ.get(i + 1)).contains(part[i])){
+                setrepformatZ(i + 1, part[i]);
+            };
+        }
+
+    }
+
+    public String getRepformatZ(int i) {
+        return repformatZ.get(i);
     }
 
     public int getNbphotoRep() {
@@ -349,11 +369,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
                 statusRep = KO;
+            } else {
+                if (repformatZ.get(key).compareTo("") == 0) {
+                    statusRep = KO;
+                }
             }
-            if (repformatZ.get(key).compareTo("") == 0) {
-                statusRep = KO;
-            }
-            if (statusRep.compareTo(KO)==0){
+            if (statusRep.compareTo(KO) == 0) {
                 break;
             }
         }
@@ -594,13 +615,16 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     public ObservableList<String> personalizelist(ObservableList<String> listeZ) {
 
-        listeZ.forEach(tab -> {
+        ObservableList<String> pListeZ = FXCollections.observableArrayList(listeZ);
+
+        pListeZ.forEach(tab -> {
             String[] part = tab.split("%");
             if (part.length > 1 && part[1].compareTo("DATE") == 0) {
-                listeZ.remove(tab);
-                listeZ.add(this.getDtdebHumain());
+                pListeZ.remove(tab);
+                pListeZ.add(this.getDtdebHumain());
             }
         });
-        return listeZ;
+
+        return pListeZ;
     }
 }
