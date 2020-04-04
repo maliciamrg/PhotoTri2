@@ -11,12 +11,12 @@ public class AgLibraryFile {
      */
     public static final String REP_NEW = "repNew";
 
-    public boolean isSetedited() {
-        return setedited;
+    public boolean isEdited() {
+        return edited;
     }
 
-    public void setSetedited(boolean setedited) {
-        this.setedited = setedited;
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 
     public double getStarValue() {
@@ -30,7 +30,7 @@ public class AgLibraryFile {
     /**
      * The Setedited.
      */
-    private boolean setedited;
+    private boolean edited;
     /**
      * The Star value.
      */
@@ -193,14 +193,21 @@ public class AgLibraryFile {
     public void valeurDecrease() {
         if ( starValue > -1) {
             starValue -= 1;
-            setedited=true;
+            edited =true;
         }
     }
 
     public void valeurIncrease() {
         if (starValue < 5) {
             starValue += 1;
-            setedited=true;
+            edited =true;
+        }
+    }
+
+    public void execmodification(AgLibrarySubFolder subFolderDest) {
+        if (isEdited()){
+            String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
+
         }
     }
 }

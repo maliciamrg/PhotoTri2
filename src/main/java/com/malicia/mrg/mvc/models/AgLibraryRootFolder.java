@@ -416,7 +416,11 @@ public class AgLibraryRootFolder {
     }
 
     private void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile) throws SQLException, IOException {
-        String destdirectoryName = normalizePath(absolutePath + repertoiredest);
+        moveListEle(listFile, repertoiredest, AddprefixFile,absolutePath);
+    }
+
+    void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile, String absolutePathdest) throws SQLException, IOException {
+        String destdirectoryName = normalizePath(absolutePathdest + repertoiredest);
         LOGGER.info("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName);
 
         String Folder_id_local = sqlMkdirRepertory(destdirectoryName);
@@ -425,7 +429,7 @@ public class AgLibraryRootFolder {
 
             String source = normalizePath(file.getAbsolutePath() + file.getPathFromRoot() + file.getLcIdxFilename());
             String rename = (((AddprefixFile) ? "$" + UUID.randomUUID().toString() + "$" : "") + supprimerbalisedollar(file.getLcIdxFilename())).toLowerCase();
-            String destination = normalizePath(destdirectoryName + java.io.File.separator + rename);
+            String destination = normalizePath(destdirectoryName + File.separator + rename);
 
             sqlmovefile(source, destination, Folder_id_local, file.getFileIdLocal());
 

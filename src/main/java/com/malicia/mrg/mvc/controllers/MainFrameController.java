@@ -414,7 +414,13 @@ public class MainFrameController {
      */
     @FXML
     void actionExecModification() {
-        popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+        try {
+            popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+            activeRep.execmodification();
+        } catch (IOException | SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 
     /**

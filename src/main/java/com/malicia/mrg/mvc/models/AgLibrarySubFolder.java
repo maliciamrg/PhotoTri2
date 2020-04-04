@@ -54,6 +54,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
+
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -98,9 +99,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         int i;
         for (i = 0; i < part.length; i++) {
-            if(personalizelist(parentLrcat.listeZ.get(i + 1)).contains(part[i])){
+            if (personalizelist(parentLrcat.listeZ.get(i + 1)).contains(part[i])) {
                 setrepformatZ(i + 1, part[i]);
-            };
+            }
         }
 
     }
@@ -626,5 +627,16 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         });
 
         return pListeZ;
+    }
+
+    public void execmodification() throws IOException, SQLException {
+
+        this.moveListEle(listFileSubFolder, pathFromRoot, false, absolutePath);
+
+        for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
+            AgLibraryFile fi = listFileSubFolder.get(ifile);
+            fi.execmodification();
+        }
+
     }
 }
