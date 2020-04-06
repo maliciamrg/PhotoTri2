@@ -146,17 +146,16 @@ public class MainFrameController {
      * Popupalert.
      *
      * @param contentText the content text
+     * @return
      */
-    public static void popupalertConfirmeModification(String contentText) {
+    public static Optional<ButtonType> popupalertConfirmeModification(String contentText) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("do you confirme ?");
         alert.setContentText(contentText);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            repEncours.ValidModification();
-        }
+        return result;
     }
 
     /**
@@ -393,7 +392,10 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerlebazar() {
-        popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+        Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+        }
     }
 
     private String showChoiceOneWindow(List<String> listeChoice) {
@@ -415,8 +417,10 @@ public class MainFrameController {
     @FXML
     void actionExecModification() {
         try {
-            popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
-            activeRep.execmodification();
+            Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                activeRep.execmodification();
+            }
         } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);

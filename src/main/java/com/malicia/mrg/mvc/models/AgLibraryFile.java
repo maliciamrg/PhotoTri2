@@ -10,6 +10,44 @@ public class AgLibraryFile {
      * The constant REP_NEW.
      */
     public static final String REP_NEW = "repNew";
+    private AgLibrarySubFolder subFolder;
+    /**
+     * The Setedited.
+     */
+    private boolean edited;
+    /**
+     * The Star value.
+     */
+    private double starValue;
+    /**
+     * The Lc idx filename.
+     */
+    private String lcIdxFilename;
+    private String fileIdLocal;
+    private String fileformat;
+    private long captureTime;
+    private String fileIdGlobal;
+    private int addRotate;
+
+    /**
+     * Instantiates a new Ele.
+     */
+    public AgLibraryFile(AgLibrarySubFolder subFolder,
+                         String lcIdxFilename,
+                         String fileIdLocal,
+                         double starValue,
+                         String fileformat,
+                         long captureTime,
+                         String fileIdGlobal) {
+        this.subFolder = subFolder;
+        this.lcIdxFilename = lcIdxFilename;
+        this.fileIdLocal = fileIdLocal;
+        this.starValue = starValue;
+        this.fileformat = fileformat;
+        this.captureTime = captureTime;
+        this.fileIdGlobal = fileIdGlobal;
+        this.addRotate = 0;
+    }
 
     public boolean isEdited() {
         return edited;
@@ -25,60 +63,6 @@ public class AgLibraryFile {
 
     public void setStarValue(double starValue) {
         this.starValue = starValue;
-    }
-
-    /**
-     * The Setedited.
-     */
-    private boolean edited;
-    /**
-     * The Star value.
-     */
-    private double starValue;
-    /**
-     * The Lc idx filename.
-     */
-    private String lcIdxFilename;
-    private String fileIdLocal;
-
-
-    private String fileformat;
-    private long captureTime;
-    private String fileIdGlobal;
-    private String pathFromRoot;
-    private String absolutePath;
-    private int addRotate;
-
-    /**
-     * Instantiates a new Ele.
-     *
-     * @param absolutePath        the absolute path
-     * @param pathFromRoot        the path from root
-     * @param lcIdxFilename       the lc idx filename
-     * @param fileIdLocal         the file id local
-     * @param agLibraryRootFolder the ag library root folder
-     * @param starValue           the star value
-     * @param fileformat          the fileformat
-     * @param captureTime         the capture time
-     * @param fileIdGlobal        the file id global
-     */
-    public AgLibraryFile(String absolutePath,
-                         String pathFromRoot,
-                         String lcIdxFilename,
-                         String fileIdLocal,
-                         double starValue,
-                         String fileformat,
-                         long captureTime,
-                         String fileIdGlobal) {
-        this.absolutePath = absolutePath;
-        this.pathFromRoot = pathFromRoot;
-        this.lcIdxFilename = lcIdxFilename;
-        this.fileIdLocal = fileIdLocal;
-        this.starValue = starValue;
-        this.fileformat = fileformat;
-        this.captureTime = captureTime;
-        this.fileIdGlobal = fileIdGlobal;
-        this.addRotate = 0;
     }
 
     /**
@@ -105,7 +89,7 @@ public class AgLibraryFile {
      * @return the absolute path
      */
     public String getAbsolutePath() {
-        return absolutePath;
+        return subFolder.absolutePath;
     }
 
     /**
@@ -114,7 +98,7 @@ public class AgLibraryFile {
      * @return the path from root
      */
     public String getPathFromRoot() {
-        return pathFromRoot;
+        return subFolder.getPathFromRoot();
     }
 
     /**
@@ -163,7 +147,7 @@ public class AgLibraryFile {
      * @return the path
      */
     public String getPath() {
-        return normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
+        return normalizePath(subFolder.absolutePath + subFolder.getPathFromRoot() + lcIdxFilename);
     }
 
     /**
@@ -191,23 +175,17 @@ public class AgLibraryFile {
     }
 
     public void valeurDecrease() {
-        if ( starValue > -1) {
+        if (starValue > -1) {
             starValue -= 1;
-            edited =true;
+            edited = true;
         }
     }
 
     public void valeurIncrease() {
         if (starValue < 5) {
             starValue += 1;
-            edited =true;
+            edited = true;
         }
     }
 
-    public void execmodification(AgLibrarySubFolder subFolderDest) {
-        if (isEdited()){
-            String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
-
-        }
-    }
 }

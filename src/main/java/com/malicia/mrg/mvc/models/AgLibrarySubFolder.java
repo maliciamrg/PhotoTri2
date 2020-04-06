@@ -54,6 +54,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
+    private AgLibraryRootFolder RootFolderDest;
 
     /**
      * Instantiates a new Ag library sub folder.
@@ -63,7 +64,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @param agLibraryRootFolder
      * @throws SQLException the sql exception
      */
-    public AgLibrarySubFolder(String pathFromRoot, String folderIdLocal, AgLibraryRootFolder agLibraryRootFolder) throws SQLException {
+    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
         super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
         logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
@@ -85,7 +86,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
             String fileformat = rs.getString("fileformat");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(this.absolutePath, this.pathFromRoot, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
+            listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
 
         for (Integer key : Context.formatZ.keySet()) {
@@ -160,6 +161,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         for (int key : Context.categories.keySet()) {
             if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
                 categorie = Context.categories.get(key);
+                RootFolderDest = parentLrcat.rep.get(key);
             }
         }
     }
@@ -630,12 +632,16 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void execmodification() throws IOException, SQLException {
+        this.rootfolderidlocal;
+        this.absolutePath;
+        RootFolderDest.rootfolderidlocal;
+        RootFolderDest.absolutePath;
 
-        this.moveListEle(listFileSubFolder, pathFromRoot, false, absolutePath);
+
+        RootFolderDest.moveListEle(listFileSubFolder, pathFromRoot, false, RootFolderDest.absolutePath);
 
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
-            fi.execmodification();
         }
 
     }

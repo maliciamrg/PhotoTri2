@@ -227,25 +227,25 @@
                                     <VBox>
                                        <children>
                                           <Label fx:id="lbselectssrepformatZ1" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0" />
+                                                    <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
                                           <Label fx:id="lbselectssrepformatZ2" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0" />
+                                                    <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
                                           <Label fx:id="lbselectssrepformatZ3" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0" />
+                                                    <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
                                           <Label fx:id="lbselectssrepformatZ4" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0" />
+                                                    <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0" />
                                        </children>
                                     </VBox>
                                  </children>

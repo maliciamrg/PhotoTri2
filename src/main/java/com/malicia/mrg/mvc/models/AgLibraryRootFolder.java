@@ -362,8 +362,9 @@ public class AgLibraryRootFolder {
             String fileformat = rsele.getString("fileformat");
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             String file_id_global = rsele.getString("id_global");
+            String folder_id_local = rsele.getString("folder_id_local");
 
-            AgLibraryFile eleFile = new AgLibraryFile(absolutePath, pathFromRoot, lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
+            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this,pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);
@@ -520,7 +521,7 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
 
             if (isRepertoryToProcess(pathFromRoot)) {
-                ret.add(new AgLibrarySubFolder(pathFromRoot, folder_id_local ,  this));
+                ret.add(new AgLibrarySubFolder(this,pathFromRoot, folder_id_local ));
             }
 
         }
@@ -569,9 +570,6 @@ public class AgLibraryRootFolder {
                         " ;");
     }
 
-    public void ValidModification() {
-
-    }
 }
 
 
