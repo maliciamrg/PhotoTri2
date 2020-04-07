@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.malicia.mrg.app.Context.lrcat;
-import static com.malicia.mrg.app.Context.repEncours;
 
 
 /**
@@ -536,7 +535,7 @@ public class MainFrameController {
         imager4.setImage(activeRep.getimagepreview(4));
     }
 
-    private void refreshcompteurRepertoire() {
+    private void refreshcompteurRepertoire() throws SQLException {
         activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
@@ -752,8 +751,13 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
-        activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
-        refreshcompteurRepertoire();
+        try {
+            activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
+            refreshcompteurRepertoire();
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 
     /**
@@ -762,8 +766,13 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-        refreshcompteurRepertoire();
+        try {
+            activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+            refreshcompteurRepertoire();
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 
     /**
@@ -772,8 +781,14 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-        refreshcompteurRepertoire();
+        try {
+            activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+
+            refreshcompteurRepertoire();
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
     }
 
     /**
@@ -782,8 +797,14 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-        refreshcompteurRepertoire();
+        try {
+            activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+            refreshcompteurRepertoire();
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+
     }
 
     /**
@@ -792,17 +813,23 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-        refreshcompteurRepertoire();
+        try {
+            activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+            refreshcompteurRepertoire();
+        } catch (SQLException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+
     }
 
     public void actionChoose(ActionEvent actionEvent) {
-        activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
-        refreshcompteurRepertoire();
-        refreshcomboxRepertoire();
-        activeRep.moveActivephotoNumTo(0);
-        datesub.setText(activeRep.getDtdebHumain());
         try {
+            activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
+            refreshcompteurRepertoire();
+            refreshcomboxRepertoire();
+            activeRep.moveActivephotoNumTo(0);
+            datesub.setText(activeRep.getDtdebHumain());
             refreshActivePhoto();
             refreshvaleurphoto();
             setimagepreview();

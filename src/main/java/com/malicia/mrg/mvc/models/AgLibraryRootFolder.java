@@ -94,7 +94,7 @@ public class AgLibraryRootFolder {
      * @param path the path
      * @return the string
      */
-    private String normalizePath(String path) {
+    public String normalizePath(String path) {
         return path.replaceAll("\\\\", "/");
     }
 
@@ -570,6 +570,20 @@ public class AgLibraryRootFolder {
                         " ;");
     }
 
+
+    protected void sqlmoverejet(String source, String destination,  String folderIdLocalsrc , String folderIdLocaldestination) throws IOException, SQLException {
+        SystemFiles.moveFile(source, destination);
+
+        String sql;
+        sql = "" +
+                "update AgLibraryFile " +
+                "set folder =  " + folderIdLocaldestination + "  " +
+                "where id_local =  " + folderIdLocalsrc + " " +
+                ";";
+        parentLrcat.executeUpdate(sql);
+
+
+    }
 }
 
 
