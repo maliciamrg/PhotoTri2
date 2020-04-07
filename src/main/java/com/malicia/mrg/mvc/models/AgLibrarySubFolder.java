@@ -55,6 +55,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private long dtdeb;
     private long dtfin;
     private AgLibraryRootFolder RootFolderDest;
+    private String newPathFromRoot;
 
     /**
      * Instantiates a new Ag library sub folder.
@@ -99,7 +100,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         int i;
-        for (i = 0; i < part.length; i++) {
+        for (i = 0; i < part.length && i < parentLrcat.listeZ.size(); i++) {
             if (personalizelist(parentLrcat.listeZ.get(i + 1)).contains(part[i])) {
                 setrepformatZ(i + 1, part[i]);
             }
@@ -161,7 +162,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         for (int key : Context.categories.keySet()) {
             if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
                 categorie = Context.categories.get(key);
-                RootFolderDest = parentLrcat.rep.get(key);
+            }
+        }
+        RootFolderDest = null;
+        for (String keyRoot : parentLrcat.rep.keySet()) {
+            if (parentLrcat.rep.get(keyRoot).name.compareTo(catFoldertxt) == 0) {
+                RootFolderDest = parentLrcat.rep.get(keyRoot);
             }
         }
     }
@@ -369,21 +375,28 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private void calculStatusRep() {
         //        statusRep
         statusRep = OK;
+        newPathFromRoot = "";
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
                 statusRep = KO;
             } else {
                 if (repformatZ.get(key).compareTo("") == 0) {
                     statusRep = KO;
+                }  else {
+                    newPathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"),"") + Context.appParam.getString("ssrepformatSep");
                 }
             }
             if (statusRep.compareTo(KO) == 0) {
                 break;
             }
         }
+        if (newPathFromRoot.endsWith("_")) {
+            newPathFromRoot=newPathFromRoot.substring(0,newPathFromRoot.length()-1);
+        }
         if (nbphotoapurger != 0) {
             statusRep = KO;
         }
+
     }
 
     /**
@@ -632,17 +645,13 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public void execmodification() throws IOException, SQLException {
-        this.rootfolderidlocal;
-        this.absolutePath;
-        RootFolderDest.rootfolderidlocal;
-        RootFolderDest.absolutePath;
+//        this.rootfolderidlocal;
+//        this.absolutePath;
+//        RootFolderDest.rootfolderidlocal;
+//        RootFolderDest.absolutePath;
 
+        RootFolderDest.moveListEle(listFileSubFolder, newPathFromRoot, false, RootFolderDest.absolutePath);
 
-        RootFolderDest.moveListEle(listFileSubFolder, pathFromRoot, false, RootFolderDest.absolutePath);
-
-        for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
-            AgLibraryFile fi = listFileSubFolder.get(ifile);
-        }
 
     }
 }

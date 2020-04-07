@@ -264,7 +264,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
                 String[] part = subFolder.split(Context.appParam.getString("ssrepformatSep"));
                 if (part.length == formatZ.size()) {
-                    String elez = " # " + part[numListeZ - 1].replace("/", "");
+                    String elez = Context.appParam.getString("caractsup") + part[numListeZ - 1].replace("/", "");
                     if (!listeleFromCat.contains(elez)) {
                         listeleFromCat.add(elez);
                     }
