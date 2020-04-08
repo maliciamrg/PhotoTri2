@@ -235,7 +235,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     public ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess(List<Integer> typeToProcess) throws SQLException {
         ObservableList<AgLibrarySubFolder> listrep = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
-            if (typeToProcess.contains(entry.getValue().getTypeRoot())) {
+            if (typeToProcess.contains(entry.getValue().typeRoot)) {
                 listrep.addAll(entry.getValue().getlistofrepertorytoprocess());
             }
         }
@@ -245,7 +245,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     public ObservableList<String> getlistofpathFromRoottoprocess(List<Integer> typeToProcess) throws SQLException {
         ObservableList<String> listrep = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : rep.entrySet()) {
-            if (typeToProcess.contains(entry.getValue().getTypeRoot())) {
+            if (typeToProcess.contains(entry.getValue().typeRoot)) {
                 listrep.addAll(entry.getValue().getlistofpathFromRoottoprocess());
             }
         }

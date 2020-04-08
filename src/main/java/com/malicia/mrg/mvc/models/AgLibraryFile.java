@@ -100,7 +100,7 @@ public class AgLibraryFile {
      * @return the path from root
      */
     public String getPathFromRoot() {
-        return subFolder.getPathFromRoot();
+        return subFolder.pathFromRoot;
     }
 
     /**
@@ -149,7 +149,7 @@ public class AgLibraryFile {
      * @return the path
      */
     public String getPath() {
-        return normalizePath(subFolder.absolutePath + subFolder.getPathFromRoot() + lcIdxFilename);
+        return normalizePath(subFolder.absolutePath + subFolder.pathFromRoot + lcIdxFilename);
     }
 
     /**

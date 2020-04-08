@@ -31,11 +31,7 @@ public class AgLibraryRootFolder {
     public String rootfolderidlocal;
     public String absolutePath;
 
-    public int getTypeRoot() {
-        return typeRoot;
-    }
-
-    private int typeRoot;
+    public int typeRoot;
     public String name;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
@@ -95,7 +91,7 @@ public class AgLibraryRootFolder {
      * @return the string
      */
     public String normalizePath(String path) {
-        return path.replaceAll("\\\\", "/");
+        return path.replaceAll("\\\\", "/").replaceAll("\\/\\/","/");
     }
 
 

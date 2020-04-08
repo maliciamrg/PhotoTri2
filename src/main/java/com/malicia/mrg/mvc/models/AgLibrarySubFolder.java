@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.photo.repCat;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -54,7 +55,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private repCat categorie;
     private long dtdeb;
     private long dtfin;
-    private AgLibrarySubFolder SubFolderDest;
     private boolean isDest;
 
     /**
@@ -66,12 +66,12 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws SQLException the sql exception
      */
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
+        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
         AglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
 
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
+        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
         if (folderIdLocalcalc.compareTo("") == 0) {
             folderIdLocalcalc = sqlMkdirRepertory(this.Getpath());
@@ -80,13 +80,18 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal, boolean isDest) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.getTypeRoot());
+        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
         this.isDest = isDest;
         AglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
 
+    public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
+        super(activeRep.parentLrcat, activeRep.name, activeRep.rootfolderidlocal, activeRep.absolutePath, activeRep.typeRoot);
+        AglibraySubFolderConstructor(activeRep, activeRep.pathFromRoot, activeRep.folderIdLocal);
+    }
+
     private String Getpath() {
-        return normalizePath(this.absolutePath + this.getPathFromRoot());
+        return normalizePath(this.absolutePath + pathFromRoot);
     }
 
     public void AglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
@@ -94,11 +99,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
 
-        if (!isDest) {
-            SubFolderDest = new AgLibrarySubFolder(agLibraryRootFolder, pathFromRoot, folderIdLocal, true);
-        }
-
-        if (agLibraryRootFolder.getTypeRoot() == AgLibraryRootFolder.TYPE_CAT) {
+        if (agLibraryRootFolder.typeRoot == AgLibraryRootFolder.TYPE_CAT) {
             final Pattern pattern = Pattern.compile("##[A-Za-z0-9 -]*", Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(this.absolutePath);
             if (matcher.find()) {
@@ -140,10 +141,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     public int getNbphotoRep() {
         return nbphotoRep;
-    }
-
-    public String getPathFromRoot() {
-        return pathFromRoot;
     }
 
     public String getDtdebHumain() {
@@ -188,13 +185,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         for (int key : Context.categories.keySet()) {
             if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
                 categorie = Context.categories.get(key);
-            }
-        }
-        for (String keyRoot : parentLrcat.rep.keySet()) {
-            if (parentLrcat.rep.get(keyRoot).name.compareTo(catFoldertxt) == 0) {
-                if (!isDest) {
-                    SubFolderDest = new AgLibrarySubFolder(parentLrcat.rep.get(keyRoot), SubFolderDest.getPathFromRoot(), folderIdLocal, true);
-                }
             }
         }
     }
@@ -423,9 +413,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         if (nbphotoapurger != 0) {
             statusRep = KO;
         }
-        if (!isDest) {
-            SubFolderDest = new AgLibrarySubFolder(SubFolderDest, newPathFromRoot, folderIdLocal, true);
-        }
 
     }
 
@@ -544,7 +531,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + getTypeRoot() + " " + pathFromRoot;
+        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + typeRoot + " " + pathFromRoot;
     }
 
 
@@ -674,18 +661,24 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         return pListeZ;
     }
 
-    public void execmodification() throws IOException, SQLException {
+    public void execmodification(AgLibrarySubFolder activeRepDest) throws IOException, SQLException {
 
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
         listFileSubFolder.forEach((ele) -> {
-            if (ele.isEdited()) {
-                if (ele.estRejeter()) {
-                    listFileSubFolderRejet.add(ele);
+                    if (ele.isEdited()) {
+                        if (ele.estRejeter()) {
+                            listFileSubFolderRejet.add(ele);
+                        }
+                        try {
+                            ele.enregistrerStarValue();
+                        } catch (SQLException e) {
+                            MainFrameController.popupalertException(e);
+                            MainFrameController.excptlog(e);
+                        }
+                    }
                 }
-                ele.enregistrerStarValue();
-            }
-        });
+        );
 
         //move les elements dans le sous repertoire rejet
         SubFolderDest.moveListEle(listFileSubFolderRejet, SubFolderDest.getpathFromRootrejet(), false, SubFolderDest.absolutePath);
@@ -707,7 +700,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     private String getpathFromRootrejet() {
-        return getPathFromRoot() + File.separator + Context.appParam.getString("ssrepRejet");
+        return normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
     }
 
 }

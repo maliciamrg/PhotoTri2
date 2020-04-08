@@ -131,6 +131,7 @@ public class MainFrameController {
     private Button valid;
 
     private AgLibrarySubFolder activeRep;
+    private AgLibrarySubFolder activeRepDest;
 
 
     /**
@@ -248,7 +249,7 @@ public class MainFrameController {
         initialize();
     }
 
-    private void excptlog(Exception theException) {
+    public static void excptlog(Exception theException) {
         StringWriter stringWritter = new StringWriter();
         PrintWriter printWritter = new PrintWriter(stringWritter, true);
         theException.printStackTrace(printWritter);
@@ -282,7 +283,7 @@ public class MainFrameController {
         LOGGER.info(msg);
     }
 
-    private void popupalertException(Exception ex) {
+    public static void popupalertException(Exception ex) {
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -295,7 +296,7 @@ public class MainFrameController {
 
     }
 
-    private void popupalert(String contentText, String exceptionText) {
+    private static void popupalert(String contentText, String exceptionText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
         alert.setHeaderText("Exception Dialog");
@@ -418,7 +419,7 @@ public class MainFrameController {
         try {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                activeRep.execmodification();
+                activeRep.execmodification(activeRepDest);
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
@@ -826,6 +827,7 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
+            activeRepDest = new AgLibrarySubFolder(activeRep);
             refreshcompteurRepertoire();
             refreshcomboxRepertoire();
             activeRep.moveActivephotoNumTo(0);
