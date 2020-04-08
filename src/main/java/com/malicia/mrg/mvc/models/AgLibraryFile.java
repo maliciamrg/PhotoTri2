@@ -1,5 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
+import java.sql.SQLException;
+
 import static com.malicia.mrg.mvc.models.SystemFiles.normalizePath;
 
 /**
@@ -188,4 +190,11 @@ public class AgLibraryFile {
         }
     }
 
+    public void enregistrerStarValue() throws SQLException {
+        double editstartvalue = starValue;
+        if (starValue < 0) {
+            editstartvalue = 0;
+        }
+        subFolder.sqlEditStarValue(fileIdLocal, editstartvalue);
+    }
 }

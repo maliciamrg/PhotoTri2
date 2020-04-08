@@ -571,18 +571,39 @@ public class AgLibraryRootFolder {
     }
 
 
-    protected void sqlmoverejet(String source, String destination,  String folderIdLocalsrc , String folderIdLocaldestination) throws IOException, SQLException {
+    protected void sqlmoveRepertoryWithSubDirectory(String source,
+                                                    String destination,
+                                                    String pathFromRootsrc,
+                                                    String pathFromRootdest,
+                                                    String rootFoldersrc,
+                                                    String rootFolderdest) throws IOException, SQLException {
+//move repertory and subdirectory
         SystemFiles.moveFile(source, destination);
+
 
         String sql;
         sql = "" +
-                "update AgLibraryFile " +
-                "set folder =  " + folderIdLocaldestination + "  " +
-                "where id_local =  " + folderIdLocalsrc + " " +
+                "update AgLibraryFolder " +
+                "set pathFromRoot =   replace( pathFromRoot, " + pathFromRootsrc + " , " + pathFromRootdest + " ) , " +
+                " b.rootFolder = " + rootFoldersrc + "" +
+                "where pathFromRoot =  like " + pathFromRootsrc + "% " +
+                " and rootFolder = " + rootFolderdest + "" +
                 ";";
         parentLrcat.executeUpdate(sql);
 
 
+    }
+
+    public void sqlEditStarValue(String fileIdLocal, double starValue) throws SQLException {
+
+        String sql;
+
+        sql = "update Adobe_images " +
+                "set rating = " + starValue + " " +
+                "Where  e.rootFile =  \"" + fileIdLocal + "\" " +
+                " ;";
+
+        parentLrcat.executeUpdate(sql);
     }
 }
 

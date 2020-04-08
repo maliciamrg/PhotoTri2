@@ -676,17 +676,38 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     public void execmodification() throws IOException, SQLException {
 
-        SubFolderDest.moveListEle(listFileSubFolder, SubFolderDest.pathFromRoot, false, SubFolderDest.absolutePath);
-        SubFolderDest.regrouperRejet(this);
+        List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
+
+        listFileSubFolder.forEach((ele) -> {
+            if (ele.isEdited()) {
+                if (ele.estRejeter()) {
+                    listFileSubFolderRejet.add(ele);
+                }
+                ele.enregistrerStarValue();
+            }
+        });
+
+        //move les elements dans le sous repertoire rejet
+        SubFolderDest.moveListEle(listFileSubFolderRejet, SubFolderDest.getpathFromRootrejet(), false, SubFolderDest.absolutePath);
+
+        //rename du SubFolder ET
+        //deplacement du subfolder et des sousrep dans le bon rootfolder
+        AgLibrarySubFolder foldersrc = new AgLibrarySubFolder(this,
+                getpathFromRootrejet());
+        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(SubFolderDest,
+                SubFolderDest.getpathFromRootrejet());
+        SubFolderDest.sqlmoveRepertoryWithSubDirectory(foldersrc.Getpath(),
+                folderdest.Getpath(),
+                foldersrc.pathFromRoot,
+                folderdest.pathFromRoot,
+                foldersrc.rootfolderidlocal,
+                folderdest.rootfolderidlocal);
 
 
     }
 
-    private void regrouperRejet(AgLibrarySubFolder agLibrarySubFolderSrc) throws SQLException, IOException {
-
-        AgLibrarySubFolder srcfoldersrc = new AgLibrarySubFolder(agLibrarySubFolderSrc, agLibrarySubFolderSrc.getPathFromRoot() + File.separator + Context.appParam.getString("ssrepRejet"));
-        AgLibrarySubFolder destfoldersrc = new AgLibrarySubFolder(this, pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
-
-        this.sqlmoverejet(srcfoldersrc.Getpath(), destfoldersrc.Getpath(), srcfoldersrc.folderIdLocal, destfoldersrc.folderIdLocal);
+    private String getpathFromRootrejet() {
+        return getPathFromRoot() + File.separator + Context.appParam.getString("ssrepRejet");
     }
+
 }
