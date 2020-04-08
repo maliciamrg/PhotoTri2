@@ -131,7 +131,7 @@ public class MainFrameController {
     private Button valid;
 
     private AgLibrarySubFolder activeRep;
-    private AgLibrarySubFolder activeRepDest;
+    private AgLibrarySubFolder activeRepSrc;
 
 
     /**
@@ -419,7 +419,7 @@ public class MainFrameController {
         try {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                activeRep.execmodification(activeRepDest);
+                activeRepSrc.execmodification(activeRep);
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
@@ -827,7 +827,7 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
-            activeRepDest = new AgLibrarySubFolder(activeRep);
+            activeRepSrc = new AgLibrarySubFolder(activeRep);
             refreshcompteurRepertoire();
             refreshcomboxRepertoire();
             activeRep.moveActivephotoNumTo(0);

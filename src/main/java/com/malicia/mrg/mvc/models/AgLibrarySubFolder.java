@@ -46,7 +46,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
-    private String pathFromRoot;
+    public String pathFromRoot;
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;
     private int activeNum;
@@ -681,15 +681,15 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         );
 
         //move les elements dans le sous repertoire rejet
-        SubFolderDest.moveListEle(listFileSubFolderRejet, SubFolderDest.getpathFromRootrejet(), false, SubFolderDest.absolutePath);
+        activeRepDest.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.absolutePath);
 
         //rename du SubFolder ET
         //deplacement du subfolder et des sousrep dans le bon rootfolder
         AgLibrarySubFolder foldersrc = new AgLibrarySubFolder(this,
                 getpathFromRootrejet());
-        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(SubFolderDest,
-                SubFolderDest.getpathFromRootrejet());
-        SubFolderDest.sqlmoveRepertoryWithSubDirectory(foldersrc.Getpath(),
+        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
+                activeRepDest.getpathFromRootrejet());
+        activeRepDest.sqlmoveRepertoryWithSubDirectory(foldersrc.Getpath(),
                 folderdest.Getpath(),
                 foldersrc.pathFromRoot,
                 folderdest.pathFromRoot,
