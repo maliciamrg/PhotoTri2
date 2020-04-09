@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -647,33 +648,28 @@ public class AgLibrarySubFolder  {
 
         activeRepDest.calculpathFromRoot();
 
-//        List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
-//
-//        listFileSubFolder.forEach(ele -> {
-//                    if (ele.isEdited()) {
-//                        if (ele.estRejeter()) {
-//                            listFileSubFolderRejet.add(ele);
-//                        }
-//                        try {
-//                            ele.enregistrerStarValue();
-//                        } catch (SQLException e) {
-//                            MainFrameController.popupalertException(e);
-//                            MainFrameController.excptlog(e);
-//                        }
-//                    }
-//                }
-//        );
-//
-//        //move les elements dans le sous repertoire rejet
-//        activeRepDest.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.absolutePath);
-//
-//        //rename du SubFolder ET
-//        //deplacement du subfolder et des sousrep dans le bon rootfolder
-//        AgLibrarySubFolder foldersrc = new AgLibrarySubFolder(this,
-//                getpathFromRootrejet());
-//        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
-//                activeRepDest.getpathFromRootrejet());
-        activeRepDest.agLibraryRootFolder.sqlmoveRepertoryWithSubDirectory(this.getpath(),
+        List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
+
+        listFileSubFolder.forEach(ele -> {
+                    if (ele.isEdited()) {
+                        if (ele.estRejeter()) {
+                            listFileSubFolderRejet.add(ele);
+                        }
+                        try {
+                            ele.enregistrerStarValue();
+                        } catch (SQLException e) {
+                            MainFrameController.popupalertException(e);
+                            MainFrameController.excptlog(e);
+                        }
+                    }
+                }
+        );
+        if (listFileSubFolderRejet.size()>0) {
+            //move les elements dans le sous repertoire rejet
+            activeRepDest.agLibraryRootFolder.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.agLibraryRootFolder.absolutePath);
+        }
+
+        activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
                 activeRepDest.getpath(),
                 this.pathFromRoot,
                 activeRepDest.pathFromRoot,
@@ -686,5 +682,31 @@ public class AgLibrarySubFolder  {
     private String getpathFromRootrejet() {
         return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
     }
+
+
+    protected void sqlmoveRepertoryWithSubDirectory(String source,
+                                                    String destination,
+                                                    String pathFromRootsrc,
+                                                    String pathFromRootdest,
+                                                    String rootFoldersrc,
+                                                    String rootFolderdest) throws IOException, SQLException {
+//move repertory and subdirectory
+        SystemFiles.moveRepertory(source, destination);
+
+
+        String sql;
+        sql = "" +
+                "update AgLibraryFolder " +
+                "set pathFromRoot = " +
+                "replace( pathFromRoot, '" + pathFromRootsrc + "' , '" + pathFromRootdest + "' ) , " +
+                " rootFolder = " + rootFoldersrc + " " +
+                "where pathFromRoot like '" + pathFromRootsrc + "%' " +
+                " and rootFolder = " + rootFolderdest + "" +
+                ";";
+        agLibraryRootFolder.parentLrcat.executeUpdate(sql);
+
+
+    }
+
 
 }
