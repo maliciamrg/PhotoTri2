@@ -1,6 +1,6 @@
 package com.malicia.mrg.app;
 
-import com.malicia.mrg.app.photo.repCat;
+import com.malicia.mrg.app.photo.RepCat;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.collections.FXCollections;
@@ -39,7 +39,7 @@ public class Context implements Serializable {
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static AgLibraryRootFolder repEncours;
-    public static HashMap<Integer, repCat> categories = new HashMap();
+    public static HashMap<Integer, RepCat> categories = new HashMap();
     public static HashMap<Integer, String> formatZ = new HashMap();
     private static Logger LOGGER;
     /**
@@ -112,7 +112,7 @@ public class Context implements Serializable {
         //array de catagories
         int numcat = 1;
         for (String repCat : Context.appParam.getString("repCatx").split(",")) {
-            categories.put(numcat, new repCat(numcat, repCat, appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
+            categories.put(numcat, new RepCat( repCat, appParam.getString("nbminiCat" + numcat), appParam.getString("nbmaxCat" + numcat)));
             numcat += 1;
         }
 

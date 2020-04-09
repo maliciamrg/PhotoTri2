@@ -1,7 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.photo.repCat;
+import com.malicia.mrg.app.photo.RepCat;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,17 +24,13 @@ import java.util.regex.Pattern;
  * The type Ag library sub folder.
  */
 public class AgLibrarySubFolder extends AgLibraryRootFolder {
-    /**
-     * The constant UNEXPECTED_VALUE.
-     */
+
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
+    private String pathFromRoot;
     private Logger logger;
     private Map<Integer, String> repformatZ = new HashMap();
-    /**
-     * The List file sub folder.
-     */
     private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
@@ -46,17 +43,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
-    public String pathFromRoot;
     private String folderIdLocal;
     private Map<Integer, Integer> activephotoNum;
     private int activeNum;
     private int zero = 2;
     private long nbjourfolder;
-    private repCat categorie;
+    private RepCat categorie;
     private long dtdeb;
     private long dtfin;
-    private boolean isDest;
-
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -67,34 +61,35 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      */
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
         super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
-        AglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
+        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
-
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
         if (folderIdLocalcalc.compareTo("") == 0) {
-            folderIdLocalcalc = sqlMkdirRepertory(this.Getpath());
+            folderIdLocalcalc = sqlMkdirRepertory(this.getpath());
         }
-        AglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc);
-    }
-
-    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal, boolean isDest) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
-        this.isDest = isDest;
-        AglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
+        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc);
     }
 
     public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
         super(activeRep.parentLrcat, activeRep.name, activeRep.rootfolderidlocal, activeRep.absolutePath, activeRep.typeRoot);
-        AglibraySubFolderConstructor(activeRep, activeRep.pathFromRoot, activeRep.folderIdLocal);
+        aglibraySubFolderConstructor(activeRep, activeRep.pathFromRoot, activeRep.folderIdLocal);
     }
 
-    private String Getpath() {
+    public String getPathFromRoot() {
+        return pathFromRoot;
+    }
+
+    public void setPathFromRoot(String pathFromRoot) {
+        this.pathFromRoot = pathFromRoot;
+    }
+
+    private String getpath() {
         return normalizePath(this.absolutePath + pathFromRoot);
     }
 
-    public void AglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
+    public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
         logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
@@ -180,7 +175,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      *
      * @param catFoldertxt the cat foldertxt
      */
-    public void setCatFolder(String catFoldertxt) throws SQLException {
+    public void setCatFolder(String catFoldertxt) {
         categorie = null;
         for (int key : Context.categories.keySet()) {
             if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
@@ -230,7 +225,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         }
         if (image.isError()) {
-            logger.info("" + phototoshow + " " + localUrl);
+            logger.log(Level.INFO," {} {} ", new Object[] { phototoshow ,localUrl});
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
         }
         return image;
@@ -301,7 +296,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     /**
      * Refresh compteur.
      */
-    public void refreshCompteur() throws SQLException {
+    public void refreshCompteur()  {
         nbelerep = 0;
         nbphotoRep = 0;
         nbetrationzeroetoile = 0;
@@ -389,26 +384,20 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         ratiophotoaconserver = "" + String.format("%03d", limiteminfolder) + " - " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
     }
 
-    private void calculStatusRep() throws SQLException {
+    private void calculStatusRep()  {
         //        statusRep
         statusRep = OK;
-        String newPathFromRoot = "";
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
                 statusRep = KO;
             } else {
                 if (repformatZ.get(key).compareTo("") == 0) {
                     statusRep = KO;
-                } else {
-                    newPathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
                 }
             }
             if (statusRep.compareTo(KO) == 0) {
                 break;
             }
-        }
-        if (newPathFromRoot.endsWith("_")) {
-            newPathFromRoot = newPathFromRoot.substring(0, newPathFromRoot.length() - 1);
         }
         if (nbphotoapurger != 0) {
             statusRep = KO;
@@ -665,7 +654,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
-        listFileSubFolder.forEach((ele) -> {
+        listFileSubFolder.forEach(ele -> {
                     if (ele.isEdited()) {
                         if (ele.estRejeter()) {
                             listFileSubFolderRejet.add(ele);
@@ -689,8 +678,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
                 getpathFromRootrejet());
         AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
                 activeRepDest.getpathFromRootrejet());
-        activeRepDest.sqlmoveRepertoryWithSubDirectory(foldersrc.Getpath(),
-                folderdest.Getpath(),
+        activeRepDest.sqlmoveRepertoryWithSubDirectory(foldersrc.getpath(),
+                folderdest.getpath(),
                 foldersrc.pathFromRoot,
                 folderdest.pathFromRoot,
                 foldersrc.rootfolderidlocal,

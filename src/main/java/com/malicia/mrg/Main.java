@@ -22,7 +22,7 @@ public class Main extends Application {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException, URISyntaxException {
+    public static void main(String[] args) throws SQLException, IOException, URISyntaxException {
         Context.setup();
         launch(args);
     }

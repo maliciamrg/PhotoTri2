@@ -154,8 +154,7 @@ public class MainFrameController {
         alert.setHeaderText("do you confirme ?");
         alert.setContentText(contentText);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        return result;
+        return alert.showAndWait();
     }
 
     /**
@@ -394,7 +393,7 @@ public class MainFrameController {
     void actionRangerlebazar() {
         Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         if (result.isPresent() && result.get() == ButtonType.OK) {
-
+            popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         }
     }
 
@@ -536,7 +535,7 @@ public class MainFrameController {
         imager4.setImage(activeRep.getimagepreview(4));
     }
 
-    private void refreshcompteurRepertoire() throws SQLException {
+    private void refreshcompteurRepertoire()  {
         activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
@@ -752,13 +751,8 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
-        try {
-            activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
-            refreshcompteurRepertoire();
-        } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
-        }
+        activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 
     /**
@@ -767,13 +761,8 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        try {
-            activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-            refreshcompteurRepertoire();
-        } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
-        }
+        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
     }
 
     /**
@@ -782,14 +771,9 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        try {
-            activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
 
-            refreshcompteurRepertoire();
-        } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
-        }
+        refreshcompteurRepertoire();
     }
 
     /**
@@ -798,13 +782,8 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        try {
-            activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-            refreshcompteurRepertoire();
-        } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
-        }
+        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
 
     }
 
@@ -814,13 +793,8 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        try {
-            activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
-            refreshcompteurRepertoire();
-        } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
-        }
+        activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        refreshcompteurRepertoire();
 
     }
 

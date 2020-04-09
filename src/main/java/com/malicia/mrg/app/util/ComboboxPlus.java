@@ -17,11 +17,7 @@ public class ComboboxPlus {
         ObservableList<T> data = comboBox.getItems();
 
         comboBox.setEditable(isEditable);
-//        comboBox.getEditor().focusedProperty().addListener(observable -> {
-//            if (comboBox.getSelectionModel().getSelectedIndex() < 0) {
-//                comboBox.getEditor().setText(null);
-//            }
-//        });
+
         comboBox.addEventHandler(KeyEvent.KEY_PRESSED, t -> comboBox.hide());
         comboBox.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
 
