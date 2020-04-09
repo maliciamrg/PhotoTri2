@@ -574,15 +574,16 @@ public class AgLibraryRootFolder {
                                                     String rootFoldersrc,
                                                     String rootFolderdest) throws IOException, SQLException {
 //move repertory and subdirectory
-        SystemFiles.moveFile(source, destination);
+        SystemFiles.moveRepertory(source, destination);
 
 
         String sql;
         sql = "" +
                 "update AgLibraryFolder " +
-                "set pathFromRoot =   replace( pathFromRoot, " + pathFromRootsrc + " , " + pathFromRootdest + " ) , " +
-                " b.rootFolder = " + rootFoldersrc + "" +
-                "where pathFromRoot =  like " + pathFromRootsrc + "% " +
+                "set pathFromRoot = " +
+                "replace( pathFromRoot, '" + pathFromRootsrc + "' , '" + pathFromRootdest + "' ) , " +
+                " rootFolder = " + rootFoldersrc + " " +
+                "where pathFromRoot like '" + pathFromRootsrc + "%' " +
                 " and rootFolder = " + rootFolderdest + "" +
                 ";";
         parentLrcat.executeUpdate(sql);

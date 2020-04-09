@@ -72,7 +72,7 @@ public class SystemFiles {
         File fsource = new File(source);
         File fdest = new File(destination);
         if (fsource.compareTo(fdest) != 0) {
-            if (!fsource.exists()) {
+            if (!fsource.exists() || !fsource.isFile() ) {
                 throw new IllegalStateException("non existance : " + fsource.toString());
             }
             if (fdest.exists()) {
@@ -82,4 +82,28 @@ public class SystemFiles {
             Files.move(fsource.toPath(), fdest.toPath());
         }
     }
+
+    /**
+     * Move file.
+     *
+     * @param source      the source
+     * @param destination the destination
+     * @throws IOException  the io exception
+     * @throws SQLException the sql exception
+     */
+    public static void moveRepertory(String source, String destination) throws IOException {
+        File fsource = new File(source);
+        File fdest = new File(destination);
+        if (fsource.compareTo(fdest) != 0) {
+            if (!fsource.exists() || !fsource.isDirectory() ) {
+                throw new IllegalStateException("non existance : " + fsource.toString());
+            }
+            if (fdest.exists()) {
+                throw new IllegalStateException("existance     : " + fdest.toString());
+            }
+            LOGGER.info(() -> "move_file p=" + fsource.toString() + " -> " + fdest.toString());
+            Files.move(fsource.toPath(), fdest.toPath());
+        }
+    }
+
 }

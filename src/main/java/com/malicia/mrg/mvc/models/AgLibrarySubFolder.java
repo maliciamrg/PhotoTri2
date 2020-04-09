@@ -385,7 +385,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     private void calculStatusRep()  {
-        //        statusRep
         statusRep = OK;
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
@@ -405,6 +404,23 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     }
 
+    private void calculpathFromRoot()  {
+
+
+
+        pathFromRoot="";
+        for (Integer key : Context.formatZ.keySet()) {
+            if (repformatZ.containsKey(key)) {
+                if (repformatZ.get(key).compareTo("") != 0) {
+                    pathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
+                }
+            }
+        }
+        if (pathFromRoot.endsWith("_")) {
+            pathFromRoot = pathFromRoot.substring(0, pathFromRoot.length() - 1);
+        }
+        pathFromRoot += "/";
+    }
     /**
      * Nbetratiovaleur string.
      *
@@ -652,38 +668,40 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     public void execmodification(AgLibrarySubFolder activeRepDest) throws IOException, SQLException {
 
-        List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
+        activeRepDest.calculpathFromRoot();
 
-        listFileSubFolder.forEach(ele -> {
-                    if (ele.isEdited()) {
-                        if (ele.estRejeter()) {
-                            listFileSubFolderRejet.add(ele);
-                        }
-                        try {
-                            ele.enregistrerStarValue();
-                        } catch (SQLException e) {
-                            MainFrameController.popupalertException(e);
-                            MainFrameController.excptlog(e);
-                        }
-                    }
-                }
-        );
-
-        //move les elements dans le sous repertoire rejet
-        activeRepDest.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.absolutePath);
-
-        //rename du SubFolder ET
-        //deplacement du subfolder et des sousrep dans le bon rootfolder
-        AgLibrarySubFolder foldersrc = new AgLibrarySubFolder(this,
-                getpathFromRootrejet());
-        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
-                activeRepDest.getpathFromRootrejet());
-        activeRepDest.sqlmoveRepertoryWithSubDirectory(foldersrc.getpath(),
-                folderdest.getpath(),
-                foldersrc.pathFromRoot,
-                folderdest.pathFromRoot,
-                foldersrc.rootfolderidlocal,
-                folderdest.rootfolderidlocal);
+//        List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
+//
+//        listFileSubFolder.forEach(ele -> {
+//                    if (ele.isEdited()) {
+//                        if (ele.estRejeter()) {
+//                            listFileSubFolderRejet.add(ele);
+//                        }
+//                        try {
+//                            ele.enregistrerStarValue();
+//                        } catch (SQLException e) {
+//                            MainFrameController.popupalertException(e);
+//                            MainFrameController.excptlog(e);
+//                        }
+//                    }
+//                }
+//        );
+//
+//        //move les elements dans le sous repertoire rejet
+//        activeRepDest.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.absolutePath);
+//
+//        //rename du SubFolder ET
+//        //deplacement du subfolder et des sousrep dans le bon rootfolder
+//        AgLibrarySubFolder foldersrc = new AgLibrarySubFolder(this,
+//                getpathFromRootrejet());
+//        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
+//                activeRepDest.getpathFromRootrejet());
+        activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
+                activeRepDest.getpath(),
+                this.pathFromRoot,
+                activeRepDest.pathFromRoot,
+                this.rootfolderidlocal,
+                activeRepDest.rootfolderidlocal);
 
 
     }
