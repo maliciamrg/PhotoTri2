@@ -221,7 +221,7 @@
                                     <VBox>
                                        <children>
                                           <Label fx:id="lbselectrepCat" text="Label" />
-                                                    <ComboBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0" />
+                                                    <ChoiceBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0" />
                                        </children>
                                     </VBox>
                                     <VBox>

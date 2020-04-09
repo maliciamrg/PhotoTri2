@@ -38,8 +38,14 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         addrootFolder("repEncours", Context.appParam.getString("repEncours"), AgLibraryRootFolder.TYPE_ENC);
         addrootFolder("repKidz", Context.appParam.getString("repKidz"), AgLibraryRootFolder.TYPE_KID);
         addrootFolder("repNew", Context.appParam.getString("repNew"), AgLibraryRootFolder.TYPE_NEW);
-        for (Integer key : Context.categories.keySet()) {
-            addrootFolder("repCat" + key, Context.categories.get(key).getRepertoire(), AgLibraryRootFolder.TYPE_CAT);
+
+        //array de categories
+        int numcat = 1;
+        for (String repCat : Context.appParam.getString("repCatx").split(",")) {
+            addrootFolder("repCat" + numcat, repCat, AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat" + numcat).nbminiCat = Context.appParam.getString("nbminiCat" + numcat);
+            rep.get("repCat" + numcat).nbmaxCat = Context.appParam.getString("nbmaxCat" + numcat);
+            numcat += 1;
         }
 
     }

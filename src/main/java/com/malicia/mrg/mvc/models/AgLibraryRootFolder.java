@@ -33,6 +33,8 @@ public class AgLibraryRootFolder {
 
     public int typeRoot;
     public String name;
+    public String nbminiCat;
+    public String nbmaxCat;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
 
@@ -601,6 +603,15 @@ public class AgLibraryRootFolder {
                 " ;";
 
         parentLrcat.executeUpdate(sql);
+    }
+
+    public boolean isCat() {
+        return typeRoot == AgLibraryRootFolder.TYPE_CAT;
+    }
+
+    @Override
+    public String toString() {
+        return absolutePath;
     }
 }
 

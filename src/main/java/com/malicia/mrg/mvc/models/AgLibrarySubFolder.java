@@ -1,8 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.photo.RepCat;
-import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -17,13 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The type Ag library sub folder.
  */
-public class AgLibrarySubFolder extends AgLibraryRootFolder {
+public class AgLibrarySubFolder  {
 
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
@@ -48,9 +44,10 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     private int activeNum;
     private int zero = 2;
     private long nbjourfolder;
-    private RepCat categorie;
     private long dtdeb;
     private long dtfin;
+    public AgLibraryRootFolder agLibraryRootFolder;
+
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -60,21 +57,21 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws SQLException the sql exception
      */
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
+        this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
-        super(agLibraryRootFolder.parentLrcat, agLibraryRootFolder.name, agLibraryRootFolder.rootfolderidlocal, agLibraryRootFolder.absolutePath, agLibraryRootFolder.typeRoot);
+        this.agLibraryRootFolder = agLibraryRootFolder;
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
         if (folderIdLocalcalc.compareTo("") == 0) {
-            folderIdLocalcalc = sqlMkdirRepertory(this.getpath());
+            folderIdLocalcalc = agLibraryRootFolder.sqlMkdirRepertory(this.getpath());
         }
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc);
     }
 
     public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
-        super(activeRep.parentLrcat, activeRep.name, activeRep.rootfolderidlocal, activeRep.absolutePath, activeRep.typeRoot);
-        aglibraySubFolderConstructor(activeRep, activeRep.pathFromRoot, activeRep.folderIdLocal);
+        this.agLibraryRootFolder = activeRep.agLibraryRootFolder;
+        aglibraySubFolderConstructor(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal);
     }
 
     public String getPathFromRoot() {
@@ -86,7 +83,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
     }
 
     private String getpath() {
-        return normalizePath(this.absolutePath + pathFromRoot);
+        return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + pathFromRoot);
     }
 
     public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
@@ -94,13 +91,6 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
 
-        if (agLibraryRootFolder.typeRoot == AgLibraryRootFolder.TYPE_CAT) {
-            final Pattern pattern = Pattern.compile("##[A-Za-z0-9 -]*", Pattern.MULTILINE);
-            final Matcher matcher = pattern.matcher(this.absolutePath);
-            if (matcher.find()) {
-                setCatFolder(matcher.group(0));
-            }
-        }
         listFileSubFolder = new ArrayList();
         ResultSet rs = sqlgetListelementsubfolder();
         while (rs.next()) {
@@ -123,8 +113,8 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         int i;
-        for (i = 0; i < part.length && i < parentLrcat.listeZ.size(); i++) {
-            if (personalizelist(parentLrcat.listeZ.get(i + 1)).contains(part[i])) {
+        for (i = 0; i < part.length && i < agLibraryRootFolder.parentLrcat.listeZ.size(); i++) {
+            if (personalizelist(agLibraryRootFolder.parentLrcat.listeZ.get(i + 1)).contains(part[i])) {
                 setrepformatZ(i + 1, part[i]);
             }
         }
@@ -162,27 +152,14 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      *
      * @return the cat folder
      */
-    public String getCatFolder() {
-        if (categorie != null) {
-            return categorie.getRepertoire();
+    public AgLibraryRootFolder getCatFolder() {
+        if (agLibraryRootFolder.isCat()) {
+            return agLibraryRootFolder;
         } else {
-            return "";
+            return null;
         }
     }
 
-    /**
-     * Sets cat folder.
-     *
-     * @param catFoldertxt the cat foldertxt
-     */
-    public void setCatFolder(String catFoldertxt) {
-        categorie = null;
-        for (int key : Context.categories.keySet()) {
-            if (Context.categories.get(key).getRepertoire().compareTo(catFoldertxt) == 0) {
-                categorie = Context.categories.get(key);
-            }
-        }
-    }
 
 
     /**
@@ -193,7 +170,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public Image getimagepreview(int num) throws IOException, SQLException {
+    public Image getimagepreview(int num) throws IOException {
         int interval = (nbphotoRep / 5);
         return getimagenumero(getnextphotonumfrom(interval * num));
     }
@@ -279,7 +256,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
      * @throws SQLException the sql exception
      */
     public ResultSet sqlgetListelementsubfolder() throws SQLException {
-        return parentLrcat.select(
+        return agLibraryRootFolder.parentLrcat.select(
                 "select a.id_local as file_id_local , " +
                         "a.id_global , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
@@ -362,9 +339,9 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
         Double nbmin = 0d;
         Double nbmax = 999d;
-        if (categorie != null) {
-            nbmin = Double.valueOf(categorie.getNbminiphotobyday());
-            nbmax = Double.valueOf(categorie.getNbmaxphotobyday());
+        if (agLibraryRootFolder.isCat()) {
+            nbmin = Double.valueOf(agLibraryRootFolder.nbminiCat);
+            nbmax = Double.valueOf(agLibraryRootFolder.nbmaxCat);
         }
 
         int limiteminfolder = (int) (nbmin * nbjourfolder);
@@ -536,7 +513,7 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + typeRoot + " " + pathFromRoot;
+        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + agLibraryRootFolder.typeRoot + " " + pathFromRoot;
     }
 
 
@@ -696,18 +673,18 @@ public class AgLibrarySubFolder extends AgLibraryRootFolder {
 //                getpathFromRootrejet());
 //        AgLibrarySubFolder folderdest = new AgLibrarySubFolder(activeRepDest,
 //                activeRepDest.getpathFromRootrejet());
-        activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
+        activeRepDest.agLibraryRootFolder.sqlmoveRepertoryWithSubDirectory(this.getpath(),
                 activeRepDest.getpath(),
                 this.pathFromRoot,
                 activeRepDest.pathFromRoot,
-                this.rootfolderidlocal,
-                activeRepDest.rootfolderidlocal);
+                this.agLibraryRootFolder.rootfolderidlocal,
+                activeRepDest.agLibraryRootFolder.rootfolderidlocal);
 
 
     }
 
     private String getpathFromRootrejet() {
-        return normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
+        return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
     }
 
 }

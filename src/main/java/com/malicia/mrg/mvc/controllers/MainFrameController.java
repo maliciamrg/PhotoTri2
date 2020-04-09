@@ -36,10 +36,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import static com.malicia.mrg.app.Context.lrcat;
 
@@ -116,7 +114,7 @@ public class MainFrameController {
     @FXML
     private Label datesub;
     @FXML
-    private ComboBox<String> selectrepCat;
+    private ChoiceBox<AgLibraryRootFolder> selectrepCat;
     @FXML
     private ComboBox<String> selectssrepformatZ1;
     @FXML
@@ -508,6 +506,7 @@ public class MainFrameController {
     }
 
     private void refreshcomboxRepertoire() {
+
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
 
         selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
@@ -703,7 +702,15 @@ public class MainFrameController {
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
         lbselectrepCat.setText("Categories");
-        selectrepCat.setItems(Context.getlistofx("repCatx"));
+        ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();;
+        for (Map.Entry<String, AgLibraryRootFolder> entry : lrcat.rep.entrySet()) {
+            AgLibraryRootFolder rootFolder = entry.getValue();
+            if (rootFolder.isCat()){
+                listRootfolder.add(rootFolder);
+            }
+        }
+        selectrepCat.setItems(listRootfolder);
+
         lrcat.setListeZ(1);
         lrcat.setListeZ(2);
         lrcat.setListeZ(3);
@@ -751,7 +758,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
-        activeRep.setCatFolder(((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ComboBox) actionEvent.getTarget()).getValue());
         refreshcompteurRepertoire();
     }
 
