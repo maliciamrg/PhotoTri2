@@ -551,7 +551,7 @@ public class MainFrameController {
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
-    private void refreshActivePhoto() throws IOException, SQLException {
+    private void refreshActivePhoto() throws IOException {
         LOGGER.info("refresh");
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-2)));
@@ -623,7 +623,7 @@ public class MainFrameController {
                 default:
                     break;
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -638,7 +638,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -653,7 +653,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | SQLException e) {
+        } catch (IOException  e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -668,7 +668,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -683,7 +683,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(+1);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -702,7 +702,7 @@ public class MainFrameController {
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
         lbselectrepCat.setText("Categories");
-        ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();;
+        ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : lrcat.rep.entrySet()) {
             AgLibraryRootFolder rootFolder = entry.getValue();
             if (rootFolder.isCat()){

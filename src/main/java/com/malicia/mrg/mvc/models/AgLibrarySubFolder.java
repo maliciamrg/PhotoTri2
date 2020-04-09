@@ -388,10 +388,8 @@ public class AgLibrarySubFolder  {
 
         pathFromRoot="";
         for (Integer key : Context.formatZ.keySet()) {
-            if (repformatZ.containsKey(key)) {
-                if (repformatZ.get(key).compareTo("") != 0) {
-                    pathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
-                }
+            if (repformatZ.containsKey(key) && repformatZ.get(key).compareTo("") != 0) {
+                pathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
             }
         }
         if (pathFromRoot.endsWith("_")) {
@@ -664,7 +662,7 @@ public class AgLibrarySubFolder  {
                     }
                 }
         );
-        if (listFileSubFolderRejet.size()>0) {
+        if (listFileSubFolderRejet.isEmpty()) {
             //move les elements dans le sous repertoire rejet
             activeRepDest.agLibraryRootFolder.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.agLibraryRootFolder.absolutePath);
         }
