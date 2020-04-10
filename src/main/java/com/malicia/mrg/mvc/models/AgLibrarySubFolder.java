@@ -646,6 +646,14 @@ public class AgLibrarySubFolder  {
 
         activeRepDest.calculpathFromRoot();
 
+        activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
+                activeRepDest.getpath(),
+                this.pathFromRoot,
+                activeRepDest.pathFromRoot,
+                this.agLibraryRootFolder.rootfolderidlocal,
+                activeRepDest.agLibraryRootFolder.rootfolderidlocal);
+
+
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
         listFileSubFolder.forEach(ele -> {
@@ -662,17 +670,10 @@ public class AgLibrarySubFolder  {
                     }
                 }
         );
-        if (listFileSubFolderRejet.isEmpty()) {
+        if (!listFileSubFolderRejet.isEmpty()) {
             //move les elements dans le sous repertoire rejet
             activeRepDest.agLibraryRootFolder.moveListEle(listFileSubFolderRejet, activeRepDest.getpathFromRootrejet(), false, activeRepDest.agLibraryRootFolder.absolutePath);
         }
-
-        activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
-                activeRepDest.getpath(),
-                this.pathFromRoot,
-                activeRepDest.pathFromRoot,
-                this.agLibraryRootFolder.rootfolderidlocal,
-                activeRepDest.agLibraryRootFolder.rootfolderidlocal);
 
 
     }

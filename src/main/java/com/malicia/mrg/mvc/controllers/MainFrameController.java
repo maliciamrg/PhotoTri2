@@ -758,7 +758,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
-        activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ComboBox) actionEvent.getTarget()).getValue());
+        activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue());
         refreshcompteurRepertoire();
     }
 

@@ -587,7 +587,7 @@ public class AgLibraryRootFolder {
 
     @Override
     public String toString() {
-        return absolutePath;
+        return name;
     }
 }
 
