@@ -36,8 +36,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
 
@@ -155,6 +155,56 @@ public class MainFrameController {
         return alert.showAndWait();
     }
 
+    public static void excptlog(Exception theException) {
+        StringWriter stringWritter = new StringWriter();
+        PrintWriter printWritter = new PrintWriter(stringWritter, true);
+        theException.printStackTrace(printWritter);
+        printWritter.flush();
+        stringWritter.flush();
+        LOGGER.severe(() -> "theException = " + "\n" + stringWritter.toString());
+    }
+
+    public static void popupalertException(Exception ex) {
+        // Create expandable Exception.
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        String contentText = ex.toString();
+
+        popupalert(contentText, exceptionText);
+
+    }
+
+    private static void popupalert(String contentText, String exceptionText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Dialog");
+        alert.setHeaderText("Exception Dialog");
+        alert.setContentText(contentText);
+
+        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+    }
+
     /**
      * Initialize.
      */
@@ -246,15 +296,6 @@ public class MainFrameController {
         initialize();
     }
 
-    public static void excptlog(Exception theException) {
-        StringWriter stringWritter = new StringWriter();
-        PrintWriter printWritter = new PrintWriter(stringWritter, true);
-        theException.printStackTrace(printWritter);
-        printWritter.flush();
-        stringWritter.flush();
-        LOGGER.severe(() -> "theException = " + "\n" + stringWritter.toString());
-    }
-
     /**
      * Boucle delete repertoire logique.
      */
@@ -278,47 +319,6 @@ public class MainFrameController {
         alert.showAndWait();
 
         LOGGER.info(msg);
-    }
-
-    public static void popupalertException(Exception ex) {
-        // Create expandable Exception.
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        String exceptionText = sw.toString();
-
-        String contentText = ex.toString();
-
-        popupalert(contentText, exceptionText);
-
-    }
-
-    private static void popupalert(String contentText, String exceptionText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Exception Dialog");
-        alert.setContentText(contentText);
-
-        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
     }
 
     /**
@@ -417,7 +417,21 @@ public class MainFrameController {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
-                actionCycleTraitementPhoto();
+
+                ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = repChoose.getItems();
+                ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
+                getlistofrepertorytoprocess.forEach(subFolder -> {
+                    if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
+                        getlistofrepertorytoprocessfiltred.add(subFolder);
+                    }
+                });
+
+                int i = repChoose.getItems().indexOf(activeRep);
+                repChoose.getItems().remove(activeRep);
+
+                repChoose.getItems().add(i, activeRep);
+                repChoose.setValue(activeRep);
+
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
@@ -535,7 +549,7 @@ public class MainFrameController {
         imager4.setImage(activeRep.getimagepreview(4));
     }
 
-    private void refreshcompteurRepertoire()  {
+    private void refreshcompteurRepertoire() {
         activeRep.refreshCompteur();
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
@@ -654,7 +668,7 @@ public class MainFrameController {
             activeRep.moveActivephotoNumTo(-2);
             refreshActivePhoto();
             refreshvaleurphoto();
-        } catch (IOException  e) {
+        } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -706,7 +720,7 @@ public class MainFrameController {
         ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : lrcat.rep.entrySet()) {
             AgLibraryRootFolder rootFolder = entry.getValue();
-            if (rootFolder.isCat()){
+            if (rootFolder.isCat()) {
                 listRootfolder.add(rootFolder);
             }
         }
@@ -809,14 +823,16 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
-            activeRepSrc = new AgLibrarySubFolder(activeRep);
-            refreshcompteurRepertoire();
-            refreshcomboxRepertoire();
-            activeRep.moveActivephotoNumTo(0);
-            datesub.setText(activeRep.getDtdebHumain());
-            refreshActivePhoto();
-            refreshvaleurphoto();
-            setimagepreview();
+            if (activeRep != null) {
+                activeRepSrc = new AgLibrarySubFolder(activeRep);
+                refreshcompteurRepertoire();
+                refreshcomboxRepertoire();
+                activeRep.moveActivephotoNumTo(0);
+                datesub.setText(activeRep.getDtdebHumain());
+                refreshActivePhoto();
+                refreshvaleurphoto();
+                setimagepreview();
+            }
         } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
