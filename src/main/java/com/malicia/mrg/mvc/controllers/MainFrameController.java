@@ -425,13 +425,8 @@ public class MainFrameController {
                         getlistofrepertorytoprocessfiltred.add(subFolder);
                     }
                 });
-
-                int i = repChoose.getItems().indexOf(activeRep);
-                repChoose.getItems().remove(activeRep);
-
-                repChoose.getItems().add(i, activeRep);
-                repChoose.setValue(activeRep);
-
+            repChoose.getItems().clear();
+                repChoose.setItems()
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
