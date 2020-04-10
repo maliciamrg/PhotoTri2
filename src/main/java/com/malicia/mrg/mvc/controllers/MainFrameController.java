@@ -417,6 +417,7 @@ public class MainFrameController {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
+                actionCycleTraitementPhoto();
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);

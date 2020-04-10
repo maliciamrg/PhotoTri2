@@ -656,7 +656,7 @@ public class AgLibrarySubFolder  {
 
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
-        listFileSubFolder.forEach(ele -> {
+        activeRepDest.listFileSubFolder.forEach(ele -> {
                     if (ele.isEdited()) {
                         if (ele.estRejeter()) {
                             listFileSubFolderRejet.add(ele);

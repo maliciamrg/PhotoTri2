@@ -575,7 +575,7 @@ public class AgLibraryRootFolder {
 
         sql = "update Adobe_images " +
                 "set rating = " + starValue + " " +
-                "Where  e.rootFile =  \"" + fileIdLocal + "\" " +
+                "Where  rootFile =  \"" + fileIdLocal + "\" " +
                 " ;";
 
         parentLrcat.executeUpdate(sql);
