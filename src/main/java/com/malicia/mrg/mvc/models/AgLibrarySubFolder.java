@@ -698,9 +698,9 @@ public class AgLibrarySubFolder  {
                 "update AgLibraryFolder " +
                 "set pathFromRoot = " +
                 "replace( pathFromRoot, '" + pathFromRootsrc + "' , '" + pathFromRootdest + "' ) , " +
-                " rootFolder = " + rootFoldersrc + " " +
+                " rootFolder = " + rootFolderdest + " " +
                 "where pathFromRoot like '" + pathFromRootsrc + "%' " +
-                " and rootFolder = " + rootFolderdest + "" +
+                " and rootFolder = " + rootFoldersrc + "" +
                 ";";
         agLibraryRootFolder.parentLrcat.executeUpdate(sql);
 
