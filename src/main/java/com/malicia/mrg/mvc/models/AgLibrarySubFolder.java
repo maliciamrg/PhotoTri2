@@ -5,6 +5,7 @@ import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import sun.security.timestamp.HttpTimestamper;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.malicia.mrg.app.Context.*;
 
 /**
  * The type Ag library sub folder.
@@ -384,6 +387,50 @@ public class AgLibrarySubFolder  {
         if (nbphotoapurger != 0) {
             statusRep = KO;
         }
+
+        if (nbphotoRep > 0) {
+
+            Integer ratio1s = (nbetrationuneetoile / nbphotoRep) * 100;
+            if (ratio1s > ratioMax1s){
+                statusRep = KO;
+            }
+            if (ratio1s < (ratioMax1s / divMaxToMinstar)){
+                statusRep = KO;
+            }
+
+            int ratio2s = (nbetrationdeuxetoile / nbphotoRep) * 100;
+            if (ratio2s > ratioMax2s){
+                statusRep = KO;
+            }
+            if (ratio2s < (ratioMax2s / divMaxToMinstar)){
+                statusRep = KO;
+            }
+
+            int ratio3s = (nbetrationtroisetoile / nbphotoRep) * 100;
+            if (ratio3s > ratioMax3s){
+                statusRep = KO;
+            }
+            if (ratio3s < (ratioMax3s / divMaxToMinstar)){
+                statusRep = KO;
+            }
+
+            int ratio4s = (nbetrationquatreetoile / nbphotoRep) * 100;
+            if (ratio4s > ratioMax4s){
+                statusRep = KO;
+            }
+            if (ratio4s < (ratioMax4s / divMaxToMinstar)){
+                statusRep = KO;
+            }
+
+            int ratio5s = (nbetrationcinqetoile / nbphotoRep) * 100;
+            if (ratio5s > ratioMax5s){
+                statusRep = KO;
+            }
+            if (ratio5s < (ratioMax5s / divMaxToMinstar)){
+                statusRep = KO;
+            }
+        }
+
 
     }
 

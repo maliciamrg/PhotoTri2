@@ -45,6 +45,12 @@ public class Context implements Serializable {
     private static String localVoidPhotoUrl;
     private static String localErr404PhotoUrl;
     private static String localErrPhotoUrl;
+    public static Integer divMaxToMinstar;
+    public static Integer ratioMax1s;
+    public static Integer ratioMax2s;
+    public static Integer ratioMax3s;
+    public static Integer ratioMax4s;
+    public static Integer ratioMax5s;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -113,6 +119,13 @@ public class Context implements Serializable {
         }
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
+
+         divMaxToMinstar = Integer.getInteger(Context.appParam.getString("divMaxToMinstar"));
+         ratioMax1s = Integer.getInteger(Context.appParam.getString("ratioMax1s"));
+         ratioMax2s = Integer.getInteger(Context.appParam.getString("ratioMax2s"));
+         ratioMax3s = Integer.getInteger(Context.appParam.getString("ratioMax3s"));
+         ratioMax4s = Integer.getInteger(Context.appParam.getString("ratioMax4s"));
+         ratioMax5s = Integer.getInteger(Context.appParam.getString("ratioMax5s"));
 
     }
 
