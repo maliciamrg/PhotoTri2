@@ -5,7 +5,6 @@ import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import sun.security.timestamp.HttpTimestamper;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,14 +22,15 @@ import static com.malicia.mrg.app.Context.*;
 /**
  * The type Ag library sub folder.
  */
-public class AgLibrarySubFolder  {
+public class AgLibrarySubFolder {
 
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
+    public Map<Integer, String> repformatZ = new HashMap();
+    public AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
     private Logger logger;
-    public Map<Integer, String> repformatZ = new HashMap();
     private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
@@ -50,7 +50,6 @@ public class AgLibrarySubFolder  {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
-    public AgLibraryRootFolder agLibraryRootFolder;
 
     /**
      * Instantiates a new Ag library sub folder.
@@ -64,6 +63,7 @@ public class AgLibrarySubFolder  {
         this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
+
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
@@ -170,7 +170,6 @@ public class AgLibrarySubFolder  {
     }
 
 
-
     /**
      * Gets .
      *
@@ -211,7 +210,7 @@ public class AgLibrarySubFolder  {
 
         }
         if (image.isError()) {
-            logger.log(Level.INFO," {} {} ", new Object[] { phototoshow ,localUrl});
+            logger.log(Level.INFO, " {} {} ", new Object[]{phototoshow, localUrl});
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
         }
         return image;
@@ -282,7 +281,7 @@ public class AgLibrarySubFolder  {
     /**
      * Refresh compteur.
      */
-    public void refreshCompteur()  {
+    public void refreshCompteur() {
         nbelerep = 0;
         nbphotoRep = 0;
         nbetrationzeroetoile = 0;
@@ -370,7 +369,7 @@ public class AgLibrarySubFolder  {
         ratiophotoaconserver = "" + String.format("%03d", limiteminfolder) + " - " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
     }
 
-    private void calculStatusRep()  {
+    private void calculStatusRep() {
         statusRep = OK;
         for (Integer key : Context.formatZ.keySet()) {
             if (!repformatZ.containsKey(key)) {
@@ -390,55 +389,36 @@ public class AgLibrarySubFolder  {
 
         if (nbphotoRep > 0) {
 
-            Integer ratio1s = (nbetrationuneetoile / nbphotoRep) * 100;
-            if (ratio1s > ratioMax1s){
-                statusRep = KO;
-            }
-            if (ratio1s < (ratioMax1s / divMaxToMinstar)){
-                statusRep = KO;
-            }
+            statusRep = statuStar(statusRep, nbetrationuneetoile,ratioMax1s);
+            statusRep = statuStar(statusRep, nbetrationdeuxetoile,ratioMax2s);
+            statusRep = statuStar(statusRep, nbetrationtroisetoile,ratioMax3s);
+            statusRep = statuStar(statusRep, nbetrationquatreetoile,ratioMax4s);
+            statusRep = statuStar(statusRep, nbetrationcinqetoile,ratioMax5s);
 
-            int ratio2s = (nbetrationdeuxetoile / nbphotoRep) * 100;
-            if (ratio2s > ratioMax2s){
-                statusRep = KO;
-            }
-            if (ratio2s < (ratioMax2s / divMaxToMinstar)){
-                statusRep = KO;
-            }
-
-            int ratio3s = (nbetrationtroisetoile / nbphotoRep) * 100;
-            if (ratio3s > ratioMax3s){
-                statusRep = KO;
-            }
-            if (ratio3s < (ratioMax3s / divMaxToMinstar)){
-                statusRep = KO;
-            }
-
-            int ratio4s = (nbetrationquatreetoile / nbphotoRep) * 100;
-            if (ratio4s > ratioMax4s){
-                statusRep = KO;
-            }
-            if (ratio4s < (ratioMax4s / divMaxToMinstar)){
-                statusRep = KO;
-            }
-
-            int ratio5s = (nbetrationcinqetoile / nbphotoRep) * 100;
-            if (ratio5s > ratioMax5s){
-                statusRep = KO;
-            }
-            if (ratio5s < (ratioMax5s / divMaxToMinstar)){
-                statusRep = KO;
-            }
         }
 
 
     }
 
-    private void calculpathFromRoot()  {
+    private String statuStar(String starstatusRep, int starnbetrationuneetoile, int starratioMax) {
+        int countmin = (starnbetrationuneetoile * (starratioMax / divMaxToMinstar)) / 100;
+        int countmax = (starnbetrationuneetoile * starratioMax) / 100;
+        if (countmax < 1) {
+            countmax = 1;
+        }
+        if (starnbetrationuneetoile > countmax) {
+            return KO;
+        }
+        if (starnbetrationuneetoile < countmin) {
+            return KO;
+        }
+        return starstatusRep;
+    }
+
+    private void calculpathFromRoot() {
 
 
-
-        pathFromRoot="";
+        pathFromRoot = "";
         for (Integer key : Context.formatZ.keySet()) {
             if (repformatZ.containsKey(key) && repformatZ.get(key).compareTo("") != 0) {
                 pathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
@@ -449,6 +429,7 @@ public class AgLibrarySubFolder  {
         }
         pathFromRoot += "/";
     }
+
     /**
      * Nbetratiovaleur string.
      *
@@ -457,27 +438,46 @@ public class AgLibrarySubFolder  {
      */
     public String nbetratiovaleur(int valeur) {
         int nb = 0;
+        int ratiomax;
+        int ratiomin;
         switch (valeur) {
             case 0:
                 nb = nbetrationzeroetoile;
+                ratiomin = 0;
+                ratiomax = 100;
                 break;
             case 1:
                 nb = nbetrationuneetoile;
+                ratiomin = (ratioMax1s / divMaxToMinstar);
+                ratiomax = ratioMax1s;
                 break;
             case 2:
                 nb = nbetrationdeuxetoile;
+                ratiomin = (ratioMax2s / divMaxToMinstar);
+                ratiomax = ratioMax2s;
                 break;
             case 3:
                 nb = nbetrationtroisetoile;
+                ratiomin = (ratioMax3s / divMaxToMinstar);
+                ratiomax = ratioMax3s;
                 break;
             case 4:
                 nb = nbetrationquatreetoile;
+                ratiomin = (ratioMax4s / divMaxToMinstar);
+                ratiomax = ratioMax4s;
                 break;
             case 5:
                 nb = nbetrationcinqetoile;
+                ratiomin = (ratioMax5s / divMaxToMinstar);
+                ratiomax = ratioMax5s;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);
+        }
+        int countmin = (nb * ratiomin) / 100;
+        int countmax = (nb * ratiomax) / 100;
+        if (countmax < 1) {
+            countmax = 1;
         }
         DecimalFormat df = new DecimalFormat("##.##%");
         double percent;
@@ -486,7 +486,7 @@ public class AgLibrarySubFolder  {
         } else {
             percent = ((double) nb / nbphotoRep);
         }
-        return " " + String.format("%02d", nb) + " = " + df.format(percent);
+        return " " + String.format("%02d", nb) + " = " + df.format(percent) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
     }
 
     /**

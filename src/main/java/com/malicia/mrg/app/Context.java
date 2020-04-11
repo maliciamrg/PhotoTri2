@@ -120,12 +120,12 @@ public class Context implements Serializable {
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 
-         divMaxToMinstar = Integer.getInteger(Context.appParam.getString("divMaxToMinstar"));
-         ratioMax1s = Integer.getInteger(Context.appParam.getString("ratioMax1s"));
-         ratioMax2s = Integer.getInteger(Context.appParam.getString("ratioMax2s"));
-         ratioMax3s = Integer.getInteger(Context.appParam.getString("ratioMax3s"));
-         ratioMax4s = Integer.getInteger(Context.appParam.getString("ratioMax4s"));
-         ratioMax5s = Integer.getInteger(Context.appParam.getString("ratioMax5s"));
+         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
+         ratioMax1s = Integer.parseInt(Context.appParam.getString("ratioMax1s"));
+         ratioMax2s = Integer.parseInt(Context.appParam.getString("ratioMax2s"));
+         ratioMax3s = Integer.parseInt(Context.appParam.getString("ratioMax3s"));
+         ratioMax4s = Integer.parseInt(Context.appParam.getString("ratioMax4s"));
+         ratioMax5s = Integer.parseInt(Context.appParam.getString("ratioMax5s"));
 
     }
 
