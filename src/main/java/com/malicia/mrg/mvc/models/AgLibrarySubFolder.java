@@ -110,6 +110,7 @@ public class AgLibrarySubFolder  {
                 repformatZ.put(key, "");
             }
         }
+
         refreshCompteur();
 
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
@@ -119,6 +120,10 @@ public class AgLibrarySubFolder  {
                 setrepformatZ(i + 1, part[i]);
             }
         }
+
+        calculStatusRep();
+
+
     }
 
     public String getRepformatZ(int i) {
