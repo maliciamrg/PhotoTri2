@@ -90,14 +90,6 @@ public class MainFrameController {
     @FXML
     private ChoiceBox<AgLibrarySubFolder> repChoose;
     @FXML
-    private ImageView imager1;
-    @FXML
-    private ImageView imager2;
-    @FXML
-    private ImageView imager3;
-    @FXML
-    private ImageView imager4;
-    @FXML
     private ImageView imageM2;
     @FXML
     private ImageView imageP2;
@@ -418,15 +410,8 @@ public class MainFrameController {
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
 
-                ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = repChoose.getItems();
-                ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
-                getlistofrepertorytoprocess.forEach(subFolder -> {
-                    if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
-                        getlistofrepertorytoprocessfiltred.add(subFolder);
-                    }
-                });
-            repChoose.getItems().clear();
-                repChoose.setItems()
+                repChoose.getSelectionModel().selectNext();
+//                populatereChooseChoicebox();
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
@@ -501,47 +486,40 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
-            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT));
-            ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
-            getlistofrepertorytoprocess.forEach(subFolder -> {
-                if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
-                    getlistofrepertorytoprocessfiltred.add(subFolder);
-                }
-            });
-            repChoose.setItems(getlistofrepertorytoprocessfiltred);
+            populatereChooseChoicebox();
         } catch (SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
 
+    private void populatereChooseChoicebox() throws SQLException {
+        repChoose.getItems().clear();
+        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT));
+        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
+        getlistofrepertorytoprocess.forEach(subFolder -> {
+            if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
+                getlistofrepertorytoprocessfiltred.add(subFolder);
+            }
+        });
+        repChoose.setItems(getlistofrepertorytoprocessfiltred);
+        repChoose.getSelectionModel().selectFirst();
+    }
+
     private void refreshcomboxRepertoire() {
 
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
+
+        selectssrepformatZ1.setValue(activeRep.getRepformatZ(1));
+        selectssrepformatZ2.setValue(activeRep.getRepformatZ(2));
+        selectssrepformatZ3.setValue(activeRep.getRepformatZ(3));
+        selectssrepformatZ4.setValue(activeRep.getRepformatZ(4));
 
         selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
         selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
         selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
         selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
 
-        selectssrepformatZ1.setValue(activeRep.getRepformatZ(1));
-        selectssrepformatZ2.setValue(activeRep.getRepformatZ(2));
-        selectssrepformatZ3.setValue(activeRep.getRepformatZ(3));
-        selectssrepformatZ4.setValue(activeRep.getRepformatZ(4));
-    }
-
-    /**
-     * Sets .
-     *
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public void setimagepreview() throws IOException, SQLException {
-        LOGGER.info("setimagepreview");
-        imager1.setImage(activeRep.getimagepreview(1));
-        imager2.setImage(activeRep.getimagepreview(2));
-        imager3.setImage(activeRep.getimagepreview(3));
-        imager4.setImage(activeRep.getimagepreview(4));
     }
 
     private void refreshcompteurRepertoire() {
@@ -826,7 +804,6 @@ public class MainFrameController {
                 datesub.setText(activeRep.getDtdebHumain());
                 refreshActivePhoto();
                 refreshvaleurphoto();
-                setimagepreview();
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);

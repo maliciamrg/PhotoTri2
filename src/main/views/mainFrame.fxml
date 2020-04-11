@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
@@ -69,232 +68,212 @@
         </MenuBar>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="837.0" prefWidth="1205.0" VBox.vgrow="ALWAYS">
             <children>
-                <BorderPane layoutX="274.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                    <bottom>
-                        <AnchorPane prefHeight="0.0" prefWidth="775.0" BorderPane.alignment="CENTER" />
-                    </bottom>
-                    <center>
-                        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="775.0" BorderPane.alignment="CENTER">
-                            <children>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbeleRep1" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
-                                                <Label fx:id="nbeleRep" layoutX="7.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationzeroetoile1" text="zero etoile" />
-                                                <Label fx:id="nbetrationzeroetoile" layoutX="14.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbphotoRep1" text="nbPhoto" />
-                                                <Label fx:id="nbphotoRep" layoutX="9.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationuneetoile1" text="1 etoile" />
-                                                <Label fx:id="nbetrationuneetoile" layoutX="6.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label text="NbJour" />
-                                                <Label fx:id="nbjourrep" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationdeuxetoile1" text="2 etoiles" />
-                                                <Label fx:id="nbetrationdeuxetoile" layoutX="8.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbratiophotoaconcerver1" text="Aconserver" />
-                                                <Label fx:id="ratiophotoaconcerver" layoutX="15.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationtroisetoile1" text="3 etoiles" />
-                                                <Label fx:id="nbetrationtroisetoile" layoutX="8.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbphotoapurger1" text="Apurger" />
-                                                <Label fx:id="nbphotoapurger" layoutX="8.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationquatreetoile1" text="4 etoiles" />
-                                                <Label fx:id="nbetrationquatreetoile" layoutX="8.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                    <children>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbstatusRep1" text="Status" />
-                                                <Label fx:id="statusRep" layoutX="2.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                        <Group>
-                                            <children>
-                                                <Label fx:id="lbnbetrationcinqetoile1" text="5 etoiles" />
-                                                <Label fx:id="nbetrationcinqetoile" layoutX="8.0" layoutY="17.0" text="Label" />
-                                            </children>
-                                        </Group>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                    </center>
-                </BorderPane>
-                <AnchorPane layoutX="14.0" layoutY="14.0">
-                    <children>
-                        <ChoiceBox fx:id="repChoose" onAction="#actionChoose" layoutX="2.0" prefHeight="25.0" prefWidth="226.0" />
-                        <BorderPane layoutY="68.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                            <top>
-                                <AnchorPane prefHeight="644.0" prefWidth="228.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                        <BorderPane layoutX="13.0" layoutY="14.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imager1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="13.0" layoutY="166.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imager2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="13.0" layoutY="318.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imager3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="13.0" layoutY="470.0" style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
-                                            <center>
-                                                <ImageView fx:id="imager4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                    </children>
-                                </AnchorPane>
-                            </top>
-                        </BorderPane>
-                  <Label fx:id="datesub" alignment="CENTER" contentDisplay="CENTER" layoutX="101.0" layoutY="35.0" text="Label" />
-                    </children>
-                </AnchorPane>
-                <AnchorPane layoutX="258.0" layoutY="94.0" prefHeight="663.0" prefWidth="810.0">
-                    <children>
-                        <BorderPane prefHeight="640.0" prefWidth="806.0">
-                     <top>
-                                <AnchorPane BorderPane.alignment="CENTER">
+            <VBox prefHeight="799.0" prefWidth="1113.0">
+               <children>
+                      <AnchorPane prefHeight="70.0" prefWidth="996.0">
+                          <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1113.0">
                            <children>
-                              <TilePane alignment="CENTER" prefHeight="53.0" prefWidth="806.0">
-                                 <children>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="lbselectrepCat" text="Label" />
-                                                    <ChoiceBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="lbselectssrepformatZ1" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="lbselectssrepformatZ2" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="lbselectssrepformatZ3" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="lbselectssrepformatZ4" text="Label" />
-                                                    <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </TilePane>
+                                    <ChoiceBox fx:id="repChoose" onAction="#actionChoose" prefHeight="25.0" prefWidth="713.0" />
+                              <Label fx:id="datesub" alignment="CENTER" contentDisplay="CENTER" text="Label" />
                            </children>
-                                </AnchorPane>
-                     </top>
-                     <bottom>
-                                <AnchorPane prefHeight="351.0" prefWidth="809.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                        <BorderPane layoutX="606.0">
-                                            <center>
-                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop2" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane>
-                                            <center>
-                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom2" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0">
-                                            <center>
-                                                <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="75.0" layoutY="76.0">
-                                            <center>
-                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom1" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <BorderPane layoutX="531.0" layoutY="76.0">
-                                            <center>
-                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
-                                            </center>
-                                        </BorderPane>
-                                        <Text fx:id="imagedestinationcorbeilleorstar" layoutX="290.0" layoutY="111.0" textAlignment="CENTER" wrappingWidth="230.0">
-                                            <font>
-                                                <Font name="Arial" size="30.0" />
-                                            </font>
-                                        </Text>
-                                        <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="135.0" prefHeight="60.0" prefWidth="230.0" />
-                                        <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
-                                        <Circle fx:id="pointeur" fill="#ff1f1f" layoutX="24.0" layoutY="408.0" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
-                                    </children>
-                                </AnchorPane>
-                     </bottom>
-                        </BorderPane>
-                    </children>
-                </AnchorPane>
+                        </HBox>
+                          </children>
+                      </AnchorPane>
+                      <BorderPane style="-fx-border-color: black;     -fx-border-style: solid;     -fx-border-width: 1;">
+                          <bottom>
+                              <AnchorPane prefHeight="0.0" prefWidth="775.0" BorderPane.alignment="CENTER" />
+                          </bottom>
+                          <center>
+                              <HBox alignment="CENTER" prefHeight="30.0" prefWidth="775.0" BorderPane.alignment="CENTER">
+                                  <children>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbeleRep1" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
+                                                      <Label fx:id="nbeleRep" layoutX="7.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationzeroetoile1" text="zero etoile" />
+                                                      <Label fx:id="nbetrationzeroetoile" layoutX="14.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbphotoRep1" text="nbPhoto" />
+                                                      <Label fx:id="nbphotoRep" layoutX="9.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationuneetoile1" text="1 etoile" />
+                                                      <Label fx:id="nbetrationuneetoile" layoutX="6.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label text="NbJour" />
+                                                      <Label fx:id="nbjourrep" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationdeuxetoile1" text="2 etoiles" />
+                                                      <Label fx:id="nbetrationdeuxetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbratiophotoaconcerver1" text="Aconserver" />
+                                                      <Label fx:id="ratiophotoaconcerver" layoutX="15.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationtroisetoile1" text="3 etoiles" />
+                                                      <Label fx:id="nbetrationtroisetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbphotoapurger1" text="Apurger" />
+                                                      <Label fx:id="nbphotoapurger" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationquatreetoile1" text="4 etoiles" />
+                                                      <Label fx:id="nbetrationquatreetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbstatusRep1" text="Status" />
+                                                      <Label fx:id="statusRep" layoutX="2.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                              <Group>
+                                                  <children>
+                                                      <Label fx:id="lbnbetrationcinqetoile1" text="5 etoiles" />
+                                                      <Label fx:id="nbetrationcinqetoile" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                  </children>
+                                              </Group>
+                                          </children>
+                                      </VBox>
+                                  </children>
+                              </HBox>
+                          </center>
+                      </BorderPane>
+                      <AnchorPane prefHeight="663.0" prefWidth="810.0">
+                          <children>
+                              <BorderPane prefHeight="659.0" prefWidth="1113.0">
+                           <top>
+                                      <AnchorPane BorderPane.alignment="CENTER">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1113.0">
+                                       <children>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="lbselectrepCat" text="Label" />
+                                                          <ChoiceBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="lbselectssrepformatZ1" text="Label" />
+                                                          <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="lbselectssrepformatZ2" text="Label" />
+                                                          <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="lbselectssrepformatZ3" text="Label" />
+                                                          <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="lbselectssrepformatZ4" text="Label" />
+                                                          <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                      </AnchorPane>
+                           </top>
+                           <bottom>
+                                      <AnchorPane prefHeight="351.0" prefWidth="809.0" BorderPane.alignment="CENTER">
+                                          <children>
+                                              <BorderPane layoutX="606.0">
+                                                  <center>
+                                                      <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop2" pickOnBounds="true" preserveRatio="true" />
+                                                  </center>
+                                              </BorderPane>
+                                              <BorderPane>
+                                                  <center>
+                                                      <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom2" pickOnBounds="true" preserveRatio="true" />
+                                                  </center>
+                                              </BorderPane>
+                                              <BorderPane layoutX="75.0" layoutY="201.0" prefHeight="405.0" prefWidth="658.0">
+                                                  <center>
+                                                      <ImageView fx:id="imageOne" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                                  </center>
+                                              </BorderPane>
+                                              <BorderPane layoutX="75.0" layoutY="76.0">
+                                                  <center>
+                                                      <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom1" pickOnBounds="true" preserveRatio="true" />
+                                                  </center>
+                                              </BorderPane>
+                                              <BorderPane layoutX="531.0" layoutY="76.0">
+                                                  <center>
+                                                      <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
+                                                  </center>
+                                              </BorderPane>
+                                              <Text fx:id="imagedestinationcorbeilleorstar" layoutX="290.0" layoutY="111.0" textAlignment="CENTER" wrappingWidth="230.0">
+                                                  <font>
+                                                      <Font name="Arial" size="30.0" />
+                                                  </font>
+                                              </Text>
+                                              <Label fx:id="imagedestinationinformation" layoutX="290.0" layoutY="135.0" prefHeight="60.0" prefWidth="230.0" />
+                                              <Button fx:id="valid" layoutX="739.0" layoutY="541.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
+                                              <Circle fx:id="pointeur" fill="#ff1f1f" layoutX="24.0" layoutY="408.0" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
+                                          </children>
+                                      </AnchorPane>
+                           </bottom>
+                              </BorderPane>
+                          </children>
+                      </AnchorPane>
+               </children>
+            </VBox>
             </children>
         </AnchorPane>
         <HBox prefHeight="58.0" prefWidth="1113.0" />

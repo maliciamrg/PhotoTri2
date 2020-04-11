@@ -27,7 +27,7 @@ public class AgLibrarySubFolder  {
     public static final String KO = "------";
     private String pathFromRoot;
     private Logger logger;
-    private Map<Integer, String> repformatZ = new HashMap();
+    public Map<Integer, String> repformatZ = new HashMap();
     private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
