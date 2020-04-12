@@ -389,11 +389,11 @@ public class AgLibrarySubFolder {
 
         if (nbphotoRep > 0) {
 
-            statusRep = statuStar(statusRep, nbetrationuneetoile,ratioMax1s);
-            statusRep = statuStar(statusRep, nbetrationdeuxetoile,ratioMax2s);
-            statusRep = statuStar(statusRep, nbetrationtroisetoile,ratioMax3s);
-            statusRep = statuStar(statusRep, nbetrationquatreetoile,ratioMax4s);
-            statusRep = statuStar(statusRep, nbetrationcinqetoile,ratioMax5s);
+            statusRep = statuStar(statusRep, nbetrationuneetoile, ratioMax1s);
+            statusRep = statuStar(statusRep, nbetrationdeuxetoile, ratioMax2s);
+            statusRep = statuStar(statusRep, nbetrationtroisetoile, ratioMax3s);
+            statusRep = statuStar(statusRep, nbetrationquatreetoile, ratioMax4s);
+            statusRep = statuStar(statusRep, nbetrationcinqetoile, ratioMax5s);
 
         }
 
