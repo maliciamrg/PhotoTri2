@@ -602,10 +602,32 @@ public class AgLibrarySubFolder {
                 activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
                 activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
                 break;
+            case -3:
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                break;
+            case -4:
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
+                break;
             case +1:
                 activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
                 break;
             case +2:
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                break;
+            case +3:
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                break;
+            case +4:
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
+                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
                 activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
                 activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
                 break;
@@ -624,8 +646,12 @@ public class AgLibrarySubFolder {
         activephotoNum.put(zero, activephotoNumsetZero);
         activephotoNum.put(zero + 1, getnextphotonumfrom(activephotoNum.get(zero)));
         activephotoNum.put(zero + 2, getnextphotonumfrom(activephotoNum.get(zero + 1)));
+        activephotoNum.put(zero + 3, getnextphotonumfrom(activephotoNum.get(zero + 2)));
+        activephotoNum.put(zero + 4, getnextphotonumfrom(activephotoNum.get(zero + 3)));
         activephotoNum.put(zero - 1, getprevphotonumfrom(activephotoNum.get(zero)));
         activephotoNum.put(zero - 2, getprevphotonumfrom(activephotoNum.get(zero - 1)));
+        activephotoNum.put(zero - 3, getprevphotonumfrom(activephotoNum.get(zero - 2)));
+        activephotoNum.put(zero - 4, getprevphotonumfrom(activephotoNum.get(zero - 3)));
 
         activeNum = activephotoNum.get(zero);
 

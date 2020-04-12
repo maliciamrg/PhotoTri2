@@ -90,19 +90,27 @@ public class MainFrameController {
     @FXML
     private ChoiceBox<AgLibrarySubFolder> repChoose;
     @FXML
-    private ImageView imageM2;
+    private ImageView imageM4;
     @FXML
-    private ImageView imageP2;
+    private ImageView imageM3;
+    @FXML
+    private ImageView imageM2;
     @FXML
     private ImageView imageM1;
     @FXML
     private ImageView imageP1;
     @FXML
+    private ImageView imageP2;
+    @FXML
+    private ImageView imageP3;
+    @FXML
+    private ImageView imageP4;
+    @FXML
     private ImageView imageOne;
     @FXML
-    private Text imagedestinationcorbeilleorstar;
+    private Text imageM1star;
     @FXML
-    private Label imagedestinationinformation;
+    private Label imageOnestar;
     @FXML
     private Label datesub;
     @FXML
@@ -541,6 +549,13 @@ public class MainFrameController {
 
     private void refreshActivePhoto() throws IOException {
         LOGGER.info("refresh");
+
+        imageM4.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-4)));
+        imageM4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-4)));
+
+        imageM3.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-3)));
+        imageM3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-3)));
+
         imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-2)));
 
@@ -555,14 +570,20 @@ public class MainFrameController {
 
         imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(2)));
         imageP2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(2)));
+
+        imageP3.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(3)));
+        imageP3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(3)));
+
+        imageP4.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(4)));
+        imageP4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(4)));
     }
 
     private void refreshvaleurphoto() {
-        imagedestinationcorbeilleorstar.setText(activeRep.getActivephotoValeur());
-        imagedestinationcorbeilleorstar.setFont(new Font("Wingdings", 30));
-        imagedestinationcorbeilleorstar.setSmooth(true);
-        imagedestinationcorbeilleorstar.setFontSmoothingType(FontSmoothingType.LCD);
-        imagedestinationinformation.setText(activeRep.getactivephotovaleurlibelle());
+        imageM1star.setText(activeRep.getActivephotoValeur());
+        imageM1star.setFont(new Font("Wingdings", 30));
+        imageM1star.setSmooth(true);
+        imageM1star.setFontSmoothingType(FontSmoothingType.LCD);
+        imageOnestar.setText(activeRep.getactivephotovaleurlibelle());
     }
 
     /**
@@ -618,12 +639,27 @@ public class MainFrameController {
     }
 
     /**
-     * Action active photop 2.
+     * Action active photom 4.
      */
     @FXML
-    public void actionActivePhotop2() {
+    public void actionActivePhotom4() {
         try {
-            activeRep.moveActivephotoNumTo(+2);
+            activeRep.moveActivephotoNumTo(-4);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    /**
+     * Action active photom 3.
+     */
+    @FXML
+    public void actionActivePhotom3() {
+        try {
+            activeRep.moveActivephotoNumTo(-3);
             refreshActivePhoto();
             refreshvaleurphoto();
         } catch (IOException e) {
@@ -678,6 +714,51 @@ public class MainFrameController {
 
     }
 
+    /**
+     * Action active photop 2.
+     */
+    @FXML
+    public void actionActivePhotop2() {
+        try {
+            activeRep.moveActivephotoNumTo(+2);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
+
+    /**
+     * Action active photop 3.
+     */
+    @FXML
+    public void actionActivePhotop3() {
+        try {
+            activeRep.moveActivephotoNumTo(+3);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+
+    }
+
+    /**
+     * Action active photop 4.
+     */
+    @FXML
+    public void actionActivePhotop4() {
+        try {
+            activeRep.moveActivephotoNumTo(+4);
+            refreshActivePhoto();
+            refreshvaleurphoto();
+        } catch (IOException e) {
+            popupalertException(e);
+            excptlog(e);
+        }
+    }
 
     /**
      * Start.
