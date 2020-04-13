@@ -284,4 +284,18 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         listeZ.put(numListeZ, listetmp);
     }
 
+    public ObservableList<String> getlistofKeyword(String racinegenealogy) throws SQLException {
+        ObservableList<String> list_lc_name = FXCollections.observableArrayList();
+        ResultSet rs = this.select("select lc_name " +
+                "from AgLibraryKeyword " +
+                "where genealogy like ( " +
+                "select '/%_' || id_local || '/%' " +
+                "from  AgLibraryKeyword " +
+                "where lc_name = '" + racinegenealogy.toLowerCase() + "' ) " +
+                ";");
+        while (rs.next()) {
+            list_lc_name.add(rs.getString("lc_name"));
+        }
+        return list_lc_name;
+    }
 }

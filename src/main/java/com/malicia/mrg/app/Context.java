@@ -37,6 +37,12 @@ public class Context implements Serializable {
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static HashMap<Integer, String> formatZ = new HashMap();
+    public static Integer divMaxToMinstar;
+    public static Integer ratioMax1s;
+    public static Integer ratioMax2s;
+    public static Integer ratioMax3s;
+    public static Integer ratioMax4s;
+    public static Integer ratioMax5s;
     private static Logger LOGGER;
     /**
      * The constant currentContext.
@@ -45,12 +51,6 @@ public class Context implements Serializable {
     private static String localVoidPhotoUrl;
     private static String localErr404PhotoUrl;
     private static String localErrPhotoUrl;
-    public static Integer divMaxToMinstar;
-    public static Integer ratioMax1s;
-    public static Integer ratioMax2s;
-    public static Integer ratioMax3s;
-    public static Integer ratioMax4s;
-    public static Integer ratioMax5s;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -120,12 +120,12 @@ public class Context implements Serializable {
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 
-         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
-         ratioMax1s = Integer.parseInt(Context.appParam.getString("ratioMax1s"));
-         ratioMax2s = Integer.parseInt(Context.appParam.getString("ratioMax2s"));
-         ratioMax3s = Integer.parseInt(Context.appParam.getString("ratioMax3s"));
-         ratioMax4s = Integer.parseInt(Context.appParam.getString("ratioMax4s"));
-         ratioMax5s = Integer.parseInt(Context.appParam.getString("ratioMax5s"));
+        divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
+        ratioMax1s = Integer.parseInt(Context.appParam.getString("ratioMax1s"));
+        ratioMax2s = Integer.parseInt(Context.appParam.getString("ratioMax2s"));
+        ratioMax3s = Integer.parseInt(Context.appParam.getString("ratioMax3s"));
+        ratioMax4s = Integer.parseInt(Context.appParam.getString("ratioMax4s"));
+        ratioMax5s = Integer.parseInt(Context.appParam.getString("ratioMax5s"));
 
     }
 
@@ -161,7 +161,7 @@ public class Context implements Serializable {
         return Context.appParam.getString("urlgitwiki");
     }
 
-    public static ObservableList<String> getlistofx(String key) {
+    public static ObservableList<String> getlistofx(String key) throws SQLException {
         if (appParam.containsKey(key)) {
             return FXCollections.observableArrayList(appParam.getString(key).split(","));
         } else {
@@ -174,7 +174,15 @@ public class Context implements Serializable {
                     ret.add(key);
                 }
             } else {
-                ret.add(key);
+                String[] decript2 = key.split("@");
+                if (decript2.length > 1) {
+                    String[] decript3 = decript2[1].split("[|]");
+                    for(int i = 0; i< decript3.length; i++){
+                        ret.addAll(lrcat.getlistofKeyword(decript3[i]));
+                    }
+                } else {
+                    ret.add(key);
+                }
             }
             return ret;
         }
