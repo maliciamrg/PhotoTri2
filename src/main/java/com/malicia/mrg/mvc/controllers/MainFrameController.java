@@ -108,9 +108,23 @@ public class MainFrameController {
     @FXML
     private ImageView imageOne;
     @FXML
+    private Text imageM4star;
+    @FXML
+    private Text imageM3star;
+    @FXML
+    private Text imageM2star;
+    @FXML
     private Text imageM1star;
     @FXML
-    private Label imageOnestar;
+    private Text imageOnestar;
+    @FXML
+    private Text imageP1star;
+    @FXML
+    private Text imageP2star;
+    @FXML
+    private Text imageP3star;
+    @FXML
+    private Text imageP4star;
     @FXML
     private Label datesub;
     @FXML
@@ -579,11 +593,22 @@ public class MainFrameController {
     }
 
     private void refreshvaleurphoto() {
-        imageM1star.setText(activeRep.getActivephotoValeur());
-        imageM1star.setFont(new Font("Wingdings", 30));
-        imageM1star.setSmooth(true);
-        imageM1star.setFontSmoothingType(FontSmoothingType.LCD);
-        imageOnestar.setText(activeRep.getactivephotovaleurlibelle());
+        displayStarValueAndLibelle(imageM4star, activeRep.getActivephotoNum(-4));
+        displayStarValueAndLibelle(imageM3star, activeRep.getActivephotoNum(-3));
+        displayStarValueAndLibelle(imageM2star, activeRep.getActivephotoNum(-2));
+        displayStarValueAndLibelle(imageM1star, activeRep.getActivephotoNum(-1));
+        displayStarValueAndLibelle(imageOnestar, activeRep.getActiveNum());
+        displayStarValueAndLibelle(imageP1star, activeRep.getActivephotoNum(+1));
+        displayStarValueAndLibelle(imageP2star, activeRep.getActivephotoNum(+2));
+        displayStarValueAndLibelle(imageP3star, activeRep.getActivephotoNum(+3));
+        displayStarValueAndLibelle(imageP4star, activeRep.getActivephotoNum(+4));
+    }
+
+    private  void displayStarValueAndLibelle(Text imagestar, int activeNum) {
+        imagestar.setText(activeRep.getActivephotoValeur(activeNum));
+        imagestar.setFont(new Font("Wingdings",10));
+        imagestar.setSmooth(true);
+        imagestar.setFontSmoothingType(FontSmoothingType.LCD);
     }
 
     /**

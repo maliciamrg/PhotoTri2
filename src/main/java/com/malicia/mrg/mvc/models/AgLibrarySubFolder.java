@@ -217,32 +217,6 @@ public class AgLibrarySubFolder {
     }
 
     /**
-     * Gets .
-     *
-     * @return the
-     */
-    public String getactivephotovaleurlibelle() {
-        switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
-            case -1:
-                return Context.appParam.getString("valeurCorbeille");
-            case 0:
-                return Context.appParam.getString("valeurZero__");
-            case 1:
-                return Context.appParam.getString("valeur1star_");
-            case 2:
-                return Context.appParam.getString("valeur2stars");
-            case 3:
-                return Context.appParam.getString("valeur3stars");
-            case 4:
-                return Context.appParam.getString("valeur4stars");
-            case 5:
-                return Context.appParam.getString("valeur5stars");
-            default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
-        }
-    }
-
-    /**
      * Valeuractivephotoincrease.
      */
     public void valeuractivephotoincrease() {
@@ -530,28 +504,34 @@ public class AgLibrarySubFolder {
     /**
      * Gets activephoto valeur.
      *
+     * @param activeNum
      * @return the activephoto valeur
      */
-    public String getActivephotoValeur() {
+    public String getActivephotoValeur(int activeNum) {
+
+        if (activeNum == -1 || activeNum > listFileSubFolder.size() -1 ) {
+            return "---";
+        }
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 ";
+                return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + Context.appParam.getString("valeurCorbeille");
             case 0:
-                return "           ";
+                return "           " + "\n" + Context.appParam.getString("valeurZero__");
             case 1:
-                return " ★         ";
+                return " ★         " + "\n" + Context.appParam.getString("valeur1star_");
             case 2:
-                return " ★ ★       ";
+                return " ★ ★       " + "\n" + Context.appParam.getString("valeur2stars");
             case 3:
-                return " ★ ★ ★     ";
+                return " ★ ★ ★     " + "\n" + Context.appParam.getString("valeur3stars");
             case 4:
-                return " ★ ★ ★ ★   ";
+                return " ★ ★ ★ ★   " + "\n" + Context.appParam.getString("valeur4stars");
             case 5:
-                return " ★ ★ ★ ★ ★ ";
+                return " ★ ★ ★ ★ ★ " + "\n" + Context.appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
     }
+
 
     /**
      * Gets status rep.
