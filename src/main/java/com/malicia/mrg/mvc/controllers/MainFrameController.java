@@ -564,31 +564,31 @@ public class MainFrameController {
     private void refreshActivePhoto() throws IOException {
         LOGGER.info("refresh");
 
-        imageM4.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-4)));
+        imageM4.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-4)));
         imageM4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-4)));
 
-        imageM3.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-3)));
+        imageM3.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-3)));
         imageM3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-3)));
 
-        imageM2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-2)));
+        imageM2.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-2)));
         imageM2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-2)));
 
-        imageM1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(-1)));
+        imageM1.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-1)));
         imageM1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-1)));
 
-        imageOne.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(0)));
+        imageOne.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(0)));
         imageOne.setRotate(activeRep.getRotateFromActivephotonum());
 
-        imageP1.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(1)));
+        imageP1.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(1)));
         imageP1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(1)));
 
-        imageP2.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(2)));
+        imageP2.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(2)));
         imageP2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(2)));
 
-        imageP3.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(3)));
+        imageP3.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(3)));
         imageP3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(3)));
 
-        imageP4.setImage(activeRep.getimagenumero(activeRep.getActivephotoNum(4)));
+        imageP4.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(4)));
         imageP4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(4)));
     }
 
