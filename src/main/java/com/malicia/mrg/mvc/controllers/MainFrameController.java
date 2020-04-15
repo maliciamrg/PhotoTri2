@@ -859,7 +859,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(0, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(0,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
         refreshcompteurRepertoire();
     }
 
@@ -869,7 +869,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(1,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
 
         refreshcompteurRepertoire();
     }
@@ -880,7 +880,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(2, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
         refreshcompteurRepertoire();
 
     }
@@ -891,7 +891,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(3,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
         refreshcompteurRepertoire();
 
     }
