@@ -20,12 +20,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import org.apache.tools.ant.DirectoryScanner;
-import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.File;
@@ -547,26 +547,51 @@ public class MainFrameController {
 
     private void refreshcompteurRepertoire() {
         activeRep.refreshCompteur();
+
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
         nbjourrep.setText(activeRep.getNbjourfolder());
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
         nbphotoapurger.setText(activeRep.getNbphotoapurger());
-        statusRep.setText(activeRep.getStatusRep());
 
-        alimetcolorlabelinfo(0, nbetrationzeroetoile);
-        alimetcolorlabelinfo(1, nbetrationuneetoile);
-        alimetcolorlabelinfo(2, nbetrationdeuxetoile);
-        alimetcolorlabelinfo(3, nbetrationtroisetoile);
-        alimetcolorlabelinfo(4, nbetrationquatreetoile);
-        alimetcolorlabelinfo(5, nbetrationcinqetoile);
+        alimetcolorlabelstatus(statusRep);
+
+        alimetcolorlabeletoile(0, nbetrationzeroetoile);
+        alimetcolorlabeletoile(1, nbetrationuneetoile);
+        alimetcolorlabeletoile(2, nbetrationdeuxetoile);
+        alimetcolorlabeletoile(3, nbetrationtroisetoile);
+        alimetcolorlabeletoile(4, nbetrationquatreetoile);
+        alimetcolorlabeletoile(5, nbetrationcinqetoile);
+
+        colorlabelzonez(lbselectssrepformatZ1,selectssrepformatZ1);
+        colorlabelzonez(lbselectssrepformatZ2,selectssrepformatZ2);
+        colorlabelzonez(lbselectssrepformatZ3,selectssrepformatZ3);
+        colorlabelzonez(lbselectssrepformatZ4,selectssrepformatZ4);
 
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
-    private void alimetcolorlabelinfo(int n, Label champs) {
+    private void colorlabelzonez(Label champs, ComboBox<String> selectssrepformatZ) {
+        if (!selectssrepformatZ.getValue().equals("")) {
+            champs.setTextFill(Color.BLACK);
+        } else {
+            champs.setTextFill(Color.RED);
+        }
+        champs.setText(activeRep.getStatusRep());
+    }
+
+    private void alimetcolorlabelstatus(Label champs) {
+        if (activeRep.getStatusRep().equals(AgLibrarySubFolder.OK)) {
+            champs.setTextFill(Color.BLACK);
+        } else {
+            champs.setTextFill(Color.RED);
+        }
+        champs.setText(activeRep.getStatusRep());
+    }
+
+    private void alimetcolorlabeletoile(int n, Label champs) {
         String[] ret = activeRep.nbetratiovaleur(n).split("@");
-        if (ret[1].compareTo("0")==0){
+        if (ret[1].compareTo("0") == 0) {
             champs.setTextFill(Color.BLACK);
         } else {
             champs.setTextFill(Color.RED);
@@ -617,9 +642,9 @@ public class MainFrameController {
         displayStarValueAndLibelle(imageP4star, activeRep.getActivephotoNum(+4));
     }
 
-    private  void displayStarValueAndLibelle(Text imagestar, int activeNum) {
+    private void displayStarValueAndLibelle(Text imagestar, int activeNum) {
         imagestar.setText(activeRep.getActivephotoValeur(activeNum));
-        imagestar.setFont(new Font("Wingdings",10));
+        imagestar.setFont(new Font("Wingdings", 10));
         imagestar.setSmooth(true);
         imagestar.setFontSmoothingType(FontSmoothingType.LCD);
     }
@@ -872,7 +897,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(0,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
+        activeRep.setrepformatZ(0, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
         refreshcompteurRepertoire();
     }
 
@@ -882,7 +907,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
+        activeRep.setrepformatZ(1, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
 
         refreshcompteurRepertoire();
     }
@@ -904,7 +929,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3,  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
+        activeRep.setrepformatZ(3, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
         refreshcompteurRepertoire();
 
     }
