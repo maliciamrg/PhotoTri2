@@ -25,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import org.apache.tools.ant.DirectoryScanner;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.File;
@@ -552,13 +553,25 @@ public class MainFrameController {
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
         nbphotoapurger.setText(activeRep.getNbphotoapurger());
         statusRep.setText(activeRep.getStatusRep());
-        nbetrationzeroetoile.setText(activeRep.nbetratiovaleur(0));
-        nbetrationuneetoile.setText(activeRep.nbetratiovaleur(1));
-        nbetrationdeuxetoile.setText(activeRep.nbetratiovaleur(2));
-        nbetrationtroisetoile.setText(activeRep.nbetratiovaleur(3));
-        nbetrationquatreetoile.setText(activeRep.nbetratiovaleur(4));
-        nbetrationcinqetoile.setText(activeRep.nbetratiovaleur(5));
+
+        alimetcolorlabelinfo(0, nbetrationzeroetoile);
+        alimetcolorlabelinfo(1, nbetrationuneetoile);
+        alimetcolorlabelinfo(2, nbetrationdeuxetoile);
+        alimetcolorlabelinfo(3, nbetrationtroisetoile);
+        alimetcolorlabelinfo(4, nbetrationquatreetoile);
+        alimetcolorlabelinfo(5, nbetrationcinqetoile);
+
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
+    }
+
+    private void alimetcolorlabelinfo(int n, Label champs) {
+        String[] ret = activeRep.nbetratiovaleur(n).split("@");
+        if (ret[1].compareTo("0")==0){
+            champs.setTextFill(Color.BLACK);
+        } else {
+            champs.setTextFill(Color.RED);
+        }
+        champs.setText(ret[2]);
     }
 
     private void refreshActivePhoto() throws IOException {

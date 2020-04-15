@@ -446,7 +446,13 @@ public class AgLibrarySubFolder {
         } else {
             percent = ((double) nb / nbphotoRep);
         }
-        return " " + String.format("%02d", nb) + " = " + df.format(percent) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
+        String color;
+        if (nb >= countmin && nb <= countmax) {
+            color = "0";
+        } else {
+            color = "1";
+        }
+        return "@" + color + "@ " + String.format("%02d", nb) + " = " + df.format(percent) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
     }
 
     /**
@@ -701,7 +707,7 @@ public class AgLibrarySubFolder {
                     alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
                     alert.setContentText("Choose Keyword Master in " + cursubFolderFormatZ.titreZone);
 
-                    ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size()+1];
+                    ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
                     int ii;
                     for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
                         buttonType[ii] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(ii));
@@ -714,7 +720,7 @@ public class AgLibrarySubFolder {
 
                     for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
                         if (result.get() == buttonType[ii]) {
-                            lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii),cursubFolderFormatZ.getLocalValue());
+                            lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii), cursubFolderFormatZ.getLocalValue());
                             lrcat.setListeZ();
                         }
                     }
@@ -798,7 +804,7 @@ public class AgLibrarySubFolder {
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
             if (personalizelist(subFolderFormatZ.get(i)).contains(part[i])) {
-                setrepformatZ(i , part[i]);
+                setrepformatZ(i, part[i]);
             }
         }
 
