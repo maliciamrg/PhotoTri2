@@ -532,15 +532,15 @@ public class MainFrameController {
 
         selectrepCat.getSelectionModel().select(activeRep.getCatFolder());
 
-        selectssrepformatZ1.setValue(activeRep.getRepformatZ(1));
-        selectssrepformatZ2.setValue(activeRep.getRepformatZ(2));
-        selectssrepformatZ3.setValue(activeRep.getRepformatZ(3));
-        selectssrepformatZ4.setValue(activeRep.getRepformatZ(4));
+        selectssrepformatZ1.setValue(activeRep.getRepformatZ(0));
+        selectssrepformatZ2.setValue(activeRep.getRepformatZ(1));
+        selectssrepformatZ3.setValue(activeRep.getRepformatZ(2));
+        selectssrepformatZ4.setValue(activeRep.getRepformatZ(3));
 
-        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
-        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
-        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
-        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(4)));
+        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.ListeZ.get(0)));
+        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.ListeZ.get(1)));
+        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.ListeZ.get(2)));
+        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.ListeZ.get(3)));
 
     }
 
@@ -805,19 +805,16 @@ public class MainFrameController {
         }
         selectrepCat.setItems(listRootfolder);
 
-        lrcat.setListeZ(1);
-        lrcat.setListeZ(2);
-        lrcat.setListeZ(3);
-        lrcat.setListeZ(4);
+        lrcat.setListeZ();
 
-        lbselectssrepformatZ1.setText(Context.formatZ.get(1));
-        selectssrepformatZ1.setItems(lrcat.listeZ.get(1));
-        lbselectssrepformatZ2.setText(Context.formatZ.get(2));
-        selectssrepformatZ2.setItems(lrcat.listeZ.get(2));
-        lbselectssrepformatZ3.setText(Context.formatZ.get(3));
-        selectssrepformatZ3.setItems(lrcat.listeZ.get(3));
-        lbselectssrepformatZ4.setText(Context.formatZ.get(4));
-        selectssrepformatZ4.setItems(lrcat.listeZ.get(4));
+        lbselectssrepformatZ1.setText(lrcat.ListeZ.get(0).titreZone);
+        selectssrepformatZ1.setItems(lrcat.ListeZ.get(0).listeEleZone);
+        lbselectssrepformatZ2.setText(lrcat.ListeZ.get(1).titreZone);
+        selectssrepformatZ2.setItems(lrcat.ListeZ.get(1).listeEleZone);
+        lbselectssrepformatZ3.setText(lrcat.ListeZ.get(2).titreZone);
+        selectssrepformatZ3.setItems(lrcat.ListeZ.get(2).listeEleZone);
+        lbselectssrepformatZ4.setText(lrcat.ListeZ.get(3).titreZone);
+        selectssrepformatZ4.setItems(lrcat.ListeZ.get(3).listeEleZone);
 
 
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
@@ -862,7 +859,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(0, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
     }
 
@@ -872,7 +869,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(1, ((ComboBox) actionEvent.getTarget()).getValue().toString());
 
         refreshcompteurRepertoire();
     }
@@ -883,7 +880,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(2, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
 
     }
@@ -894,7 +891,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(4, ((ComboBox) actionEvent.getTarget()).getValue().toString());
+        activeRep.setrepformatZ(3, ((ComboBox) actionEvent.getTarget()).getValue().toString());
         refreshcompteurRepertoire();
 
     }
@@ -902,6 +899,7 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
+            activeRep.refreshValue();
             if (activeRep != null) {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
                 refreshcompteurRepertoire();

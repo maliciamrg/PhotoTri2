@@ -12,12 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.malicia.mrg.app.Context.formatZ;
+import java.util.*;
 
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
@@ -27,7 +22,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     public String nomFichier;
     public Map<String, AgLibraryRootFolder> rep = new HashMap();
     public String cheminfichierLrcat = "";
-    public Map<Integer, ObservableList<String>> listeZ = new HashMap();
+    public List<ZoneZ> ListeZ;
 
     public CatalogLrcat(String catalogLrcat) throws SQLException {
         super(catalogLrcat);
@@ -211,6 +206,34 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         return idLocalCalcul;
     }
 
+    public long sqlGetPrevIdlocalforKeyword() throws SQLException {
+        String sql = "select * FROM AgLibraryKeyword " +
+                "ORDER by id_local desc " +
+                "; ";
+        ResultSet rs = select(sql);
+        boolean first = true;
+        long idLocalCalcul = 0;
+        long id_local = 0;
+        while (rs.next()) {
+            // Recuperer les info de l'elements
+            id_local = rs.getLong("id_local");
+            if (first) {
+                idLocalCalcul = id_local;
+                first = false;
+            } else {
+                idLocalCalcul -= 1;
+                if (idLocalCalcul > id_local) {
+                    return idLocalCalcul;
+                }
+            }
+        }
+        // 0 ou 1 repertoire dans AgLibraryFolder
+        if (idLocalCalcul == id_local) {
+            idLocalCalcul = (id_local / 2) + 1;
+        }
+        return idLocalCalcul;
+    }
+
     public int openLigthroomLrcatandWait() throws IOException, InterruptedException {
         // open ligthroom catalog
         disconnect();
@@ -259,29 +282,46 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
     }
 
 
-    public void setListeZ(int numListeZ) throws SQLException {
-        ObservableList<String> listetmp = Context.getlistofx(Context.formatZ.get(numListeZ));
+    public void setListeZ() throws SQLException {
+        //array des format de zones
+        int numformatZ = 1;
+        ListeZ = new ArrayList<ZoneZ>();
+        for (String ssrepformatZ : Context.appParam.getString("ssrepformatZx").split(",")) {
 
-        if (!(listetmp.size() == 1 && listetmp.get(0).startsWith("%") && listetmp.get(0).endsWith("%"))) {
-            ObservableList<String> listeleFromCat = FXCollections.observableArrayList();
+            ObservableList<String> listetmp = FXCollections.observableArrayList();
 
-            ObservableList<String> listSubCat = getlistofpathFromRoottoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_CAT));
-            listSubCat.forEach(subFolder -> {
-
-                String[] part = subFolder.split(Context.appParam.getString("ssrepformatSep"));
-                if (part.length == formatZ.size()) {
-                    String elez = Context.appParam.getString("caractsup") + part[numListeZ - 1].replace("/", "");
-                    if (!listeleFromCat.contains(elez)) {
-                        listeleFromCat.add(elez);
+            String typ;
+            List<String> keyMaitre = new ArrayList<String>();
+            switch (ssrepformatZ.substring(0, 1) + ssrepformatZ.substring(ssrepformatZ.length() - 1)) {
+                case "££":
+                    typ = "£";
+                    String[] decript1 = ssrepformatZ.split("£");
+                    listetmp.add(decript1[1]);
+                    break;
+                case "%%":
+                    String[] decript = ssrepformatZ.split("%");
+                    typ = "%";
+                    listetmp = FXCollections.observableArrayList(Context.appParam.getString(decript[1]).split(","));
+                    break;
+                case "@@":
+                    String[] decript2 = ssrepformatZ.split("@");
+                    typ = "@";
+                    String[] decript3 = decript2[1].split("[|]");
+                    for (int i = 0; i < decript3.length; i++) {
+                        keyMaitre.add(decript3[i]);
+                        listetmp.addAll(Context.lrcat.getlistofKeyword(decript3[i]));
                     }
-                }
+                    break;
+                default:
+                    typ = " ";
+                    listetmp.add(ssrepformatZ);
+                    break;
+            }
 
-            });
+            ListeZ.add(new ZoneZ(typ, ssrepformatZ, listetmp, keyMaitre));
 
-            listetmp.addAll(listeleFromCat);
+            numformatZ += 1;
         }
-
-        listeZ.put(numListeZ, listetmp);
     }
 
     public ObservableList<String> getlistofKeyword(String racinegenealogy) throws SQLException {
@@ -297,5 +337,27 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             list_lc_name.add(rs.getString("lc_name"));
         }
         return list_lc_name;
+    }
+
+    public void sqlcreateKeyword(String keywordmaitre, String keyword) throws SQLException {
+
+        ResultSet rs = this.select("select id_local , genealogy " +
+                "from  AgLibraryKeyword " +
+                "where lc_name = '" + keywordmaitre.toLowerCase() + "' ");
+        String genealogyMaitre = "";
+        String idlocalmaitre = "";
+        while (rs.next()) {
+            genealogyMaitre = rs.getString("genealogy");
+            idlocalmaitre = rs.getString("id_local");
+        }
+
+        long idlocal = sqlGetPrevIdlocalforKeyword();
+        String sql = "INSERT INTO AgLibraryKeyword (id_local, id_global, dateCreated, " +
+                "genealogy, imageCountCache, includeOnExport, includeParents, includeSynonyms, " +
+                "keywordType, lastApplied, lc_name, name, parent) " +
+                "VALUES (" + idlocal + " , '" + UUID.randomUUID().toString() + "', '608509497.846982', " +
+                "'" + genealogyMaitre + "/7" + idlocal + "', '', '1', '1', '1', " +
+                "'', '', '" + keyword.toLowerCase() + "', '" + keyword + "', '" + idlocalmaitre + "');";
+        executeUpdate(sql);
     }
 }

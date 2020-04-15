@@ -36,7 +36,6 @@ public class Context implements Serializable {
     private static final long serialVersionUID = 1L;
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
-    public static HashMap<Integer, String> formatZ = new HashMap();
     public static Integer divMaxToMinstar;
     public static Integer ratioMax1s;
     public static Integer ratioMax2s;
@@ -111,13 +110,6 @@ public class Context implements Serializable {
 
         Context.initPropertiesParameters();
 
-        //array des format de zones
-        int numformatZ = 1;
-        for (String ssrepformatZ : Context.appParam.getString("ssrepformatZx").split(",")) {
-            formatZ.put(numformatZ, ssrepformatZ);
-            numformatZ += 1;
-        }
-
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
@@ -161,30 +153,4 @@ public class Context implements Serializable {
         return Context.appParam.getString("urlgitwiki");
     }
 
-    public static ObservableList<String> getlistofx(String key) throws SQLException {
-        if (appParam.containsKey(key)) {
-            return FXCollections.observableArrayList(appParam.getString(key).split(","));
-        } else {
-            ObservableList<String> ret = FXCollections.observableArrayList();
-            String[] decript = key.split("%");
-            if (decript.length > 1) {
-                if (appParam.containsKey(decript[1])) {
-                    return FXCollections.observableArrayList(appParam.getString(decript[1]).split(","));
-                } else {
-                    ret.add(key);
-                }
-            } else {
-                String[] decript2 = key.split("@");
-                if (decript2.length > 1) {
-                    String[] decript3 = decript2[1].split("[|]");
-                    for(int i = 0; i< decript3.length; i++){
-                        ret.addAll(lrcat.getlistofKeyword(decript3[i]));
-                    }
-                } else {
-                    ret.add(key);
-                }
-            }
-            return ret;
-        }
-    }
 }

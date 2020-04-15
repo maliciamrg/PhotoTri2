@@ -4,6 +4,9 @@ import com.malicia.mrg.app.Context;
 import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -27,7 +30,7 @@ public class AgLibrarySubFolder {
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "------";
-    public Map<Integer, String> repformatZ = new HashMap();
+    public List<ZoneZ> subFolderFormatZ;
     public AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
     private Logger logger;
@@ -108,29 +111,14 @@ public class AgLibrarySubFolder {
             listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
         }
 
-        for (Integer key : Context.formatZ.keySet()) {
-            if (!repformatZ.containsKey(key)) {
-                repformatZ.put(key, "");
-            }
-        }
 
-        refreshCompteur();
-
-        String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
-        int i;
-        for (i = 0; i < part.length && i < agLibraryRootFolder.parentLrcat.listeZ.size(); i++) {
-            if (personalizelist(agLibraryRootFolder.parentLrcat.listeZ.get(i + 1)).contains(part[i])) {
-                setrepformatZ(i + 1, part[i]);
-            }
-        }
-
-        calculStatusRep();
+        refreshValue();
 
 
     }
 
     public String getRepformatZ(int i) {
-        return repformatZ.get(i);
+        return subFolderFormatZ.get(i).getLocalValue();
     }
 
     public int getNbphotoRep() {
@@ -345,15 +333,10 @@ public class AgLibrarySubFolder {
 
     private void calculStatusRep() {
         statusRep = OK;
-        for (Integer key : Context.formatZ.keySet()) {
-            if (!repformatZ.containsKey(key)) {
+        int i;
+        for (i = 0; i < subFolderFormatZ.size(); i++) {
+            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
                 statusRep = KO;
-            } else {
-                if (repformatZ.get(key).compareTo("") == 0) {
-                    statusRep = KO;
-                }
-            }
-            if (statusRep.compareTo(KO) == 0) {
                 break;
             }
         }
@@ -393,11 +376,14 @@ public class AgLibrarySubFolder {
 
 
         pathFromRoot = "";
-        for (Integer key : Context.formatZ.keySet()) {
-            if (repformatZ.containsKey(key) && repformatZ.get(key).compareTo("") != 0) {
-                pathFromRoot += repformatZ.get(key).replace(Context.appParam.getString("caractsup"), "") + Context.appParam.getString("ssrepformatSep");
+
+        int i;
+        for (i = 0; i < subFolderFormatZ.size(); i++) {
+            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") != 0) {
+                pathFromRoot += subFolderFormatZ.get(i).getLocalValue() + Context.appParam.getString("ssrepformatSep");
             }
         }
+
         if (pathFromRoot.endsWith("_")) {
             pathFromRoot = pathFromRoot.substring(0, pathFromRoot.length() - 1);
         }
@@ -509,7 +495,7 @@ public class AgLibrarySubFolder {
      */
     public String getActivephotoValeur(int activeNum) {
 
-        if (activeNum == -1 || activeNum > listFileSubFolder.size() -1 ) {
+        if (activeNum == -1 || activeNum > listFileSubFolder.size() - 1) {
             return "---";
         }
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
@@ -682,20 +668,21 @@ public class AgLibrarySubFolder {
     }
 
     public void setrepformatZ(int i, String valeur) {
-        repformatZ.put(i, valeur);
+        subFolderFormatZ.get(i).setLocalValue(valeur);
     }
 
-    public ObservableList<String> personalizelist(ObservableList<String> listeZ) {
+    public ObservableList<String> personalizelist(ZoneZ listeZ) {
 
-        ObservableList<String> pListeZ = FXCollections.observableArrayList(listeZ);
+        ObservableList<String> pListeZ = FXCollections.observableArrayList(listeZ.listeEleZone);
 
-        pListeZ.forEach(tab -> {
-            String[] part = tab.split("%");
-            if (part.length > 1 && part[1].compareTo("DATE") == 0) {
-                pListeZ.remove(tab);
-                pListeZ.add(this.getDtdebHumain());
-            }
-        });
+        if (listeZ.typeDeListeDeZone.compareTo("£") == 0) {
+            pListeZ.forEach(tab -> {
+                if (tab.compareTo("DATE") == 0) {
+                    pListeZ.remove(tab);
+                    pListeZ.add(this.getDtdebHumain());
+                }
+            });
+        }
 
         return pListeZ;
     }
@@ -703,6 +690,38 @@ public class AgLibrarySubFolder {
     public void execmodification(AgLibrarySubFolder activeRepDest) throws IOException, SQLException {
 
         activeRepDest.calculpathFromRoot();
+
+        int i;
+        for (i = 0; i < activeRepDest.subFolderFormatZ.size(); i++) {
+            ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
+            if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
+                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue())) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Dialog with Custom Actions");
+                    alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
+                    alert.setContentText("Choose Keyword Master in " + cursubFolderFormatZ.titreZone);
+
+                    ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size()+1];
+                    int ii;
+                    for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
+                        buttonType[ii] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(ii));
+                    }
+                    buttonType[ii] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                    alert.getButtonTypes().setAll(buttonType);
+
+                    Optional<ButtonType> result = alert.showAndWait();
+
+                    for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
+                        if (result.get() == buttonType[ii]) {
+                            lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii),cursubFolderFormatZ.getLocalValue());
+                            lrcat.setListeZ();
+                        }
+                    }
+
+                }
+            }
+        }
 
         activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
                 activeRepDest.getpath(),
@@ -766,4 +785,23 @@ public class AgLibrarySubFolder {
     }
 
 
+    public void refreshValue() {
+        subFolderFormatZ = new ArrayList<ZoneZ>();
+
+        int i;
+        for (i = 0; i < (agLibraryRootFolder.parentLrcat.ListeZ.size()); i++) {
+            subFolderFormatZ.add(new ZoneZ(agLibraryRootFolder.parentLrcat.ListeZ.get(i)));
+        }
+
+        refreshCompteur();
+
+        String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
+        for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
+            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i])) {
+                setrepformatZ(i , part[i]);
+            }
+        }
+
+        calculStatusRep();
+    }
 }
