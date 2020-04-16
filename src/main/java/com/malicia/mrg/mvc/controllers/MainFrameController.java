@@ -67,15 +67,37 @@ public class MainFrameController {
     @FXML
     private Label nbphotoapurger;
     @FXML
+    private Label lbnbeleRep1;
+    @FXML
+    private Label lbnbetrationzeroetoile1;
+    @FXML
     private Label nbetrationzeroetoile;
+    @FXML
+    private Label lbnbphotoRep1;
+    @FXML
+    private Label lbnbetrationuneetoile1;
     @FXML
     private Label nbetrationuneetoile;
     @FXML
+    private Label lbnbetrationdeuxetoile1;
+    @FXML
     private Label nbetrationdeuxetoile;
+    @FXML
+    private Label lbratiophotoaconcerver1;
+    @FXML
+    private Label lbnbetrationtroisetoile1;
     @FXML
     private Label nbetrationtroisetoile;
     @FXML
+    private Label lbnbphotoapurger1;
+    @FXML
+    private Label lbnbetrationquatreetoile1;
+    @FXML
     private Label nbetrationquatreetoile;
+    @FXML
+    private Label lbstatusRep1;
+    @FXML
+    private Label lbnbetrationcinqetoile1;
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
@@ -552,51 +574,69 @@ public class MainFrameController {
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
         nbjourrep.setText(activeRep.getNbjourfolder());
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
-        nbphotoapurger.setText(activeRep.getNbphotoapurger());
+
+        alimetcolornbphotoapurger(nbphotoapurger,lbnbphotoapurger1);
 
         alimetcolorlabelstatus(statusRep);
 
-        alimetcolorlabeletoile(0, nbetrationzeroetoile);
-        alimetcolorlabeletoile(1, nbetrationuneetoile);
-        alimetcolorlabeletoile(2, nbetrationdeuxetoile);
-        alimetcolorlabeletoile(3, nbetrationtroisetoile);
-        alimetcolorlabeletoile(4, nbetrationquatreetoile);
-        alimetcolorlabeletoile(5, nbetrationcinqetoile);
+        alimetcolorlabeletoile(0, nbetrationzeroetoile,lbnbetrationzeroetoile1);
+        alimetcolorlabeletoile(1, nbetrationuneetoile,lbnbetrationuneetoile1);
+        alimetcolorlabeletoile(2, nbetrationdeuxetoile,lbnbetrationdeuxetoile1);
+        alimetcolorlabeletoile(3, nbetrationtroisetoile,lbnbetrationtroisetoile1);
+        alimetcolorlabeletoile(4, nbetrationquatreetoile,lbnbetrationquatreetoile1);
+        alimetcolorlabeletoile(5, nbetrationcinqetoile,lbnbetrationcinqetoile1);
 
-        colorlabelzonez(lbselectssrepformatZ1,selectssrepformatZ1);
-        colorlabelzonez(lbselectssrepformatZ2,selectssrepformatZ2);
-        colorlabelzonez(lbselectssrepformatZ3,selectssrepformatZ3);
-        colorlabelzonez(lbselectssrepformatZ4,selectssrepformatZ4);
+        colorlabelzonez(lbselectssrepformatZ1, selectssrepformatZ1);
+        colorlabelzonez(lbselectssrepformatZ2, selectssrepformatZ2);
+        colorlabelzonez(lbselectssrepformatZ3, selectssrepformatZ3);
+        colorlabelzonez(lbselectssrepformatZ4, selectssrepformatZ4);
 
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
     private void colorlabelzonez(Label champs, ComboBox<String> selectssrepformatZ) {
-        if (!selectssrepformatZ.getValue().equals("")) {
-            champs.setTextFill(Color.BLACK);
-        } else {
+        champs.setTextFill(Color.BLACK);
+        champs.setStyle("-fx-font-weight: regular");
+        String tmpval = selectssrepformatZ.getValue();
+        if (tmpval == null || tmpval.isEmpty() || tmpval.equals("")) {
             champs.setTextFill(Color.RED);
+            champs.setStyle("-fx-font-weight: bold");
         }
-        champs.setText(activeRep.getStatusRep());
     }
 
     private void alimetcolorlabelstatus(Label champs) {
-        if (activeRep.getStatusRep().equals(AgLibrarySubFolder.OK)) {
-            champs.setTextFill(Color.BLACK);
-        } else {
+        champs.setTextFill(Color.GREEN);
+        champs.setStyle("-fx-font-weight: regular");
+        if (!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK)) {
             champs.setTextFill(Color.RED);
+            champs.setStyle("-fx-font-weight: bold");
         }
         champs.setText(activeRep.getStatusRep());
     }
 
-    private void alimetcolorlabeletoile(int n, Label champs) {
-        String[] ret = activeRep.nbetratiovaleur(n).split("@");
-        if (ret[1].compareTo("0") == 0) {
-            champs.setTextFill(Color.BLACK);
-        } else {
+    private void alimetcolornbphotoapurger( Label champs, Label champsConnex) {
+        champs.setTextFill(Color.BLACK);
+        champs.setStyle("-fx-font-weight: regular");
+        String[] ret = activeRep.getNbphotoapurger().split("@");
+        if (ret[1].compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
+            champs.setStyle("-fx-font-weight: bold");
         }
         champs.setText(ret[2]);
+        champsConnex.setTextFill(champs.getTextFill());
+        champsConnex.setStyle(champs.getStyle());
+    }
+    private void alimetcolorlabeletoile(int n, Label champs, Label champsConnex) {
+        champs.setTextFill(Color.BLACK);
+        champs.setStyle("-fx-font-weight: regular");
+        String[] ret = activeRep.nbetratiovaleur(n).split("@");
+        if (ret[1].compareTo("0") != 0) {
+            champs.setTextFill(Color.RED);
+            champs.setStyle("-fx-font-weight: bold");
+        }
+        champs.setText(ret[2]);
+        champsConnex.setTextFill(champs.getTextFill());
+        champsConnex.setStyle(champs.getStyle());
     }
 
     private void refreshActivePhoto() throws IOException {

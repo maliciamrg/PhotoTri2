@@ -36,7 +36,9 @@ public class Main extends Application {
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
 //        primaryStage.setScene(new Scene(root, 1000, 950));
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(Main.class.getClassLoader().getResource("caspian.css").toExternalForm());
+        primaryStage.setScene(scene);
 //        primaryStage.sizeToScene();
         controller.start();
         primaryStage.show();

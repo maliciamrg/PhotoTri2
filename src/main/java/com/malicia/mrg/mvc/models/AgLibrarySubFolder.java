@@ -29,7 +29,7 @@ public class AgLibrarySubFolder {
 
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
-    public static final String KO = "------";
+    public static final String KO = "--KO--";
     public List<ZoneZ> subFolderFormatZ;
     public AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
@@ -489,7 +489,13 @@ public class AgLibrarySubFolder {
      * @return the nbphotoapurger
      */
     public String getNbphotoapurger() {
-        return " " + String.format("%04d", nbphotoapurger);
+        String color;
+        if (nbphotoapurger == 0) {
+            color = "0";
+        } else {
+            color = "1";
+        }
+        return "@" + color + "@ " + String.format("%04d", nbphotoapurger);
     }
 
 
