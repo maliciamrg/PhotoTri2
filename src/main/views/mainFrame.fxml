@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <BorderPane>
             <center>
@@ -179,120 +191,140 @@
                                 </Menu>
                             </menus>
                         </MenuBar>
-                  <BorderPane>
-                     <center>
-                              <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="775.0">
-                                  <children>
+                        <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="775.0">
+                            <children>
+                        <VBox>
+                           <children>
                                       <VBox alignment="TOP_CENTER" prefHeight="68.0" prefWidth="328.0">
                                           <children>
                                               <VBox alignment="CENTER">
                                                   <children>
-                                                      <ChoiceBox fx:id="repChoose" onAction="#actionChoose" prefHeight="25.0" prefWidth="250.0" />
-                                                      <Label fx:id="datesub" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="25.33333396911621" text="Label" />
+                                          <HBox>
+                                             <children>
+                                                            <ChoiceBox fx:id="repChoose" onAction="#actionChoose" prefHeight="21.0" prefWidth="754.0">
+                                                   <HBox.margin>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ChoiceBox>
+                                                            <Label fx:id="datesub" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label">
+                                                   <HBox.margin>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
                                                   </children>
                                               </VBox>
                                           </children>
                                       </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbeleRep1" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
-                                                      <Label fx:id="nbeleRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationzeroetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="zero etoile" />
-                                                      <Label fx:id="nbetrationzeroetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbphotoRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="nbPhoto" />
-                                                      <Label fx:id="nbphotoRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationuneetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="1 etoile" />
-                                                      <Label fx:id="nbetrationuneetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour" />
-                                                      <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationdeuxetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="2 etoiles" />
-                                                      <Label fx:id="nbetrationdeuxetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Aconserver" />
-                                                      <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationtroisetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="3 etoiles" />
-                                                      <Label fx:id="nbetrationtroisetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Apurger" />
-                                                      <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationquatreetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="4 etoiles" />
-                                                      <Label fx:id="nbetrationquatreetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                          <children>
-                                              <VBox alignment="CENTER">
-                                                  <children>
-                                                      <Label fx:id="lbstatusRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Status" />
-                                                      <Label fx:id="statusRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox alignment="CENTER" prefHeight="35.0" prefWidth="130.0">
-                                                  <children>
-                                                      <Label fx:id="lbnbetrationcinqetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="5 etoiles" />
-                                                      <Label fx:id="nbetrationcinqetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                      </VBox>
-                                  </children>
-                              </HBox>
-                     </center>
-                  </BorderPane>
+                              <BorderPane>
+                                 <center>
+                                    <HBox style="-fx-border-width: 2; -fx-border-color: black; -fx-border-insets: 3;">
+                                       <children>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbeleRep1" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
+                                                                  <Label fx:id="nbeleRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationzeroetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="zero etoile" />
+                                                                  <Label fx:id="nbetrationzeroetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbphotoRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="nbPhoto" />
+                                                                  <Label fx:id="nbphotoRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationuneetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="1 etoile" />
+                                                                  <Label fx:id="nbetrationuneetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour" />
+                                                                  <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationdeuxetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="2 etoiles" />
+                                                                  <Label fx:id="nbetrationdeuxetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Aconserver" />
+                                                                  <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationtroisetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="3 etoiles" />
+                                                                  <Label fx:id="nbetrationtroisetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Apurger" />
+                                                                  <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationquatreetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="4 etoiles" />
+                                                                  <Label fx:id="nbetrationquatreetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                      <children>
+                                                          <VBox alignment="CENTER">
+                                                              <children>
+                                                                  <Label fx:id="lbstatusRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Status" />
+                                                                  <Label fx:id="statusRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                          <VBox alignment="CENTER" prefHeight="35.0" prefWidth="130.0">
+                                                              <children>
+                                                                  <Label fx:id="lbnbetrationcinqetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" text="5 etoiles" />
+                                                                  <Label fx:id="nbetrationcinqetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" text="Label" />
+                                                              </children>
+                                                          </VBox>
+                                                      </children>
+                                                  </VBox>
+                                       </children>
+                                    </HBox>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </VBox>
+                            </children>
+                        </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="1113.0">
                             <children>
                                 <VBox alignment="TOP_CENTER">
