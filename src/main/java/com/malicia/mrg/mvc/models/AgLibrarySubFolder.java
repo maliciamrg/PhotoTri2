@@ -400,59 +400,53 @@ public class AgLibrarySubFolder {
         int nb = 0;
         int ratiomax;
         int ratiomin;
+        int countmin;
+        int countmax;
         switch (valeur) {
             case 0:
                 nb = nbetrationzeroetoile;
-                ratiomin = 0;
-                ratiomax = 100;
+                countmin =  0;
+                countmax = nbphotoRep-nbphotoapurger;
                 break;
             case 1:
                 nb = nbetrationuneetoile;
-                ratiomin = (ratioMax1s / divMaxToMinstar);
-                ratiomax = ratioMax1s;
+                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax1s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax1s) / 100;
                 break;
             case 2:
                 nb = nbetrationdeuxetoile;
-                ratiomin = (ratioMax2s / divMaxToMinstar);
-                ratiomax = ratioMax2s;
+                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax2s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax2s) / 100;
                 break;
             case 3:
                 nb = nbetrationtroisetoile;
-                ratiomin = (ratioMax3s / divMaxToMinstar);
-                ratiomax = ratioMax3s;
+                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax3s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax3s) / 100;
                 break;
             case 4:
                 nb = nbetrationquatreetoile;
-                ratiomin = (ratioMax4s / divMaxToMinstar);
-                ratiomax = ratioMax4s;
+                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax4s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax4s) / 100;
                 break;
             case 5:
                 nb = nbetrationcinqetoile;
-                ratiomin = (ratioMax5s / divMaxToMinstar);
-                ratiomax = ratioMax5s;
+                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax5s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax5s) / 100;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);
         }
-        int countmin = (nb * ratiomin) / 100;
-        int countmax = (nb * ratiomax) / 100;
         if (countmax < 1) {
             countmax = 1;
         }
         DecimalFormat df = new DecimalFormat("##.##%");
-        double percent;
-        if (nbphotoRep == 0) {
-            percent = 1;
-        } else {
-            percent = ((double) nb / nbphotoRep);
-        }
         String color;
         if (nb >= countmin && nb <= countmax) {
             color = "0";
         } else {
             color = "1";
         }
-        return "@" + color + "@ " + String.format("%02d", nb) + " = " + df.format(percent) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
+        return "@" + color + "@ " + String.format("%02d", nb) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
     }
 
     /**
