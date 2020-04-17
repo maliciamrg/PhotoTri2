@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.IOException;
@@ -346,27 +347,21 @@ public class AgLibrarySubFolder {
 
         if (nbphotoRep > 0) {
 
-            statusRep = statuStar(statusRep, nbetrationuneetoile, ratioMax1s);
-            statusRep = statuStar(statusRep, nbetrationdeuxetoile, ratioMax2s);
-            statusRep = statuStar(statusRep, nbetrationtroisetoile, ratioMax3s);
-            statusRep = statuStar(statusRep, nbetrationquatreetoile, ratioMax4s);
-            statusRep = statuStar(statusRep, nbetrationcinqetoile, ratioMax5s);
+            statusRep = statuStar(statusRep, 0);
+            statusRep = statuStar(statusRep, 1);
+            statusRep = statuStar(statusRep, 2);
+            statusRep = statuStar(statusRep, 3);
+            statusRep = statuStar(statusRep, 4);
+            statusRep = statuStar(statusRep, 5);
 
         }
 
 
     }
 
-    private String statuStar(String starstatusRep, int starnbetrationuneetoile, int starratioMax) {
-        int countmin = (starnbetrationuneetoile * (starratioMax / divMaxToMinstar)) / 100;
-        int countmax = (starnbetrationuneetoile * starratioMax) / 100;
-        if (countmax < 1) {
-            countmax = 1;
-        }
-        if (starnbetrationuneetoile > countmax) {
-            return KO;
-        }
-        if (starnbetrationuneetoile < countmin) {
+    private String statuStar(String starstatusRep, int starnbetrationuneetoile) {
+        String[] ret = nbetratiovaleur(starnbetrationuneetoile).split("@");
+        if (ret[1].compareTo("0") != 0) {
             return KO;
         }
         return starstatusRep;
@@ -398,8 +393,6 @@ public class AgLibrarySubFolder {
      */
     public String nbetratiovaleur(int valeur) {
         int nb = 0;
-        int ratiomax;
-        int ratiomin;
         int countmin;
         int countmax;
         switch (valeur) {
