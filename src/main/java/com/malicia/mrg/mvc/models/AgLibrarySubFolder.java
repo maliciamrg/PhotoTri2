@@ -48,9 +48,6 @@ public class AgLibrarySubFolder {
     private String ratiophotoaconserver;
     private String statusRep;
     private String folderIdLocal;
-    private Map<Integer, Integer> activephotoNum;
-    private int activeNum;
-    private int zero = 2;
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
@@ -132,10 +129,6 @@ public class AgLibrarySubFolder {
         return repDateFormat.format(dtdebH);
     }
 
-    public int getActiveNum() {
-        return activeNum;
-    }
-
     /**
      * Gets nbjourfolder.
      *
@@ -158,19 +151,6 @@ public class AgLibrarySubFolder {
         }
     }
 
-
-    /**
-     * Gets .
-     *
-     * @param num the num
-     * @return the
-     * @throws IOException  the io exception
-     * @throws SQLException the sql exception
-     */
-    public Image getimagepreview(int num) throws IOException {
-        int interval = (nbphotoRep / 5);
-        return getimagenumero(getnextphotonumfrom(interval * num));
-    }
 
     /**
      * Gets .
@@ -208,14 +188,14 @@ public class AgLibrarySubFolder {
     /**
      * Valeuractivephotoincrease.
      */
-    public void valeuractivephotoincrease() {
+    public void valeuractivephotoincrease(int activeNum) {
         listFileSubFolder.get(activeNum).valeurIncrease();
     }
 
     /**
      * Valeuractivephotodecrease.
      */
-    public void valeuractivephotodecrease() {
+    public void valeuractivephotodecrease(int activeNum) {
         listFileSubFolder.get(activeNum).valeurDecrease();
     }
 
@@ -533,130 +513,8 @@ public class AgLibrarySubFolder {
     }
 
 
-    /**
-     * Gets activephoto num.
-     *
-     * @param i the
-     * @return the activephoto num
-     */
-    public int getActivephotoNum(int i) {
-        return activephotoNum.get(zero + i);
-    }
-
-    /**
-     * Move activephoto num to.
-     *
-     * @param delta the delta
-     */
-    public void moveActivephotoNumTo(int delta) {
-
-        Integer activephotoNumsetZero = 0;
-        if (delta != 0) {
-            activephotoNumsetZero = activephotoNum.get(zero);
-        }
-
-        activephotoNum = new HashMap<>();
-        switch (delta) {
-            case 0:
-                activephotoNumsetZero = getnextphotonumfrom(-1);
-                break;
-            case -1:
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                break;
-            case -2:
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                break;
-            case -3:
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                break;
-            case -4:
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-                break;
-            case +1:
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                break;
-            case +2:
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                break;
-            case +3:
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                break;
-            case +4:
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-                break;
-            default:
-                throw new IllegalStateException(UNEXPECTED_VALUE + delta);
-        }
-
-        //forcage activephotoNum zero sur une photo
-        if (activephotoNumsetZero < 0) {
-            activephotoNumsetZero = getnextphotonumfrom(activephotoNumsetZero);
-        }
-        if (activephotoNumsetZero > listFileSubFolder.size() - 1) {
-            activephotoNumsetZero = getprevphotonumfrom(activephotoNumsetZero);
-        }
-
-        activephotoNum.put(zero, activephotoNumsetZero);
-        activephotoNum.put(zero + 1, getnextphotonumfrom(activephotoNum.get(zero)));
-        activephotoNum.put(zero + 2, getnextphotonumfrom(activephotoNum.get(zero + 1)));
-        activephotoNum.put(zero + 3, getnextphotonumfrom(activephotoNum.get(zero + 2)));
-        activephotoNum.put(zero + 4, getnextphotonumfrom(activephotoNum.get(zero + 3)));
-        activephotoNum.put(zero - 1, getprevphotonumfrom(activephotoNum.get(zero)));
-        activephotoNum.put(zero - 2, getprevphotonumfrom(activephotoNum.get(zero - 1)));
-        activephotoNum.put(zero - 3, getprevphotonumfrom(activephotoNum.get(zero - 2)));
-        activephotoNum.put(zero - 4, getprevphotonumfrom(activephotoNum.get(zero - 3)));
-
-        activeNum = activephotoNum.get(zero);
-
-    }
-
-    private int getprevphotonumfrom(int phototoshow) {
-        phototoshow -= 1;
-
-        while (phototoshow >= 0) {
-            AgLibraryFile fil = listFileSubFolder.get(phototoshow);
-            if (fil.estPhoto()) {
-                return phototoshow;
-            }
-            phototoshow -= 1;
-        }
-        return -1;
-
-    }
-
-    private int getnextphotonumfrom(int phototoshow) {
-        phototoshow += 1;
-
-        while (phototoshow <= listFileSubFolder.size() - 1) {
-            AgLibraryFile fil = listFileSubFolder.get(phototoshow);
-            if (fil.estPhoto()) {
-                return phototoshow;
-            }
-            phototoshow += 1;
-        }
-        return listFileSubFolder.size();
-
-    }
-
-
-    public void setRotateActivephotoNumTo(int addRotate) {
+    public void setRotateToFile(int activeNum,int addRotate) {
         listFileSubFolder.get(activeNum).setAddRotate(addRotate);
-    }
-
-    public int getRotateFromActivephotonum() {
-        return listFileSubFolder.get(activeNum).getAddRotate();
     }
 
     public int getRotateFromphotonum(int photonum) {
@@ -802,5 +660,13 @@ public class AgLibrarySubFolder {
         }
 
         calculStatusRep();
+    }
+
+    public boolean filestPhoto(int phototoshow) {
+        return listFileSubFolder.get(phototoshow).estPhoto();
+    }
+
+    public int filsize() {
+        return listFileSubFolder.size();
     }
 }

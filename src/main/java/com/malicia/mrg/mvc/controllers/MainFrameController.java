@@ -129,7 +129,7 @@ public class MainFrameController {
     @FXML
     private ImageView imageP4;
     @FXML
-    private ImageView imageOne;
+    private ImageView imageZ0;
     @FXML
     private Text imageM4star;
     @FXML
@@ -139,7 +139,7 @@ public class MainFrameController {
     @FXML
     private Text imageM1star;
     @FXML
-    private Text imageOnestar;
+    private Text imageZ0star;
     @FXML
     private Text imageP1star;
     @FXML
@@ -167,6 +167,7 @@ public class MainFrameController {
 
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
+    private int activephotoNum;
 
 
     /**
@@ -639,48 +640,87 @@ public class MainFrameController {
         champsConnex.setStyle(champs.getStyle());
     }
 
-    private void refreshActivePhoto() throws IOException {
+    private void refreshAllPhoto() throws IOException {
         LOGGER.info("refresh");
 
-        imageM4.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-4)));
-        imageM4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-4)));
+        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
+        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3);
+        recalculimagev(getnumphotofromactive(-2), imageM2star, imageM2);
+        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1);
+        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0);
+        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1);
+        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2);
+        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3);
+        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4);
 
-        imageM3.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-3)));
-        imageM3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-3)));
-
-        imageM2.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-2)));
-        imageM2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-2)));
-
-        imageM1.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(-1)));
-        imageM1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(-1)));
-
-        imageOne.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(0)));
-        imageOne.setRotate(activeRep.getRotateFromActivephotonum());
-
-        imageP1.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(1)));
-        imageP1.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(1)));
-
-        imageP2.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(2)));
-        imageP2.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(2)));
-
-        imageP3.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(3)));
-        imageP3.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(3)));
-
-        imageP4.setImage(activeRepSrc.getimagenumero(activeRep.getActivephotoNum(4)));
-        imageP4.setRotate(activeRep.getRotateFromphotonum(activeRep.getActivephotoNum(4)));
     }
 
-    private void refreshvaleurphoto() {
-        displayStarValueAndLibelle(imageM4star, activeRep.getActivephotoNum(-4));
-        displayStarValueAndLibelle(imageM3star, activeRep.getActivephotoNum(-3));
-        displayStarValueAndLibelle(imageM2star, activeRep.getActivephotoNum(-2));
-        displayStarValueAndLibelle(imageM1star, activeRep.getActivephotoNum(-1));
-        displayStarValueAndLibelle(imageOnestar, activeRep.getActiveNum());
-        displayStarValueAndLibelle(imageP1star, activeRep.getActivephotoNum(+1));
-        displayStarValueAndLibelle(imageP2star, activeRep.getActivephotoNum(+2));
-        displayStarValueAndLibelle(imageP3star, activeRep.getActivephotoNum(+3));
-        displayStarValueAndLibelle(imageP4star, activeRep.getActivephotoNum(+4));
+    private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException {
+        displayStarValueAndLibelle(imagestar, numphotofromactive);
+        imageV.setImage(activeRepSrc.getimagenumero(numphotofromactive));
+        imageV.setRotate(activeRep.getRotateFromphotonum(numphotofromactive));
     }
+
+
+    /**
+     * Move activephoto num to.
+     *
+     * @param deltaphoto the delta
+     */
+    public void moveActivephotoNumTo(int deltaphoto) {
+
+        if (deltaphoto==0) {
+            activephotoNum = -1;
+            activephotoNum = getnumphotofromactive(+1);
+        } else {
+            activephotoNum = getnumphotofromactive(deltaphoto);
+        }
+
+
+    }
+
+    /**
+     * Gets activephoto num.
+     *
+     * @param deltaphoto the
+     * @return the activephoto num
+     */
+    public int getnumphotofromactive(int deltaphoto) {
+
+        //activephotoNum [-1....max]
+
+        return currentfilephoto.get(zero + deltaphoto);
+
+        private int getprevphotonumfrom(int phototoshow) {
+            phototoshow -= 1;
+
+            while (phototoshow >= 0) {
+                if (activeRep.filestPhoto(phototoshow)) {
+
+                    return phototoshow;
+                }
+                phototoshow -= 1;
+            }
+            return -1;
+
+        }
+
+        private int getnextphotonumfrom(int phototoshow) {
+            phototoshow += 1;
+
+            while (phototoshow <= activeRep.filsize() - 1) {
+                if (activeRep.filestPhoto(phototoshow)) {
+
+                    return phototoshow;
+                }
+                phototoshow += 1;
+            }
+            return activeRep.filsize();
+
+        }
+
+    }
+
 
     private void displayStarValueAndLibelle(Text imagestar, int activeNum) {
         imagestar.setText(activeRep.getActivephotoValeur(activeNum));
@@ -699,37 +739,35 @@ public class MainFrameController {
         try {
             switch (keyEvent.getCode()) {
                 case RIGHT:
-                    activeRep.moveActivephotoNumTo(+1);
-                    refreshActivePhoto();
-                    refreshvaleurphoto();
+                    moveActivephotoNumTo(+1);
+                    refreshAllPhoto();
                     keyEvent.consume();
                     break;
                 case LEFT:
-                    activeRep.moveActivephotoNumTo(-1);
-                    refreshActivePhoto();
-                    refreshvaleurphoto();
+                    moveActivephotoNumTo(-1);
+                    refreshAllPhoto();
                     keyEvent.consume();
                     break;
                 case UP:
-                    activeRep.valeuractivephotoincrease();
+                    activeRep.valeuractivephotoincrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    refreshvaleurphoto();
+                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case DOWN:
-                    activeRep.valeuractivephotodecrease();
+                    activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    refreshvaleurphoto();
+                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case Q:
-                    activeRep.setRotateActivephotoNumTo(+90);
-                    imageOne.setRotate(activeRep.getRotateFromActivephotonum());
+                    activeRep.setRotateToFile(activephotoNum,+90);
+                    imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
                 case D:
-                    activeRep.setRotateActivephotoNumTo(-90);
-                    imageOne.setRotate(activeRep.getRotateFromActivephotonum());
+                    activeRep.setRotateToFile(activephotoNum,-90);
+                    imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
                 default:
@@ -747,9 +785,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotom4() {
         try {
-            activeRep.moveActivephotoNumTo(-4);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(-4);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -762,9 +799,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotom3() {
         try {
-            activeRep.moveActivephotoNumTo(-3);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(-3);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -777,9 +813,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotom2() {
         try {
-            activeRep.moveActivephotoNumTo(-2);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(-2);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -792,9 +827,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotom1() {
         try {
-            activeRep.moveActivephotoNumTo(-1);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(-1);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -807,9 +841,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotop1() {
         try {
-            activeRep.moveActivephotoNumTo(+1);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(+1);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -823,9 +856,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotop2() {
         try {
-            activeRep.moveActivephotoNumTo(+2);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(+2);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -838,9 +870,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotop3() {
         try {
-            activeRep.moveActivephotoNumTo(+3);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(+3);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -854,9 +885,8 @@ public class MainFrameController {
     @FXML
     public void actionActivePhotop4() {
         try {
-            activeRep.moveActivephotoNumTo(+4);
-            refreshActivePhoto();
-            refreshvaleurphoto();
+            moveActivephotoNumTo(+4);
+            refreshAllPhoto();
         } catch (IOException e) {
             popupalertException(e);
             excptlog(e);
@@ -982,10 +1012,9 @@ public class MainFrameController {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
                 refreshcompteurRepertoire();
                 refreshcomboxRepertoire();
-                activeRep.moveActivephotoNumTo(0);
+                moveActivephotoNumTo(0);
                 datesub.setText(activeRep.getDtdebHumain());
-                refreshActivePhoto();
-                refreshvaleurphoto();
+                refreshAllPhoto();
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
