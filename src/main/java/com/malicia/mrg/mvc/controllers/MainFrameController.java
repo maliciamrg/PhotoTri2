@@ -576,16 +576,16 @@ public class MainFrameController {
         nbjourrep.setText(activeRep.getNbjourfolder());
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
 
-        alimetcolornbphotoapurger(nbphotoapurger,lbnbphotoapurger1);
+        alimetcolornbphotoapurger(nbphotoapurger, lbnbphotoapurger1);
 
         alimetcolorlabelstatus(statusRep);
 
-        alimetcolorlabeletoile(0, nbetrationzeroetoile,lbnbetrationzeroetoile1);
-        alimetcolorlabeletoile(1, nbetrationuneetoile,lbnbetrationuneetoile1);
-        alimetcolorlabeletoile(2, nbetrationdeuxetoile,lbnbetrationdeuxetoile1);
-        alimetcolorlabeletoile(3, nbetrationtroisetoile,lbnbetrationtroisetoile1);
-        alimetcolorlabeletoile(4, nbetrationquatreetoile,lbnbetrationquatreetoile1);
-        alimetcolorlabeletoile(5, nbetrationcinqetoile,lbnbetrationcinqetoile1);
+        alimetcolorlabeletoile(0, nbetrationzeroetoile, lbnbetrationzeroetoile1);
+        alimetcolorlabeletoile(1, nbetrationuneetoile, lbnbetrationuneetoile1);
+        alimetcolorlabeletoile(2, nbetrationdeuxetoile, lbnbetrationdeuxetoile1);
+        alimetcolorlabeletoile(3, nbetrationtroisetoile, lbnbetrationtroisetoile1);
+        alimetcolorlabeletoile(4, nbetrationquatreetoile, lbnbetrationquatreetoile1);
+        alimetcolorlabeletoile(5, nbetrationcinqetoile, lbnbetrationcinqetoile1);
 
         colorlabelzonez(lbselectssrepformatZ1, selectssrepformatZ1);
         colorlabelzonez(lbselectssrepformatZ2, selectssrepformatZ2);
@@ -615,7 +615,7 @@ public class MainFrameController {
         champs.setText(activeRep.getStatusRep());
     }
 
-    private void alimetcolornbphotoapurger( Label champs, Label champsConnex) {
+    private void alimetcolornbphotoapurger(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: regular");
         String[] ret = activeRep.getNbphotoapurger().split("@");
@@ -627,6 +627,7 @@ public class MainFrameController {
         champsConnex.setTextFill(champs.getTextFill());
         champsConnex.setStyle(champs.getStyle());
     }
+
     private void alimetcolorlabeletoile(int n, Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: regular");
@@ -669,14 +670,18 @@ public class MainFrameController {
      */
     public void moveActivephotoNumTo(int deltaphoto) {
 
-        if (deltaphoto==0) {
+        if (deltaphoto == 0) {
             activephotoNum = -1;
             activephotoNum = getnumphotofromactive(+1);
         } else {
-            activephotoNum = getnumphotofromactive(deltaphoto);
+            int sens = Integer.signum(deltaphoto);
+            for (int i1 = 1; i1 <= Math.abs(deltaphoto); i1++) {
+                int ret = getnumphotofromactive(sens);
+                if (ret >= 0 && ret <= activeRep.filsize() - 1) {
+                    activephotoNum = ret;
+                }
+            }
         }
-
-
     }
 
     /**
@@ -688,37 +693,29 @@ public class MainFrameController {
     public int getnumphotofromactive(int deltaphoto) {
 
         //activephotoNum [-1....max]
+        int sens = Integer.signum(deltaphoto);
 
-        return currentfilephoto.get(zero + deltaphoto);
-
-        private int getprevphotonumfrom(int phototoshow) {
-            phototoshow -= 1;
-
-            while (phototoshow >= 0) {
-                if (activeRep.filestPhoto(phototoshow)) {
-
-                    return phototoshow;
+        int calculnewactivephotoNum = activephotoNum;
+        for (int i1 = 1; i1 <= Math.abs(deltaphoto); i1++) {
+            for (int num = calculnewactivephotoNum + sens; num > -2 && num < activeRep.filsize() + 1; num += sens) {
+                if (num == activeRep.filsize()) {
+                    calculnewactivephotoNum = activeRep.filsize();
+                    break;
                 }
-                phototoshow -= 1;
-            }
-            return -1;
-
-        }
-
-        private int getnextphotonumfrom(int phototoshow) {
-            phototoshow += 1;
-
-            while (phototoshow <= activeRep.filsize() - 1) {
-                if (activeRep.filestPhoto(phototoshow)) {
-
-                    return phototoshow;
+                if (num == -1) {
+                    calculnewactivephotoNum = -1;
+                    break;
                 }
-                phototoshow += 1;
+                if (activeRep.fileFiltrer(num, true, -1, false)) {
+                    calculnewactivephotoNum = num;
+                    break;
+                }
             }
-            return activeRep.filsize();
-
         }
-
+        if ((calculnewactivephotoNum != activephotoNum && deltaphoto != 0) || (calculnewactivephotoNum == activephotoNum && deltaphoto == 0)) {
+            return calculnewactivephotoNum;
+        }
+        return -1;
     }
 
 
@@ -761,12 +758,12 @@ public class MainFrameController {
                     keyEvent.consume();
                     break;
                 case Q:
-                    activeRep.setRotateToFile(activephotoNum,+90);
+                    activeRep.setRotateToFile(activephotoNum, +90);
                     imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
                 case D:
-                    activeRep.setRotateToFile(activephotoNum,-90);
+                    activeRep.setRotateToFile(activephotoNum, -90);
                     imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;

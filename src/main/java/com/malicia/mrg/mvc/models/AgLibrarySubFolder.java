@@ -662,8 +662,12 @@ public class AgLibrarySubFolder {
         calculStatusRep();
     }
 
-    public boolean filestPhoto(int phototoshow) {
-        return listFileSubFolder.get(phototoshow).estPhoto();
+    public boolean fileFiltrer(int phototoshow, boolean estphoto , int nbstar , boolean estrejeter) {
+        boolean ret = true;
+        if (estphoto && !listFileSubFolder.get(phototoshow).estPhoto()) {ret = false;}
+        if (nbstar>-1 && listFileSubFolder.get(phototoshow).getStarValue()!=nbstar) {ret = false;}
+        if (estrejeter && !listFileSubFolder.get(phototoshow).estRejeter()) {ret = false;}
+        return ret;
     }
 
     public int filsize() {
