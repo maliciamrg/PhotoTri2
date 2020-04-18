@@ -168,6 +168,9 @@ public class MainFrameController {
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
     private int activephotoNum;
+    private int filtreNbstar;
+    private boolean filtreEstPhoto;
+    private boolean FiltreEstrejeter;
 
 
     /**
@@ -706,7 +709,7 @@ public class MainFrameController {
                     calculnewactivephotoNum = -1;
                     break;
                 }
-                if (activeRep.fileFiltrer(num, true, -1, false)) {
+                if (activeRep.fileFiltrer(num, filtreEstPhoto, filtreNbstar, FiltreEstrejeter)) {
                     calculnewactivephotoNum = num;
                     break;
                 }
@@ -1009,13 +1012,70 @@ public class MainFrameController {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
                 refreshcompteurRepertoire();
                 refreshcomboxRepertoire();
-                moveActivephotoNumTo(0);
+                actionFiltreNull();
                 datesub.setText(activeRep.getDtdebHumain());
-                refreshAllPhoto();
             }
         } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
     }
+
+    public void actionFiltreNull() throws IOException {
+        filtreNbstar = -1;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre0() throws IOException {
+        filtreNbstar = 0;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre1() throws IOException {
+        filtreNbstar = 1;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre2() throws IOException {
+        filtreNbstar = 2;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre3() throws IOException {
+        filtreNbstar = 3;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre4() throws IOException {
+        filtreNbstar = 4;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltre5() throws IOException {
+        filtreNbstar = 5;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = false;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+    public void actionfiltrep() throws IOException {
+        filtreNbstar = -1;
+        filtreEstPhoto = true;
+        FiltreEstrejeter = true;
+        moveActivephotoNumTo(0);
+        refreshAllPhoto();
+    }
+
 }
