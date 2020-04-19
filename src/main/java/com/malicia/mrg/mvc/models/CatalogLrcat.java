@@ -41,7 +41,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
             addrootFolder("repCat" + numcat, Context.appParam.getString("repCat"+numcat), AgLibraryRootFolder.TYPE_CAT);
             rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
             rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
-            rep.get("repCat" + numcat).sszCat = Context.appParam.getString("sszCat" + numcat);
+            rep.get("repCat" + numcat).setsszCat(Context.appParam.getString("sszCat" + numcat));
             rep.get("repCat" + numcat).sszCatVal = Context.appParam.getString("sszCatVal" + numcat);
             rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
             numcat ++;

@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
@@ -35,8 +36,8 @@ public class AgLibraryRootFolder {
     public String name;
     public double nbmaxCat;
     public int nbjouCat;
-    public String sszCat;
     public String sszCatVal;
+    public boolean[] ssz;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
     private String[] ratioMaxStar;
@@ -600,6 +601,20 @@ public class AgLibraryRootFolder {
 
     public void setratioMaxstarCat(String ratioMaxstarCat) {
         ratioMaxStar = ratioMaxstarCat.split(",");
+    }
+
+    public void setsszCat(String sszCat) {
+        String[] tmpssz = sszCat.split(",");
+        ssz = new boolean[tmpssz.length];
+        for(int i = 0 ; i < tmpssz.length ; i++)
+        {
+            if(tmpssz[i].compareTo("Close")==0){
+                ssz[i]=false;
+            };
+            if(tmpssz[i].compareTo("Open")==0){
+                ssz[i]=true;
+            };
+        }
     }
 }
 

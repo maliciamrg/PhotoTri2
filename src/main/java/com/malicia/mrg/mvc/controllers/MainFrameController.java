@@ -959,6 +959,7 @@ public class MainFrameController {
     public void actionrepCatChange(ActionEvent actionEvent) {
         activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue());
         refreshcompteurRepertoire();
+        selectssrepformatZ1.setEditable(activeRep.agLibraryRootFolder.ssz[0]);
     }
 
     /**
