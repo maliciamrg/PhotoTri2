@@ -289,7 +289,7 @@ public class AgLibrarySubFolder {
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
 
-        int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil(nbjourfolder / agLibraryRootFolder.nbjouCat));
+        int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil((double)nbjourfolder / agLibraryRootFolder.nbjouCat));
         if (nbphotoRep > limitemaxfolder) {
             nbphotoapurger = (nbphotoRep - limitemaxfolder);
         }

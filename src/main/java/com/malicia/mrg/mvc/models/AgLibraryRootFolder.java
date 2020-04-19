@@ -39,17 +39,11 @@ public class AgLibraryRootFolder {
     public String sszCatVal;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
-
-    public int getRatioMaxStar(int star) {
-        return Integer.parseInt(ratioMaxStar[star-1]);
-    }
-
     private String[] ratioMaxStar;
 
     {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
-
 
     public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath, int typeRoot) {
         parentLrcat = catalogLrcat;
@@ -59,9 +53,12 @@ public class AgLibraryRootFolder {
         this.typeRoot = typeRoot;
         setratioMaxstarCat("0,0,0,0,0");
         nbmaxCat = 999d;
-        nbjouCat=0;
+        nbjouCat = 1;
     }
 
+    public int getRatioMaxStar(int star) {
+        return Integer.parseInt(ratioMaxStar[star - 1]);
+    }
 
     public void FlatRootFolder() throws SQLException, IOException {
 
@@ -104,7 +101,7 @@ public class AgLibraryRootFolder {
      * @return the string
      */
     public String normalizePath(String path) {
-        return path.replaceAll("\\\\", "/").replaceAll("\\/\\/","/");
+        return path.replaceAll("\\\\", "/").replaceAll("\\/\\/", "/");
     }
 
 
@@ -373,7 +370,7 @@ public class AgLibraryRootFolder {
             String file_id_global = rsele.getString("id_global");
             String folder_id_local = rsele.getString("folder_id_local");
 
-            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this,pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
+            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);
@@ -426,7 +423,7 @@ public class AgLibraryRootFolder {
     }
 
     private void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile) throws SQLException, IOException {
-        moveListEle(listFile, repertoiredest, AddprefixFile,absolutePath);
+        moveListEle(listFile, repertoiredest, AddprefixFile, absolutePath);
     }
 
     void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile, String absolutePathdest) throws SQLException, IOException {
@@ -530,7 +527,7 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
 
             if (isRepertoryToProcess(pathFromRoot)) {
-                ret.add(new AgLibrarySubFolder(this,pathFromRoot, folder_id_local ));
+                ret.add(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local));
             }
 
         }
@@ -602,7 +599,7 @@ public class AgLibraryRootFolder {
     }
 
     public void setratioMaxstarCat(String ratioMaxstarCat) {
-        ratioMaxStar =ratioMaxstarCat.split(",");
+        ratioMaxStar = ratioMaxstarCat.split(",");
     }
 }
 
