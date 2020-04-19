@@ -37,11 +37,6 @@ public class Context implements Serializable {
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static Integer divMaxToMinstar;
-    public static Integer ratioMax1s;
-    public static Integer ratioMax2s;
-    public static Integer ratioMax3s;
-    public static Integer ratioMax4s;
-    public static Integer ratioMax5s;
     private static Logger LOGGER;
     /**
      * The constant currentContext.
@@ -113,11 +108,6 @@ public class Context implements Serializable {
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
-        ratioMax1s = Integer.parseInt(Context.appParam.getString("ratioMax1s"));
-        ratioMax2s = Integer.parseInt(Context.appParam.getString("ratioMax2s"));
-        ratioMax3s = Integer.parseInt(Context.appParam.getString("ratioMax3s"));
-        ratioMax4s = Integer.parseInt(Context.appParam.getString("ratioMax4s"));
-        ratioMax5s = Integer.parseInt(Context.appParam.getString("ratioMax5s"));
 
     }
 

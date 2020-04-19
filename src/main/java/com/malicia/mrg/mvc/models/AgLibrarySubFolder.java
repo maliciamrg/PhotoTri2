@@ -288,14 +288,11 @@ public class AgLibrarySubFolder {
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
-        Double nbmin = 0d;
         Double nbmax = 999d;
         if (agLibraryRootFolder.isCat()) {
-            nbmin = Double.valueOf(agLibraryRootFolder.nbminiCat);
             nbmax = Double.valueOf(agLibraryRootFolder.nbmaxCat);
         }
 
-        int limiteminfolder = (int) (nbmin * nbjourfolder);
         int limitemaxfolder = (int) (nbmax * nbjourfolder);
         if (nbphotoRep > limitemaxfolder) {
             nbphotoapurger = (nbphotoRep - limitemaxfolder);
@@ -309,7 +306,7 @@ public class AgLibrarySubFolder {
         } else {
             percent = 0;
         }
-        ratiophotoaconserver = "" + String.format("%03d", limiteminfolder) + " - " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
+        ratiophotoaconserver = " "  + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
     }
 
     private void calculStatusRep() {
@@ -382,29 +379,13 @@ public class AgLibrarySubFolder {
                 countmax = nbphotoRep - nbphotoapurger;
                 break;
             case 1:
-                nb = nbetrationuneetoile;
-                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax1s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax1s) / 100;
-                break;
             case 2:
-                nb = nbetrationdeuxetoile;
-                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax2s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax2s) / 100;
-                break;
             case 3:
-                nb = nbetrationtroisetoile;
-                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax3s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax3s) / 100;
-                break;
             case 4:
-                nb = nbetrationquatreetoile;
-                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax4s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax4s) / 100;
-                break;
             case 5:
-                nb = nbetrationcinqetoile;
-                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax5s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax5s) / 100;
+                nb = nbetrationuneetoile;
+                countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);

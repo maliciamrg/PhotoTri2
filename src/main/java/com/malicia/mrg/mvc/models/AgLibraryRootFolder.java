@@ -33,10 +33,18 @@ public class AgLibraryRootFolder {
 
     public int typeRoot;
     public String name;
-    public String nbminiCat;
     public String nbmaxCat;
+    public String nbjouCat;
+    public String sszCat;
+    public String sszCatVal;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
+
+    public int getRatioMaxStar(int star) {
+        return Integer.parseInt(ratioMaxStar[star-1]);
+    }
+
+    private String[] ratioMaxStar;
 
     {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -49,6 +57,7 @@ public class AgLibraryRootFolder {
         this.rootfolderidlocal = rootfolderidlocal;
         this.absolutePath = absolutePath;
         this.typeRoot = typeRoot;
+        setratioMaxstarCat("0,0,0,0,0");
     }
 
 
@@ -588,6 +597,10 @@ public class AgLibraryRootFolder {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setratioMaxstarCat(String ratioMaxstarCat) {
+        ratioMaxStar =ratioMaxstarCat.split(",");
     }
 }
 

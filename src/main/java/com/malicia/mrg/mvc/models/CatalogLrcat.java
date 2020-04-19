@@ -35,14 +35,17 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         addrootFolder("repNew", Context.appParam.getString("repNew"), AgLibraryRootFolder.TYPE_NEW);
 
         //array de categories
-        int numcat = 1;
-        for (String repCat : Context.appParam.getString("repCatx").split(",")) {
-            addrootFolder("repCat" + numcat, repCat, AgLibraryRootFolder.TYPE_CAT);
-            rep.get("repCat" + numcat).nbminiCat = Context.appParam.getString("nbminiCat" + numcat);
-            rep.get("repCat" + numcat).nbmaxCat = Context.appParam.getString("nbmaxCat" + numcat);
-            numcat += 1;
-        }
 
+        int numcat = 1;
+        while (Context.appParam.containsKey("repCat"+numcat)) {
+            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat"+numcat), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat" + numcat).nbjouCat = Context.appParam.getString("nbjouCat" + numcat);
+            rep.get("repCat" + numcat).nbmaxCat = Context.appParam.getString("nbmaxCat" + numcat);
+            rep.get("repCat" + numcat).sszCat = Context.appParam.getString("sszCat" + numcat);
+            rep.get("repCat" + numcat).sszCatVal = Context.appParam.getString("sszCatVal" + numcat);
+            rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
+            numcat ++;
+        }
     }
 
     private void refreshdataLrcat(String catalogLrcat) {
