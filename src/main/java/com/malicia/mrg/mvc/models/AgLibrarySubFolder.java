@@ -288,12 +288,8 @@ public class AgLibrarySubFolder {
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
-        Double nbmax = 999d;
-        if (agLibraryRootFolder.isCat()) {
-            nbmax = Double.valueOf(agLibraryRootFolder.nbmaxCat);
-        }
 
-        int limitemaxfolder = (int) (nbmax * nbjourfolder);
+        int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil(nbjourfolder / agLibraryRootFolder.nbjouCat));
         if (nbphotoRep > limitemaxfolder) {
             nbphotoapurger = (nbphotoRep - limitemaxfolder);
         }
@@ -306,7 +302,7 @@ public class AgLibrarySubFolder {
         } else {
             percent = 0;
         }
-        ratiophotoaconserver = " "  + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
+        ratiophotoaconserver = " " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
     }
 
     private void calculStatusRep() {

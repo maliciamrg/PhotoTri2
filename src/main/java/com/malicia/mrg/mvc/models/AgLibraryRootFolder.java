@@ -33,8 +33,8 @@ public class AgLibraryRootFolder {
 
     public int typeRoot;
     public String name;
-    public String nbmaxCat;
-    public String nbjouCat;
+    public double nbmaxCat;
+    public int nbjouCat;
     public String sszCat;
     public String sszCatVal;
     CatalogLrcat parentLrcat;
@@ -58,6 +58,8 @@ public class AgLibraryRootFolder {
         this.absolutePath = absolutePath;
         this.typeRoot = typeRoot;
         setratioMaxstarCat("0,0,0,0,0");
+        nbmaxCat = 999d;
+        nbjouCat=0;
     }
 
 
