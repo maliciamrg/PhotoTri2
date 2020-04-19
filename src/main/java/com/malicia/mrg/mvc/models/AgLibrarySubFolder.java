@@ -378,33 +378,33 @@ public class AgLibrarySubFolder {
         switch (valeur) {
             case 0:
                 nb = nbetrationzeroetoile;
-                countmin =  0;
-                countmax = nbphotoRep-nbphotoapurger;
+                countmin = 0;
+                countmax = nbphotoRep - nbphotoapurger;
                 break;
             case 1:
                 nb = nbetrationuneetoile;
-                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax1s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax1s) / 100;
+                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax1s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax1s) / 100;
                 break;
             case 2:
                 nb = nbetrationdeuxetoile;
-                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax2s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax2s) / 100;
+                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax2s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax2s) / 100;
                 break;
             case 3:
                 nb = nbetrationtroisetoile;
-                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax3s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax3s) / 100;
+                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax3s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax3s) / 100;
                 break;
             case 4:
                 nb = nbetrationquatreetoile;
-                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax4s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax4s) / 100;
+                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax4s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax4s) / 100;
                 break;
             case 5:
                 nb = nbetrationcinqetoile;
-                countmin =  ((nbphotoRep-nbphotoapurger) * (ratioMax5s / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep-nbphotoapurger) * ratioMax5s) / 100;
+                countmin = ((nbphotoRep - nbphotoapurger) * (ratioMax5s / divMaxToMinstar)) / 100;
+                countmax = ((nbphotoRep - nbphotoapurger) * ratioMax5s) / 100;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);
@@ -477,21 +477,25 @@ public class AgLibrarySubFolder {
         if (activeNum == -1 || activeNum > listFileSubFolder.size() - 1) {
             return "---";
         }
+        SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date dtdebH = new Date(listFileSubFolder.get(activeNum).getCaptureTime() * 1000);
+        String dth = repDateFormat.format(dtdebH);
+
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + Context.appParam.getString("valeurCorbeille");
+                return dth + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + Context.appParam.getString("valeurCorbeille");
             case 0:
-                return "           " + "\n" + Context.appParam.getString("valeurZero__");
+                return dth + "\n" + "           " + "\n" + Context.appParam.getString("valeurZero__");
             case 1:
-                return " ★         " + "\n" + Context.appParam.getString("valeur1star_");
+                return dth + "\n" + " ★         " + "\n" + Context.appParam.getString("valeur1star_");
             case 2:
-                return " ★ ★       " + "\n" + Context.appParam.getString("valeur2stars");
+                return dth + "\n" + " ★ ★       " + "\n" + Context.appParam.getString("valeur2stars");
             case 3:
-                return " ★ ★ ★     " + "\n" + Context.appParam.getString("valeur3stars");
+                return dth + "\n" + " ★ ★ ★     " + "\n" + Context.appParam.getString("valeur3stars");
             case 4:
-                return " ★ ★ ★ ★   " + "\n" + Context.appParam.getString("valeur4stars");
+                return dth + "\n" + " ★ ★ ★ ★   " + "\n" + Context.appParam.getString("valeur4stars");
             case 5:
-                return " ★ ★ ★ ★ ★ " + "\n" + Context.appParam.getString("valeur5stars");
+                return dth + "\n" + " ★ ★ ★ ★ ★ " + "\n" + Context.appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
@@ -513,7 +517,7 @@ public class AgLibrarySubFolder {
     }
 
 
-    public void setRotateToFile(int activeNum,int addRotate) {
+    public void setRotateToFile(int activeNum, int addRotate) {
         listFileSubFolder.get(activeNum).setAddRotate(addRotate);
     }
 
@@ -662,11 +666,17 @@ public class AgLibrarySubFolder {
         calculStatusRep();
     }
 
-    public boolean fileFiltrer(int phototoshow, boolean estphoto , int nbstar , boolean estrejeter) {
+    public boolean fileFiltrer(int phototoshow, boolean estphoto, int nbstar, boolean estrejeter) {
         boolean ret = true;
-        if (estphoto && !listFileSubFolder.get(phototoshow).estPhoto()) {ret = false;}
-        if (nbstar>-1 && listFileSubFolder.get(phototoshow).getStarValue()!=nbstar) {ret = false;}
-        if (estrejeter && !listFileSubFolder.get(phototoshow).estRejeter()) {ret = false;}
+        if (estphoto && !listFileSubFolder.get(phototoshow).estPhoto()) {
+            ret = false;
+        }
+        if (nbstar > -1 && listFileSubFolder.get(phototoshow).getStarValue() != nbstar) {
+            ret = false;
+        }
+        if (estrejeter && !listFileSubFolder.get(phototoshow).estRejeter()) {
+            ret = false;
+        }
         return ret;
     }
 
