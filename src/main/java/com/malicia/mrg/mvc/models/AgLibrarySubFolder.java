@@ -38,12 +38,7 @@ public class AgLibrarySubFolder {
     private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
-    private int nbetrationzeroetoile;
-    private int nbetrationuneetoile;
-    private int nbetrationdeuxetoile;
-    private int nbetrationtroisetoile;
-    private int nbetrationquatreetoile;
-    private int nbetrationcinqetoile;
+    private int[] nbetrationetoile;
     private int nbphotoapurger;
     private String ratiophotoaconserver;
     private String statusRep;
@@ -227,12 +222,7 @@ public class AgLibrarySubFolder {
     public void refreshCompteur() {
         nbelerep = 0;
         nbphotoRep = 0;
-        nbetrationzeroetoile = 0;
-        nbetrationuneetoile = 0;
-        nbetrationdeuxetoile = 0;
-        nbetrationtroisetoile = 0;
-        nbetrationquatreetoile = 0;
-        nbetrationcinqetoile = 0;
+        nbetrationetoile = new int[]{0, 0, 0, 0, 0, 0};
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
@@ -255,22 +245,12 @@ public class AgLibrarySubFolder {
     private void calculateStarAndDate(AgLibraryFile fi) {
         switch ((int) fi.getStarValue()) {
             case 0:
-                nbetrationzeroetoile += 1;
-                break;
             case 1:
-                nbetrationuneetoile += 1;
-                break;
             case 2:
-                nbetrationdeuxetoile += 1;
-                break;
             case 3:
-                nbetrationtroisetoile += 1;
-                break;
             case 4:
-                nbetrationquatreetoile += 1;
-                break;
             case 5:
-                nbetrationcinqetoile += 1;
+                nbetrationetoile[(int) fi.getStarValue()] += 1;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) fi.getStarValue());
@@ -370,7 +350,7 @@ public class AgLibrarySubFolder {
         int countmax;
         switch (valeur) {
             case 0:
-                nb = nbetrationzeroetoile;
+                nb = nbetrationetoile[valeur];
                 countmin = 0;
                 countmax = nbphotoRep - nbphotoapurger;
                 break;
@@ -379,7 +359,7 @@ public class AgLibrarySubFolder {
             case 3:
             case 4:
             case 5:
-                nb = nbetrationuneetoile;
+                nb = nbetrationetoile[valeur];
                 countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
                 countmax = ((nbphotoRep - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
                 break;
