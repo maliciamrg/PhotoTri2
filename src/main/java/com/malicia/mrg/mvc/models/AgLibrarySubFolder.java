@@ -9,8 +9,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -176,8 +174,6 @@ public class AgLibrarySubFolder {
                 logger.info(localUrl);
                 image = new Image(localUrl, 400, 400, true, false, false);
                 if (image.isError()) {
-
-
                     RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
                     if (RetBlob == null) {
                         localUrl = Context.getLocalVoidPhotoUrl();
@@ -187,8 +183,6 @@ public class AgLibrarySubFolder {
                         InputStream in = RetBlob.getBinaryStream();
                         image = new Image(in);
                     }
-
-
                 }
             } else {
                 localUrl = Context.getLocalErr404PhotoUrl();
