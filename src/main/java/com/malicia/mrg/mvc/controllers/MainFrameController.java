@@ -645,7 +645,7 @@ public class MainFrameController {
         champsConnex.setStyle(champs.getStyle());
     }
 
-    private void refreshAllPhoto() throws IOException {
+    private void refreshAllPhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
 
         recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
@@ -660,7 +660,7 @@ public class MainFrameController {
 
     }
 
-    private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException {
+    private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException, SQLException {
         displayStarValueAndLibelle(imagestar, numphotofromactive);
         imageV.setImage(activeRepSrc.getimagenumero(numphotofromactive));
         imageV.setRotate(activeRep.getRotateFromphotonum(numphotofromactive));
@@ -774,7 +774,7 @@ public class MainFrameController {
                 default:
                     break;
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -788,7 +788,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(-4);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -802,7 +802,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(-3);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -816,7 +816,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(-2);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -830,7 +830,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(-1);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -844,7 +844,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(+1);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -859,7 +859,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(+2);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -873,7 +873,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(+3);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -888,7 +888,7 @@ public class MainFrameController {
         try {
             moveActivephotoNumTo(+4);
             refreshAllPhoto();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             popupalertException(e);
             excptlog(e);
         }
@@ -1026,56 +1026,56 @@ public class MainFrameController {
         }
     }
 
-    public void actionFiltreNull() throws IOException {
+    public void actionFiltreNull() throws IOException, SQLException {
         filtreNbstar = -1;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre0() throws IOException {
+    public void actionfiltre0() throws IOException, SQLException {
         filtreNbstar = 0;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre1() throws IOException {
+    public void actionfiltre1() throws IOException, SQLException {
         filtreNbstar = 1;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre2() throws IOException {
+    public void actionfiltre2() throws IOException, SQLException {
         filtreNbstar = 2;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre3() throws IOException {
+    public void actionfiltre3() throws IOException, SQLException {
         filtreNbstar = 3;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre4() throws IOException {
+    public void actionfiltre4() throws IOException, SQLException {
         filtreNbstar = 4;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltre5() throws IOException {
+    public void actionfiltre5() throws IOException, SQLException {
         filtreNbstar = 5;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
-    public void actionfiltrep() throws IOException {
+    public void actionfiltrep() throws IOException, SQLException {
         filtreNbstar = -1;
         filtreEstPhoto = true;
         FiltreEstrejeter = true;
