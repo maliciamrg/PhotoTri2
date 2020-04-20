@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -1082,4 +1083,12 @@ public class MainFrameController {
         refreshAllPhoto();
     }
 
+    public void playElement(ContextMenuEvent contextMenuEvent) {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.open(new File(activeRep.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
