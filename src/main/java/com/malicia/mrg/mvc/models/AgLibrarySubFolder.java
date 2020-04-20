@@ -289,7 +289,7 @@ public class AgLibrarySubFolder {
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
 
-        int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil((double)nbjourfolder / agLibraryRootFolder.nbjouCat));
+        int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil((double) nbjourfolder / agLibraryRootFolder.nbjouCat));
         if (nbphotoRep > limitemaxfolder) {
             nbphotoapurger = (nbphotoRep - limitemaxfolder);
         }
@@ -309,10 +309,10 @@ public class AgLibrarySubFolder {
         statusRep = OK;
         int i;
         for (i = 0; i < subFolderFormatZ.size(); i++) {
-            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
-                statusRep = KO;
-                break;
-            }
+                if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
+                    statusRep = KO;
+                    break;
+                }
         }
         if (nbphotoapurger != 0) {
             statusRep = KO;
@@ -533,7 +533,7 @@ public class AgLibrarySubFolder {
         for (i = 0; i < activeRepDest.subFolderFormatZ.size(); i++) {
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
             if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
-                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue())) {
+                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.sszVal[i]) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Confirmation Dialog with Custom Actions");
                     alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
@@ -635,7 +635,7 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i])) {
+            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i] ) {
                 setrepformatZ(i, part[i]);
             }
         }

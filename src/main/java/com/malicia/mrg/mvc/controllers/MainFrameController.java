@@ -960,6 +960,9 @@ public class MainFrameController {
         activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue());
         refreshcompteurRepertoire();
         selectssrepformatZ1.setEditable(activeRep.agLibraryRootFolder.ssz[0]);
+        selectssrepformatZ2.setEditable(activeRep.agLibraryRootFolder.ssz[1]);
+        selectssrepformatZ3.setEditable(activeRep.agLibraryRootFolder.ssz[2]);
+        selectssrepformatZ4.setEditable(activeRep.agLibraryRootFolder.ssz[3]);
     }
 
     /**

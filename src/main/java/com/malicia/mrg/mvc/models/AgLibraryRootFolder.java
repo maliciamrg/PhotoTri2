@@ -36,7 +36,7 @@ public class AgLibraryRootFolder {
     public String name;
     public double nbmaxCat;
     public int nbjouCat;
-    public String sszCatVal;
+    public boolean[] sszVal;
     public boolean[] ssz;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
@@ -55,6 +55,8 @@ public class AgLibraryRootFolder {
         setratioMaxstarCat("0,0,0,0,0");
         nbmaxCat = 999d;
         nbjouCat = 1;
+        setsszCat("Open,Open,Open,Open");
+        setsszCatVal("Facul,Facul,Facul,Facul");
     }
 
     public int getRatioMaxStar(int star) {
@@ -613,6 +615,20 @@ public class AgLibraryRootFolder {
             };
             if(tmpssz[i].compareTo("Open")==0){
                 ssz[i]=true;
+            };
+        }
+    }
+
+    public void setsszCatVal(String sszCatVal) {
+        String[] tmpsszval = sszCatVal.split(",");
+        sszVal = new boolean[tmpsszval.length];
+        for(int i = 0 ; i < tmpsszval.length ; i++)
+        {
+            if(tmpsszval[i].compareTo("Facul")==0){
+                sszVal[i]=false;
+            };
+            if(tmpsszval[i].compareTo("Oblig")==0){
+                sszVal[i]=true;
             };
         }
     }
