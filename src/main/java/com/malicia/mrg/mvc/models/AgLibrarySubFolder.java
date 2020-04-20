@@ -8,20 +8,27 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.malicia.mrg.app.Context.*;
+import static com.malicia.mrg.app.Context.divMaxToMinstar;
+import static com.malicia.mrg.app.Context.lrcat;
 
 /**
  * The type Ag library sub folder.
@@ -33,9 +40,9 @@ public class AgLibrarySubFolder {
     public static final String KO = "--KO--";
     public List<ZoneZ> subFolderFormatZ;
     public AgLibraryRootFolder agLibraryRootFolder;
+    public List<AgLibraryFile> listFileSubFolder;
     private String pathFromRoot;
     private Logger logger;
-    private List<AgLibraryFile> listFileSubFolder;
     private int nbelerep;
     private int nbphotoRep;
     private int[] nbetrationetoile;
@@ -59,6 +66,7 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
+    private Blob RetBlob;
 
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
@@ -155,7 +163,7 @@ public class AgLibrarySubFolder {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public Image getimagenumero(int phototoshow) throws IOException {
+    public Image getimagenumero(int phototoshow) throws IOException, SQLException {
         Image image = null;
         String localUrl;
         if (phototoshow < 0 || phototoshow > listFileSubFolder.size() - 1) {
@@ -167,6 +175,21 @@ public class AgLibrarySubFolder {
                 localUrl = file.toURI().toURL().toExternalForm();
                 logger.info(localUrl);
                 image = new Image(localUrl, 400, 400, true, false, false);
+                if (image.isError()) {
+
+
+                    RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
+                    if (RetBlob == null) {
+                        localUrl = Context.getLocalVoidPhotoUrl();
+                        image = new Image(localUrl, false);
+                    } else {
+                        localUrl = file.toURI().toURL().toExternalForm();
+                        InputStream in = RetBlob.getBinaryStream();
+                        image = new Image(in);
+                    }
+
+
+                }
             } else {
                 localUrl = Context.getLocalErr404PhotoUrl();
                 image = new Image(localUrl, false);
@@ -289,10 +312,10 @@ public class AgLibrarySubFolder {
         statusRep = OK;
         int i;
         for (i = 0; i < subFolderFormatZ.size(); i++) {
-                if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
-                    statusRep = KO;
-                    break;
-                }
+            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
+                statusRep = KO;
+                break;
+            }
         }
         if (nbphotoapurger != 0) {
             statusRep = KO;
@@ -615,7 +638,7 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i] ) {
+            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i]) {
                 setrepformatZ(i, part[i]);
             }
         }

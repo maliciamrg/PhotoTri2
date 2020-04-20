@@ -134,10 +134,14 @@ public class AgLibraryFile {
                 return false;
             case "avi":
                 return false;
+            case "dng":
+                return true;
+            case "tiff":
+                return true;
             case "raw":
-                return false;
+                return true;
             case "arw":
-                return false;
+                return true;
             default:
                 return true;
         }

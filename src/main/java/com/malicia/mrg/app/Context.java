@@ -3,6 +3,7 @@ package com.malicia.mrg.app;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class Context implements Serializable {
     private static String localVoidPhotoUrl;
     private static String localErr404PhotoUrl;
     private static String localErrPhotoUrl;
+    public static CatalogPreviews Previews;
 
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -106,6 +108,7 @@ public class Context implements Serializable {
         Context.initPropertiesParameters();
 
         lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
+        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 
