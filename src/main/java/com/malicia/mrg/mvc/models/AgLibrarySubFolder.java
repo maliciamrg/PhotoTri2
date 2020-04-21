@@ -9,24 +9,21 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.Blob;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.malicia.mrg.app.Context.divMaxToMinstar;
-import static com.malicia.mrg.app.Context.lrcat;
+import static com.malicia.mrg.app.Context.*;
 
 /**
  * The type Ag library sub folder.
@@ -64,7 +61,6 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
-    private Blob RetBlob;
 
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
@@ -173,16 +169,34 @@ public class AgLibrarySubFolder {
                 localUrl = file.toURI().toURL().toExternalForm();
                 logger.info(localUrl);
                 image = new Image(localUrl, 400, 400, true, false, false);
+                //file not supported in jdk
                 if (image.isError()) {
-                    RetBlob = Context.Previews.getJpegFromUuidFile(listFileSubFolder.get(phototoshow).getFileIdGlobal());
-                    if (RetBlob == null) {
-                        localUrl = Context.getLocalVoidPhotoUrl();
-                        image = new Image(localUrl, false);
-                    } else {
-                        localUrl = file.toURI().toURL().toExternalForm();
-                        InputStream in = RetBlob.getBinaryStream();
-                        image = new Image(in);
+
+                    localUrl = Context.getLocalVoidPhotoUrl();
+                    image = new Image(localUrl, false);
+
+                    // get preview file if exist
+                    String uuid = listFileSubFolder.get(phototoshow).getFileIdGlobal();
+                    ResultSet rs = Previews.getJpegFromUuidFile(uuid);
+                    InputStream jpegData;
+                    while (rs.next()) {
+                        jpegData = rs.getBinaryStream("jpegData");
+                        String digest = rs.getString("digest");
+                        File filePreview = new File(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator
+                                + uuid.substring(0, 1) + File.separator + uuid.substring(0, 4) + File.separator + uuid + "-" +  digest + ".lrprev");
+                        if (filePreview.exists()) {
+                            image = new Image(FileLrprev.getLastJpegFromLrprev(filePreview));
+                        } else {
+                            // get preview bloc (low quality) if exist
+                            if (jpegData == null) {
+                                localUrl = Context.getLocalVoidPhotoUrl();
+                                image = new Image(localUrl, false);
+                            } else {
+                                image = new Image(jpegData);
+                            }
+                        }
                     }
+
                 }
             } else {
                 localUrl = Context.getLocalErr404PhotoUrl();
@@ -345,7 +359,7 @@ public class AgLibrarySubFolder {
         int i;
         for (i = 0; i < subFolderFormatZ.size(); i++) {
             if (subFolderFormatZ.get(i).getLocalValue().compareTo("") != 0) {
-                pathFromRoot += subFolderFormatZ.get(i).getLocalValue() + Context.appParam.getString("ssrepformatSep");
+                pathFromRoot += subFolderFormatZ.get(i).getLocalValue() + appParam.getString("ssrepformatSep");
             }
         }
 
@@ -457,19 +471,19 @@ public class AgLibrarySubFolder {
 
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return dth + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + Context.appParam.getString("valeurCorbeille");
+                return dth + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
             case 0:
-                return dth + "\n" + "           " + "\n" + Context.appParam.getString("valeurZero__");
+                return dth + "\n" + "           " + "\n" + appParam.getString("valeurZero__");
             case 1:
-                return dth + "\n" + " ★         " + "\n" + Context.appParam.getString("valeur1star_");
+                return dth + "\n" + " ★         " + "\n" + appParam.getString("valeur1star_");
             case 2:
-                return dth + "\n" + " ★ ★       " + "\n" + Context.appParam.getString("valeur2stars");
+                return dth + "\n" + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
             case 3:
-                return dth + "\n" + " ★ ★ ★     " + "\n" + Context.appParam.getString("valeur3stars");
+                return dth + "\n" + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
             case 4:
-                return dth + "\n" + " ★ ★ ★ ★   " + "\n" + Context.appParam.getString("valeur4stars");
+                return dth + "\n" + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
             case 5:
-                return dth + "\n" + " ★ ★ ★ ★ ★ " + "\n" + Context.appParam.getString("valeur5stars");
+                return dth + "\n" + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
@@ -591,7 +605,7 @@ public class AgLibrarySubFolder {
     }
 
     private String getpathFromRootrejet() {
-        return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet"));
+        return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + appParam.getString("ssrepRejet"));
     }
 
 
@@ -630,7 +644,7 @@ public class AgLibrarySubFolder {
 
         refreshCompteur();
 
-        String[] part = pathFromRoot.replace("/", "").split(Context.appParam.getString("ssrepformatSep"));
+        String[] part = pathFromRoot.replace("/", "").split(appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
             if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i]) {
                 setrepformatZ(i, part[i]);

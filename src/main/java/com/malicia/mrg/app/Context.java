@@ -6,11 +6,13 @@ import javafx.collections.ObservableList;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.LogManager;
@@ -107,8 +109,8 @@ public class Context implements Serializable {
 
         Context.initPropertiesParameters();
 
-        lrcat = new CatalogLrcat(appParam.getString("CatalogLrcat"));
-        Previews = new CatalogPreviews(appParam.getString("CatalogPreviews"));
+        lrcat = new CatalogLrcat(appParam.getString("RepCatalog") + File.separator + appParam.getString("CatalogLrcat"));
+        Previews = new CatalogPreviews(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator + appParam.getString("CatalogPreviews"));
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 

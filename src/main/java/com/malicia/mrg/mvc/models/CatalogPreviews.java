@@ -1,20 +1,10 @@
 package com.malicia.mrg.mvc.models;
 
-import com.malicia.mrg.app.Context;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Blob;
+import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class CatalogPreviews extends SQLiteJDBCDriverConnection {
@@ -39,16 +29,14 @@ public class CatalogPreviews extends SQLiteJDBCDriverConnection {
         dateFichierHR = dateFormat.format(dateFichier);
     }
 
-    public Blob getJpegFromUuidFile(String UuidFile) throws SQLException {
+    public ResultSet getJpegFromUuidFile(String UuidFile) throws SQLException {
         ResultSet rs = this.select("" +
-                "select jpegData " +
+                "select jpegData , croppedWidth, croppedHeight , digest " +
                 "from RootPixels " +
                 "where uuid = '" + UuidFile + "' " +
                 ";");
-        while (rs.next()) {
-            return rs.getBlob("jpegData");
-        }
-        return null;
+
+        return rs;
     }
 
     public String getname() {
