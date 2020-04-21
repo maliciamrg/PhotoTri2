@@ -739,12 +739,12 @@ public class MainFrameController {
     public void actionActivePhoto(KeyEvent keyEvent) {
         try {
             switch (keyEvent.getCode()) {
-                case RIGHT:
+                case LEFT:
                     moveActivephotoNumTo(+1);
                     refreshAllPhoto();
                     keyEvent.consume();
                     break;
-                case LEFT:
+                case RIGHT:
                     moveActivephotoNumTo(-1);
                     refreshAllPhoto();
                     keyEvent.consume();
