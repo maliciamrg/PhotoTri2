@@ -9,17 +9,18 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,8 +35,8 @@ public class AgLibrarySubFolder {
     public static final String OK = "--OK--";
     public static final String KO = "--KO--";
     public List<ZoneZ> subFolderFormatZ;
-    public AgLibraryRootFolder agLibraryRootFolder;
     public List<AgLibraryFile> listFileSubFolder;
+    private AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
     private Logger logger;
     private int nbelerep;
@@ -48,7 +49,6 @@ public class AgLibrarySubFolder {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
-
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -61,7 +61,6 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
-
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
@@ -74,6 +73,14 @@ public class AgLibrarySubFolder {
     public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
         this.agLibraryRootFolder = activeRep.agLibraryRootFolder;
         aglibraySubFolderConstructor(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal);
+    }
+
+    public AgLibraryRootFolder getAgLibraryRootFolder() {
+        return agLibraryRootFolder;
+    }
+
+    public void setAgLibraryRootFolder(AgLibraryRootFolder agLibraryRootFolder) {
+        this.agLibraryRootFolder = agLibraryRootFolder;
     }
 
     public String getPathFromRoot() {
@@ -183,7 +190,7 @@ public class AgLibrarySubFolder {
                         jpegData = rs.getBinaryStream("jpegData");
                         String digest = rs.getString("digest");
                         File filePreview = new File(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator
-                                + uuid.substring(0, 1) + File.separator + uuid.substring(0, 4) + File.separator + uuid + "-" +  digest + ".lrprev");
+                                + uuid.substring(0, 1) + File.separator + uuid.substring(0, 4) + File.separator + uuid + "-" + digest + ".lrprev");
                         if (filePreview.exists()) {
                             image = new Image(FileLrprev.getLastJpegFromLrprev(filePreview));
                         } else {

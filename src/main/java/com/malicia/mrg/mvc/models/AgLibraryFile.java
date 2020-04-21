@@ -91,7 +91,7 @@ public class AgLibraryFile {
      * @return the absolute path
      */
     public String getAbsolutePath() {
-        return subFolder.agLibraryRootFolder.absolutePath;
+        return subFolder.getAgLibraryRootFolder().absolutePath;
     }
 
     /**
@@ -153,7 +153,7 @@ public class AgLibraryFile {
      * @return the path
      */
     public String getPath() {
-        return normalizePath(subFolder.agLibraryRootFolder.absolutePath + subFolder.getPathFromRoot() + lcIdxFilename);
+        return normalizePath(subFolder.getAgLibraryRootFolder().absolutePath + subFolder.getPathFromRoot() + lcIdxFilename);
     }
 
     /**
@@ -199,6 +199,6 @@ public class AgLibraryFile {
         if (starValue < 0) {
             editstartvalue = 0;
         }
-        subFolder.agLibraryRootFolder.sqlEditStarValue(fileIdLocal, editstartvalue);
+        subFolder.getAgLibraryRootFolder().sqlEditStarValue(fileIdLocal, editstartvalue);
     }
 }

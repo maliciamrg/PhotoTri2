@@ -958,12 +958,13 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
-        activeRep.agLibraryRootFolder = (AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue());
+        activeRep.setAgLibraryRootFolder((AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue()));
+        if (activeRep.getAgLibraryRootFolder()==null) {activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));}
         refreshcompteurRepertoire();
-        selectssrepformatZ1.setEditable(activeRep.agLibraryRootFolder.ssz[0]);
-        selectssrepformatZ2.setEditable(activeRep.agLibraryRootFolder.ssz[1]);
-        selectssrepformatZ3.setEditable(activeRep.agLibraryRootFolder.ssz[2]);
-        selectssrepformatZ4.setEditable(activeRep.agLibraryRootFolder.ssz[3]);
+        selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().ssz[0]);
+        selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().ssz[1]);
+        selectssrepformatZ3.setEditable(activeRep.getAgLibraryRootFolder().ssz[2]);
+        selectssrepformatZ4.setEditable(activeRep.getAgLibraryRootFolder().ssz[3]);
     }
 
     /**
