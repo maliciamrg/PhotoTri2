@@ -739,12 +739,12 @@ public class MainFrameController {
     public void actionActivePhoto(KeyEvent keyEvent) {
         try {
             switch (keyEvent.getCode()) {
-                case LEFT:
+                case RIGHT:
                     moveActivephotoNumTo(+1);
                     refreshAllPhoto();
                     keyEvent.consume();
                     break;
-                case RIGHT:
+                case LEFT:
                     moveActivephotoNumTo(-1);
                     refreshAllPhoto();
                     keyEvent.consume();
@@ -761,12 +761,12 @@ public class MainFrameController {
                     displayStarValueAndLibelle(imageZ0star, activephotoNum);
                     keyEvent.consume();
                     break;
-                case Q:
+                case D:
                     activeRep.setRotateToFile(activephotoNum, +90);
                     imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
-                case D:
+                case Q:
                     activeRep.setRotateToFile(activephotoNum, -90);
                     imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();

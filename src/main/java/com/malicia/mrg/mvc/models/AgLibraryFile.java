@@ -171,11 +171,11 @@ public class AgLibraryFile {
 
     public void setAddRotate(int addRotate) {
         this.addRotate += addRotate;
-        if (this.addRotate > 180) {
-            this.addRotate = this.addRotate - 180;
+        if (this.addRotate > 270) {
+            this.addRotate = this.addRotate - 360;
         } else {
-            if (this.addRotate < -180) {
-                this.addRotate = this.addRotate + 180;
+            if (this.addRotate < -270) {
+                this.addRotate = this.addRotate + 360;
             }
         }
     }
