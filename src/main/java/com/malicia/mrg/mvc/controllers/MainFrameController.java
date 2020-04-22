@@ -1087,7 +1087,7 @@ public class MainFrameController {
     public void playElement(ContextMenuEvent contextMenuEvent) {
         Desktop desktop = Desktop.getDesktop();
         try {
-            desktop.open(new File(activeRep.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
+            desktop.open(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
