@@ -17,14 +17,29 @@ import java.sql.SQLException;
  */
 public class Main extends Application {
 
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+    }
+
     /**
      * The entry point of application.
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) throws SQLException, IOException, URISyntaxException {
-        Context.setup();
-        launch(args);
+    public static void main(String[] args) throws  IOException, URISyntaxException {
+        try {
+            Context.setup();
+            launch(args);
+        } catch (SQLException e) {
+
+//            Context.logecrireuserlogInfo("sqlite acces error :" + e.getMessage());
+//            Context.popupalertException(e);
+            LOGGER.info("sqlite acces error :" + e.getMessage());
+            Context.excptlog(e,LOGGER);
+
+        }
     }
 
     @Override

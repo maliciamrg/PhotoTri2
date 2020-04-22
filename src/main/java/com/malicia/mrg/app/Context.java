@@ -1,15 +1,18 @@
 package com.malicia.mrg.app;
 
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -146,6 +149,81 @@ public class Context implements Serializable {
 
     public static String getUrlgitwiki() {
         return Context.appParam.getString("urlgitwiki");
+    }
+
+    /**
+     * Popupalert.
+     *
+     * @param contentText the content text
+     * @return
+     */
+    public static Optional<ButtonType> popupalertConfirmeModification(String contentText) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("do you confirme ?");
+        alert.setContentText(contentText);
+
+        return alert.showAndWait();
+    }
+
+    public static void excptlog(Exception theException,java.util.logging.Logger loggerori) {
+        StringWriter stringWritter = new StringWriter();
+        PrintWriter printWritter = new PrintWriter(stringWritter, true);
+        theException.printStackTrace(printWritter);
+        printWritter.flush();
+        stringWritter.flush();
+        loggerori.severe(() -> "theException = " + "\n" + stringWritter.toString());
+    }
+
+    public static void popupalertException(Exception ex) {
+        // Create expandable Exception.
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        String contentText = ex.toString();
+
+        popupalert(contentText, exceptionText);
+
+    }
+
+    public static void popupalert(String contentText, String exceptionText) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Dialog");
+        alert.setHeaderText("Exception Dialog");
+        alert.setContentText(contentText);
+
+        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+// Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+    }
+
+    public static void logecrireuserlogInfo(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText("Information Dialog");
+        alert.setContentText(msg);
+        alert.showAndWait();
+
+        LOGGER.info(msg);
     }
 
 }

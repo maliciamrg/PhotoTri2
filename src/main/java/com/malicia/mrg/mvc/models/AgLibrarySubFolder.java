@@ -1,7 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -598,8 +597,8 @@ public class AgLibrarySubFolder {
                         try {
                             ele.enregistrerStarValue();
                         } catch (SQLException e) {
-                            MainFrameController.popupalertException(e);
-                            MainFrameController.excptlog(e);
+                            popupalertException(e);
+                            excptlog(e,logger);
                         }
                     }
                 }

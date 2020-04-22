@@ -17,6 +17,12 @@ import java.util.*;
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+    }
+
     public long dateFichier;
     public String dateFichierHR;
     public String nomFichier;
@@ -28,7 +34,6 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         super(catalogLrcat);
 
         refreshdataLrcat(catalogLrcat);
-
         addrootFolder("repLegacy", Context.appParam.getString("repLegacy"), AgLibraryRootFolder.TYPE_LEG);
         addrootFolder("repEncours", Context.appParam.getString("repEncours"), AgLibraryRootFolder.TYPE_ENC);
         addrootFolder("repKidz", Context.appParam.getString("repKidz"), AgLibraryRootFolder.TYPE_KID);
@@ -37,15 +42,17 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         //array de categories
 
         int numcat = 1;
-        while (Context.appParam.containsKey("repCat"+numcat)) {
-            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat"+numcat), AgLibraryRootFolder.TYPE_CAT);
+        while (Context.appParam.containsKey("repCat" + numcat)) {
+            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat" + numcat), AgLibraryRootFolder.TYPE_CAT);
             rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
             rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
             rep.get("repCat" + numcat).setsszCat(Context.appParam.getString("sszCat" + numcat));
             rep.get("repCat" + numcat).setsszCatVal(Context.appParam.getString("sszCatVal" + numcat));
             rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
-            numcat ++;
+            numcat++;
         }
+
+
     }
 
     private void refreshdataLrcat(String catalogLrcat) {

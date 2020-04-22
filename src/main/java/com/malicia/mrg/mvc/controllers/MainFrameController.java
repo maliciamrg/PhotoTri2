@@ -14,13 +14,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -31,8 +28,6 @@ import org.apache.tools.ant.DirectoryScanner;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -183,71 +178,6 @@ public class MainFrameController {
     }
 
     /**
-     * Popupalert.
-     *
-     * @param contentText the content text
-     * @return
-     */
-    public static Optional<ButtonType> popupalertConfirmeModification(String contentText) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("do you confirme ?");
-        alert.setContentText(contentText);
-
-        return alert.showAndWait();
-    }
-
-    public static void excptlog(Exception theException) {
-        StringWriter stringWritter = new StringWriter();
-        PrintWriter printWritter = new PrintWriter(stringWritter, true);
-        theException.printStackTrace(printWritter);
-        printWritter.flush();
-        stringWritter.flush();
-        LOGGER.severe(() -> "theException = " + "\n" + stringWritter.toString());
-    }
-
-    public static void popupalertException(Exception ex) {
-        // Create expandable Exception.
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        String exceptionText = sw.toString();
-
-        String contentText = ex.toString();
-
-        popupalert(contentText, exceptionText);
-
-    }
-
-    private static void popupalert(String contentText, String exceptionText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Exception Dialog");
-        alert.setContentText(contentText);
-
-        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
-    }
-
-    /**
      * Initialize.
      */
     private void initialize() {
@@ -278,12 +208,12 @@ public class MainFrameController {
 
             if (fori.exists()) {
                 Files.copy(fori.toPath(), dest.toPath());
-                logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
+                Context.logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
             }
         } catch (IOException e) {
-            logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
-            popupalertException(e);
-            excptlog(e);
+            Context.logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
     }
@@ -320,17 +250,17 @@ public class MainFrameController {
                     if (fdest.isFile() && fdest.exists()) {
                         Files.delete(fdest.toPath());
                         Files.copy(fori.toPath(), fdest.toPath());
-                        logecrireuserlogInfo("restaure lrcat de :" + selectfile);
+                        Context.logecrireuserlogInfo("restaure lrcat de :" + selectfile);
                     }
                 } else {
-                    logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
+                    Context.logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
                 }
             } catch (IOException e) {
-                popupalertException(e);
-                excptlog(e);
+                Context.popupalertException(e);
+                Context.excptlog(e,LOGGER);
             }
         } else {
-            logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
+            Context.logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
         }
 
         lrcat.reconnect();
@@ -345,22 +275,12 @@ public class MainFrameController {
     void actionDeleteRepertoireLogique() {
         try {
             int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
-            logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+            Context.logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
         } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
-    }
-
-    private void logecrireuserlogInfo(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText("Information Dialog");
-        alert.setContentText(msg);
-        alert.showAndWait();
-
-        LOGGER.info(msg);
     }
 
     /**
@@ -374,8 +294,8 @@ public class MainFrameController {
             lrcat.rangerRejet();
 
         } catch (SQLException | IOException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
     }
@@ -391,14 +311,14 @@ public class MainFrameController {
             int exitVal = lrcat.openLigthroomLrcatandWait();
 
             if (exitVal == 0) {
-                logecrireuserlogInfo("Success! = open : " + lrcat.cheminfichierLrcat);
+                Context.logecrireuserlogInfo("Success! = open : " + lrcat.cheminfichierLrcat);
             } else {
-                logecrireuserlogInfo("Erreur = " + exitVal + " | " + lrcat.cheminfichierLrcat);
+                Context.logecrireuserlogInfo("Erreur = " + exitVal + " | " + lrcat.cheminfichierLrcat);
             }
 
         } catch (Exception e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -415,12 +335,12 @@ public class MainFrameController {
             lrcat.rep.get(AgLibraryFile.REP_NEW).RegoupFileByAdherence();
 
             int ndDelTotal = lrcat.rep.get(AgLibraryFile.REP_NEW).DeleteEmptyDirectory();
-            logecrireuserlogInfo("delete all from " + lrcat.rep.get(AgLibraryFile.REP_NEW).name + " : " + String.format("%05d", ndDelTotal));
+            Context.logecrireuserlogInfo("delete all from " + lrcat.rep.get(AgLibraryFile.REP_NEW).name + " : " + String.format("%05d", ndDelTotal));
 
 
         } catch (SQLException | IOException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -431,9 +351,9 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerlebazar() {
-        Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+        Optional<ButtonType> result = Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+            Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         }
     }
 
@@ -456,16 +376,16 @@ public class MainFrameController {
     @FXML
     void actionExecModification() {
         try {
-            Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+            Optional<ButtonType> result = Context.popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
-
+repChoose.getItems().remove(activeRep);
                 repChoose.getSelectionModel().selectNext();
 //                populatereChooseChoicebox();
             }
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -479,10 +399,10 @@ public class MainFrameController {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
             }
         } catch (IOException | URISyntaxException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
-        logecrireuserlogInfo(Context.getUrlgitwiki());
+        Context.logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
 
@@ -493,10 +413,10 @@ public class MainFrameController {
     void actionDeleteEmptyDirectoryPhysique() {
         try {
             int ndDelTotal = lrcat.deleteEmptyDirectory();
-            logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
+            Context.logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -509,8 +429,8 @@ public class MainFrameController {
             lrcat.openLigthroomLrcatandWait();
             initialize();
         } catch (Exception e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -522,10 +442,10 @@ public class MainFrameController {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
+            Context.popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
         } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
     }
@@ -538,8 +458,8 @@ public class MainFrameController {
         try {
             populatereChooseChoicebox();
         } catch (SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -775,8 +695,8 @@ public class MainFrameController {
                     break;
             }
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -789,8 +709,8 @@ public class MainFrameController {
             moveActivephotoNumTo(-4);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -803,8 +723,8 @@ public class MainFrameController {
             moveActivephotoNumTo(-3);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -817,8 +737,8 @@ public class MainFrameController {
             moveActivephotoNumTo(-2);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -831,8 +751,8 @@ public class MainFrameController {
             moveActivephotoNumTo(-1);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -845,8 +765,8 @@ public class MainFrameController {
             moveActivephotoNumTo(+1);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
     }
@@ -860,8 +780,8 @@ public class MainFrameController {
             moveActivephotoNumTo(+2);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -874,8 +794,8 @@ public class MainFrameController {
             moveActivephotoNumTo(+3);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
 
     }
@@ -889,8 +809,8 @@ public class MainFrameController {
             moveActivephotoNumTo(+4);
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 
@@ -1022,8 +942,8 @@ public class MainFrameController {
                 datesub.setText(activeRep.getDtdebHumain());
             }
         } catch (IOException | SQLException e) {
-            popupalertException(e);
-            excptlog(e);
+            Context.popupalertException(e);
+            Context.excptlog(e,LOGGER);
         }
     }
 

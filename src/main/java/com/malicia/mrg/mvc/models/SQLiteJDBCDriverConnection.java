@@ -47,6 +47,7 @@ public class SQLiteJDBCDriverConnection {
         } catch (SQLException e) {
             LOGGER.severe(e.getMessage());
         }
+
     }
 
     /**
