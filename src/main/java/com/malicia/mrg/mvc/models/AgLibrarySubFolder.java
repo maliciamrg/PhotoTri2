@@ -524,6 +524,7 @@ public class AgLibrarySubFolder {
     }
 
     public void setrepformatZ(int i, String valeur) {
+        if (valeur.compareTo("null")==0){valeur="";}
         subFolderFormatZ.get(i).setLocalValue(valeur);
     }
 
