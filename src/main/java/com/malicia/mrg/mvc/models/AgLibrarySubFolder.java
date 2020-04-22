@@ -398,7 +398,8 @@ public class AgLibrarySubFolder {
             case 4:
             case 5:
                 nb = nbetrationetoile[valeur];
-                countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
+                countmin = 0;
+//                countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
                 countmax = ((nbphotoRep - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
                 break;
             default:
