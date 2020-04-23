@@ -880,6 +880,8 @@ repChoose.getItems().remove(activeRep);
     public void actionrepCatChange(ActionEvent actionEvent) {
         activeRep.setAgLibraryRootFolder((AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue()));
         if (activeRep.getAgLibraryRootFolder()==null) {activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));}
+        activeRep.refreshValue();
+        refreshcomboxRepertoire();
         refreshcompteurRepertoire();
         selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().ssz[0]);
         selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().ssz[1]);
