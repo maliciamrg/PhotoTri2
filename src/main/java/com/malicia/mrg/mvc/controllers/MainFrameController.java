@@ -936,8 +936,8 @@ repChoose.getItems().remove(activeRep);
             activeRep.refreshValue();
             if (activeRep != null) {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
-                refreshcompteurRepertoire();
                 refreshcomboxRepertoire();
+                refreshcompteurRepertoire();
                 actionFiltreNull();
                 datesub.setText(activeRep.getDtdebHumain());
             }
