@@ -474,23 +474,24 @@ public class AgLibrarySubFolder {
         }
         SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dtdebH = new Date(listFileSubFolder.get(activeNum).getCaptureTime() * 1000);
-        String dth = repDateFormat.format(dtdebH);
+
+        String infoPrec = String.format("%04d", activeNum) + " - " + repDateFormat.format(dtdebH);
 
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return dth + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
+                return infoPrec + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
             case 0:
-                return dth + "\n" + "           " + "\n" + appParam.getString("valeurZero__");
+                return infoPrec + "\n" + "           " + "\n" + appParam.getString("valeurZero__");
             case 1:
-                return dth + "\n" + " ★         " + "\n" + appParam.getString("valeur1star_");
+                return infoPrec + "\n" + " ★         " + "\n" + appParam.getString("valeur1star_");
             case 2:
-                return dth + "\n" + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
+                return infoPrec + "\n" + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
             case 3:
-                return dth + "\n" + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
+                return infoPrec + "\n" + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
             case 4:
-                return dth + "\n" + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
+                return infoPrec + "\n" + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
             case 5:
-                return dth + "\n" + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
+                return infoPrec + "\n" + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
