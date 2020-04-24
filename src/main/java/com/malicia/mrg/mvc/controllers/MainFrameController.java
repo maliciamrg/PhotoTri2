@@ -670,6 +670,16 @@ public class MainFrameController {
                     refreshAllPhoto();
                     keyEvent.consume();
                     break;
+                case HOME:
+                    moveActivephotoNumTo(-9999);
+                    refreshAllPhoto();
+                    keyEvent.consume();
+                    break;
+                case END:
+                    moveActivephotoNumTo(+9999);
+                    refreshAllPhoto();
+                    keyEvent.consume();
+                    break;
                 case UP:
                     activeRep.valeuractivephotoincrease(activephotoNum);
                     refreshcompteurRepertoire();
