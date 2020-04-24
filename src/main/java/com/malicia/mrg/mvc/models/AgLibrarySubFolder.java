@@ -475,7 +475,7 @@ public class AgLibrarySubFolder {
         SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dtdebH = new Date(listFileSubFolder.get(activeNum).getCaptureTime() * 1000);
 
-        String infoPrec = String.format("%04d", activeNum) + " - " + repDateFormat.format(dtdebH);
+        String infoPrec = String.format("%04d", activeNum+1) + " - " + repDateFormat.format(dtdebH);
 
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
