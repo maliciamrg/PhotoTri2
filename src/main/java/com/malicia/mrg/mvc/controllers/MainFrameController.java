@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
+import static com.malicia.mrg.app.Context.popupalert;
 
 
 /**
@@ -684,6 +685,13 @@ public class MainFrameController {
                     activeRep.valeuractivephotoincrease(activephotoNum);
                     refreshcompteurRepertoire();
                     displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                    keyEvent.consume();
+                    break;
+                case S:
+                    if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
+                        // TODO: 25/04/2020  
+                        popupalert("split repertoire","split repertoire a coder");
+                    }
                     keyEvent.consume();
                     break;
                 case DOWN:
