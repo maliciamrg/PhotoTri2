@@ -213,7 +213,7 @@ public class MainFrameController {
         } catch (IOException e) {
             Context.logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -257,7 +257,7 @@ public class MainFrameController {
                 }
             } catch (IOException e) {
                 Context.popupalertException(e);
-                Context.excptlog(e,LOGGER);
+                Context.excptlog(e, LOGGER);
             }
         } else {
             Context.logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
@@ -278,7 +278,7 @@ public class MainFrameController {
             Context.logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
         } catch (SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -290,12 +290,13 @@ public class MainFrameController {
     void actionRangerRejet() {
 
         try {
-
-            lrcat.rangerRejet();
+            if (false) {
+                lrcat.rangerRejet();
+            }
 
         } catch (SQLException | IOException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -318,7 +319,7 @@ public class MainFrameController {
 
         } catch (Exception e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -340,7 +341,7 @@ public class MainFrameController {
 
         } catch (SQLException | IOException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -385,7 +386,7 @@ public class MainFrameController {
             }
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -400,7 +401,7 @@ public class MainFrameController {
             }
         } catch (IOException | URISyntaxException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
         Context.logecrireuserlogInfo(Context.getUrlgitwiki());
     }
@@ -416,7 +417,7 @@ public class MainFrameController {
             Context.logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -430,7 +431,7 @@ public class MainFrameController {
             initialize();
         } catch (Exception e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -445,7 +446,7 @@ public class MainFrameController {
             Context.popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
         } catch (SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -459,7 +460,7 @@ public class MainFrameController {
             populatereChooseChoicebox();
         } catch (SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -696,7 +697,7 @@ public class MainFrameController {
             }
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -710,7 +711,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -724,7 +725,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -738,7 +739,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -752,7 +753,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -766,7 +767,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -781,7 +782,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -795,7 +796,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
 
     }
@@ -810,7 +811,7 @@ public class MainFrameController {
             refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -879,7 +880,9 @@ public class MainFrameController {
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
         activeRep.setAgLibraryRootFolder((AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue()));
-        if (activeRep.getAgLibraryRootFolder()==null) {activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));}
+        if (activeRep.getAgLibraryRootFolder() == null) {
+            activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));
+        }
         activeRep.refreshValue();
         refreshcomboxRepertoire();
         refreshcompteurRepertoire();
@@ -945,7 +948,7 @@ public class MainFrameController {
             }
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
-            Context.excptlog(e,LOGGER);
+            Context.excptlog(e, LOGGER);
         }
     }
 
@@ -956,6 +959,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre0() throws IOException, SQLException {
         filtreNbstar = 0;
         filtreEstPhoto = true;
@@ -963,6 +967,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre1() throws IOException, SQLException {
         filtreNbstar = 1;
         filtreEstPhoto = true;
@@ -970,6 +975,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre2() throws IOException, SQLException {
         filtreNbstar = 2;
         filtreEstPhoto = true;
@@ -977,6 +983,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre3() throws IOException, SQLException {
         filtreNbstar = 3;
         filtreEstPhoto = true;
@@ -984,6 +991,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre4() throws IOException, SQLException {
         filtreNbstar = 4;
         filtreEstPhoto = true;
@@ -991,6 +999,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltre5() throws IOException, SQLException {
         filtreNbstar = 5;
         filtreEstPhoto = true;
@@ -998,6 +1007,7 @@ public class MainFrameController {
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
+
     public void actionfiltrep() throws IOException, SQLException {
         filtreNbstar = -1;
         filtreEstPhoto = true;

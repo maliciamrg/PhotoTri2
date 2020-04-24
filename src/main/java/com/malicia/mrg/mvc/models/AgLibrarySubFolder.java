@@ -508,7 +508,8 @@ public class AgLibrarySubFolder {
 
     @Override
     public String toString() {
-        return getNbelerep() + " " + getNbphotoRepHuman() + " #" + agLibraryRootFolder.typeRoot + " " + pathFromRoot;
+        //return getNbelerep() + " " + getNbphotoRepHuman() + " #" + agLibraryRootFolder.typeRoot + " " + pathFromRoot;
+        return getAgLibraryRootFolder().name + " [" + getNbphotoRepHuman() + " ] " +  pathFromRoot;
     }
 
 
