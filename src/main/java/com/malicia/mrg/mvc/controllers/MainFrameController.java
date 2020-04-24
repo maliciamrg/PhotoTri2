@@ -379,7 +379,7 @@ public class MainFrameController {
             Optional<ButtonType> result = Context.popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
-repChoose.getItems().remove(activeRep);
+                repChoose.getItems().remove(activeRep);
                 repChoose.getSelectionModel().selectNext();
 //                populatereChooseChoicebox();
             }
@@ -465,7 +465,7 @@ repChoose.getItems().remove(activeRep);
 
     private void populatereChooseChoicebox() throws SQLException {
         repChoose.getItems().clear();
-        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT));
+        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT, AgLibraryRootFolder.TYPE_LEG));
         ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
         getlistofrepertorytoprocess.forEach(subFolder -> {
             if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
@@ -592,7 +592,7 @@ repChoose.getItems().remove(activeRep);
      *
      * @param deltaphoto the delta
      */
-    public void moveActivephotoNumTo(int deltaphoto) {
+    private void moveActivephotoNumTo(int deltaphoto) {
 
         if (deltaphoto == 0) {
             activephotoNum = -1;
@@ -614,7 +614,7 @@ repChoose.getItems().remove(activeRep);
      * @param deltaphoto the
      * @return the activephoto num
      */
-    public int getnumphotofromactive(int deltaphoto) {
+    private int getnumphotofromactive(int deltaphoto) {
 
         //activephotoNum [-1....max]
         int sens = Integer.signum(deltaphoto);
@@ -860,7 +860,7 @@ repChoose.getItems().remove(activeRep);
      *
      * @param newNode the new node
      */
-    public void placeMarker(Node newNode) {
+    private void placeMarker(Node newNode) {
         double nodeMinX = newNode.getLayoutBounds().getMinX();
         double nodeMinY = newNode.getLayoutBounds().getMinY();
         Point2D nodeInScene = newNode.localToScene(nodeMinX, nodeMinY);
@@ -1006,7 +1006,7 @@ repChoose.getItems().remove(activeRep);
         refreshAllPhoto();
     }
 
-    public void playElement(ContextMenuEvent contextMenuEvent) {
+    public void actionplayElement(ContextMenuEvent contextMenuEvent) {
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.open(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));

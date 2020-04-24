@@ -544,6 +544,7 @@ public class AgLibraryRootFolder {
                 if (pathFromRoot.matches("\\$[0-9a-zA-Z-]*\\$\\/")) {
                     return true;
                 }
+                break;
             case TYPE_ENC:
                 //repertoire = (#En cours de Traitement) !1er Passe Passe les flags et !2eme Passe les notes
                 if (pathFromRoot.matches("![0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")) {
@@ -553,11 +554,19 @@ public class AgLibraryRootFolder {
                 if (pathFromRoot.matches("![0-9a-zA-Z- _]*\\/##[0-9a-zA-Z- _]*\\/[0-9a-zA-Z- _]*\\/")) {
                     return true;
                 }
+                break;
             case TYPE_CAT:
                 //repertoire = (##%cat%)
                 if (pathFromRoot.matches("[0-9a-zA-Z- _]*\\/")) {
                     return true;
                 }
+                break;
+            case TYPE_LEG:
+                //repertoire = (!!Legacy) 0000(-0000)/
+                if (pathFromRoot.matches("[0-9]{4}-*[0-9]*\\/[0-9a-zA-Z- _]*\\/")) {
+                    return true;
+                }
+                break;
         }
         return false;
     }
