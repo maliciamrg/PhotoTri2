@@ -676,6 +676,18 @@ public class MainFrameController {
                     refreshAllPhoto();
                     keyEvent.consume();
                     break;
+                case DELETE:
+                    activeRep.valeuractivephotodecrease(activephotoNum);
+                    activeRep.valeuractivephotodecrease(activephotoNum);
+                    activeRep.valeuractivephotodecrease(activephotoNum);
+                    activeRep.valeuractivephotodecrease(activephotoNum);
+                    activeRep.valeuractivephotodecrease(activephotoNum);
+                    refreshcompteurRepertoire();
+                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                    moveActivephotoNumTo(+1);
+                    refreshAllPhoto();
+                    keyEvent.consume();
+                    break;
                 case END:
                     moveActivephotoNumTo(+9999);
                     refreshAllPhoto();
