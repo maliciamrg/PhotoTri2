@@ -107,9 +107,10 @@ public class AgLibrarySubFolder {
             String lcIdxFilename = rs.getString("lc_idx_filename");
             Double rating = rs.getDouble("rating");
             String fileformat = rs.getString("fileformat");
+            String orientation = rs.getString("orientation");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal));
+            listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal , orientation));
         }
 
 
@@ -244,7 +245,8 @@ public class AgLibrarySubFolder {
                         "a.id_global , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
                         "e.rating , " +
-                        "e.fileformat ," +
+                        "e.fileformat , " +
+                        "e.orientation , " +
                         "strftime('%s', e.captureTime) as captureTime " +
                         "from AgLibraryFile a  " +
                         "inner join Adobe_images e  " +

@@ -1,7 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
@@ -149,6 +148,7 @@ public class AgLibraryRootFolder {
                         "b.rootFolder , " +
                         "e.rating , " +
                         "e.fileformat , " +
+                        "e.orientation , " +
                         "strftime('%s', e.captureTime) as captureTime " +
                         "from AgLibraryFile a  " +
                         "inner join AgLibraryFolder b   " +
@@ -372,8 +372,9 @@ public class AgLibraryRootFolder {
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             String file_id_global = rsele.getString("id_global");
             String folder_id_local = rsele.getString("folder_id_local");
+            String orientation = rsele.getString("orientation");
 
-            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global);
+            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global, orientation);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

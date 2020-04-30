@@ -40,7 +40,8 @@ public class AgLibraryFile {
                          double starValue,
                          String fileformat,
                          long captureTime,
-                         String fileIdGlobal) {
+                         String fileIdGlobal,
+                         String orientation) {
         this.subFolder = subFolder;
         this.lcIdxFilename = lcIdxFilename;
         this.fileIdLocal = fileIdLocal;
@@ -48,7 +49,21 @@ public class AgLibraryFile {
         this.fileformat = fileformat;
         this.captureTime = captureTime;
         this.fileIdGlobal = fileIdGlobal;
-        this.addRotate = 0;
+        this.addRotate = translateOrientation(orientation);
+    }
+
+    private int translateOrientation(String orientation) {
+        if (orientation==null){return 0;}
+        switch (orientation) {
+            case "BC":
+                return 90;
+            case "CD":
+                return 180;
+            case "DA":
+                return 270;
+            default:
+                return 0;
+        }
     }
 
     public boolean isEdited() {
