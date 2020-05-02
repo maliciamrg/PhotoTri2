@@ -198,7 +198,7 @@ public class MainFrameController {
     @FXML
     void actionMakeadulpicatelrcatwithdate() {
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdHHmmss");
         String formattedDate = sdf.format(date);
 
         java.io.File fori = new java.io.File(lrcat.cheminfichierLrcat);
@@ -228,7 +228,7 @@ public class MainFrameController {
         lrcat.disconnect();
 
         String basedir = Context.appParam.getString("RepCatlogSauve");
-        String patterncherche = "save_lrcat_" + "*" + "/" + lrcat.nomFichier;
+        String patterncherche = "save_lrcat_" + "*" + File.separator + lrcat.nomFichier;
 
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setIncludes(new String[]{patterncherche});
@@ -237,7 +237,7 @@ public class MainFrameController {
         scanner.scan();
         List<String> files = Arrays.asList(scanner.getIncludedFiles());
 
-        if (files.isEmpty()) {
+        if (!files.isEmpty()) {
 
             String theone = showChoiceOneWindow(files);
             String selectfile = basedir + File.separator + theone;

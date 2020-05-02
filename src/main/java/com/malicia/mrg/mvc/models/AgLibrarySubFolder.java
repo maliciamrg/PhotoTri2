@@ -252,6 +252,7 @@ public class AgLibrarySubFolder {
                         "inner join Adobe_images e  " +
                         " on a.id_local = e.rootFile    " +
                         "Where a.folder =  \"" + folderIdLocal + "\" " +
+                        "order by captureTime asc " +
                         " ;");
     }
 
