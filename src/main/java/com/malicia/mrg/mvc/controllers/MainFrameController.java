@@ -383,6 +383,7 @@ public class MainFrameController {
                 activeRepSrc.execmodification(activeRep);
                 repChoose.getItems().remove(activeRep);
                 repChoose.getSelectionModel().selectNext();
+
 //                populatereChooseChoicebox();
             }
         } catch (IOException | SQLException e) {
@@ -523,31 +524,31 @@ public class MainFrameController {
 
     private void colorlabelzonez(Label champs, ComboBox<String> selectssrepformatZ) {
         champs.setTextFill(Color.BLACK);
-        champs.setStyle("-fx-font-weight: regular");
+        champs.setStyle("-fx-font-weight: normal;");
         String tmpval = selectssrepformatZ.getValue();
         if (tmpval == null || tmpval.isEmpty() || tmpval.equals("")) {
             champs.setTextFill(Color.RED);
-            champs.setStyle("-fx-font-weight: bold");
+            champs.setStyle("-fx-font-weight: bold;");
         }
     }
 
     private void alimetcolorlabelstatus(Label champs) {
         champs.setTextFill(Color.GREEN);
-        champs.setStyle("-fx-font-weight: regular");
+        champs.setStyle("-fx-font-weight: normal;");
         if (!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK)) {
             champs.setTextFill(Color.RED);
-            champs.setStyle("-fx-font-weight: bold");
+            champs.setStyle("-fx-font-weight: bold;");
         }
         champs.setText(activeRep.getStatusRep());
     }
 
     private void alimetcolornbphotoapurger(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
-        champs.setStyle("-fx-font-weight: regular");
+        champs.setStyle("-fx-font-weight: normal;");
         String[] ret = activeRep.getNbphotoapurger().split("@");
         if (ret[1].compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
-            champs.setStyle("-fx-font-weight: bold");
+            champs.setStyle("-fx-font-weight: bold;");
         }
         champs.setText(ret[2]);
         champsConnex.setTextFill(champs.getTextFill());
@@ -556,11 +557,11 @@ public class MainFrameController {
 
     private void alimetcolorlabeletoile(int n, Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
-        champs.setStyle("-fx-font-weight: regular");
+        champs.setStyle("-fx-font-weight: normal;");
         String[] ret = activeRep.nbetratiovaleur(n).split("@");
         if (ret[1].compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
-            champs.setStyle("-fx-font-weight: bold");
+            champs.setStyle("-fx-font-weight: bold;");
         }
         champs.setText(ret[2]);
         champsConnex.setTextFill(champs.getTextFill());
