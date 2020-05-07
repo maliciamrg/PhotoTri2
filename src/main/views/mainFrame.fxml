@@ -149,10 +149,12 @@
                             <menus>
                                 <Menu mnemonicParsing="false" text="File">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir dans ligthroom" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir ligthroom" />
                                         <SeparatorMenuItem mnemonicParsing="false" />
                                         <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer la dernier Copy de Sauvegarde" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer Copy de Sauvegarde" />
+                                        <SeparatorMenuItem mnemonicParsing="false" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionSuppressionDuplicate" text="Supression Copy de Sauvegarde" />
                                         <SeparatorMenuItem mnemonicParsing="false" />
                                         <MenuItem mnemonicParsing="false" text="_Preferences…" />
                                         <SeparatorMenuItem mnemonicParsing="false" />
