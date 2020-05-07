@@ -703,7 +703,7 @@ public class MainFrameController {
                 case S:
                     if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
                         // TODO: 25/04/2020  
-                        popupalert("split repertoire","split repertoire a coder");
+                        popupalert("split repertoire", "split repertoire a coder");
                     }
                     keyEvent.consume();
                     break;
@@ -1054,5 +1054,43 @@ public class MainFrameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void actionSuppressionDuplicate(ActionEvent actionEvent) {
+
+        String basedir = Context.appParam.getString("RepCatlogSauve");
+        String patterncherche = "save_lrcat_" + "*" + File.separator + lrcat.nomFichier;
+
+        DirectoryScanner scanner = new DirectoryScanner();
+        scanner.setIncludes(new String[]{patterncherche});
+        scanner.setBasedir(basedir);
+        scanner.setCaseSensitive(false);
+        scanner.scan();
+        List<String> files = Arrays.asList(scanner.getIncludedFiles());
+
+        if (!files.isEmpty()) {
+
+            String theone = showChoiceOneWindow(files);
+            String selectfile = basedir + File.separator + theone;
+
+
+            java.io.File fori = new java.io.File(selectfile);
+
+            try {
+                if (fori.isFile() && fori.exists()) {
+                    Files.delete(fori.toPath());
+                    Context.logecrireuserlogInfo("delete lrcat de :" + selectfile);
+                } else {
+                    Context.logecrireuserlogInfo("delete annule pb de fichier :" + selectfile);
+                }
+            } catch (IOException e) {
+                Context.popupalertException(e);
+                Context.excptlog(e, LOGGER);
+            }
+        } else {
+            Context.logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
+        }
+
+
     }
 }
