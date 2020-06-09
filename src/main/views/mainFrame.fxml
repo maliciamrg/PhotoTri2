@@ -76,7 +76,8 @@
                             </Text>
                             <VBox alignment="CENTER">
                                 <children>
-                                    <ImageView fx:id="imageZ0" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="imageZ0" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onContextMenuRequested="#actionplayElement"
+                                               onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
                                     <Text fx:id="imageZ0star" layoutX="228.0" layoutY="382.0" textAlignment="CENTER" wrappingWidth="196.0">
                                         <font>
                                             <Font name="Arial" size="10.0" />

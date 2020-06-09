@@ -381,7 +381,7 @@ public class MainFrameController {
             Optional<ButtonType> result = Context.popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
-                repChoose.getItems().remove(activeRep);
+//                repChoose.getItems().remove(activeRep);
                 repChoose.getSelectionModel().selectNext();
 
 //                populatereChooseChoicebox();
