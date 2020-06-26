@@ -47,9 +47,10 @@ public class Main extends Application {
         Context.setPrimaryStage(primaryStage);
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getClassLoader().getResource("mainFrame.fxml"));
+        loader.setLocation(Main.class.getClassLoader().getResource( "com.malicia.mrg/mainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
+        controller.setApplication(this);
 //        primaryStage.setScene(new Scene(root, 1000, 950));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Main.class.getClassLoader().getResource("caspian.css").toExternalForm());

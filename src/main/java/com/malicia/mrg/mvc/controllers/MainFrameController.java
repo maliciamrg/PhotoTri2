@@ -1,11 +1,14 @@
 package com.malicia.mrg.mvc.controllers;
 
+import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
+import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,7 +28,6 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import org.apache.tools.ant.DirectoryScanner;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -168,6 +170,7 @@ public class MainFrameController {
     private int filtreNbstar;
     private boolean filtreEstPhoto;
     private boolean FiltreEstrejeter;
+    private Application mainApplication;
 
 
     /**
@@ -397,15 +400,16 @@ public class MainFrameController {
      */
     @FXML
     void actionAbouturl() {
-        try {
-            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
-            }
-        } catch (IOException | URISyntaxException e) {
-            Context.popupalertException(e);
-            Context.excptlog(e, LOGGER);
-        }
-        Context.logecrireuserlogInfo(Context.getUrlgitwiki());
+//        try {
+            mainApplication.getHostServices().showDocument(Context.getUrlgitwiki());
+//            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+//                Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
+//            }
+//        } catch (IOException | URISyntaxException e) {
+//            Context.popupalertException(e);
+//            Context.excptlog(e, LOGGER);
+//        }
+//        Context.logecrireuserlogInfo(Context.getUrlgitwiki());
     }
 
 
@@ -1048,12 +1052,13 @@ public class MainFrameController {
     }
 
     public void actionplayElement(ContextMenuEvent contextMenuEvent) {
-        Desktop desktop = Desktop.getDesktop();
-        try {
-            desktop.open(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Desktop desktop = Desktop.getDesktop();
+//        try {
+//            desktop.open(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        mainApplication.getHostServices().showDocument(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()).toURI().toString());
     }
 
     public void actionSuppressionDuplicate(ActionEvent actionEvent) {
@@ -1092,5 +1097,9 @@ public class MainFrameController {
         }
 
 
+    }
+
+    public void setApplication(Application mainApplication) {
+        this.mainApplication = mainApplication;
     }
 }
