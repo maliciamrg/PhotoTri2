@@ -163,18 +163,7 @@ public class MainFrameController {
     private Button valid;
     @FXML
     private TilePane tile00;
-    @FXML
-    private ImageView imageT00;
-    @FXML
-    private Text imageT00star;
-    @FXML
-    private ImageView imageT01;
-    @FXML
-    private Text imageT01star;
-    @FXML
-    private ImageView imageT02;
-    @FXML
-    private Text imageT02star;
+
 
 
 
@@ -590,7 +579,9 @@ public class MainFrameController {
     private void refreshAllPhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
 
-        //todo use tilepane
+        tile00 = new TilePane();
+        tile00.setPadding(new Insets(15, 15, 15, 15));
+        tile00.setHgap(15);
 
         recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
         recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3);
@@ -602,12 +593,6 @@ public class MainFrameController {
         recalculimagev(getnumphotofromactive(3), imageP3star, imageP3);
         recalculimagev(getnumphotofromactive(4), imageP4star, imageP4);
 
-        tile00 = new TilePane();
-        tile00.setPadding(new Insets(15, 15, 15, 15));
-        tile00.setHgap(15);
-        recalculimagev(getnumphotofromactive(0), imageT00star, imageT00);
-        recalculimagev(getnumphotofromactive(1), imageT01star, imageT01);
-        recalculimagev(getnumphotofromactive(2), imageT02star, imageT02);
 
     }
 
