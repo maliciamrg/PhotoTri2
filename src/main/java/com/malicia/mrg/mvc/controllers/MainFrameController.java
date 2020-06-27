@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -159,6 +161,22 @@ public class MainFrameController {
     private Circle pointeur;
     @FXML
     private Button valid;
+    @FXML
+    private TilePane tile00;
+    @FXML
+    private ImageView imageT00;
+    @FXML
+    private Text imageT00star;
+    @FXML
+    private ImageView imageT01;
+    @FXML
+    private Text imageT01star;
+    @FXML
+    private ImageView imageT02;
+    @FXML
+    private Text imageT02star;
+
+
 
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
@@ -167,6 +185,7 @@ public class MainFrameController {
     private boolean filtreEstPhoto;
     private boolean FiltreEstrejeter;
     private Application mainApplication;
+
 
 
     /**
@@ -571,6 +590,8 @@ public class MainFrameController {
     private void refreshAllPhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
 
+        //todo use tilepane
+
         recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
         recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3);
         recalculimagev(getnumphotofromactive(-2), imageM2star, imageM2);
@@ -581,9 +602,17 @@ public class MainFrameController {
         recalculimagev(getnumphotofromactive(3), imageP3star, imageP3);
         recalculimagev(getnumphotofromactive(4), imageP4star, imageP4);
 
+        tile00 = new TilePane();
+        tile00.setPadding(new Insets(15, 15, 15, 15));
+        tile00.setHgap(15);
+        recalculimagev(getnumphotofromactive(0), imageT00star, imageT00);
+        recalculimagev(getnumphotofromactive(1), imageT01star, imageT01);
+        recalculimagev(getnumphotofromactive(2), imageT02star, imageT02);
+
     }
 
     private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException, SQLException {
+
         displayStarValueAndLibelle(imagestar, numphotofromactive);
         imageV.setImage(activeRepSrc.getimagenumero(numphotofromactive));
         imageV.setRotate(activeRep.getRotateFromphotonum(numphotofromactive));
