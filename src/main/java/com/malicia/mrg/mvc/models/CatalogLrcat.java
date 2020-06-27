@@ -41,18 +41,51 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         //array de categories
 
-        int numcat = 1;
-        while (Context.appParam.containsKey("repCat" + numcat)) {
-            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat" + numcat), AgLibraryRootFolder.TYPE_CAT);
-            rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
-            rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
-            rep.get("repCat" + numcat).setsszCat(Context.appParam.getString("sszCat" + numcat));
-            rep.get("repCat" + numcat).setsszCatVal(Context.appParam.getString("sszCatVal" + numcat));
-            rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
-            numcat++;
-        }
+//        int numcat = 1;
+//        while (Context.appParam.containsKey("repCat" + numcat)) {
+//            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat" + numcat), AgLibraryRootFolder.TYPE_CAT);
+//            rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
+//            rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
+//            rep.get("repCat" + numcat).setsszCat(Context.appParam.getString("sszCat" + numcat));
+//            rep.get("repCat" + numcat).setsszCatVal(Context.appParam.getString("sszCatVal" + numcat));
+//            rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
+//            numcat++;
+//        }
 
+        addrootFolder("repCat1", Context.appParam.getString("repCat1"), AgLibraryRootFolder.TYPE_CAT);
+        rep.get("repCat1").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat1"));
+        rep.get("repCat1").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat1"));
+        rep.get("repCat1").setsszCat(Context.appParam.getString("sszCat1"));
+        rep.get("repCat1").setsszCatVal(Context.appParam.getString("sszCatVal1"));
+        rep.get("repCat1").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat1"));
 
+        addrootFolder("repCat2", Context.appParam.getString("repCat2"), AgLibraryRootFolder.TYPE_CAT);
+        rep.get("repCat2").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat2"));
+        rep.get("repCat2").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat2"));
+        rep.get("repCat2").setsszCat(Context.appParam.getString("sszCat2"));
+        rep.get("repCat2").setsszCatVal(Context.appParam.getString("sszCatVal2"));
+        rep.get("repCat2").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat2"));
+
+        addrootFolder("repCat3", Context.appParam.getString("repCat3"), AgLibraryRootFolder.TYPE_CAT);
+        rep.get("repCat3").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat3"));
+        rep.get("repCat3").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat3"));
+        rep.get("repCat3").setsszCat(Context.appParam.getString("sszCat3"));
+        rep.get("repCat3").setsszCatVal(Context.appParam.getString("sszCatVal3"));
+        rep.get("repCat3").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat3"));
+
+        addrootFolder("repCat4", Context.appParam.getString("repCat4"), AgLibraryRootFolder.TYPE_CAT);
+        rep.get("repCat4").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat4"));
+        rep.get("repCat4").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat4"));
+        rep.get("repCat4").setsszCat(Context.appParam.getString("sszCat4"));
+        rep.get("repCat4").setsszCatVal(Context.appParam.getString("sszCatVal4"));
+        rep.get("repCat4").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat4"));
+
+        addrootFolder("repCat5", Context.appParam.getString("repCat5"), AgLibraryRootFolder.TYPE_CAT);
+        rep.get("repCat5").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat5"));
+        rep.get("repCat5").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat5"));
+        rep.get("repCat5").setsszCat(Context.appParam.getString("sszCat5"));
+        rep.get("repCat5").setsszCatVal(Context.appParam.getString("sszCatVal5"));
+        rep.get("repCat5").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat5"));
     }
 
     private void refreshdataLrcat(String catalogLrcat) {
