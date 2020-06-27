@@ -557,7 +557,7 @@ public class AgLibrarySubFolder {
         for (i = 0; i < activeRepDest.subFolderFormatZ.size(); i++) {
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
             if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
-                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.sszVal[i]) {
+                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.isZoneObligatoire[i]) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Confirmation Dialog with Custom Actions");
                     alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
@@ -659,7 +659,7 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i]) {
+            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.isZoneObligatoire[i]) {
                 setrepformatZ(i, part[i]);
             }
         }

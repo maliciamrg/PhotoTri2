@@ -40,52 +40,102 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         addrootFolder("repNew", Context.appParam.getString("repNew"), AgLibraryRootFolder.TYPE_NEW);
 
         //array de categories
+        arrayDeCategories();
 
-//        int numcat = 1;
+    }
+
+    public void arrayDeCategories() throws SQLException {
+        //        int numcat = 1;
 //        while (Context.appParam.containsKey("repCat" + numcat)) {
 //            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat" + numcat), AgLibraryRootFolder.TYPE_CAT);
 //            rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
 //            rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
-//            rep.get("repCat" + numcat).setsszCat(Context.appParam.getString("sszCat" + numcat));
-//            rep.get("repCat" + numcat).setsszCatVal(Context.appParam.getString("sszCatVal" + numcat));
+//            rep.get("repCat" + numcat).setzoneEditableCat(Context.appParam.getString("zoneEditableCat" + numcat));
+//            rep.get("repCat" + numcat).setzoneObligatoire(Context.appParam.getString("zoneObligatoire" + numcat));
 //            rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
 //            numcat++;
 //        }
 
-        addrootFolder("repCat1", Context.appParam.getString("repCat1"), AgLibraryRootFolder.TYPE_CAT);
-        rep.get("repCat1").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat1"));
-        rep.get("repCat1").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat1"));
-        rep.get("repCat1").setsszCat(Context.appParam.getString("sszCat1"));
-        rep.get("repCat1").setsszCatVal(Context.appParam.getString("sszCatVal1"));
-        rep.get("repCat1").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat1"));
-
-        addrootFolder("repCat2", Context.appParam.getString("repCat2"), AgLibraryRootFolder.TYPE_CAT);
-        rep.get("repCat2").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat2"));
-        rep.get("repCat2").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat2"));
-        rep.get("repCat2").setsszCat(Context.appParam.getString("sszCat2"));
-        rep.get("repCat2").setsszCatVal(Context.appParam.getString("sszCatVal2"));
-        rep.get("repCat2").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat2"));
-
-        addrootFolder("repCat3", Context.appParam.getString("repCat3"), AgLibraryRootFolder.TYPE_CAT);
-        rep.get("repCat3").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat3"));
-        rep.get("repCat3").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat3"));
-        rep.get("repCat3").setsszCat(Context.appParam.getString("sszCat3"));
-        rep.get("repCat3").setsszCatVal(Context.appParam.getString("sszCatVal3"));
-        rep.get("repCat3").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat3"));
-
-        addrootFolder("repCat4", Context.appParam.getString("repCat4"), AgLibraryRootFolder.TYPE_CAT);
-        rep.get("repCat4").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat4"));
-        rep.get("repCat4").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat4"));
-        rep.get("repCat4").setsszCat(Context.appParam.getString("sszCat4"));
-        rep.get("repCat4").setsszCatVal(Context.appParam.getString("sszCatVal4"));
-        rep.get("repCat4").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat4"));
-
-        addrootFolder("repCat5", Context.appParam.getString("repCat5"), AgLibraryRootFolder.TYPE_CAT);
-        rep.get("repCat5").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat5"));
-        rep.get("repCat5").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat5"));
-        rep.get("repCat5").setsszCat(Context.appParam.getString("sszCat5"));
-        rep.get("repCat5").setsszCatVal(Context.appParam.getString("sszCatVal5"));
-        rep.get("repCat5").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat5"));
+        if (Context.appParam.containsKey("repCat1")) {
+            addrootFolder("repCat1", Context.appParam.getString("repCat1"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat1").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat1"));
+            rep.get("repCat1").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat1"));
+            rep.get("repCat1").setZoneEditableCat(Context.appParam.getString("zoneEditableCat1"));
+            rep.get("repCat1").setZoneObligatoire(Context.appParam.getString("zoneObligatoire1"));
+            rep.get("repCat1").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat1"));
+        }
+        if (Context.appParam.containsKey("repCat2")) {
+            addrootFolder("repCat2", Context.appParam.getString("repCat2"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat2").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat2"));
+            rep.get("repCat2").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat2"));
+            rep.get("repCat2").setZoneEditableCat(Context.appParam.getString("zoneEditableCat2"));
+            rep.get("repCat2").setZoneObligatoire(Context.appParam.getString("zoneObligatoire2"));
+            rep.get("repCat2").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat2"));
+        }
+        if (Context.appParam.containsKey("repCat3")) {
+            addrootFolder("repCat3", Context.appParam.getString("repCat3"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat3").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat3"));
+            rep.get("repCat3").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat3"));
+            rep.get("repCat3").setZoneEditableCat(Context.appParam.getString("zoneEditableCat3"));
+            rep.get("repCat3").setZoneObligatoire(Context.appParam.getString("zoneObligatoire3"));
+            rep.get("repCat3").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat3"));
+        }
+        if (Context.appParam.containsKey("repCat4")) {
+            addrootFolder("repCat4", Context.appParam.getString("repCat4"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat4").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat4"));
+            rep.get("repCat4").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat4"));
+            rep.get("repCat4").setZoneEditableCat(Context.appParam.getString("zoneEditableCat4"));
+            rep.get("repCat4").setZoneObligatoire(Context.appParam.getString("zoneObligatoire4"));
+            rep.get("repCat4").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat4"));
+        }
+        if (Context.appParam.containsKey("repCat5")) {
+            addrootFolder("repCat5", Context.appParam.getString("repCat5"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat5").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat5"));
+            rep.get("repCat5").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat5"));
+            rep.get("repCat5").setZoneEditableCat(Context.appParam.getString("zoneEditableCat5"));
+            rep.get("repCat5").setZoneObligatoire(Context.appParam.getString("zoneObligatoire5"));
+            rep.get("repCat5").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat5"));
+        }
+        if (Context.appParam.containsKey("repCat6")) {
+            addrootFolder("repCat6", Context.appParam.getString("repCat6"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat6").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat6"));
+            rep.get("repCat6").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat6"));
+            rep.get("repCat6").setZoneEditableCat(Context.appParam.getString("zoneEditableCat6"));
+            rep.get("repCat6").setZoneObligatoire(Context.appParam.getString("zoneObligatoire6"));
+            rep.get("repCat6").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat6"));
+        }
+        if (Context.appParam.containsKey("repCat7")) {
+            addrootFolder("repCat7", Context.appParam.getString("repCat7"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat7").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat7"));
+            rep.get("repCat7").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat7"));
+            rep.get("repCat7").setZoneEditableCat(Context.appParam.getString("zoneEditableCat7"));
+            rep.get("repCat7").setZoneObligatoire(Context.appParam.getString("zoneObligatoire7"));
+            rep.get("repCat7").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat7"));
+        }
+        if (Context.appParam.containsKey("repCat8")) {
+            addrootFolder("repCat8", Context.appParam.getString("repCat8"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat8").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat8"));
+            rep.get("repCat8").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat8"));
+            rep.get("repCat8").setZoneEditableCat(Context.appParam.getString("zoneEditableCat8"));
+            rep.get("repCat8").setZoneObligatoire(Context.appParam.getString("zoneObligatoire8"));
+            rep.get("repCat8").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat8"));
+        }
+        if (Context.appParam.containsKey("repCat9")) {
+            addrootFolder("repCat9", Context.appParam.getString("repCat9"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat9").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat9"));
+            rep.get("repCat9").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat9"));
+            rep.get("repCat9").setZoneEditableCat(Context.appParam.getString("zoneEditableCat9"));
+            rep.get("repCat9").setZoneObligatoire(Context.appParam.getString("zoneObligatoire9"));
+            rep.get("repCat9").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat9"));
+        }
+        if (Context.appParam.containsKey("repCat10")) {
+            addrootFolder("repCat10", Context.appParam.getString("repCat10"), AgLibraryRootFolder.TYPE_CAT);
+            rep.get("repCat10").nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat10"));
+            rep.get("repCat10").nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat10"));
+            rep.get("repCat10").setZoneEditableCat(Context.appParam.getString("zoneEditableCat10"));
+            rep.get("repCat10").setZoneObligatoire(Context.appParam.getString("zoneObligatoire10"));
+            rep.get("repCat10").setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat10"));
+        }
     }
 
     private void refreshdataLrcat(String catalogLrcat) {

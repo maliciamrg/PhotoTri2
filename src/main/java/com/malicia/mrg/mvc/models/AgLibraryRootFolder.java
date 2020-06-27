@@ -35,8 +35,8 @@ public class AgLibraryRootFolder {
     public String name;
     public double nbmaxCat;
     public int nbjouCat;
-    public boolean[] sszVal;
-    public boolean[] ssz;
+    public boolean[] isZoneObligatoire;
+    public boolean[] IsZoneEditable;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
     private String[] ratioMaxStar;
@@ -54,8 +54,8 @@ public class AgLibraryRootFolder {
         setratioMaxstarCat("0,0,0,0,0");
         nbmaxCat = 999d;
         nbjouCat = 1;
-        setsszCat("Open,Open,Open,Open");
-        setsszCatVal("Facul,Facul,Facul,Facul");
+        setZoneEditableCat("Open,Open,Open,Open");
+        setZoneObligatoire("Facul,Facul,Facul,Facul");
     }
 
     public int getRatioMaxStar(int star) {
@@ -615,30 +615,30 @@ public class AgLibraryRootFolder {
         ratioMaxStar = ratioMaxstarCat.split(",");
     }
 
-    public void setsszCat(String sszCat) {
-        String[] tmpssz = sszCat.split(",");
-        ssz = new boolean[tmpssz.length];
+    public void setZoneEditableCat(String zoneEditableCat) {
+        String[] tmpssz = zoneEditableCat.split(",");
+        IsZoneEditable = new boolean[tmpssz.length];
         for(int i = 0 ; i < tmpssz.length ; i++)
         {
             if(tmpssz[i].compareTo("Close")==0){
-                ssz[i]=false;
+                IsZoneEditable[i]=false;
             };
             if(tmpssz[i].compareTo("Open")==0){
-                ssz[i]=true;
+                IsZoneEditable[i]=true;
             };
         }
     }
 
-    public void setsszCatVal(String sszCatVal) {
-        String[] tmpsszval = sszCatVal.split(",");
-        sszVal = new boolean[tmpsszval.length];
+    public void setZoneObligatoire(String zoneObligatoire) {
+        String[] tmpsszval = zoneObligatoire.split(",");
+        isZoneObligatoire = new boolean[tmpsszval.length];
         for(int i = 0 ; i < tmpsszval.length ; i++)
         {
             if(tmpsszval[i].compareTo("Facul")==0){
-                sszVal[i]=false;
+                isZoneObligatoire[i]=false;
             };
             if(tmpsszval[i].compareTo("Oblig")==0){
-                sszVal[i]=true;
+                isZoneObligatoire[i]=true;
             };
         }
     }

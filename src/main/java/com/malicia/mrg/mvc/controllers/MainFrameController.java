@@ -1,6 +1,5 @@
 package com.malicia.mrg.mvc.controllers;
 
-import com.malicia.mrg.Main;
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
@@ -8,7 +7,6 @@ import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,8 +28,6 @@ import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -921,10 +917,10 @@ public class MainFrameController {
         activeRep.refreshValue();
         refreshcomboxRepertoire();
         refreshcompteurRepertoire();
-        selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().ssz[0]);
-        selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().ssz[1]);
-        selectssrepformatZ3.setEditable(activeRep.getAgLibraryRootFolder().ssz[2]);
-        selectssrepformatZ4.setEditable(activeRep.getAgLibraryRootFolder().ssz[3]);
+        selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[0]);
+        selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[1]);
+        selectssrepformatZ3.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[2]);
+        selectssrepformatZ4.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[3]);
     }
 
     /**
