@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
+import com.malicia.mrg.app.util.ImageViewExt;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
@@ -110,41 +111,61 @@ public class MainFrameController {
     @FXML
     private ChoiceBox<AgLibrarySubFolder> repChoose;
     @FXML
-    private ImageView imageM4;
+    private ImageView imageZ01;
     @FXML
-    private ImageView imageM3;
+    private Text imageZ01star;
     @FXML
-    private ImageView imageM2;
+    private ImageView imageZ02;
     @FXML
-    private ImageView imageM1;
+    private Text imageZ02star;
     @FXML
-    private ImageView imageP1;
+    private ImageView imageZ03;
     @FXML
-    private ImageView imageP2;
+    private Text imageZ03star;
     @FXML
-    private ImageView imageP3;
+    private ImageView imageZ04;
     @FXML
-    private ImageView imageP4;
+    private Text imageZ04star;
     @FXML
-    private ImageView imageZ0;
+    private ImageView imageZ05;
     @FXML
-    private Text imageM4star;
+    private Text imageZ05star;
     @FXML
-    private Text imageM3star;
+    private ImageView imageZ06;
     @FXML
-    private Text imageM2star;
+    private Text imageZ06star;
     @FXML
-    private Text imageM1star;
+    private ImageView imageZ07;
     @FXML
-    private Text imageZ0star;
+    private Text imageZ07star;
     @FXML
-    private Text imageP1star;
+    private ImageView imageZ08;
     @FXML
-    private Text imageP2star;
+    private Text imageZ08star;
     @FXML
-    private Text imageP3star;
+    private ImageView imageZ09;
     @FXML
-    private Text imageP4star;
+    private Text imageZ09star;
+    @FXML
+    private ImageView imageZ10;
+    @FXML
+    private Text imageZ10star;
+    @FXML
+    private ImageView imageZ11;
+    @FXML
+    private Text imageZ11star;
+    @FXML
+    private ImageView imageZ12;
+    @FXML
+    private Text imageZ12star;
+    @FXML
+    private ImageView imageZ13;
+    @FXML
+    private Text imageZ13star;
+    @FXML
+    private ImageView imageZ14;
+    @FXML
+    private Text imageZ14star;
     @FXML
     private Label datesub;
     @FXML
@@ -583,15 +604,20 @@ public class MainFrameController {
         tile00.setPadding(new Insets(15, 15, 15, 15));
         tile00.setHgap(15);
 
-        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
-        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3);
-        recalculimagev(getnumphotofromactive(-2), imageM2star, imageM2);
-        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1);
-        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0);
-        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1);
-        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2);
-        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3);
-        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4);
+        recalculimagev(getnumphotofromactive(0), imageZ01star, imageZ01);
+        recalculimagev(getnumphotofromactive(1), imageZ02star, imageZ02);
+        recalculimagev(getnumphotofromactive(2), imageZ03star, imageZ03);
+        recalculimagev(getnumphotofromactive(3), imageZ04star, imageZ04);
+        recalculimagev(getnumphotofromactive(4), imageZ05star, imageZ05);
+        recalculimagev(getnumphotofromactive(5), imageZ06star, imageZ06);
+        recalculimagev(getnumphotofromactive(6), imageZ07star, imageZ07);
+        recalculimagev(getnumphotofromactive(7), imageZ08star, imageZ08);
+        recalculimagev(getnumphotofromactive(8), imageZ09star, imageZ09);
+        recalculimagev(getnumphotofromactive(9), imageZ10star, imageZ10);
+        recalculimagev(getnumphotofromactive(10), imageZ11star, imageZ11);
+        recalculimagev(getnumphotofromactive(11), imageZ12star, imageZ12);
+        recalculimagev(getnumphotofromactive(12), imageZ13star, imageZ13);
+        recalculimagev(getnumphotofromactive(13), imageZ14star, imageZ14);
 
 
     }
@@ -698,7 +724,7 @@ public class MainFrameController {
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     moveActivephotoNumTo(+1);
                     refreshAllPhoto();
                     keyEvent.consume();
@@ -711,7 +737,7 @@ public class MainFrameController {
                 case UP:
                     activeRep.valeuractivephotoincrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case S:
@@ -724,17 +750,17 @@ public class MainFrameController {
                 case DOWN:
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case D:
                     activeRep.setRotateToFile(activephotoNum, +90);
-                    imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
+                    imageZ01.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
                 case Q:
                     activeRep.setRotateToFile(activephotoNum, -90);
-                    imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
+                    imageZ01.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
                     keyEvent.consume();
                     break;
                 default:
