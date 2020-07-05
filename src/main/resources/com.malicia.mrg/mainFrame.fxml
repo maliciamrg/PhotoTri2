@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.malicia.mrg.app.util.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -227,168 +226,169 @@
                 </VBox>
             </top>
          <center>
-                <TilePane fx:id="tile00" hgap="100.0" prefTileHeight="150.0" prefTileWidth="200.0" vgap="100.0" BorderPane.alignment="TOP_LEFT">
-                    <children>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ01" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ01star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ02" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ02star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ03" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ03star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ04" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ04star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ05" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ05star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ06" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ06star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ07" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ07star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ08" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ08star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ09" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ09star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ10" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ10star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ11" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ11star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ12" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ12star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ13" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ13star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <ImageViewExt fx:id="imageZ14" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                <Text fx:id="imageZ14star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                            <children>
-                                <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                                <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                    <font>
-                                        <Font name="Arial" size="10.0" />
-                                    </font>
-                                </Text>
-                                <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
-                            </children>
-                        </VBox>
-                    </children>
-               <BorderPane.margin>
-                  <Insets bottom="50.0" left="100.0" right="100.0" top="50.0" />
-               </BorderPane.margin>
-                </TilePane>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <content>
+                      <TilePane fx:id="tile00" hgap="100.0" prefTileHeight="150.0" prefTileWidth="200.0" vgap="100.0">
+                          <children>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ01" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ01star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ02" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ02star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ03" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ03star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ04" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ04star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ05" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ05star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ06" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ06star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ07" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ07star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ08" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ08star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ09" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ09star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ10" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ10star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ11" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ11star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ12" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ12star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ13" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ13star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <ImageViewExt fx:id="imageZ14" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                      <Text fx:id="imageZ14star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                  </children>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                  <children>
+                                      <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                      <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                          <font>
+                                              <Font name="Arial" size="10.0" />
+                                          </font>
+                                      </Text>
+                                      <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
+                                  </children>
+                              </VBox>
+                          </children>
+                      </TilePane>
+               </content>
+            </ScrollPane>
          </center>
         </BorderPane>
         <Circle fx:id="pointeur" fill="#ff1f1f" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
