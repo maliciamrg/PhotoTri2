@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import com.malicia.mrg.app.util.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
+<AnchorPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <BorderPane>
             <top>
@@ -16,40 +18,40 @@
                             <menus>
                                 <Menu mnemonicParsing="false" text="File">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir ligthroom" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer Copy de Sauvegarde" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionSuppressionDuplicate" text="Supression Copy de Sauvegarde" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" text="_Preferences…" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" text="_Quit" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionopenligthroom" text="Ouvrir ligthroom"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionMakeadulpicatelrcatwithdate" text="Faire une Copy de Sauvegarde"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRestaureLastDuplicate" text="Restaurer Copy de Sauvegarde"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionSuppressionDuplicate" text="Supression Copy de Sauvegarde"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" text="_Preferences…"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" text="_Quit"/>
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Workflow">
 
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer @New " />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Organiser par Date @New" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionCycleTraitementPhoto" text="Cycle de traitement photo" />
-                                        <SeparatorMenuItem mnemonicParsing="false" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="_Trier le Bazar" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionImportNew" text="Importer @New "/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerNew" text="Organiser par Date @New"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionCycleTraitementPhoto" text="Cycle de traitement photo"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerlebazar" text="_Trier le Bazar"/>
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Maintenance">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="_Ranger les rejets (.rejet)" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge @New Physique Vide " />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide" />
-                                        <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Fichier physique Absent" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="_Ranger les rejets (.rejet)"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge @New Physique Vide "/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Fichier physique Absent"/>
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Help">
                                     <items>
-                                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2" />
+                                        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#actionAbouturl" text="About PhotoTri2"/>
                                     </items>
                                 </Menu>
                             </menus>
@@ -66,12 +68,12 @@
                                                             <children>
                                                                 <ChoiceBox fx:id="repChoose" onAction="#actionChoose" prefHeight="21.0" prefWidth="754.0">
                                                                     <HBox.margin>
-                                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                                                     </HBox.margin>
                                                                 </ChoiceBox>
                                                                 <Label fx:id="datesub" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label">
                                                                     <HBox.margin>
-                                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                                                     </HBox.margin>
                                                                 </Label>
                                                             </children>
@@ -88,30 +90,19 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbeleRep1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionFiltreNull" prefHeight="17.0" prefWidth="42.0" text="nbEle" />
-                                                                        <Label fx:id="nbeleRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="17.0" onMouseClicked="#actionFiltreNull" text="Label" />
+                                                                        <Label fx:id="lbnbeleRep1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionFiltreNull" prefHeight="17.0" prefWidth="42.0"
+                                                                               text="nbEle"/>
+                                                                        <Label fx:id="nbeleRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="7.0"
+                                                                               layoutY="17.0" onMouseClicked="#actionFiltreNull" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbetrationzeroetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre0" text="zero etoile" />
-                                                                        <Label fx:id="nbetrationzeroetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="17.0" onMouseClicked="#actionfiltre0" text="Label" />
-                                                                    </children>
-                                                                </VBox>
-                                                            </children>
-                                                        </VBox>
-                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                                            <children>
-                                                                <VBox alignment="CENTER">
-                                                                    <children>
-                                                                        <Label fx:id="lbnbphotoRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="nbPhoto" />
-                                                                        <Label fx:id="nbphotoRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="9.0" layoutY="17.0" text="Label" />
-                                                                    </children>
-                                                                </VBox>
-                                                                <VBox alignment="CENTER">
-                                                                    <children>
-                                                                        <Label fx:id="lbnbetrationuneetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre1" text="1 etoile" />
-                                                                        <Label fx:id="nbetrationuneetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="17.0" onMouseClicked="#actionfiltre1" text="Label" />
+                                                                        <Label fx:id="lbnbetrationzeroetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre0" text="zero etoile"/>
+                                                                        <Label fx:id="nbetrationzeroetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="14.0" layoutY="17.0" onMouseClicked="#actionfiltre0" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                             </children>
@@ -120,30 +111,18 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour" />
-                                                                        <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0" text="Label" />
+                                                                        <Label fx:id="lbnbphotoRep1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               text="nbPhoto"/>
+                                                                        <Label fx:id="nbphotoRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="9.0"
+                                                                               layoutY="17.0" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbetrationdeuxetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre2" text="2 etoiles" />
-                                                                        <Label fx:id="nbetrationdeuxetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre2" text="Label" />
-                                                                    </children>
-                                                                </VBox>
-                                                            </children>
-                                                        </VBox>
-                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
-                                                            <children>
-                                                                <VBox alignment="CENTER">
-                                                                    <children>
-                                                                        <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Aconserver" />
-                                                                        <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="17.0" text="Label" />
-                                                                    </children>
-                                                                </VBox>
-                                                                <VBox alignment="CENTER">
-                                                                    <children>
-                                                                        <Label fx:id="lbnbetrationtroisetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre3" text="3 etoiles" />
-                                                                        <Label fx:id="nbetrationtroisetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre3" text="Label" />
+                                                                        <Label fx:id="lbnbetrationuneetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre1" text="1 etoile"/>
+                                                                        <Label fx:id="nbetrationuneetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="6.0" layoutY="17.0" onMouseClicked="#actionfiltre1" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                             </children>
@@ -152,14 +131,17 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltrep" text="Apurger" />
-                                                                        <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltrep" text="Label" />
+                                                                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour"/>
+                                                                        <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0"
+                                                                               text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbetrationquatreetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre4" text="4 etoiles" />
-                                                                        <Label fx:id="nbetrationquatreetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre4" text="Label" />
+                                                                        <Label fx:id="lbnbetrationdeuxetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre2" text="2 etoiles"/>
+                                                                        <Label fx:id="nbetrationdeuxetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre2" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                             </children>
@@ -168,14 +150,58 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbstatusRep1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Status" />
-                                                                        <Label fx:id="statusRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="17.0" text="Label" />
+                                                                        <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               text="Aconserver"/>
+                                                                        <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="15.0" layoutY="17.0" text="Label"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER">
+                                                                    <children>
+                                                                        <Label fx:id="lbnbetrationtroisetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre3" text="3 etoiles"/>
+                                                                        <Label fx:id="nbetrationtroisetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre3" text="Label"/>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                            <children>
+                                                                <VBox alignment="CENTER">
+                                                                    <children>
+                                                                        <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltrep" text="Apurger"/>
+                                                                        <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltrep" text="Label"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER">
+                                                                    <children>
+                                                                        <Label fx:id="lbnbetrationquatreetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre4" text="4 etoiles"/>
+                                                                        <Label fx:id="nbetrationquatreetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre4" text="Label"/>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="180.0">
+                                                            <children>
+                                                                <VBox alignment="CENTER">
+                                                                    <children>
+                                                                        <Label fx:id="lbstatusRep1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               text="Status"/>
+                                                                        <Label fx:id="statusRep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0"
+                                                                               layoutY="17.0" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER" prefHeight="35.0" prefWidth="130.0">
                                                                     <children>
-                                                                        <Label fx:id="lbnbetrationcinqetoile1" alignment="TOP_CENTER" contentDisplay="CENTER" onMouseClicked="#actionfiltre5" text="5 etoiles" />
-                                                                        <Label fx:id="nbetrationcinqetoile" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre5" text="Label" />
+                                                                        <Label fx:id="lbnbetrationcinqetoile1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltre5" text="5 etoiles"/>
+                                                                        <Label fx:id="nbetrationcinqetoile" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltre5" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                             </children>
@@ -192,32 +218,32 @@
                             <children>
                                 <VBox alignment="TOP_CENTER">
                                     <children>
-                                        <Label fx:id="lbselectrepCat" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label" />
-                                        <ChoiceBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0" />
+                                        <Label fx:id="lbselectrepCat" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label"/>
+                                        <ChoiceBox fx:id="selectrepCat" onAction="#actionrepCatChange" prefHeight="25.0" prefWidth="160.0"/>
                                     </children>
                                 </VBox>
                                 <VBox alignment="TOP_CENTER">
                                     <children>
-                                        <Label fx:id="lbselectssrepformatZ1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label" />
-                                        <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0" />
+                                        <Label fx:id="lbselectssrepformatZ1" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label"/>
+                                        <ComboBox fx:id="selectssrepformatZ1" onAction="#actionssrepformatZ1Change" prefHeight="25.0" prefWidth="160.0"/>
                                     </children>
                                 </VBox>
                                 <VBox alignment="TOP_CENTER">
                                     <children>
-                                        <Label fx:id="lbselectssrepformatZ2" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label" />
-                                        <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0" />
+                                        <Label fx:id="lbselectssrepformatZ2" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label"/>
+                                        <ComboBox fx:id="selectssrepformatZ2" onAction="#actionssrepformatZ2Change" prefHeight="25.0" prefWidth="160.0"/>
                                     </children>
                                 </VBox>
                                 <VBox alignment="TOP_CENTER">
                                     <children>
-                                        <Label fx:id="lbselectssrepformatZ3" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label" />
-                                        <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0" />
+                                        <Label fx:id="lbselectssrepformatZ3" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label"/>
+                                        <ComboBox fx:id="selectssrepformatZ3" onAction="#actionssrepformatZ3Change" prefHeight="25.0" prefWidth="160.0"/>
                                     </children>
                                 </VBox>
                                 <VBox alignment="TOP_CENTER">
                                     <children>
-                                        <Label fx:id="lbselectssrepformatZ4" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label" />
-                                        <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0" />
+                                        <Label fx:id="lbselectssrepformatZ4" alignment="TOP_CENTER" contentDisplay="CENTER" text="Label"/>
+                                        <ComboBox fx:id="selectssrepformatZ4" onAction="#actionssrepformatZ4Change" prefHeight="25.0" prefWidth="160.0"/>
                                     </children>
                                 </VBox>
                             </children>
@@ -225,172 +251,208 @@
                     </children>
                 </VBox>
             </top>
-         <center>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <content>
-                      <TilePane fx:id="tile00" hgap="100.0" prefTileHeight="150.0" prefTileWidth="200.0" vgap="100.0">
-                          <children>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ01" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ01star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ02" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ02star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ03" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ03star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ04" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ04star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ05" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ05star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ06" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ06star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ07" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ07star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ08" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ08star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ09" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ09star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ10" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ10star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ11" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ11star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ12" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ12star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ13" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ13star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <ImageViewExt fx:id="imageZ14" fitHeight="150.0" fitWidth="200.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                      <Text fx:id="imageZ14star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER">
-                                  <children>
-                                      <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                      <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                          <font>
-                                              <Font name="Arial" size="10.0" />
-                                          </font>
-                                      </Text>
-                                      <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
-                                  </children>
-                              </VBox>
-                          </children>
-                      </TilePane>
-               </content>
-            </ScrollPane>
-         </center>
+            <center>
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <content>
+                        <TilePane fx:id="tile00" hgap="100.0" prefTileHeight="150.0" prefTileWidth="200.0" vgap="100.0">
+                            <children>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ01" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ01star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ02" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ02star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ03" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ03star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ04" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ04star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ05" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ05star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ06" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ06star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ07" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ07star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ08" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ08star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ09" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ09star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ10" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ10star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ11" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ11star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ12" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ12star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ13" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ13star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBoxExt alignment="CENTER">
+                                    <children>
+                                        <ImageView fx:id="imageZ14" fitHeight="150.0" fitWidth="200.0" focusTraversable="true"
+                                                   onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true"
+                                                   preserveRatio="true"/>
+                                        <Text fx:id="imageZ14star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBoxExt>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                        <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0"/>
+                                            </font>
+                                        </Text>
+                                        <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification"
+                                                prefHeight="51.0" prefWidth="67.0" text="Save"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </TilePane>
+                    </content>
+                </ScrollPane>
+            </center>
         </BorderPane>
-        <Circle fx:id="pointeur" fill="#ff1f1f" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="pointeur" fill="#ff1f1f" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE"/>
     </children>
 </AnchorPane>

@@ -3,12 +3,11 @@ package com.malicia.mrg.app.util;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class ImageViewExt extends ImageView
-{
+public class VBoxExt extends VBox {
 
     private ParallelTransition startTransition;
     private ScaleTransition scaleTransition;
@@ -18,52 +17,41 @@ public class ImageViewExt extends ImageView
     private SequentialTransition startsSequentialTransition;
     private DoubleProperty expandToMaxProperty;
 
-    public ImageViewExt() {
+    public VBoxExt() {
         super();
         init();
     }
 
 
-    private void init()
-    {
+    private void init() {
         expandToMaxProperty = new SimpleDoubleProperty(4);
 
-        scaleTransition =
-                new ScaleTransition(Duration.millis(200), this);
+        scaleTransition = new ScaleTransition(Duration.millis(200), this);
         scaleTransition.setCycleCount(1);
-        scaleTransition
-                .setInterpolator(Interpolator.EASE_BOTH);
+        scaleTransition.setInterpolator(Interpolator.EASE_BOTH);
 
-        startScaleTransition =
-                new ScaleTransition(Duration.millis(200), this);
+        startScaleTransition = new ScaleTransition(Duration.millis(200), this);
         startScaleTransition.setCycleCount(1);
-        startScaleTransition
-                .setInterpolator(Interpolator.EASE_BOTH);
+        startScaleTransition.setInterpolator(Interpolator.EASE_BOTH);
 
         fadeTransition = new FadeTransition(Duration.millis(200), this);
         fadeTransition.setCycleCount(1);
-        fadeTransition
-                .setInterpolator(Interpolator.EASE_BOTH);
+        fadeTransition.setInterpolator(Interpolator.EASE_BOTH);
 
         startTransition = new ParallelTransition();
         startTransition.setCycleCount(2);
         startTransition.setAutoReverse(true);
-        startTransition.getChildren()
-                .addAll(startScaleTransition, fadeTransition);
+        startTransition.getChildren().addAll(startScaleTransition, fadeTransition);
 
         initTransition =
                 new ScaleTransition(Duration.millis(200), this);
         initTransition.setToX(1);
         initTransition.setToY(1);
         initTransition.setCycleCount(1);
-        initTransition
-                .setInterpolator(Interpolator.EASE_BOTH);
+        initTransition.setInterpolator(Interpolator.EASE_BOTH);
 
         startsSequentialTransition = new SequentialTransition();
-        startsSequentialTransition.getChildren()
-                .addAll(
-                        startTransition,
-                        initTransition);
+        startsSequentialTransition.getChildren().addAll(startTransition, initTransition);
 
 
         setOnMouseEntered((MouseEvent t) -> {
@@ -93,8 +81,7 @@ public class ImageViewExt extends ImageView
         });
     }
 
-    public DoubleProperty expandToMaxProperty()
-    {
+    public DoubleProperty expandToMaxProperty() {
         return expandToMaxProperty;
     }
 }
