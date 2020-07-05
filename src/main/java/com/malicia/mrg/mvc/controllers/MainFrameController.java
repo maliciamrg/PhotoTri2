@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
+import com.malicia.mrg.app.util.VBoxExt;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
@@ -185,8 +186,6 @@ public class MainFrameController {
     private TilePane tile00;
 
 
-
-
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
     private int activephotoNum;
@@ -194,7 +193,6 @@ public class MainFrameController {
     private boolean filtreEstPhoto;
     private boolean FiltreEstrejeter;
     private Application mainApplication;
-
 
 
     /**
@@ -425,7 +423,7 @@ public class MainFrameController {
     @FXML
     void actionAbouturl() {
 //        try {
-            mainApplication.getHostServices().showDocument(Context.getUrlgitwiki());
+        mainApplication.getHostServices().showDocument(Context.getUrlgitwiki());
 //            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 //                Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
 //            }
@@ -603,29 +601,36 @@ public class MainFrameController {
         tile00.setPadding(new Insets(15, 15, 15, 15));
         tile00.setHgap(15);
 
-        recalculimagev(getnumphotofromactive(0), imageZ01star, imageZ01);
-        recalculimagev(getnumphotofromactive(1), imageZ02star, imageZ02);
-        recalculimagev(getnumphotofromactive(2), imageZ03star, imageZ03);
-        recalculimagev(getnumphotofromactive(3), imageZ04star, imageZ04);
-        recalculimagev(getnumphotofromactive(4), imageZ05star, imageZ05);
-        recalculimagev(getnumphotofromactive(5), imageZ06star, imageZ06);
-        recalculimagev(getnumphotofromactive(6), imageZ07star, imageZ07);
-        recalculimagev(getnumphotofromactive(7), imageZ08star, imageZ08);
-        recalculimagev(getnumphotofromactive(8), imageZ09star, imageZ09);
-        recalculimagev(getnumphotofromactive(9), imageZ10star, imageZ10);
-        recalculimagev(getnumphotofromactive(10), imageZ11star, imageZ11);
-        recalculimagev(getnumphotofromactive(11), imageZ12star, imageZ12);
-        recalculimagev(getnumphotofromactive(12), imageZ13star, imageZ13);
-        recalculimagev(getnumphotofromactive(13), imageZ14star, imageZ14);
-
+        for (int i = 0; i < 14; i++) {
+            tile00.getChildren().addAll(recalculimagev(i));
+        }
+//        recalculimagev(getnumphotofromactive(0), imageZ01star, imageZ01);
+//        recalculimagev(getnumphotofromactive(1), imageZ02star, imageZ02);
+//        recalculimagev(getnumphotofromactive(2), imageZ03star, imageZ03);
+//        recalculimagev(getnumphotofromactive(3), imageZ04star, imageZ04);
+//        recalculimagev(getnumphotofromactive(4), imageZ05star, imageZ05);
+//        recalculimagev(getnumphotofromactive(5), imageZ06star, imageZ06);
+//        recalculimagev(getnumphotofromactive(6), imageZ07star, imageZ07);
+//        recalculimagev(getnumphotofromactive(7), imageZ08star, imageZ08);
+//        recalculimagev(getnumphotofromactive(8), imageZ09star, imageZ09);
+//        recalculimagev(getnumphotofromactive(9), imageZ10star, imageZ10);
+//        recalculimagev(getnumphotofromactive(10), imageZ11star, imageZ11);
+//        recalculimagev(getnumphotofromactive(11), imageZ12star, imageZ12);
+//        recalculimagev(getnumphotofromactive(12), imageZ13star, imageZ13);
+//        recalculimagev(getnumphotofromactive(13), imageZ14star, imageZ14);
+//
 
     }
 
-    private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException, SQLException {
-
-        displayStarValueAndLibelle(imagestar, numphotofromactive);
+    private VBoxExt recalculimagev(int numphotofromactive) throws IOException, SQLException {
+        VBoxExt vb = new VBoxExt();
+        Text Textv = displayStarValueAndLibelle(numphotofromactive);
+        ImageView imageV = new ImageView();
         imageV.setImage(activeRepSrc.getimagenumero(numphotofromactive));
         imageV.setRotate(activeRep.getRotateFromphotonum(numphotofromactive));
+        vb.getChildren().addAll(imageV);
+        vb.getChildren().addAll(Textv);
+        return vb;
     }
 
 
@@ -685,11 +690,13 @@ public class MainFrameController {
     }
 
 
-    private void displayStarValueAndLibelle(Text imagestar, int activeNum) {
-        imagestar.setText(activeRep.getActivephotoValeur(activeNum));
-        imagestar.setFont(new Font("Wingdings", 10));
-        imagestar.setSmooth(true);
-        imagestar.setFontSmoothingType(FontSmoothingType.LCD);
+    private Text displayStarValueAndLibelle(int activeNum) {
+        Text textstar = new Text();
+        textstar.setText(activeRep.getActivephotoValeur(activeNum));
+        textstar.setFont(new Font("Wingdings", 10));
+        textstar.setSmooth(true);
+        textstar.setFontSmoothingType(FontSmoothingType.LCD);
+        return textstar;
     }
 
     /**
