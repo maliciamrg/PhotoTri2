@@ -730,7 +730,7 @@ public class MainFrameController {
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
+                    //displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     moveActivephotoNumTo(+1);
                     refreshAllPhoto();
                     keyEvent.consume();
@@ -743,7 +743,7 @@ public class MainFrameController {
                 case UP:
                     activeRep.valeuractivephotoincrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
+                    //displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case S:
@@ -756,7 +756,7 @@ public class MainFrameController {
                 case DOWN:
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ01star, activephotoNum);
+                    //displayStarValueAndLibelle(imageZ01star, activephotoNum);
                     keyEvent.consume();
                     break;
                 case D:
