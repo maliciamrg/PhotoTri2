@@ -538,7 +538,7 @@ public class AgLibraryRootFolder {
         return ret;
     }
 
-    private boolean isRepertoryToProcess(String pathFromRoot) {
+    private boolean isRepertoryToProcess(String pathFromRoot) {//todo variabilize
         switch (typeRoot) {
             case TYPE_NEW:
                 //repertoire = (@New) $0a19d7c5-e829-4537-9d53-4743397c53d4$
