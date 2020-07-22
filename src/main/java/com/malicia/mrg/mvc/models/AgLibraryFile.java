@@ -26,6 +26,12 @@ public class AgLibraryFile {
      */
     private String lcIdxFilename;
     private String fileIdLocal;
+
+    public double getPick() {
+        return pick;
+    }
+
+    private double pick;
     private String fileformat;
     private long captureTime;
     private String fileIdGlobal;
@@ -38,6 +44,7 @@ public class AgLibraryFile {
                          String lcIdxFilename,
                          String fileIdLocal,
                          double starValue,
+                         Double pick,
                          String fileformat,
                          long captureTime,
                          String fileIdGlobal,
@@ -46,6 +53,7 @@ public class AgLibraryFile {
         this.lcIdxFilename = lcIdxFilename;
         this.fileIdLocal = fileIdLocal;
         this.starValue = starValue;
+        this.pick = pick;
         this.fileformat = fileformat;
         this.captureTime = captureTime;
         this.fileIdGlobal = fileIdGlobal;

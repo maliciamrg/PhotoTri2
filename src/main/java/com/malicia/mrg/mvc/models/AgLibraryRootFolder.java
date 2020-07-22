@@ -147,6 +147,7 @@ public class AgLibraryRootFolder {
                         " strftime('%s', DATETIME(e.captureTime,\"+" + tempsAdherence + "\")) as maxt  , " +
                         "b.rootFolder , " +
                         "e.rating , " +
+                        "e.pick , " +
                         "e.fileformat , " +
                         "e.orientation , " +
                         "strftime('%s', e.captureTime) as captureTime " +
@@ -368,13 +369,14 @@ public class AgLibraryRootFolder {
             long mint = rsele.getLong("mint");
             long maxt = rsele.getLong("maxt");
             Double rating = rsele.getDouble("rating");
+            Double pick = rsele.getDouble("pick");
             String fileformat = rsele.getString("fileformat");
             long captureTime = rsele.getLong(Context.CAPTURE_TIME);
             String file_id_global = rsele.getString("id_global");
             String folder_id_local = rsele.getString("folder_id_local");
             String orientation = rsele.getString("orientation");
 
-            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, fileformat, captureTime, file_id_global, orientation);
+            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, pick ,fileformat, captureTime, file_id_global, orientation);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

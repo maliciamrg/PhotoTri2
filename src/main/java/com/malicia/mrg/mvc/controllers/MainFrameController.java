@@ -98,6 +98,10 @@ public class MainFrameController {
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
+    private Label lbnbNotFlag;
+    @FXML
+    private Label nbNotFlag;
+    @FXML
     private Label lbselectrepCat;
     @FXML
     private Label lbselectssrepformatZ1;
@@ -145,6 +149,24 @@ public class MainFrameController {
     private Text imageP3star;
     @FXML
     private Text imageP4star;
+    @FXML
+    private Text imageM4flag;
+    @FXML
+    private Text imageM3flag;
+    @FXML
+    private Text imageM2flag;
+    @FXML
+    private Text imageM1flag;
+    @FXML
+    private Text imageZ0flag;
+    @FXML
+    private Text imageP1flag;
+    @FXML
+    private Text imageP2flag;
+    @FXML
+    private Text imageP3flag;
+    @FXML
+    private Text imageP4flag;
     @FXML
     private Label datesub;
     @FXML
@@ -504,6 +526,7 @@ public class MainFrameController {
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
 
         alimetcolornbphotoapurger(nbphotoapurger, lbnbphotoapurger1);
+        alimetcolornbnotflag(nbNotFlag, lbnbNotFlag);
 
         alimetcolorlabelstatus(statusRep);
 
@@ -542,6 +565,19 @@ public class MainFrameController {
         champs.setText(activeRep.getStatusRep());
     }
 
+    private void alimetcolornbnotflag(Label champs, Label champsConnex) {
+        champs.setTextFill(Color.BLACK);
+        champs.setStyle("-fx-font-weight: normal;");
+        String[] ret = activeRep.getNbnotflag().split("@");
+        if (ret[1].compareTo("0") != 0) {
+            champs.setTextFill(Color.RED);
+            champs.setStyle("-fx-font-weight: bold;");
+        }
+        champs.setText(ret[2]);
+        champsConnex.setTextFill(champs.getTextFill());
+        champsConnex.setStyle(champs.getStyle());
+    }
+
     private void alimetcolornbphotoapurger(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
@@ -571,20 +607,21 @@ public class MainFrameController {
     private void refreshAllPhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
 
-        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4);
-        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3);
-        recalculimagev(getnumphotofromactive(-2), imageM2star, imageM2);
-        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1);
-        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0);
-        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1);
-        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2);
-        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3);
-        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4);
+        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4flag,imageM4);
+        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3flag,imageM3);
+        recalculimagev(getnumphotofromactive(-2),  imageM2star,imageM2flag,imageM2);
+        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1flag,imageM1);
+        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0flag,imageZ0);
+        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1flag,imageP1);
+        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2flag,imageP2);
+        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3flag,imageP3);
+        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4flag,imageP4);
 
     }
 
-    private void recalculimagev(int numphotofromactive, Text imagestar, ImageView imageV) throws IOException, SQLException {
+    private void recalculimagev(int numphotofromactive, Text imagestar, Text imageflag, ImageView imageV) throws IOException, SQLException {
         displayStarValueAndLibelle(imagestar, numphotofromactive);
+        displayFlagValue(imageflag, numphotofromactive);
         imageV.setImage(activeRepSrc.getimagenumero(numphotofromactive));
         imageV.setRotate(activeRep.getRotateFromphotonum(numphotofromactive));
     }
@@ -646,8 +683,17 @@ public class MainFrameController {
     }
 
 
+    private void displayFlagValue(Text imageflag, int activeNum) {
+        imageflag.setText(activeRep.getActivephotoFlag(activeNum));
+        imageflag.setFill(Color.RED);
+        imageflag.setFont(new Font("Wingdings", 30));
+        imageflag.setSmooth(true);
+        imageflag.setFontSmoothingType(FontSmoothingType.LCD);
+    }
+
     private void displayStarValueAndLibelle(Text imagestar, int activeNum) {
         imagestar.setText(activeRep.getActivephotoValeur(activeNum));
+        imagestar.setFill(Color.RED);
         imagestar.setFont(new Font("Wingdings", 10));
         imagestar.setSmooth(true);
         imagestar.setFontSmoothingType(FontSmoothingType.LCD);
@@ -721,6 +767,14 @@ public class MainFrameController {
                 case Q:
                     activeRep.setRotateToFile(activephotoNum, -90);
                     imageZ0.setRotate(activeRep.getRotateFromphotonum(activephotoNum));
+                    keyEvent.consume();
+                    break;
+                case U:
+                    displayFlagValue(imageZ0flag, activephotoNum);
+                    keyEvent.consume();
+                    break;
+                case P:
+                    displayFlagValue(imageZ0flag, activephotoNum);
                     keyEvent.consume();
                     break;
                 default:

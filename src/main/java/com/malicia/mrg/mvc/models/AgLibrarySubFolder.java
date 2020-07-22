@@ -48,6 +48,19 @@ public class AgLibrarySubFolder {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
+
+    public String getNbnotflag() {
+        String color;
+        if (nbnotflag == 0) {
+            color = "0";
+        } else {
+            color = "1";
+        }
+        return "@" + color + "@ " + String.format("%04d", nbnotflag);
+    }
+
+    private int nbnotflag;
+
     /**
      * Instantiates a new Ag library sub folder.
      *
@@ -60,6 +73,7 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
     }
+
     public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
@@ -106,11 +120,12 @@ public class AgLibrarySubFolder {
             String fileIdGlobal = rs.getString("id_global");
             String lcIdxFilename = rs.getString("lc_idx_filename");
             Double rating = rs.getDouble("rating");
+            Double pick = rs.getDouble("pick");
             String fileformat = rs.getString("fileformat");
             String orientation = rs.getString("orientation");
             long captureTime = rs.getLong(Context.CAPTURE_TIME);
 
-            listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, fileformat, captureTime, fileIdGlobal , orientation));
+            listFileSubFolder.add(new AgLibraryFile(this, lcIdxFilename, fileIdLocal, rating, pick, fileformat, captureTime, fileIdGlobal, orientation));
         }
 
 
@@ -245,6 +260,7 @@ public class AgLibrarySubFolder {
                         "a.id_global , " +
                         "a.lc_idx_filename as lc_idx_filename , " +
                         "e.rating , " +
+                        "e.pick , " +
                         "e.fileformat , " +
                         "e.orientation , " +
                         "strftime('%s', e.captureTime) as captureTime " +
@@ -263,6 +279,7 @@ public class AgLibrarySubFolder {
         nbelerep = 0;
         nbphotoRep = 0;
         nbetrationetoile = new int[]{0, 0, 0, 0, 0, 0};
+        nbnotflag=0;
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
@@ -283,6 +300,7 @@ public class AgLibrarySubFolder {
     }
 
     private void calculateStarAndDate(AgLibraryFile fi) {
+//        calcul star
         switch ((int) fi.getStarValue()) {
             case 0:
             case 1:
@@ -295,12 +313,17 @@ public class AgLibrarySubFolder {
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) fi.getStarValue());
         }
+//        calcul date
         long dt = fi.getCaptureTime();
         if (dt < dtdeb) {
             dtdeb = dt;
         }
         if (dt > dtfin) {
             dtfin = dt;
+        }
+//        calcul flag
+        if ((int) fi.getPick() == 0) {
+            nbnotflag +=1;
         }
     }
 
@@ -463,7 +486,23 @@ public class AgLibrarySubFolder {
         return "@" + color + "@ " + String.format("%04d", nbphotoapurger);
     }
 
-
+    public String getActivephotoFlag(int activeNum) {
+        String flag = " ";
+        if (activeNum == -1 || activeNum > listFileSubFolder.size() - 1) {
+            return "";
+        }
+        switch ((int) listFileSubFolder.get(activeNum).getPick()) {
+            case 0:
+//                flag = "⚐";
+                flag = "X";
+                break;
+            case 1:
+//                flag = "\uD83C\uDFC1";
+                flag = "";
+                break;
+        }
+        return flag;
+    }
     /**
      * Gets activephoto valeur.
      *
@@ -478,23 +517,24 @@ public class AgLibrarySubFolder {
         SimpleDateFormat repDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dtdebH = new Date(listFileSubFolder.get(activeNum).getCaptureTime() * 1000);
 
-        String infoPrec = String.format("%04d", activeNum+1) + " - " + repDateFormat.format(dtdebH);
+        String infoPrec = String.format("%04d", activeNum + 1) + " - " + repDateFormat.format(dtdebH);
+
 
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return infoPrec + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
+                return infoPrec + "\n"  + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
             case 0:
-                return infoPrec + "\n" + "           " + "\n" + appParam.getString("valeurZero__");
+                return infoPrec + "\n"  + "           " + "\n" + appParam.getString("valeurZero__");
             case 1:
-                return infoPrec + "\n" + " ★         " + "\n" + appParam.getString("valeur1star_");
+                return infoPrec + "\n"  + " ★         " + "\n" + appParam.getString("valeur1star_");
             case 2:
-                return infoPrec + "\n" + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
+                return infoPrec + "\n"  + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
             case 3:
-                return infoPrec + "\n" + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
+                return infoPrec + "\n"  + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
             case 4:
-                return infoPrec + "\n" + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
+                return infoPrec + "\n"  + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
             case 5:
-                return infoPrec + "\n" + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
+                return infoPrec + "\n"  + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
@@ -513,7 +553,7 @@ public class AgLibrarySubFolder {
     @Override
     public String toString() {
         //return getNbelerep() + " " + getNbphotoRepHuman() + " #" + agLibraryRootFolder.typeRoot + " " + pathFromRoot;
-        return getAgLibraryRootFolder().name + " [" + getNbphotoRepHuman() + " ] " +  pathFromRoot;
+        return getAgLibraryRootFolder().name + " [" + getNbphotoRepHuman() + " ] " + pathFromRoot;
     }
 
 
@@ -529,7 +569,9 @@ public class AgLibrarySubFolder {
     }
 
     public void setrepformatZ(int i, String valeur) {
-        if (valeur.compareTo("null")==0){valeur="";}
+        if (valeur.compareTo("null") == 0) {
+            valeur = "";
+        }
         subFolderFormatZ.get(i).setLocalValue(valeur);
     }
 
@@ -604,7 +646,7 @@ public class AgLibrarySubFolder {
                             ele.enregistrerStarValue();
                         } catch (SQLException e) {
                             popupalertException(e);
-                            excptlog(e,logger);
+                            excptlog(e, logger);
                         }
                     }
                 }
