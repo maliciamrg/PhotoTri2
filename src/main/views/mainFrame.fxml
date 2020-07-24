@@ -306,9 +306,10 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour"/>
-                                                                        <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0"
-                                                                               text="Label"/>
+                                                                        <Label fx:id="lbnbSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionSelectionner" text="Selectionner"/>
+                                                                        <Label fx:id="nbSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0"
+                                                                               layoutY="17.0" onMouseClicked="#actionSelectionner" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
@@ -325,10 +326,9 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               text="Aconserver"/>
-                                                                        <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               layoutX="15.0" layoutY="17.0" text="Label"/>
+                                                                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="NbJour"/>
+                                                                        <Label fx:id="nbjourrep" alignment="TOP_CENTER" contentDisplay="CENTER" layoutY="17.0"
+                                                                               text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
@@ -345,10 +345,10 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               onMouseClicked="#actionfiltrep" text="Apurger"/>
-                                                                        <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltrep" text="Label"/>
+                                                                        <Label fx:id="lbratiophotoaconcerver1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               text="Aconserver"/>
+                                                                        <Label fx:id="ratiophotoaconcerver" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="15.0" layoutY="17.0" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER">
@@ -365,10 +365,10 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbnonSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               onMouseClicked="#actionnonSelectionner" text="nonSelectionner"/>
-                                                                        <Label fx:id="nbnonSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0"
-                                                                               layoutY="17.0" onMouseClicked="#actionnonSelectionner" text="Label"/>
+                                                                        <Label fx:id="lbnbphotoapurger1" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionfiltrep" text="Apurger"/>
+                                                                        <Label fx:id="nbphotoapurger" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               layoutX="8.0" layoutY="17.0" onMouseClicked="#actionfiltrep" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER" prefHeight="35.0" prefWidth="130.0">

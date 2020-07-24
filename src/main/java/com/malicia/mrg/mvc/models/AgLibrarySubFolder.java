@@ -48,7 +48,7 @@ public class AgLibrarySubFolder {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
-    private int nbnonSelectionner;
+    private int nbSelectionner;
 
     /**
      * Instantiates a new Ag library sub folder.
@@ -77,14 +77,14 @@ public class AgLibrarySubFolder {
         aglibraySubFolderConstructor(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal);
     }
 
-    public String getNbnonSelectionner() {
+    public String getNbSelectionner() {
         String color;
-        if (nbnonSelectionner == 0) {
+        if (nbSelectionner == 0) {
             color = "0";
         } else {
             color = "1";
         }
-        return "@" + color + "@ " + String.format("%04d", nbnonSelectionner);
+        return "@" + color + "@ " + String.format("%04d", nbSelectionner);
     }
 
     public AgLibraryRootFolder getAgLibraryRootFolder() {
@@ -287,18 +287,18 @@ public class AgLibrarySubFolder {
         nbelerep = 0;
         nbphotoRep = 0;
         nbetrationetoile = new int[]{0, 0, 0, 0, 0, 0};
-        nbnonSelectionner = 0;
+        nbSelectionner = 0;
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
-            if (!fi.estRejeter()) {
+//            if (!fi.estRejeter() ) {
                 nbelerep += 1;
                 if (fi.estPhoto()) {
                     nbphotoRep += 1;
                     calculateStarAndDate(fi);
                 }
-            }
+//            }
         }
 
         calculatenbphotapurger(dtfin, dtdeb);
@@ -332,13 +332,13 @@ public class AgLibrarySubFolder {
             dtfin = dt;
         }
 //        calcul flag
-        if ((int) fi.getPick() == 0) {
-            nbnonSelectionner += 1;
+        if ((int) fi.getPick() == 1) {
+            nbSelectionner += 1;
         }
     }
 
     private void calculatenbphotapurger(long dtfin, long dtdeb) {
-        int nbphotoRepSelectionner = nbphotoRep - nbnonSelectionner;
+        int nbphotoRepSelectionner = nbSelectionner;
 
         //        nbphotoapurger
         nbphotoapurger = 0;
@@ -427,7 +427,7 @@ public class AgLibrarySubFolder {
             case 0:
                 nb = nbetrationetoile[valeur];
                 countmin = 0;
-                countmax = nbphotoRep - nbphotoapurger;
+                countmax = nbSelectionner - nbphotoapurger;
                 break;
             case 1:
             case 2:
@@ -437,7 +437,7 @@ public class AgLibrarySubFolder {
                 nb = nbetrationetoile[valeur];
                 countmin = 0;
 //                countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
-                countmax = ((nbphotoRep - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
+                countmax = ((nbSelectionner - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + valeur);
@@ -727,7 +727,7 @@ public class AgLibrarySubFolder {
         calculStatusRep();
     }
 
-    public boolean fileFiltrer(int phototoshow, boolean estphoto, int nbstar, boolean estrejeter) {
+    public boolean fileFiltrer(int phototoshow, boolean estphoto, int nbstar, boolean estrejeter, boolean estselectionner) {
         boolean ret = true;
         if (estphoto && !listFileSubFolder.get(phototoshow).estPhoto()) {
             ret = false;
@@ -736,6 +736,9 @@ public class AgLibrarySubFolder {
             ret = false;
         }
         if (estrejeter && !listFileSubFolder.get(phototoshow).estRejeter()) {
+            ret = false;
+        }
+        if (estselectionner && !listFileSubFolder.get(phototoshow).estSelectionner()) {
             ret = false;
         }
         return ret;

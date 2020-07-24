@@ -99,9 +99,9 @@ public class MainFrameController {
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
-    private Label lbnbnonSelectionner;
+    private Label lbnbSelectionner;
     @FXML
-    private Label nbnonSelectionner;
+    private Label nbSelectionner;
     @FXML
     private Label lbselectrepCat;
     @FXML
@@ -191,6 +191,7 @@ public class MainFrameController {
     private int filtreNbstar;
     private boolean filtreEstPhoto;
     private boolean FiltreEstrejeter;
+    private boolean FiltreEstselectionner;
 
 
     /**
@@ -500,6 +501,12 @@ public class MainFrameController {
         });
         repChoose.setItems(getlistofrepertorytoprocessfiltred);
         repChoose.getSelectionModel().selectFirst();
+        try {
+            refreshAllPhoto();
+        } catch (SQLException | IOException e) {
+            Context.popupalertException(e);
+            Context.excptlog(e, LOGGER);
+        }
     }
 
     private void refreshcomboxRepertoire() {
@@ -527,7 +534,7 @@ public class MainFrameController {
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
 
         alimetcolornbphotoapurger(nbphotoapurger, lbnbphotoapurger1);
-        alimetcolornbnonSelectionner(nbnonSelectionner, lbnbnonSelectionner);
+        alimetcolornbSelectionner(nbSelectionner, lbnbSelectionner);
 
         alimetcolorlabelstatus(statusRep);
 
@@ -566,10 +573,10 @@ public class MainFrameController {
         champs.setText(activeRep.getStatusRep());
     }
 
-    private void alimetcolornbnonSelectionner(Label champs, Label champsConnex) {
+    private void alimetcolornbSelectionner(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
-        String[] ret = activeRep.getNbnonSelectionner().split("@");
+        String[] ret = activeRep.getNbSelectionner().split("@");
         if (ret[1].compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
@@ -617,7 +624,7 @@ public class MainFrameController {
         recalculimagev(getnumphotofromactive(2), imageP2star, imageP2flag, imageP2);
         recalculimagev(getnumphotofromactive(3), imageP3star, imageP3flag, imageP3);
         recalculimagev(getnumphotofromactive(4), imageP4star, imageP4flag, imageP4);
-
+        refreshcompteurRepertoire();
     }
 
     private void recalculimagev(int numphotofromactive, Text imagestar, Text imageflag, ImageView imageV) throws IOException, SQLException {
@@ -671,7 +678,7 @@ public class MainFrameController {
                     calculnewactivephotoNum = -1;
                     break;
                 }
-                if (activeRep.fileFiltrer(num, filtreEstPhoto, filtreNbstar, FiltreEstrejeter)) {
+                if (activeRep.fileFiltrer(num, filtreEstPhoto, filtreNbstar, FiltreEstrejeter,FiltreEstselectionner)) {
                     calculnewactivephotoNum = num;
                     break;
                 }
@@ -1036,6 +1043,7 @@ public class MainFrameController {
                 actionFiltreNull();
                 datesub.setText(activeRep.getDtdebHumain());
             }
+            refreshAllPhoto();
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -1046,6 +1054,7 @@ public class MainFrameController {
         filtreNbstar = -1;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1054,6 +1063,7 @@ public class MainFrameController {
         filtreNbstar = 0;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1062,6 +1072,7 @@ public class MainFrameController {
         filtreNbstar = 1;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1070,6 +1081,7 @@ public class MainFrameController {
         filtreNbstar = 2;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1078,6 +1090,7 @@ public class MainFrameController {
         filtreNbstar = 3;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1086,6 +1099,7 @@ public class MainFrameController {
         filtreNbstar = 4;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1094,6 +1108,7 @@ public class MainFrameController {
         filtreNbstar = 5;
         filtreEstPhoto = true;
         FiltreEstrejeter = false;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1102,6 +1117,7 @@ public class MainFrameController {
         filtreNbstar = -1;
         filtreEstPhoto = true;
         FiltreEstrejeter = true;
+        FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
     }
@@ -1153,15 +1169,19 @@ public class MainFrameController {
 
     }
 
-    public void actionnonSelectionner(MouseEvent mouseEvent) {
+    public void actionSelectionner(MouseEvent mouseEvent) {
         try {
-            if (nbnonSelectionner.toString() != " 0000") {
+            if (nbSelectionner.toString() == " 0000") {
                 Optional<ButtonType> result = Context.popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     activeRep.flagAllFile();
                     refreshAllPhoto();
                     refreshcompteurRepertoire();
                 }
+            } else {
+                FiltreEstselectionner = !FiltreEstselectionner;
+                moveActivephotoNumTo(0);
+                refreshAllPhoto();
             }
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
