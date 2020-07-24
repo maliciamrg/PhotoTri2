@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -98,9 +99,9 @@ public class MainFrameController {
     @FXML
     private Label nbetrationcinqetoile;
     @FXML
-    private Label lbnbNotFlag;
+    private Label lbnbnonSelectionner;
     @FXML
-    private Label nbNotFlag;
+    private Label nbnonSelectionner;
     @FXML
     private Label lbselectrepCat;
     @FXML
@@ -526,7 +527,7 @@ public class MainFrameController {
         ratiophotoaconcerver.setText(activeRep.getRatiophotoaconserver());
 
         alimetcolornbphotoapurger(nbphotoapurger, lbnbphotoapurger1);
-        alimetcolornbnotflag(nbNotFlag, lbnbNotFlag);
+        alimetcolornbnonSelectionner(nbnonSelectionner, lbnbnonSelectionner);
 
         alimetcolorlabelstatus(statusRep);
 
@@ -565,10 +566,10 @@ public class MainFrameController {
         champs.setText(activeRep.getStatusRep());
     }
 
-    private void alimetcolornbnotflag(Label champs, Label champsConnex) {
+    private void alimetcolornbnonSelectionner(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
-        String[] ret = activeRep.getNbnotflag().split("@");
+        String[] ret = activeRep.getNbnonSelectionner().split("@");
         if (ret[1].compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
@@ -607,15 +608,15 @@ public class MainFrameController {
     private void refreshAllPhoto() throws IOException, SQLException {
         LOGGER.info("refresh");
 
-        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4flag,imageM4);
-        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3flag,imageM3);
-        recalculimagev(getnumphotofromactive(-2),  imageM2star,imageM2flag,imageM2);
-        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1flag,imageM1);
-        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0flag,imageZ0);
-        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1flag,imageP1);
-        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2flag,imageP2);
-        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3flag,imageP3);
-        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4flag,imageP4);
+        recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4flag, imageM4);
+        recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3flag, imageM3);
+        recalculimagev(getnumphotofromactive(-2), imageM2star, imageM2flag, imageM2);
+        recalculimagev(getnumphotofromactive(-1), imageM1star, imageM1flag, imageM1);
+        recalculimagev(getnumphotofromactive(0), imageZ0star, imageZ0flag, imageZ0);
+        recalculimagev(getnumphotofromactive(1), imageP1star, imageP1flag, imageP1);
+        recalculimagev(getnumphotofromactive(2), imageP2star, imageP2flag, imageP2);
+        recalculimagev(getnumphotofromactive(3), imageP3star, imageP3flag, imageP3);
+        recalculimagev(getnumphotofromactive(4), imageP4star, imageP4flag, imageP4);
 
     }
 
@@ -770,10 +771,14 @@ public class MainFrameController {
                     keyEvent.consume();
                     break;
                 case U:
+                    activeRep.valeuractivephotounflag(activephotoNum);
+                    refreshcompteurRepertoire();
                     displayFlagValue(imageZ0flag, activephotoNum);
                     keyEvent.consume();
                     break;
                 case P:
+                    activeRep.valeuractivephotoflag(activephotoNum);
+                    refreshcompteurRepertoire();
                     displayFlagValue(imageZ0flag, activephotoNum);
                     keyEvent.consume();
                     break;
@@ -1146,5 +1151,21 @@ public class MainFrameController {
         }
 
 
+    }
+
+    public void actionnonSelectionner(MouseEvent mouseEvent) {
+        try {
+            if (nbnonSelectionner.toString() != " 0000") {
+                Optional<ButtonType> result = Context.popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    activeRep.flagAllFile();
+                    refreshAllPhoto();
+                    refreshcompteurRepertoire();
+                }
+            }
+        } catch (IOException | SQLException e) {
+            Context.popupalertException(e);
+            Context.excptlog(e, LOGGER);
+        }
     }
 }

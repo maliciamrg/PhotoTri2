@@ -48,18 +48,7 @@ public class AgLibrarySubFolder {
     private long nbjourfolder;
     private long dtdeb;
     private long dtfin;
-
-    public String getNbnotflag() {
-        String color;
-        if (nbnotflag == 0) {
-            color = "0";
-        } else {
-            color = "1";
-        }
-        return "@" + color + "@ " + String.format("%04d", nbnotflag);
-    }
-
-    private int nbnotflag;
+    private int nbnonSelectionner;
 
     /**
      * Instantiates a new Ag library sub folder.
@@ -86,6 +75,16 @@ public class AgLibrarySubFolder {
     public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
         this.agLibraryRootFolder = activeRep.agLibraryRootFolder;
         aglibraySubFolderConstructor(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal);
+    }
+
+    public String getNbnonSelectionner() {
+        String color;
+        if (nbnonSelectionner == 0) {
+            color = "0";
+        } else {
+            color = "1";
+        }
+        return "@" + color + "@ " + String.format("%04d", nbnonSelectionner);
     }
 
     public AgLibraryRootFolder getAgLibraryRootFolder() {
@@ -247,6 +246,15 @@ public class AgLibrarySubFolder {
         listFileSubFolder.get(activeNum).valeurDecrease();
     }
 
+    public void valeuractivephotounflag(int activeNum) {
+
+        listFileSubFolder.get(activeNum).unflag();
+    }
+
+    public void valeuractivephotoflag(int activeNum) {
+
+        listFileSubFolder.get(activeNum).flag();
+    }
 
     /**
      * Sqlget listelementrejetaranger result set.
@@ -279,7 +287,7 @@ public class AgLibrarySubFolder {
         nbelerep = 0;
         nbphotoRep = 0;
         nbetrationetoile = new int[]{0, 0, 0, 0, 0, 0};
-        nbnotflag=0;
+        nbnonSelectionner = 0;
         dtfin = 0;
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
@@ -308,7 +316,9 @@ public class AgLibrarySubFolder {
             case 3:
             case 4:
             case 5:
-                nbetrationetoile[(int) fi.getStarValue()] += 1;
+                if (fi.estSelectionner()) {
+                    nbetrationetoile[(int) fi.getStarValue()] += 1;
+                }
                 break;
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) fi.getStarValue());
@@ -323,25 +333,27 @@ public class AgLibrarySubFolder {
         }
 //        calcul flag
         if ((int) fi.getPick() == 0) {
-            nbnotflag +=1;
+            nbnonSelectionner += 1;
         }
     }
 
     private void calculatenbphotapurger(long dtfin, long dtdeb) {
+        int nbphotoRepSelectionner = nbphotoRep - nbnonSelectionner;
+
         //        nbphotoapurger
         nbphotoapurger = 0;
         nbjourfolder = (dtfin - dtdeb) / (60 * 60 * 24) + 1;
 
         int limitemaxfolder = (int) (agLibraryRootFolder.nbmaxCat * Math.ceil((double) nbjourfolder / agLibraryRootFolder.nbjouCat));
-        if (nbphotoRep > limitemaxfolder) {
-            nbphotoapurger = (nbphotoRep - limitemaxfolder);
+        if (nbphotoRepSelectionner > limitemaxfolder) {
+            nbphotoapurger = (nbphotoRepSelectionner - limitemaxfolder);
         }
 
         //        ratiophotoaconserver
         DecimalFormat df = new DecimalFormat("##.##%");
         double percent;
-        if (nbphotoRep != 0) {
-            percent = 1 - ((double) nbphotoapurger / nbphotoRep);
+        if (nbphotoRepSelectionner != 0) {
+            percent = 1 - ((double) nbphotoapurger / nbphotoRepSelectionner);
         } else {
             percent = 0;
         }
@@ -503,6 +515,7 @@ public class AgLibrarySubFolder {
         }
         return flag;
     }
+
     /**
      * Gets activephoto valeur.
      *
@@ -522,19 +535,19 @@ public class AgLibrarySubFolder {
 
         switch ((int) listFileSubFolder.get(activeNum).getStarValue()) {
             case -1:
-                return infoPrec + "\n"  + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
+                return infoPrec + "\n" + "     \uD83D\uDD71 \uD83D\uDD71 \uD83D\uDD71 " + "\n" + appParam.getString("valeurCorbeille");
             case 0:
-                return infoPrec + "\n"  + "           " + "\n" + appParam.getString("valeurZero__");
+                return infoPrec + "\n" + "           " + "\n" + appParam.getString("valeurZero__");
             case 1:
-                return infoPrec + "\n"  + " ★         " + "\n" + appParam.getString("valeur1star_");
+                return infoPrec + "\n" + " ★         " + "\n" + appParam.getString("valeur1star_");
             case 2:
-                return infoPrec + "\n"  + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
+                return infoPrec + "\n" + " ★ ★       " + "\n" + appParam.getString("valeur2stars");
             case 3:
-                return infoPrec + "\n"  + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
+                return infoPrec + "\n" + " ★ ★ ★     " + "\n" + appParam.getString("valeur3stars");
             case 4:
-                return infoPrec + "\n"  + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
+                return infoPrec + "\n" + " ★ ★ ★ ★   " + "\n" + appParam.getString("valeur4stars");
             case 5:
-                return infoPrec + "\n"  + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
+                return infoPrec + "\n" + " ★ ★ ★ ★ ★ " + "\n" + appParam.getString("valeur5stars");
             default:
                 throw new IllegalStateException(UNEXPECTED_VALUE + (int) listFileSubFolder.get(activeNum).getStarValue());
         }
@@ -638,17 +651,22 @@ public class AgLibrarySubFolder {
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
         activeRepDest.listFileSubFolder.forEach(ele -> {
+                    if (!ele.estSelectionner()) {
+                        listFileSubFolderRejet.add(ele);
+                    }
                     if (ele.isEdited()) {
                         if (ele.estRejeter()) {
                             listFileSubFolderRejet.add(ele);
                         }
                         try {
                             ele.enregistrerStarValue();
+                            ele.enregistrerPickValue();
                         } catch (SQLException e) {
                             popupalertException(e);
                             excptlog(e, logger);
                         }
                     }
+
                 }
         );
         if (!listFileSubFolderRejet.isEmpty()) {
@@ -725,5 +743,12 @@ public class AgLibrarySubFolder {
 
     public int filsize() {
         return listFileSubFolder.size();
+    }
+
+    public void flagAllFile() {
+        listFileSubFolder.forEach(ele -> {
+                    ele.flag();
+                }
+        );
     }
 }

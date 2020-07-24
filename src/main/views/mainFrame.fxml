@@ -365,10 +365,10 @@
                                                             <children>
                                                                 <VBox alignment="CENTER">
                                                                     <children>
-                                                                        <Label fx:id="lbnbNotFlag" alignment="TOP_CENTER" contentDisplay="CENTER"
-                                                                               text="Not Flag"/>
-                                                                        <Label fx:id="nbNotFlag" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0"
-                                                                               layoutY="17.0" text="Label"/>
+                                                                        <Label fx:id="lbnbnonSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                                                               onMouseClicked="#actionnonSelectionner" text="nonSelectionner"/>
+                                                                        <Label fx:id="nbnonSelectionner" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="2.0"
+                                                                               layoutY="17.0" onMouseClicked="#actionnonSelectionner" text="Label"/>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox alignment="CENTER" prefHeight="35.0" prefWidth="130.0">

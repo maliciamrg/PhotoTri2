@@ -592,6 +592,18 @@ public class AgLibraryRootFolder {
     }
 
 
+    public void sqlEditPickValue(String fileIdLocal, double pickValue) throws SQLException {
+
+        String sql;
+
+        sql = "update Adobe_images " +
+                "set pick = " + pickValue + " " +
+                "Where  rootFile =  \"" + fileIdLocal + "\" " +
+                " ;";
+
+        parentLrcat.executeUpdate(sql);
+    }
+
     public void sqlEditStarValue(String fileIdLocal, double starValue) throws SQLException {
 
         String sql;

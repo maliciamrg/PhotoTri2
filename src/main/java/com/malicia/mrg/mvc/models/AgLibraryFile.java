@@ -12,7 +12,7 @@ public class AgLibraryFile {
      * The constant REP_NEW.
      */
     public static final String REP_NEW = "repNew";
-    private AgLibrarySubFolder subFolder;
+    private final AgLibrarySubFolder subFolder;
     /**
      * The Setedited.
      */
@@ -24,19 +24,13 @@ public class AgLibraryFile {
     /**
      * The Lc idx filename.
      */
-    private String lcIdxFilename;
-    private String fileIdLocal;
-
-    public double getPick() {
-        return pick;
-    }
-
+    private final String lcIdxFilename;
+    private final String fileIdLocal;
     private double pick;
-    private String fileformat;
-    private long captureTime;
-    private String fileIdGlobal;
+    private final String fileformat;
+    private final long captureTime;
+    private final String fileIdGlobal;
     private int addRotate;
-
     /**
      * Instantiates a new Ele.
      */
@@ -60,8 +54,18 @@ public class AgLibraryFile {
         this.addRotate = translateOrientation(orientation);
     }
 
+    public double getPick() {
+        return pick;
+    }
+
+    public void setPick(double pick) {
+        this.pick = pick;
+    }
+
     private int translateOrientation(String orientation) {
-        if (orientation==null){return 0;}
+        if (orientation == null) {
+            return 0;
+        }
         switch (orientation) {
             case "BC":
                 return 90;
@@ -144,6 +148,11 @@ public class AgLibraryFile {
         return starValue < 0;
     }
 
+
+    public boolean estSelectionner() {
+        return pick == 1;
+    }
+
     /**
      * Est photo boolean.
      *
@@ -203,6 +212,16 @@ public class AgLibraryFile {
         }
     }
 
+    public void flag() {
+        pick = 1;
+        edited = true;
+    }
+
+    public void unflag() {
+        pick = 0;
+        edited = true;
+    }
+
     public void valeurDecrease() {
         if (starValue > -1) {
             starValue -= 1;
@@ -223,5 +242,9 @@ public class AgLibraryFile {
             editstartvalue = 0;
         }
         subFolder.getAgLibraryRootFolder().sqlEditStarValue(fileIdLocal, editstartvalue);
+    }
+
+    public void enregistrerPickValue() throws SQLException {
+        subFolder.getAgLibraryRootFolder().sqlEditPickValue(fileIdLocal, pick);
     }
 }
