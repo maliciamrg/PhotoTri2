@@ -13,6 +13,12 @@ import javafx.concurrent.Task;
 // Copy all file in C:/Windows
 public class CmdTask extends Task<Void> {
 
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+    }
+
 
     private String[] lineArray = new String[10];;
 
@@ -29,6 +35,7 @@ public class CmdTask extends Task<Void> {
             line = r.readLine();
             if (line == null) { break; }
             this.copy(line);
+            LOGGER.info(line);
         }
 
         return null;
