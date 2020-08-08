@@ -6,6 +6,9 @@ import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
+import com.sun.deploy.services.WPlatformService;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,11 +27,14 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -678,7 +684,7 @@ public class MainFrameController {
                     calculnewactivephotoNum = -1;
                     break;
                 }
-                if (activeRep.fileFiltrer(num, filtreEstPhoto, filtreNbstar, FiltreEstrejeter,FiltreEstselectionner)) {
+                if (activeRep.fileFiltrer(num, filtreEstPhoto, filtreNbstar, FiltreEstrejeter, FiltreEstselectionner)) {
                     calculnewactivephotoNum = num;
                     break;
                 }
@@ -910,6 +916,15 @@ public class MainFrameController {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
         }
+    }
+
+    @FXML
+    public void exitApplication(ActionEvent event) throws IOException {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                new ProgressCmd().start(new Stage());
+            }
+        });
     }
 
     /**

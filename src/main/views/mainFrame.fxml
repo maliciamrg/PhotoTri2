@@ -202,7 +202,7 @@
                                         <SeparatorMenuItem mnemonicParsing="false"/>
                                         <MenuItem mnemonicParsing="false" text="_Preferences…"/>
                                         <SeparatorMenuItem mnemonicParsing="false"/>
-                                        <MenuItem mnemonicParsing="false" text="_Quit"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#exitApplication" text="Quit"/>
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Workflow">

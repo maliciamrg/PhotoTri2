@@ -53,6 +53,12 @@ public class Context implements Serializable {
     private static String localErrPhotoUrl;
     public static CatalogPreviews Previews;
 
+    public static String getPostTraitement() {
+        return PostTraitement;
+    }
+
+    private static String PostTraitement;
+
     static {
         LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
@@ -114,6 +120,7 @@ public class Context implements Serializable {
 
         lrcat = new CatalogLrcat(appParam.getString("RepCatalog") + File.separator + appParam.getString("CatalogLrcat"));
         Previews = new CatalogPreviews(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator + appParam.getString("CatalogPreviews"));
+        PostTraitement = new String(appParam.getString("PostTraitement") );
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 
