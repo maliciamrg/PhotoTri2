@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import com.malicia.mrg.app.util.CmdTask;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
@@ -15,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.xml.soap.Text;
 
@@ -31,6 +34,7 @@ public class ProgressCmd extends Application {
         final Button cancelButton = new Button("Cancel");
 
         final TextArea statusText = new TextArea();
+        final CheckBox doPostTraitement = new CheckBox("doPostTraitement");
 //        final Label statusLabelm1 = new Label();
         statusText.setMinWidth(400);
 //        statusText.setTextFill(Color.BLUE);
@@ -42,7 +46,6 @@ public class ProgressCmd extends Application {
             @Override
             public void handle(ActionEvent event) {
                 startButton.setDisable(true);
-
                 cancelButton.setDisable(false);
 
                 // Create a Task.
@@ -66,9 +69,7 @@ public class ProgressCmd extends Application {
 
                             @Override
                             public void handle(WorkerStateEvent t) {
-                                statusText.textProperty().unbind();
-//                                statusLabelm1.textProperty().unbind();
-                                Platform.exit();
+                                closeAll(statusText);
                             }
                         });
 
@@ -84,10 +85,10 @@ public class ProgressCmd extends Application {
             public void handle(ActionEvent event) {
                 startButton.setDisable(false);
                 cancelButton.setDisable(true);
-                cmdTask.cancel(true);
-                statusText.textProperty().unbind();
-//                statusLabelm1.textProperty().unbind();
-                //
+                if (cmdTask!=null) {
+                    cmdTask.cancel(true);
+                }
+                closeAll(statusText);
             }
         });
 
@@ -97,14 +98,39 @@ public class ProgressCmd extends Application {
 
         root.getChildren().addAll(label, //
  //               statusLabelm1,
-                statusText, startButton, cancelButton);
+                statusText, startButton, cancelButton, doPostTraitement);
 
-        Scene scene = new Scene(root, 800, 200, Color.WHITE);
+        Scene scene = new Scene(root, 800, 300, Color.WHITE);
         primaryStage.setTitle("Progress CmdTask");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        startButton.fire();
+        startButton.setDisable(true);
+        doPostTraitement.setSelected(true);
+
+        final Timeline animation = new Timeline(
+                new KeyFrame(Duration.seconds(1),
+                        new EventHandler<ActionEvent>() {
+                            private int i = 10 ;
+                            @Override public void handle(ActionEvent actionEvent) {
+                                startButton.setText("Start in "+i--);
+                                if (i==0){
+                                    if (doPostTraitement.isSelected()) {
+                                        startButton.setDisable(false);
+                                        startButton.fire();
+                                    } else {
+                                        cancelButton.fire();
+                                    }
+                                }
+                            }
+                        }));
+        animation.setCycleCount(10);
+        animation.play();
+    }
+
+    public void closeAll(TextArea statusText) {
+        statusText.textProperty().unbind();
+        Platform.exit();
     }
 
     public static void main(String[] args) {
