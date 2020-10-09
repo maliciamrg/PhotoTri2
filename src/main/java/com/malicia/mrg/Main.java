@@ -9,15 +9,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.Optional;
+
+import static com.malicia.mrg.view.AlertMessageUtil.AlertMessage;
 
 /**
  * The type Main.
@@ -78,13 +77,7 @@ public class Main extends Application {
                 });
 
                 while (true) {
-                    // show close dialog
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Close post Process");
-                    alert.setHeaderText("Wait until end of post process");
-                    alert.initOwner(primaryStage);
-
-                    Optional<ButtonType> result = alert.showAndWait();
+                    AlertMessage(primaryStage);
 
                 }
             }
@@ -96,4 +89,5 @@ public class Main extends Application {
     public void stop() throws IOException {
         LOGGER.info("Stage is closing");
     }
+
 }

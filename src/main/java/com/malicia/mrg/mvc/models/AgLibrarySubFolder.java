@@ -3,7 +3,6 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
@@ -24,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.malicia.mrg.app.Context.*;
+import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
 
 /**
  * The type Ag library sub folder.
@@ -613,22 +613,19 @@ public class AgLibrarySubFolder {
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
             if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
                 if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.sszVal[i]) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmation Dialog with Custom Actions");
-                    alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
-                    alert.setContentText("Choose Keyword Master in " + cursubFolderFormatZ.titreZone);
+
 
                     ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
-                    int ii;
-                    for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
-                        buttonType[ii] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(ii));
+                    int y;
+                    for (y = 0; y < cursubFolderFormatZ.keywordMaitrePossible.size(); y++) {
+                        buttonType[y] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(y));
                     }
-                    buttonType[ii] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    buttonType[y] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-                    alert.getButtonTypes().setAll(buttonType);
 
-                    Optional<ButtonType> result = alert.showAndWait();
+                    Optional<ButtonType> result = AlertChoixSubfolder(cursubFolderFormatZ, buttonType);
 
+                    int ii;
                     for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
                         if (result.get() == buttonType[ii]) {
                             lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii), cursubFolderFormatZ.getLocalValue());

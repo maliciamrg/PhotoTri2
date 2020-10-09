@@ -6,8 +6,6 @@ import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
-import com.sun.deploy.services.WPlatformService;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,10 +29,8 @@ import javafx.stage.Stage;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -44,7 +40,8 @@ import java.util.List;
 import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
-import static com.malicia.mrg.app.Context.popupalert;
+import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
+import static com.malicia.mrg.view.AlertMessageUtil.popupalertConfirmeModification;
 
 
 /**
@@ -383,9 +380,9 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerlebazar() {
-        Optional<ButtonType> result = Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+        Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+            popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         }
     }
 
@@ -408,7 +405,7 @@ public class MainFrameController {
     @FXML
     void actionExecModification() {
         try {
-            Optional<ButtonType> result = Context.popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+            Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
 //                repChoose.getItems().remove(activeRep);
@@ -475,7 +472,7 @@ public class MainFrameController {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            Context.popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
+            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
         } catch (SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -1187,7 +1184,7 @@ public class MainFrameController {
     public void actionSelectionner(MouseEvent mouseEvent) {
         try {
             if (nbSelectionner.toString() == " 0000") {
-                Optional<ButtonType> result = Context.popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
+                Optional<ButtonType> result = popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     activeRep.flagAllFile();
                     refreshAllPhoto();
