@@ -7,10 +7,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 public class AlertMessageUtil {
+
+    private static final Logger logger = LogManager.getLogger(AlertMessageUtil.class);
 
     public static void AlertMessage(Stage primaryStage) {
                              // show close dialog

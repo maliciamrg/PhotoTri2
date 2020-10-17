@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,11 +25,7 @@ import static com.malicia.mrg.view.AlertMessageUtil.AlertMessage;
  */
 public class Main extends Application {
 
-    private static final java.util.logging.Logger LOGGER;
-
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(MainFrameController.class);
 
     /**
      * The entry point of application.
@@ -42,7 +40,7 @@ public class Main extends Application {
 
 //            Context.logecrireuserlogInfo("sqlite acces error :" + e.getMessage());
 //            Context.popupalertException(e);
-            LOGGER.info("sqlite acces error :" + e.getMessage());
+            LOGGER.trace("sqlite acces error :" + e.getMessage());
             Context.excptlog(e, LOGGER);
 
         }
@@ -87,7 +85,7 @@ public class Main extends Application {
 
     @Override
     public void stop() throws IOException {
-        LOGGER.info("Stage is closing");
+        LOGGER.trace("Stage is closing");
     }
 
 }

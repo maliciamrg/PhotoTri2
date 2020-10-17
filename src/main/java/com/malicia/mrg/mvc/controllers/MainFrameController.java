@@ -6,6 +6,7 @@ import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
+import com.malicia.mrg.view.TextAreaAppender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
@@ -26,6 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
@@ -43,17 +46,15 @@ import static com.malicia.mrg.app.Context.lrcat;
 import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
 import static com.malicia.mrg.view.AlertMessageUtil.popupalertConfirmeModification;
 
+import org.apache.logging.log4j.LogManager;
 
 /**
  * The type Main frame controller.
  */
 public class MainFrameController {
 
-    private static final java.util.logging.Logger LOGGER;
+    private static final Logger LOGGER = LogManager.getLogger(MainFrameController.class);
 
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
 
     @FXML
     private Label nbeleRep;
@@ -187,6 +188,8 @@ public class MainFrameController {
     private Circle pointeur;
     @FXML
     private Button valid;
+    @FXML
+    private TextArea logtext;
 
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
@@ -201,7 +204,7 @@ public class MainFrameController {
      * Instantiates a new Main frame controller.
      */
     public MainFrameController() {
-        LOGGER.info("mainFrameController");
+        LOGGER.trace("mainFrameController");
         initialize();
     }
 
@@ -209,7 +212,7 @@ public class MainFrameController {
      * Initialize.
      */
     private void initialize() {
-        LOGGER.info("initialize");
+        LOGGER.trace("initialize");
 
         if (Context.getPrimaryStage() != null) {
             Context.getPrimaryStage().sizeToScene();
@@ -616,7 +619,7 @@ public class MainFrameController {
     }
 
     private void refreshAllPhoto() throws IOException, SQLException {
-        LOGGER.info("refresh");
+        LOGGER.trace("refresh");
 
         recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4flag, imageM4);
         recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3flag, imageM3);
@@ -933,6 +936,9 @@ public class MainFrameController {
 
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
+
+        TextAreaAppender.setTextArea(logtext);
+        LOGGER.info("start Mainframe");
 
         lbselectrepCat.setText("Categories");
         ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();

@@ -1,22 +1,21 @@
 package com.malicia.mrg.mvc.models;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * The type Actionfichier repertoire.
  */
 public class SystemFiles {
 
-    private static final Logger LOGGER;
-
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(SystemFiles.class);
 
     private SystemFiles() {
         throw new IllegalStateException("Utility class");
@@ -32,7 +31,7 @@ public class SystemFiles {
     public static boolean deleteDir(File dir) throws IOException {
         boolean ret = true;
         Files.delete(dir.toPath());
-        LOGGER.log(Level.INFO, "delete_dir: {0} ", new String[]{String.valueOf(dir)});
+        LOGGER.log(Level.DEBUG, "delete_dir: {0} ", new String[]{String.valueOf(dir)});
         return ret;
     }
 
@@ -78,7 +77,7 @@ public class SystemFiles {
             if (fdest.exists()) {
                 throw new IllegalStateException("existance     : " + fdest.toString());
             }
-            LOGGER.info(() -> "move_file p=" + fsource.toString() + " -> " + fdest.toString());
+            LOGGER.debug(() -> "move_file p=" + fsource.toString() + " -> " + fdest.toString());
             Files.move(fsource.toPath(), fdest.toPath());
         }
     }
@@ -101,7 +100,7 @@ public class SystemFiles {
             if (fdest.exists()) {
                 throw new IllegalStateException("existance     : " + fdest.toString());
             }
-            LOGGER.info(() -> "move_file p=" + fsource.toString() + " -> " + fdest.toString());
+            LOGGER.debug(() -> "move_file p=" + fsource.toString() + " -> " + fdest.toString());
             Files.move(fsource.toPath(), fdest.toPath());
         }
     }
