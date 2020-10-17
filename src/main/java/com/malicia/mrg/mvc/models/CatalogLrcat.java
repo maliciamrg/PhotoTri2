@@ -3,6 +3,8 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,11 +19,7 @@ import java.util.*;
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
-    private static final java.util.logging.Logger LOGGER;
-
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(CatalogLrcat.class);
 
     public long dateFichier;
     public String dateFichierHR;

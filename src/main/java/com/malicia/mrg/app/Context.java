@@ -1,31 +1,26 @@
 package com.malicia.mrg.app;
 
-import com.malicia.mrg.mvc.controllers.MainFrameController;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+
+
+import static com.malicia.mrg.view.AlertMessageUtil.Alertinfo;
+import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
 
 /**
  * The type Context.
  */
 public class Context implements Serializable {
-
+    private static final Logger LOGGER = LogManager.getLogger(Context.class);
     /**
      * The constant PATH_FROM_ROOT.
      */
@@ -43,7 +38,7 @@ public class Context implements Serializable {
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static Integer divMaxToMinstar;
-    private static Logger LOGGER;
+
     /**
      * The constant currentContext.
      */
@@ -58,10 +53,6 @@ public class Context implements Serializable {
     }
 
     private static String PostTraitement;
-
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
 
     public static String getLocalErrPhotoUrl() {
         return localErrPhotoUrl;
@@ -102,18 +93,31 @@ public class Context implements Serializable {
      */
     public static void setup() throws IOException, SQLException, URISyntaxException {
 
-        InputStream stream = Context.class.getClassLoader().getResourceAsStream("logging.properties");
-        LogManager.getLogManager().readConfiguration(stream);
+        InputStream stream = Context.class.getClassLoader().getResourceAsStream("log4j2.properties");
+//        LogManager.getLogManager().readConfiguration(stream);
 
 
-        LOGGER.severe("---==[ severe  ]==---");
-        LOGGER.warning("---==[ warning ]==---");
+        LOGGER.fatal("                                                                                    ");
+        LOGGER.fatal("          <==============================================================>          ");
+        LOGGER.fatal("    <===                                                                    ===>    ");
+        LOGGER.fatal(" <=====        S T A R T   A P P L I C A T I O N   P H O T O T R I 2         =====> ");
+        LOGGER.fatal("    <===                                                                    ===>    ");
+        LOGGER.fatal("          <==============================================================>          ");
+        LOGGER.fatal("                                                                                    ");
+//        OFF	0
+//        FATAL	100
+//        ERROR	200
+//        WARN	300
+//        INFO	400
+//        DEBUG	500
+//        TRACE	600
+//        ALL	Integer.MAX_VALUE
+        LOGGER.trace("---==[ trace  ]==---");
+        LOGGER.debug("---==[ debug ]==---");
         LOGGER.info("---==[  info   ]==---");
-        LOGGER.config("---==[ config  ]==---");
-        LOGGER.fine("---==[  fine   ]==---");
-        LOGGER.finer("---==[  finer  ]==---");
-        LOGGER.finest("---==[ finest  ]==---");
-
+        LOGGER.warn("---==[  warn   ]==---");
+        LOGGER.error("---==[ error  ]==---");
+        LOGGER.fatal("---==[  fatal  ]==---");
         LOGGER.info("Start");
 
         Context.initPropertiesParameters();
@@ -130,14 +134,14 @@ public class Context implements Serializable {
      * Init properties parameters.
      */
     public static void initPropertiesParameters() throws URISyntaxException, MalformedURLException {
-        LOGGER.info("initPropertiesParameters");
+        LOGGER.trace("initPropertiesParameters");
 
         appParam = ResourceBundle.getBundle("config");
         Enumeration<String> keys = appParam.getKeys();
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
             String value = appParam.getString(key);
-            LOGGER.info(key + ": " + value);
+            LOGGER.debug(key + ": " + value);
         }
 
         localVoidPhotoUrl = Objects.requireNonNull(Context.class.getClassLoader().getResource("images.png")).toURI().toURL().toExternalForm();
@@ -158,28 +162,13 @@ public class Context implements Serializable {
         return Context.appParam.getString("urlgitwiki");
     }
 
-    /**
-     * Popupalert.
-     *
-     * @param contentText the content text
-     * @return
-     */
-    public static Optional<ButtonType> popupalertConfirmeModification(String contentText) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("do you confirme ?");
-        alert.setContentText(contentText);
-
-        return alert.showAndWait();
-    }
-
-    public static void excptlog(Exception theException,java.util.logging.Logger loggerori) {
+    public static void excptlog(Exception theException, Logger loggerori) {
         StringWriter stringWritter = new StringWriter();
         PrintWriter printWritter = new PrintWriter(stringWritter, true);
         theException.printStackTrace(printWritter);
         printWritter.flush();
         stringWritter.flush();
-        loggerori.severe(() -> "theException = " + "\n" + stringWritter.toString());
+        loggerori.fatal( "theException = " + "\n" + stringWritter.toString());
     }
 
     public static void popupalertException(Exception ex) {
@@ -195,42 +184,11 @@ public class Context implements Serializable {
 
     }
 
-    public static void popupalert(String contentText, String exceptionText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Exception Dialog");
-        alert.setContentText(contentText);
-
-        javafx.scene.control.Label label = new javafx.scene.control.Label("The exception stacktrace was:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-// Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
-    }
-
     public static void logecrireuserlogInfo(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText("Information Dialog");
-        alert.setContentText(msg);
-        alert.showAndWait();
+        Alertinfo(msg);
 
         LOGGER.info(msg);
     }
+
 
 }

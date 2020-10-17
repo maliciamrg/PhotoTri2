@@ -1,7 +1,9 @@
 package com.malicia.mrg.mvc.models;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
-import java.util.logging.Logger;
 
 /**
  * The type Sq lite jdbc driver connection.
@@ -10,11 +12,9 @@ import java.util.logging.Logger;
  */
 public class SQLiteJDBCDriverConnection {
 
-    private static final Logger LOGGER;
 
-    static {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(SQLiteJDBCDriverConnection.class);
+
     /**
      * The constant conn.
      */
@@ -35,17 +35,17 @@ public class SQLiteJDBCDriverConnection {
      * @param sqlliteDatabase the sqllite database
      */
     public void connect(String sqlliteDatabase) {
-        LOGGER.info(() -> "connect to database : " + sqlliteDatabase);
+        LOGGER.debug(() -> "connect to database : " + sqlliteDatabase);
         conn = null;
         try {
             // db parameters
             String url = "jdbc:sqlite:" + sqlliteDatabase;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-            LOGGER.finer("Connection to SQLite has been established.");
+            LOGGER.info("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
-            LOGGER.severe(e.getMessage());
+            LOGGER.fatal(e.getMessage());
         }
 
     }
@@ -59,7 +59,7 @@ public class SQLiteJDBCDriverConnection {
                 conn.close();
             }
         } catch (SQLException ex) {
-            LOGGER.severe(ex.getMessage());
+            LOGGER.fatal(ex.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            LOGGER.fine(sql);
+            LOGGER.debug(sql);
             return stmt.execute(sql);
         } finally {
             conn.close();
@@ -96,7 +96,7 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt = null;
 
         stmt = conn.createStatement();
-        LOGGER.fine(sql);
+        LOGGER.debug(sql);
 
         // forcage display du resultset
         ResultSet resultSet = stmt.executeQuery(sql);
@@ -120,7 +120,7 @@ public class SQLiteJDBCDriverConnection {
         Statement stmt = null;
 
         stmt = conn.createStatement();
-        LOGGER.fine(sql);
+        LOGGER.debug(sql);
         return stmt.executeUpdate(sql);
 
 
@@ -138,7 +138,7 @@ public class SQLiteJDBCDriverConnection {
         for (int i = 1; i <= columnsNumber; i++) {
             colname.append(String.format("%-20s", rsmd.getColumnName(i)) + " + ");
         }
-        LOGGER.fine(() -> "" + colname.toString());
+        LOGGER.trace(() -> "" + colname.toString());
 
 
         while (resultSetAff.next()) {
@@ -147,7 +147,7 @@ public class SQLiteJDBCDriverConnection {
             for (int i = 1; i <= columnsNumber; i++) {
                 columnValue.append(String.format("%-20s", resultSetAff.getString(i)) + " + ");
             }
-            LOGGER.fine(() -> "" + columnValue.toString());
+            LOGGER.trace(() -> "" + columnValue.toString());
         }
 
     }

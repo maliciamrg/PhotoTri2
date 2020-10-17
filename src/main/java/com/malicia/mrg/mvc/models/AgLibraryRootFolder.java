@@ -4,6 +4,8 @@ import com.malicia.mrg.app.Context;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +28,7 @@ public class AgLibraryRootFolder {
     public static final int TYPE_NEW = 1;
     public static final int TYPE_LEG = 4;
     public static final int TYPE_KID = 5;
-    private final Logger LOGGER;
+
     public String rootfolderidlocal;
     public String absolutePath;
 
@@ -41,9 +42,9 @@ public class AgLibraryRootFolder {
     private int nbDelTotal;
     private String[] ratioMaxStar;
 
-    {
-        LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    }
+
+    private static final Logger LOGGER = LogManager.getLogger(SQLiteJDBCDriverConnection.class);
+
 
     public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath, int typeRoot) {
         parentLrcat = catalogLrcat;
@@ -434,7 +435,7 @@ public class AgLibraryRootFolder {
 
     void moveListEle(List<AgLibraryFile> listFile, String repertoiredest, boolean AddprefixFile, String absolutePathdest) throws SQLException, IOException {
         String destdirectoryName = normalizePath(absolutePathdest + repertoiredest);
-        LOGGER.info("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName);
+        LOGGER.debug("moveListEle " + name + " : " + listFile.size() + " -> " + destdirectoryName);
 
         String Folder_id_local = sqlMkdirRepertory(destdirectoryName);
 

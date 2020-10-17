@@ -9,26 +9,23 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.Optional;
+
+import static com.malicia.mrg.view.AlertMessageUtil.AlertMessage;
 
 /**
  * The type Main.
  */
 public class Main extends Application {
 
-    private static final java.util.logging.Logger LOGGER;
-
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(MainFrameController.class);
 
     /**
      * The entry point of application.
@@ -43,7 +40,7 @@ public class Main extends Application {
 
 //            Context.logecrireuserlogInfo("sqlite acces error :" + e.getMessage());
 //            Context.popupalertException(e);
-            LOGGER.info("sqlite acces error :" + e.getMessage());
+            LOGGER.trace("sqlite acces error :" + e.getMessage());
             Context.excptlog(e, LOGGER);
 
         }
@@ -78,13 +75,7 @@ public class Main extends Application {
                 });
 
                 while (true) {
-                    // show close dialog
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Close post Process");
-                    alert.setHeaderText("Wait until end of post process");
-                    alert.initOwner(primaryStage);
-
-                    Optional<ButtonType> result = alert.showAndWait();
+                    AlertMessage(primaryStage);
 
                 }
             }
@@ -94,6 +85,7 @@ public class Main extends Application {
 
     @Override
     public void stop() throws IOException {
-        LOGGER.info("Stage is closing");
+        LOGGER.trace("Stage is closing");
     }
+
 }

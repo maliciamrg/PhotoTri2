@@ -4,21 +4,19 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // Copy all file in C:/Windows
 public class CmdTask extends Task<Void> {
 
-    private static final java.util.logging.Logger LOGGER;
-
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
-
+    private static final Logger LOGGER = LogManager.getLogger(CmdTask.class);
 
     private String[] lineArray = new String[10];;
 
@@ -35,7 +33,7 @@ public class CmdTask extends Task<Void> {
             line = r.readLine();
             if (line == null) { break; }
             this.copy(line);
-            LOGGER.info(line);
+            LOGGER.debug(line);
         }
 
         return null;

@@ -3,10 +3,12 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,15 +22,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import static com.malicia.mrg.app.Context.*;
+import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
 
 /**
  * The type Ag library sub folder.
  */
 public class AgLibrarySubFolder {
+
+    private static final Logger LOGGER = LogManager.getLogger(AgLibrarySubFolder.class);
 
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
@@ -37,7 +41,6 @@ public class AgLibrarySubFolder {
     public List<AgLibraryFile> listFileSubFolder;
     private AgLibraryRootFolder agLibraryRootFolder;
     private String pathFromRoot;
-    private Logger logger;
     private int nbelerep;
     private int nbphotoRep;
     private int[] nbetrationetoile;
@@ -108,7 +111,7 @@ public class AgLibrarySubFolder {
     }
 
     public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
-        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
 
@@ -188,7 +191,7 @@ public class AgLibrarySubFolder {
             File file = new File(listFileSubFolder.get(phototoshow).getPath());
             if (file.exists()) {
                 localUrl = file.toURI().toURL().toExternalForm();
-                logger.info(localUrl);
+                LOGGER.debug(localUrl);
                 image = new Image(localUrl, 400, 400, true, false, false);
                 //file not supported in jdk
                 if (image.isError()) {
@@ -226,7 +229,7 @@ public class AgLibrarySubFolder {
 
         }
         if (image.isError()) {
-            logger.log(Level.INFO, " {} {} ", new Object[]{phototoshow, localUrl});
+            LOGGER.log(Level.ERROR, " {} {} ", new Object[]{phototoshow, localUrl});
             image = new Image(new URL(Context.getLocalErrPhotoUrl()).openStream());
         }
         return image;
@@ -613,22 +616,19 @@ public class AgLibrarySubFolder {
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
             if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
                 if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.sszVal[i]) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Confirmation Dialog with Custom Actions");
-                    alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
-                    alert.setContentText("Choose Keyword Master in " + cursubFolderFormatZ.titreZone);
+
 
                     ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
-                    int ii;
-                    for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
-                        buttonType[ii] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(ii));
+                    int y;
+                    for (y = 0; y < cursubFolderFormatZ.keywordMaitrePossible.size(); y++) {
+                        buttonType[y] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(y));
                     }
-                    buttonType[ii] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    buttonType[y] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-                    alert.getButtonTypes().setAll(buttonType);
 
-                    Optional<ButtonType> result = alert.showAndWait();
+                    Optional<ButtonType> result = AlertChoixSubfolder(cursubFolderFormatZ, buttonType);
 
+                    int ii;
                     for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
                         if (result.get() == buttonType[ii]) {
                             lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii), cursubFolderFormatZ.getLocalValue());
@@ -663,7 +663,7 @@ public class AgLibrarySubFolder {
                             ele.enregistrerPickValue();
                         } catch (SQLException e) {
                             popupalertException(e);
-                            excptlog(e, logger);
+                            excptlog(e, LOGGER);
                         }
                     }
 

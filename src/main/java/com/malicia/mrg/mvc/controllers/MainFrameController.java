@@ -6,8 +6,7 @@ import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
 import com.malicia.mrg.mvc.models.SystemFiles;
-import com.sun.deploy.services.WPlatformService;
-import javafx.application.Application;
+import com.malicia.mrg.view.TextAreaAppender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
@@ -28,13 +28,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.Logger;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -44,19 +43,18 @@ import java.util.List;
 import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
-import static com.malicia.mrg.app.Context.popupalert;
+import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
+import static com.malicia.mrg.view.AlertMessageUtil.popupalertConfirmeModification;
 
+import org.apache.logging.log4j.LogManager;
 
 /**
  * The type Main frame controller.
  */
 public class MainFrameController {
 
-    private static final java.util.logging.Logger LOGGER;
+    private static final Logger LOGGER = LogManager.getLogger(MainFrameController.class);
 
-    static {
-        LOGGER = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
-    }
 
     @FXML
     private Label nbeleRep;
@@ -190,6 +188,8 @@ public class MainFrameController {
     private Circle pointeur;
     @FXML
     private Button valid;
+    @FXML
+    private TextArea logtext;
 
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
@@ -204,7 +204,7 @@ public class MainFrameController {
      * Instantiates a new Main frame controller.
      */
     public MainFrameController() {
-        LOGGER.info("mainFrameController");
+        LOGGER.trace("mainFrameController");
         initialize();
     }
 
@@ -212,7 +212,7 @@ public class MainFrameController {
      * Initialize.
      */
     private void initialize() {
-        LOGGER.info("initialize");
+        LOGGER.trace("initialize");
 
         if (Context.getPrimaryStage() != null) {
             Context.getPrimaryStage().sizeToScene();
@@ -383,9 +383,9 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerlebazar() {
-        Optional<ButtonType> result = Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+        Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            Context.popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+            popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         }
     }
 
@@ -408,7 +408,7 @@ public class MainFrameController {
     @FXML
     void actionExecModification() {
         try {
-            Optional<ButtonType> result = Context.popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
+            Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 activeRepSrc.execmodification(activeRep);
 //                repChoose.getItems().remove(activeRep);
@@ -475,7 +475,7 @@ public class MainFrameController {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            Context.popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
+            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
         } catch (SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -619,7 +619,7 @@ public class MainFrameController {
     }
 
     private void refreshAllPhoto() throws IOException, SQLException {
-        LOGGER.info("refresh");
+        LOGGER.trace("refresh");
 
         recalculimagev(getnumphotofromactive(-4), imageM4star, imageM4flag, imageM4);
         recalculimagev(getnumphotofromactive(-3), imageM3star, imageM3flag, imageM3);
@@ -937,6 +937,9 @@ public class MainFrameController {
         Context.getPrimaryStage().getScene().focusOwnerProperty().addListener(
                 (prop, oldNode, newNode) -> placeMarker(newNode));
 
+        TextAreaAppender.setTextArea(logtext);
+        LOGGER.info("start Mainframe");
+
         lbselectrepCat.setText("Categories");
         ObservableList<AgLibraryRootFolder> listRootfolder = FXCollections.observableArrayList();
         for (Map.Entry<String, AgLibraryRootFolder> entry : lrcat.rep.entrySet()) {
@@ -1187,7 +1190,7 @@ public class MainFrameController {
     public void actionSelectionner(MouseEvent mouseEvent) {
         try {
             if (nbSelectionner.toString() == " 0000") {
-                Optional<ButtonType> result = Context.popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
+                Optional<ButtonType> result = popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     activeRep.flagAllFile();
                     refreshAllPhoto();
