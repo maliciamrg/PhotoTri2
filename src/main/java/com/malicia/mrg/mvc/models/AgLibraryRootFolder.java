@@ -348,6 +348,10 @@ public class AgLibraryRootFolder {
 
     public void RegoupFileByAdherence() throws SQLException, IOException {
 
+        String pathFromRootPrev = "first";
+        String folder_id_localPrev = "first";
+        AgLibrarySubFolder subFolder = null;
+
         //Regroupement
         ResultSet rsele = sqlgetListelementnewaclasser(Context.appParam.getString("TempsAdherence"));
 
@@ -377,7 +381,14 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
             String orientation = rsele.getString("orientation");
 
-            AgLibraryFile eleFile = new AgLibraryFile(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local), lcIdxFilename, file_id_local, rating, pick ,fileformat, captureTime, file_id_global, orientation);
+
+            if (!(pathFromRootPrev.equals(pathFromRoot)) || !(folder_id_localPrev.equals(folder_id_local))) {
+                subFolder = new AgLibrarySubFolder(this, pathFromRoot, folder_id_local);
+            }
+            pathFromRootPrev = pathFromRoot;
+            folder_id_localPrev = folder_id_local;
+
+            AgLibraryFile eleFile = new AgLibraryFile(subFolder, lcIdxFilename, file_id_local, rating, pick, fileformat, captureTime, file_id_global, orientation);
 
             if (listkidsModel.contains(cameraModel)) {
                 listElekidz.add(eleFile);

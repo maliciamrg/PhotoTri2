@@ -128,28 +128,31 @@ public class SQLiteJDBCDriverConnection {
 
 
     private void displayResultset(ResultSet resultSet) throws SQLException {
-        ResultSet resultSetAff = resultSet;
+        if (LOGGER.isTraceEnabled()) {
 
-        ResultSetMetaData rsmd = resultSetAff.getMetaData();
-        int columnsNumber = rsmd.getColumnCount();
+            ResultSet resultSetAff = resultSet;
 
-        StringBuilder colname = new StringBuilder();
-        colname.append(" + ");
-        for (int i = 1; i <= columnsNumber; i++) {
-            colname.append(String.format("%-20s", rsmd.getColumnName(i)) + " + ");
-        }
-        LOGGER.trace(() -> "" + colname.toString());
+            ResultSetMetaData rsmd = resultSetAff.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
 
-
-        while (resultSetAff.next()) {
-            StringBuilder columnValue = new StringBuilder();
-            columnValue.append(" + ");
+            StringBuilder colname = new StringBuilder();
+            colname.append(" + ");
             for (int i = 1; i <= columnsNumber; i++) {
-                columnValue.append(String.format("%-20s", resultSetAff.getString(i)) + " + ");
+                colname.append(String.format("%-20s", rsmd.getColumnName(i)) + " + ");
             }
-            LOGGER.trace(() -> "" + columnValue.toString());
-        }
+            LOGGER.trace(() -> "" + colname.toString());
 
+
+            while (resultSetAff.next()) {
+                StringBuilder columnValue = new StringBuilder();
+                columnValue.append(" + ");
+                for (int i = 1; i <= columnsNumber; i++) {
+                    columnValue.append(String.format("%-20s", resultSetAff.getString(i)) + " + ");
+                }
+                LOGGER.trace(() -> "" + columnValue.toString());
+            }
+
+        }
     }
 
 }
