@@ -10,173 +10,10 @@
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.malicia.mrg.mvc.controllers.MainFrameController">
     <children>
         <BorderPane>
-            <center>
-                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                    <children>
-                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageM4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom4" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageM4flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageM4star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageM3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom3" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageM3flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageM3star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom2" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageM2flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageM2star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom1" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageM1flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageM1star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
-                                <font>
-                                    <Font name="Arial" size="10.0" />
-                                </font>
-                            </Text>
-                            <VBox alignment="CENTER">
-                                <children>
-                                    <AnchorPane>
-                                        <children>
-                                            <ImageView fx:id="imageZ0" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
-                                            <Text fx:id="imageZ0flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                        </children>
-                                    </AnchorPane>
-                                    <Text fx:id="imageZ0star" layoutX="228.0" layoutY="382.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                        <font>
-                                            <Font name="Arial" size="10.0" />
-                                        </font>
-                                    </Text>
-                                </children>
-                            </VBox>
-                            <VBox alignment="CENTER">
-                                <children>
-                                    <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                        <font>
-                                            <Font name="Arial" size="10.0" />
-                                        </font>
-                                    </Text>
-                                    <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
-                                </children>
-                            </VBox>
-                        </HBox>
-                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageP1flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageP1star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop2" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageP2flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageP2star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageP3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop3" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageP3flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageP3star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                                <VBox alignment="CENTER">
-                                    <children>
-                                        <AnchorPane>
-                                            <children>
-                                                <ImageView fx:id="imageP4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop4" pickOnBounds="true" preserveRatio="true" />
-                                                <Text fx:id="imageP4flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                                            </children>
-                                        </AnchorPane>
-                                        <Text fx:id="imageP4star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
-                                            <font>
-                                                <Font name="Arial" size="10.0" />
-                                            </font>
-                                        </Text>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </center>
-            <top>
+         <bottom>
+            <TextArea fx:id="logtext" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </bottom>
+         <left>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
                         <MenuBar prefHeight="13.0" prefWidth="1113.0">
@@ -407,10 +244,173 @@
                         </HBox>
                     </children>
                 </VBox>
-            </top>
-         <bottom>
-            <TextArea fx:id="logtext" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </bottom>
+         </left>
+         <right>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageM4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom4" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageM4flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageM4star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageM3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom3" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageM3flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageM3star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageM2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom2" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageM2flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageM2star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageM1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotom1" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageM1flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageM1star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <Text fx:id="imageOnestar1" textAlignment="CENTER" wrappingWidth="100.0">
+                                <font>
+                                    <Font name="Arial" size="10.0" />
+                                </font>
+                            </Text>
+                            <VBox alignment="CENTER">
+                                <children>
+                                    <AnchorPane>
+                                        <children>
+                                            <ImageView fx:id="imageZ0" fitHeight="404.0" fitWidth="656.0" focusTraversable="true" onContextMenuRequested="#actionplayElement" onKeyPressed="#actionActivePhoto" pickOnBounds="true" preserveRatio="true" />
+                                            <Text fx:id="imageZ0flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                        </children>
+                                    </AnchorPane>
+                                    <Text fx:id="imageZ0star" layoutX="228.0" layoutY="382.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                        <font>
+                                            <Font name="Arial" size="10.0" />
+                                        </font>
+                                    </Text>
+                                </children>
+                            </VBox>
+                            <VBox alignment="CENTER">
+                                <children>
+                                    <Text fx:id="imageOnestar11" layoutY="8.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                        <font>
+                                            <Font name="Arial" size="10.0" />
+                                        </font>
+                                    </Text>
+                                    <Button fx:id="valid" layoutX="67.0" layoutY="13.0" mnemonicParsing="false" onAction="#actionExecModification" prefHeight="51.0" prefWidth="67.0" text="Save" />
+                                </children>
+                            </VBox>
+                        </HBox>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageP1" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop1" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageP1flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageP1star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageP2" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop2" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageP2flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageP2star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageP3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop3" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageP3flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageP3star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER">
+                                    <children>
+                                        <AnchorPane>
+                                            <children>
+                                                <ImageView fx:id="imageP4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#actionActivePhotop4" pickOnBounds="true" preserveRatio="true" />
+                                                <Text fx:id="imageP4flag" layoutX="89.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                            </children>
+                                        </AnchorPane>
+                                        <Text fx:id="imageP4star" layoutY="142.0" textAlignment="CENTER" wrappingWidth="196.0">
+                                            <font>
+                                                <Font name="Arial" size="10.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+         </right>
         </BorderPane>
         <Circle fx:id="pointeur" fill="#ff1f1f" opacity="0.5" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
     </children>

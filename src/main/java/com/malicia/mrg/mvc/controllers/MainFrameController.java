@@ -239,10 +239,10 @@ public class MainFrameController {
 
             if (fori.exists()) {
                 Files.copy(fori.toPath(), dest.toPath());
-                Context.logecrireuserlogInfo("sauvegarde lrcat en :" + dupdest);
+                LOGGER.info("sauvegarde lrcat en :" + dupdest);
             }
         } catch (IOException e) {
-            Context.logecrireuserlogInfo("sauvegarde erreur :" + fori.toPath());
+            LOGGER.info("sauvegarde erreur :" + fori.toPath());
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
         }
@@ -281,17 +281,17 @@ public class MainFrameController {
                     if (fdest.isFile() && fdest.exists()) {
                         Files.delete(fdest.toPath());
                         Files.copy(fori.toPath(), fdest.toPath());
-                        Context.logecrireuserlogInfo("restaure lrcat de :" + selectfile);
+                        LOGGER.info("restaure lrcat de :" + selectfile);
                     }
                 } else {
-                    Context.logecrireuserlogInfo("restaure annule pb de fichier :" + selectfile);
+                    LOGGER.info("restaure annule pb de fichier :" + selectfile);
                 }
             } catch (IOException e) {
                 Context.popupalertException(e);
                 Context.excptlog(e, LOGGER);
             }
         } else {
-            Context.logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
+            LOGGER.info("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
         }
 
         lrcat.reconnect();
@@ -306,7 +306,7 @@ public class MainFrameController {
     void actionDeleteRepertoireLogique() {
         try {
             int nbdeltotal = lrcat.deleteAllRepertoireLogiqueVide();
-            Context.logecrireuserlogInfo("logical delete:" + String.format("%04d", nbdeltotal));
+            LOGGER.info("logical delete:" + String.format("%04d", nbdeltotal));
         } catch (SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -319,7 +319,7 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerRejet() {
-
+        LOGGER.info("Move new to grp photos");
         try {
             if (false) {
                 lrcat.rangerRejet();
@@ -343,9 +343,9 @@ public class MainFrameController {
             int exitVal = lrcat.openLigthroomLrcatandWait();
 
             if (exitVal == 0) {
-                Context.logecrireuserlogInfo("Success! = open : " + lrcat.cheminfichierLrcat);
+                LOGGER.info("Success! = open : " + lrcat.cheminfichierLrcat);
             } else {
-                Context.logecrireuserlogInfo("Erreur = " + exitVal + " | " + lrcat.cheminfichierLrcat);
+                LOGGER.info("Erreur = " + exitVal + " | " + lrcat.cheminfichierLrcat);
             }
 
         } catch (Exception e) {
@@ -367,7 +367,7 @@ public class MainFrameController {
             lrcat.rep.get(AgLibraryFile.REP_NEW).RegoupFileByAdherence();
 
             int ndDelTotal = lrcat.rep.get(AgLibraryFile.REP_NEW).DeleteEmptyDirectory();
-            Context.logecrireuserlogInfo("delete all from " + lrcat.rep.get(AgLibraryFile.REP_NEW).name + " : " + String.format("%05d", ndDelTotal));
+            LOGGER.info("delete all from " + lrcat.rep.get(AgLibraryFile.REP_NEW).name + " : " + String.format("%05d", ndDelTotal));
 
 
         } catch (SQLException | IOException e) {
@@ -386,6 +386,7 @@ public class MainFrameController {
         Optional<ButtonType> result = popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
         if (result.isPresent() && result.get() == ButtonType.OK) {
             popupalertConfirmeModification("actionRangerlebazar " + activeRep.toString() + " ?");
+            LOGGER.info("Bazar ranger" );
         }
     }
 
@@ -413,8 +414,8 @@ public class MainFrameController {
                 activeRepSrc.execmodification(activeRep);
 //                repChoose.getItems().remove(activeRep);
                 repChoose.getSelectionModel().selectNext();
-
 //                populatereChooseChoicebox();
+                LOGGER.info("Valider les modification effectuer sur la repertoire " + activeRep.toString() );
             }
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
@@ -427,6 +428,7 @@ public class MainFrameController {
      */
     @FXML
     void actionAbouturl() {
+        LOGGER.info(Context.getUrlgitwiki());
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(Context.getUrlgitwiki()));
@@ -435,7 +437,7 @@ public class MainFrameController {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
         }
-        Context.logecrireuserlogInfo(Context.getUrlgitwiki());
+//        LOGGER.info(Context.getUrlgitwiki());
     }
 
 
@@ -446,7 +448,7 @@ public class MainFrameController {
     void actionDeleteEmptyDirectoryPhysique() {
         try {
             int ndDelTotal = lrcat.deleteEmptyDirectory();
-            Context.logecrireuserlogInfo("delete all empty repertory : " + String.format("%05d", ndDelTotal));
+            LOGGER.info("delete all empty repertory : " + String.format("%05d", ndDelTotal));
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -459,6 +461,7 @@ public class MainFrameController {
     @FXML
     void actionopenligthroom() {
         try {
+            LOGGER.info("open Ligthroom Lrcat and Wait");
             lrcat.openLigthroomLrcatandWait();
             initialize();
         } catch (Exception e) {
@@ -475,7 +478,8 @@ public class MainFrameController {
         try {
             String retourtext = lrcat.spyfirst();
             List<String> retlist = Arrays.asList(retourtext.split("\n"));
-            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
+//            popupalert("spyfirst" + retlist.get(retlist.size() - 1), retourtext);
+            LOGGER.info("spyfirst" + retlist.get(retlist.size() - 1)+ " --- " + retourtext);
         } catch (SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -489,6 +493,7 @@ public class MainFrameController {
     @FXML
     void actionCycleTraitementPhoto() {
         try {
+            LOGGER.info("cycle traitement photo");
             populatereChooseChoicebox();
         } catch (SQLException e) {
             Context.popupalertException(e);
@@ -760,13 +765,13 @@ public class MainFrameController {
                     displayStarValueAndLibelle(imageZ0star, activephotoNum);
                     keyEvent.consume();
                     break;
-                case S:
-                    if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
-                        // TODO: 25/04/2020  
-                        popupalert("split repertoire", "split repertoire a coder");
-                    }
-                    keyEvent.consume();
-                    break;
+//                case S:
+//                    if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
+//                        // TODO: 25/04/2020
+//                        popupalert("split repertoire", "split repertoire a coder");
+//                    }
+//                    keyEvent.consume();
+//                    break;
                 case DOWN:
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
@@ -920,6 +925,7 @@ public class MainFrameController {
 
     @FXML
     public void exitApplication(ActionEvent event) throws IOException {
+        LOGGER.info("stop Mainframe");
         Platform.runLater(new Runnable() {
             public void run() {
                 new ProgressCmd().start(new Stage());
@@ -995,6 +1001,7 @@ public class MainFrameController {
      */
     public void actionrepCatChange(ActionEvent actionEvent) {
         activeRep.setAgLibraryRootFolder((AgLibraryRootFolder) (((ChoiceBox) actionEvent.getTarget()).getValue()));
+        LOGGER.info("Changement Cat " + (((ChoiceBox) actionEvent.getTarget()).getValue()));
         if (activeRep.getAgLibraryRootFolder() == null) {
             activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));
         }
@@ -1062,6 +1069,7 @@ public class MainFrameController {
                 datesub.setText(activeRep.getDtdebHumain());
             }
             refreshAllPhoto();
+            LOGGER.info( ((ChoiceBox) actionEvent.getTarget()).getValue());
         } catch (IOException | SQLException e) {
             Context.popupalertException(e);
             Context.excptlog(e, LOGGER);
@@ -1075,6 +1083,7 @@ public class MainFrameController {
         FiltreEstselectionner = false;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre null");
     }
 
     public void actionfiltre0() throws IOException, SQLException {
@@ -1084,6 +1093,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 0");
     }
 
     public void actionfiltre1() throws IOException, SQLException {
@@ -1093,6 +1103,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 1");
     }
 
     public void actionfiltre2() throws IOException, SQLException {
@@ -1102,6 +1113,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 2");
     }
 
     public void actionfiltre3() throws IOException, SQLException {
@@ -1111,6 +1123,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 3");
     }
 
     public void actionfiltre4() throws IOException, SQLException {
@@ -1120,6 +1133,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 4" );
     }
 
     public void actionfiltre5() throws IOException, SQLException {
@@ -1129,6 +1143,7 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre 5");
     }
 
     public void actionfiltrep() throws IOException, SQLException {
@@ -1138,11 +1153,13 @@ public class MainFrameController {
         FiltreEstselectionner = true;
         moveActivephotoNumTo(0);
         refreshAllPhoto();
+        LOGGER.info("filtre repertoire");
     }
 
     public void actionplayElement(ContextMenuEvent contextMenuEvent) {
         Desktop desktop = Desktop.getDesktop();
         try {
+            LOGGER.info("play " + activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath());
             desktop.open(new File(activeRepSrc.listFileSubFolder.get(getnumphotofromactive(0)).getPath()));
         } catch (IOException e) {
             e.printStackTrace();
@@ -1172,22 +1189,23 @@ public class MainFrameController {
             try {
                 if (fori.isFile() && fori.exists()) {
                     Files.delete(fori.toPath());
-                    Context.logecrireuserlogInfo("delete lrcat de :" + selectfile);
+                    LOGGER.info("delete lrcat de :" + selectfile);
                 } else {
-                    Context.logecrireuserlogInfo("delete annule pb de fichier :" + selectfile);
+                    LOGGER.info("delete annule pb de fichier :" + selectfile);
                 }
             } catch (IOException e) {
                 Context.popupalertException(e);
                 Context.excptlog(e, LOGGER);
             }
         } else {
-            Context.logecrireuserlogInfo("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
+            LOGGER.info("pas de sauvegarde trouvé : " + basedir + File.separator + patterncherche);
         }
 
 
     }
 
     public void actionSelectionner(MouseEvent mouseEvent) {
+        LOGGER.info("action selectionner");
         try {
             if (nbSelectionner.toString() == " 0000") {
                 Optional<ButtonType> result = popupalertConfirmeModification("Re-selectionner toute les photos (enlever les flags X des toutes les photos) ?");

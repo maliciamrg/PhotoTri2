@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-import static com.malicia.mrg.view.AlertMessageUtil.Alertinfo;
+//import static com.malicia.mrg.view.AlertMessageUtil.Alertinfo;
 import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
 
 /**
@@ -184,11 +184,11 @@ public class Context implements Serializable {
 
     }
 
-    public static void logecrireuserlogInfo(String msg) {
-        Alertinfo(msg);
-
-        LOGGER.info(msg);
-    }
+//    public static void logecrireuserlogInfo(String msg) {
+//        Alertinfo(msg);
+//
+//        LOGGER.info(msg);
+//    }
 
 
 }

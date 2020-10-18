@@ -42,13 +42,13 @@ public class AlertMessageUtil {
         return alert.showAndWait();
     }
 
-    public static void Alertinfo(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText("Information Dialog");
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
+//    public static void Alertinfo(String msg) {
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Information Dialog");
+//        alert.setHeaderText("Information Dialog");
+//        alert.setContentText(msg);
+//        alert.showAndWait();
+//    }
     public static Optional<ButtonType> AlertChoixSubfolder(ZoneZ cursubFolderFormatZ, ButtonType[] buttonType) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog with Custom Actions");
