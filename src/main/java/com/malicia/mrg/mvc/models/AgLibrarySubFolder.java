@@ -102,9 +102,9 @@ public class AgLibrarySubFolder {
         return pathFromRoot;
     }
 
-    public void setPathFromRoot(String pathFromRoot) {
-        this.pathFromRoot = pathFromRoot;
-    }
+//    public void setPathFromRoot(String pathFromRoot) {
+//        this.pathFromRoot = pathFromRoot;
+//    }
 
     private String getpath() {
         return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + pathFromRoot);
@@ -507,9 +507,13 @@ public class AgLibrarySubFolder {
             return "";
         }
         switch ((int) listFileSubFolder.get(activeNum).getPick()) {
-            case 0:
+            case -1:
 //                flag = "⚐";
                 flag = "X";
+                break;
+            case 0:
+//                flag = "⚐";
+                flag = "?";
                 break;
             case 1:
 //                flag = "\uD83C\uDFC1";
@@ -641,9 +645,9 @@ public class AgLibrarySubFolder {
         }
 
         activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
-                activeRepDest.getpath(),
+                activeRepDest.getpath().toLowerCase(),
                 this.pathFromRoot,
-                activeRepDest.pathFromRoot,
+                activeRepDest.pathFromRoot.toLowerCase(),
                 this.agLibraryRootFolder.rootfolderidlocal,
                 activeRepDest.agLibraryRootFolder.rootfolderidlocal);
 
