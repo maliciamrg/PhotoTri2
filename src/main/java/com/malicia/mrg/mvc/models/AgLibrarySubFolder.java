@@ -774,4 +774,11 @@ public class AgLibrarySubFolder {
         splitedAgLibrarySubFolder.listFileSubFolder = listFileSubFolderSplit;
         return splitedAgLibrarySubFolder;
     }
+
+    public void deletePhoto(int activephotoNum) throws IOException, SQLException {
+        LOGGER.info("deleteEle " + this.listFileSubFolder.get(activephotoNum).getAbsolutePath());
+        this.getAgLibraryRootFolder().deleteEle(this.listFileSubFolder.get(activephotoNum));
+        this.listFileSubFolder.remove(activephotoNum);
+
+    }
 }

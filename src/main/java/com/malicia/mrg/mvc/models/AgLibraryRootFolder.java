@@ -201,6 +201,28 @@ public class AgLibraryRootFolder {
 
 
     /**
+     * Sqlmovefile int.
+     *
+     * @param source      the source
+     * @param destination the destination
+     * @return the int
+     * @throws SQLException the sql exception
+     * @throws IOException  the io exception
+     */
+    public void sqldeletefile(String source, String fileIdLocal) throws IOException, SQLException {
+        SystemFiles.deleteDir(new File(source));
+
+        String sql;
+        sql = "" +
+                "delete from AgLibraryFile " +
+                "where id_local =  " + fileIdLocal + " " +
+                ";";
+        parentLrcat.executeUpdate(sql);
+
+
+    }
+
+    /**
      * Sql group by plage adherance hors rep bazar result set.
      *
      * @param tempsAdherence the temps adherence
@@ -667,6 +689,15 @@ public class AgLibraryRootFolder {
                 sszVal[i]=true;
             };
         }
+    }
+
+    public void deleteEle(AgLibraryFile file) throws IOException, SQLException {
+
+        String source = normalizePath(file.getAbsolutePath() + file.getPathFromRoot() + file.getLcIdxFilename());
+        LOGGER.debug("deleteEle " + source);
+
+        sqldeletefile(source,  file.getFileIdLocal());
+
     }
 }
 

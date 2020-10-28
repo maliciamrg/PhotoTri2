@@ -750,15 +750,27 @@ public class MainFrameController {
                     keyEvent.consume();
                     break;
                 case DELETE:
-                    activeRep.valeuractivephotodecrease(activephotoNum);
-                    activeRep.valeuractivephotodecrease(activephotoNum);
-                    activeRep.valeuractivephotodecrease(activephotoNum);
-                    activeRep.valeuractivephotodecrease(activephotoNum);
-                    activeRep.valeuractivephotodecrease(activephotoNum);
-                    refreshcompteurRepertoire();
-                    displayStarValueAndLibelle(imageZ0star, activephotoNum);
-                    moveActivephotoNumTo(+1);
-                    refreshAllPhoto();
+                    if (keyEvent.isShiftDown()) {
+                        Optional<ButtonType> result = popupalertConfirmeModification("Supprimer PHYSIQUEMENT la photo ????");
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            activeRepSrc.deletePhoto(activephotoNum);
+                            activeRep.listFileSubFolder.remove(activephotoNum);
+                            activeRep.refreshValue();
+                            moveActivephotoNumTo(+1);
+                            moveActivephotoNumTo(-1);
+                            refreshAllPhoto();
+                        }
+                    } else {
+                        activeRep.valeuractivephotodecrease(activephotoNum);
+                        activeRep.valeuractivephotodecrease(activephotoNum);
+                        activeRep.valeuractivephotodecrease(activephotoNum);
+                        activeRep.valeuractivephotodecrease(activephotoNum);
+                        activeRep.valeuractivephotodecrease(activephotoNum);
+                        refreshcompteurRepertoire();
+                        displayStarValueAndLibelle(imageZ0star, activephotoNum);
+                        moveActivephotoNumTo(+1);
+                        refreshAllPhoto();
+                    }
                     keyEvent.consume();
                     break;
                 case END:
