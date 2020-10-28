@@ -18,11 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 
 import static com.malicia.mrg.app.Context.*;
 import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
@@ -32,11 +28,10 @@ import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
  */
 public class AgLibrarySubFolder {
 
-    private static final Logger LOGGER = LogManager.getLogger(AgLibrarySubFolder.class);
-
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
     public static final String OK = "--OK--";
     public static final String KO = "--KO--";
+    private static final Logger LOGGER = LogManager.getLogger(AgLibrarySubFolder.class);
     public List<ZoneZ> subFolderFormatZ;
     public List<AgLibraryFile> listFileSubFolder;
     private AgLibraryRootFolder agLibraryRootFolder;
@@ -207,7 +202,7 @@ public class AgLibrarySubFolder {
                         jpegData = rs.getBinaryStream("jpegData");
                         String digest = rs.getString("digest");
                         File filePreview = new File(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator
-                                + uuid.substring(0, 1) + File.separator + uuid.substring(0, 4) + File.separator + uuid + "-" + digest + ".lrprev");
+                                + uuid.charAt(0) + File.separator + uuid.substring(0, 4) + File.separator + uuid + "-" + digest + ".lrprev");
                         if (filePreview.exists()) {
                             image = new Image(FileLrprev.getLastJpegFromLrprev(filePreview));
                         } else {
@@ -296,11 +291,11 @@ public class AgLibrarySubFolder {
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
 //            if (!fi.estRejeter() ) {
-                nbelerep += 1;
-                if (fi.estPhoto()) {
-                    nbphotoRep += 1;
-                    calculateStarAndDate(fi);
-                }
+            nbelerep += 1;
+            if (fi.estPhoto()) {
+                nbphotoRep += 1;
+                calculateStarAndDate(fi);
+            }
 //            }
         }
 
@@ -611,7 +606,11 @@ public class AgLibrarySubFolder {
         return pListeZ;
     }
 
-    public void execmodification(AgLibrarySubFolder activeRepDest) throws IOException, SQLException {
+    public void execmodification(AgLibrarySubFolder activeRepDest, AgLibrarySubFolder activeRepDestSplit) throws IOException, SQLException {
+        if (activeRepDestSplit.nbelerep>0) {
+            LOGGER.info("Split de " + activeRepDestSplit.nbelerep );
+            activeRepDestSplit.getAgLibraryRootFolder().moveListEle(activeRepDestSplit.listFileSubFolder);
+        }
 
         activeRepDest.calculpathFromRoot();
 
@@ -757,5 +756,22 @@ public class AgLibrarySubFolder {
                     ele.flag();
                 }
         );
+    }
+
+    public AgLibrarySubFolder split(int activephotoNum) throws SQLException {
+        AgLibrarySubFolder splitedAgLibrarySubFolder = new AgLibrarySubFolder(this);
+        List<AgLibraryFile> listFileSubFolderThis = new ArrayList();
+        List<AgLibraryFile> listFileSubFolderSplit = new ArrayList();
+        for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
+            if (ifile < activephotoNum) {
+                listFileSubFolderThis.add(listFileSubFolder.get(ifile));
+            }
+            if (ifile >= activephotoNum) {
+                listFileSubFolderSplit.add(listFileSubFolder.get(ifile));
+            }
+        }
+        this.listFileSubFolder = listFileSubFolderThis;
+        splitedAgLibrarySubFolder.listFileSubFolder = listFileSubFolderSplit;
+        return splitedAgLibrarySubFolder;
     }
 }

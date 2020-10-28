@@ -193,6 +193,7 @@ public class MainFrameController {
 
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
+    private AgLibrarySubFolder activeRepSplit;
     private int activephotoNum;
     private int filtreNbstar;
     private boolean filtreEstPhoto;
@@ -411,10 +412,16 @@ public class MainFrameController {
         try {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                activeRepSrc.execmodification(activeRep);
+                activeRepSrc.execmodification(activeRep,activeRepSplit);
 //                repChoose.getItems().remove(activeRep);
-                repChoose.getSelectionModel().selectNext();
-//                populatereChooseChoicebox();
+//                repChoose.getSelectionModel().selectNext();
+
+                int selectindex = repChoose.getSelectionModel().getSelectedIndex();
+                populatereChooseChoicebox();
+                if(repChoose.getItems().size()>selectindex) {
+                    repChoose.getSelectionModel().select(selectindex);
+                }
+
                 LOGGER.info("Valider les modification effectuer sur la repertoire " + activeRep.toString() );
             }
         } catch (IOException | SQLException e) {
@@ -765,13 +772,16 @@ public class MainFrameController {
                     displayStarValueAndLibelle(imageZ0star, activephotoNum);
                     keyEvent.consume();
                     break;
-//                case S:
-//                    if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
-//                        // TODO: 25/04/2020
-//                        popupalert("split repertoire", "split repertoire a coder");
-//                    }
-//                    keyEvent.consume();
-//                    break;
+                case S:
+                    if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
+                        activeRepSplit = activeRepSrc.split(activephotoNum);
+                        activeRep.split(activephotoNum);
+                        activeRep.refreshValue();
+                        moveActivephotoNumTo(-1);
+                        refreshAllPhoto();
+                    }
+                    keyEvent.consume();
+                    break;
                 case DOWN:
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
@@ -1063,6 +1073,7 @@ public class MainFrameController {
             activeRep.refreshValue();
             if (activeRep != null) {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
+                activeRepSplit = activeRepSrc.split(activeRepSrc.filsize());
                 refreshcomboxRepertoire();
                 refreshcompteurRepertoire();
                 actionFiltreNull();

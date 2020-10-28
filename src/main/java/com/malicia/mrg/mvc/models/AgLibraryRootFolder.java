@@ -432,7 +432,7 @@ public class AgLibraryRootFolder {
     }
 
 
-    private void moveListEle(List<AgLibraryFile> listFile) throws IOException, SQLException {
+    void moveListEle(List<AgLibraryFile> listFile) throws IOException, SQLException {
         moveListEle(listFile, "$" + UUID.randomUUID().toString() + "$", true);
     }
 
