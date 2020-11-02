@@ -194,6 +194,8 @@ public class MainFrameController {
     private AgLibrarySubFolder activeRep;
     private AgLibrarySubFolder activeRepSrc;
     private AgLibrarySubFolder activeRepSplit;
+    private List<AgLibraryFile> eleExclu;
+
     private int activephotoNum;
     private int filtreNbstar;
     private boolean filtreEstPhoto;
@@ -412,6 +414,7 @@ public class MainFrameController {
         try {
             Optional<ButtonType> result = popupalertConfirmeModification("Valider les modification effectuer sur la repertoire " + activeRep.toString() + " ?");
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                activeRepSrc.getAgLibraryRootFolder().moveListEle(eleExclu);
                 activeRepSrc.execmodification(activeRep,activeRepSplit);
 //                repChoose.getItems().remove(activeRep);
 //                repChoose.getSelectionModel().selectNext();
@@ -794,6 +797,21 @@ public class MainFrameController {
                     }
                     keyEvent.consume();
                     break;
+                case E:
+                    if (keyEvent.isShiftDown()) {
+//                        Optional<ButtonType> result = popupalertConfirmeModification("Exclure la photo ????");
+//                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            eleExclu.add(activeRepSrc.listFileSubFolder.get(activephotoNum));
+                            activeRepSrc.listFileSubFolder.remove(activephotoNum);
+                            activeRep.listFileSubFolder.remove(activephotoNum);
+                            activeRep.refreshValue();
+                            moveActivephotoNumTo(+1);
+                            moveActivephotoNumTo(-1);
+                            refreshAllPhoto();
+//                        }
+                    }
+                    keyEvent.consume();
+                    break;
                 case DOWN:
                     activeRep.valeuractivephotodecrease(activephotoNum);
                     refreshcompteurRepertoire();
@@ -1086,6 +1104,7 @@ public class MainFrameController {
             if (activeRep != null) {
                 activeRepSrc = new AgLibrarySubFolder(activeRep);
                 activeRepSplit = activeRepSrc.split(activeRepSrc.filsize());
+                eleExclu= new ArrayList();
                 refreshcomboxRepertoire();
                 refreshcompteurRepertoire();
                 actionFiltreNull();

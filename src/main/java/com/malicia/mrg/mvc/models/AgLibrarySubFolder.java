@@ -105,6 +105,10 @@ public class AgLibrarySubFolder {
         return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + pathFromRoot);
     }
 
+    private String getpath(String temppathFromRoot) {
+        return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + temppathFromRoot);
+    }
+
     public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
 
         this.pathFromRoot = pathFromRoot;
@@ -649,7 +653,6 @@ public class AgLibrarySubFolder {
                 activeRepDest.pathFromRoot.toLowerCase(),
                 this.agLibraryRootFolder.rootfolderidlocal,
                 activeRepDest.agLibraryRootFolder.rootfolderidlocal);
-
 
         List<AgLibraryFile> listFileSubFolderRejet = new ArrayList();
 
