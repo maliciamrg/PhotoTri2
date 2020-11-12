@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
@@ -44,7 +45,6 @@ public class AgLibraryRootFolder {
 
 
     private static final Logger LOGGER = LogManager.getLogger(SQLiteJDBCDriverConnection.class);
-
 
     public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath, int typeRoot) {
         parentLrcat = catalogLrcat;
@@ -522,6 +522,8 @@ public class AgLibraryRootFolder {
 
         ResultSet rsele = sqlgetListelementrejetaranger();
 
+        int nbfile = 0;
+        int nbrejet = 0;
         while (rsele.next()) {
 
             // Recuperer les info de l'elements
@@ -529,16 +531,21 @@ public class AgLibraryRootFolder {
             String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
             String file_id_local = rsele.getString(Context.FILE_ID_LOCAL);
             String folder_id_local = rsele.getString("folder_id_local");
-
+             nbfile += 1;
             if (!lcIdxFilename.endsWith(".zip") && !lcIdxFilename.endsWith(".rejet") &&  pathFromRoot.endsWith("/rejet/")) {
                 String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
                 String dest = source + ".rejet";
 
 
                 sqlmovefile(source, dest, folder_id_local, file_id_local);
+                nbrejet += 1;
             }
-
+            if (nbfile % 100 == 0 ) {
+                LOGGER.info("rangerRejet : " + nbrejet + " / " + nbfile + " ");
+            }
         }
+        LOGGER.info("rangerRejet : "  + nbrejet + " / " + nbfile + " " );
+
     }
 
     public ObservableList<String> getlistofpathFromRoottoprocess() throws SQLException {
