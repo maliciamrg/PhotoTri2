@@ -45,7 +45,7 @@
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Maintenance">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="_Ranger les rejets (.rejet)" />
+                                        <MenuItem mnemonicParsing="false" onAction="#actionRangerRejet" text="Ranger les rejets (.rejet)" />
                                         <MenuItem mnemonicParsing="false" onAction="#actionDeleteEmptyDirectoryPhysique" text="Purge @New Physique Vide " />
                                         <MenuItem mnemonicParsing="false" onAction="#actionDeleteRepertoireLogique" text="Purge [All] Logique Vide" />
                                         <MenuItem mnemonicParsing="false" onAction="#actionSpyfirst" text="Fichier physique Absent" />

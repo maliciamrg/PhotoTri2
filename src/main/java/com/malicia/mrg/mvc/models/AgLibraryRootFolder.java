@@ -530,11 +530,13 @@ public class AgLibraryRootFolder {
             String file_id_local = rsele.getString(Context.FILE_ID_LOCAL);
             String folder_id_local = rsele.getString("folder_id_local");
 
-            String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
-            String dest = source + ".rejet";
+            if (!lcIdxFilename.endsWith(".zip") && !lcIdxFilename.endsWith(".rejet") &&  pathFromRoot.endsWith("/rejet/")) {
+                String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
+                String dest = source + ".rejet";
 
 
-            sqlmovefile(source, dest, folder_id_local, file_id_local);
+                sqlmovefile(source, dest, folder_id_local, file_id_local);
+            }
 
         }
     }

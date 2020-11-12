@@ -322,11 +322,11 @@ public class MainFrameController {
      */
     @FXML
     void actionRangerRejet() {
-        LOGGER.info("Move new to grp photos");
+        LOGGER.info("action Ranger Rejet");
         try {
-            if (false) {
+ //           if (false) {
                 lrcat.rangerRejet();
-            }
+ //           }
 
         } catch (SQLException | IOException e) {
             Context.popupalertException(e);
