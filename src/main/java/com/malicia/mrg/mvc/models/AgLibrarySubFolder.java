@@ -294,13 +294,13 @@ public class AgLibrarySubFolder {
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
-//            if (!fi.estRejeter() ) {
+            if (!fi.estRejeter() ) {
             nbelerep += 1;
             if (fi.estPhoto()) {
                 nbphotoRep += 1;
                 calculateStarAndDate(fi);
             }
-//            }
+            }
         }
 
         calculatenbphotapurger(dtfin, dtdeb);
