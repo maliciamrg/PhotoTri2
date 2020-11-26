@@ -12,9 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +23,10 @@ import java.util.regex.Pattern;
 public class AgLibraryRootFolder {
 
     public static final int TYPE_INCONNU = 0;
-    public static final int TYPE_CAT = 3;
-    public static final int TYPE_ENC = 2;
     public static final int TYPE_NEW = 1;
+    public static final int TYPE_ENC = 2;
     public static final int TYPE_LEG = 4;
+    public static final int TYPE_CAT = 3;
     public static final int TYPE_KID = 5;
 
     public String rootfolderidlocal;
@@ -442,7 +441,10 @@ public class AgLibraryRootFolder {
 
         //deplacement des group d'elements
         for (List<AgLibraryFile> listEle : listGrpEletmp) {
-            moveListEle(listEle);
+            Date d = new Date(listEle.get(1).getCaptureTime() * 1000);
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+            String date1 = format1.format(d);
+            moveListEleD(listEle,date1);
         }
         moveListEle(listFileBazar, Context.appParam.getString("ssrepBazar"));
         parentLrcat.rep.get("repKidz").tranfertdeRep(listElekidz);
@@ -456,6 +458,10 @@ public class AgLibraryRootFolder {
 
     public void moveListEle(List<AgLibraryFile> listFile) throws IOException, SQLException {
         moveListEle(listFile, "$" + UUID.randomUUID().toString() + "$", true);
+    }
+
+    public void moveListEleD(List<AgLibraryFile> listFile, String yyyymmdd ) throws IOException, SQLException {
+        moveListEle(listFile,  "$" + "y" + yyyymmdd + "u" + UUID.randomUUID().toString() + "$", true);
     }
 
     private void moveListEle(List<AgLibraryFile> listFile, String repertoiredest) throws IOException, SQLException {
