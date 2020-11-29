@@ -684,7 +684,7 @@ public class AgLibrarySubFolder {
     }
 
     private String getpathFromRootrejet() {
-        return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + appParam.getString("ssrepRejet"));
+        return agLibraryRootFolder.normalizePath(pathFromRoot + File.separator + Context.appParam.getString("ssrepRejet").split(";")[0]);
     }
 
 

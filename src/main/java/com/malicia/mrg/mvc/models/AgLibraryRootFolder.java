@@ -1,7 +1,6 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.mvc.controllers.MainFrameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.io.FilenameUtils;
@@ -28,10 +27,9 @@ public class AgLibraryRootFolder {
     public static final int TYPE_LEG = 4;
     public static final int TYPE_CAT = 3;
     public static final int TYPE_KID = 5;
-
+    private static final Logger LOGGER = LogManager.getLogger(SQLiteJDBCDriverConnection.class);
     public String rootfolderidlocal;
     public String absolutePath;
-
     public int typeRoot;
     public String name;
     public double nbmaxCat;
@@ -41,9 +39,6 @@ public class AgLibraryRootFolder {
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
     private String[] ratioMaxStar;
-
-
-    private static final Logger LOGGER = LogManager.getLogger(SQLiteJDBCDriverConnection.class);
 
     public AgLibraryRootFolder(CatalogLrcat catalogLrcat, String NomRootFolder, String rootfolderidlocal, String absolutePath, int typeRoot) {
         parentLrcat = catalogLrcat;
@@ -124,8 +119,26 @@ public class AgLibraryRootFolder {
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
                         "Where b.rootFolder =  " + rootfolderidlocal + " " +
-                        "  and b.pathFromRoot like \"%" + Context.appParam.getString("ssrepRejet") + "%\" " +
+                        getConditionLike_ssrepRejet("b.pathFromRoot", Context.appParam.getString("ssrepRejet").split(";")) +
+                        getConditionLike_ssrepRejet("a.lc_idx_filename", Context.appParam.getString("ssfilerepRejet").split(";")) +
                         " ;");
+    }
+
+    private String getConditionLike_ssrepRejet(String variable_name, String[] listEle) {
+        String condi = "";
+        if (listEle.length > 0) {
+            condi += " and ( ";
+            condi += "       " + variable_name + " like \"%" + listEle[0] + "%\" ";
+            if (listEle.length > 1) {
+                int size = listEle.length;
+                for (int i = 1; i < size; i++) {
+                    condi += "    or ";
+                    condi += "       " + variable_name + " like \"%" + listEle[i] + "%\" ";
+                }
+            }
+            condi += "     ) ";
+        }
+        return condi;
     }
 
     /**
@@ -202,8 +215,7 @@ public class AgLibraryRootFolder {
     /**
      * Sqlmovefile int.
      *
-     * @param source      the source
-     * @param destination the destination
+     * @param source the source
      * @return the int
      * @throws SQLException the sql exception
      * @throws IOException  the io exception
@@ -444,7 +456,7 @@ public class AgLibraryRootFolder {
             Date d = new Date(listEle.get(1).getCaptureTime() * 1000);
             SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
             String date1 = format1.format(d);
-            moveListEleD(listEle,date1);
+            moveListEleD(listEle, date1);
         }
         moveListEle(listFileBazar, Context.appParam.getString("ssrepBazar"));
         parentLrcat.rep.get("repKidz").tranfertdeRep(listElekidz);
@@ -460,8 +472,8 @@ public class AgLibraryRootFolder {
         moveListEle(listFile, "$" + UUID.randomUUID().toString() + "$", true);
     }
 
-    public void moveListEleD(List<AgLibraryFile> listFile, String yyyymmdd ) throws IOException, SQLException {
-        moveListEle(listFile,  "$" + "y" + yyyymmdd + "u" + UUID.randomUUID().toString() + "$", true);
+    public void moveListEleD(List<AgLibraryFile> listFile, String yyyymmdd) throws IOException, SQLException {
+        moveListEle(listFile, "$" + "y" + yyyymmdd + "u" + UUID.randomUUID().toString() + "$", true);
     }
 
     private void moveListEle(List<AgLibraryFile> listFile, String repertoiredest) throws IOException, SQLException {
@@ -526,6 +538,10 @@ public class AgLibraryRootFolder {
 
     public void rangerRejet() throws SQLException, IOException {
 
+        String ssrepRejetExt = Context.appParam.getString("ssrepRejet").split(";")[0];
+        String[] extnfilerepRejet = Context.appParam.getString("ssfilerepRejet").split(";");
+        String[] extrepRejet = Context.appParam.getString("ssrepRejet").split(";");
+
         ResultSet rsele = sqlgetListelementrejetaranger();
 
         int nbfile = 0;
@@ -537,21 +553,31 @@ public class AgLibraryRootFolder {
             String lcIdxFilename = rsele.getString(Context.LC_IDX_FILENAME);
             String file_id_local = rsele.getString(Context.FILE_ID_LOCAL);
             String folder_id_local = rsele.getString("folder_id_local");
-             nbfile += 1;
-            if (!lcIdxFilename.endsWith(".zip") && !lcIdxFilename.endsWith(".rejet") &&  pathFromRoot.endsWith("/rejet/")) {
+            nbfile += 1;
+
+            if (isssrepRejetFileAutorized(lcIdxFilename, extnfilerepRejet) && isssrepRejetAutorized(pathFromRoot, extrepRejet)) {
+
                 String source = normalizePath(absolutePath + pathFromRoot + lcIdxFilename);
-                String dest = source + ".rejet";
+                String dest = source + "." + ssrepRejetExt;
 
 
                 sqlmovefile(source, dest, folder_id_local, file_id_local);
                 nbrejet += 1;
             }
-            if (nbfile % 100 == 0 ) {
+            if (nbfile % 100 == 0) {
                 LOGGER.info("rangerRejet : " + nbrejet + " / " + nbfile + " ");
             }
         }
-        LOGGER.info("rangerRejet : "  + nbrejet + " / " + nbfile + " " );
+        LOGGER.info("rangerRejet : " + nbrejet + " / " + nbfile + " ");
 
+    }
+
+    public boolean isssrepRejetFileAutorized(String lcIdxFilename, String[] extn) {
+        return Arrays.stream(extn).anyMatch(entry -> lcIdxFilename.toLowerCase().endsWith(entry));
+    }
+
+    public boolean isssrepRejetAutorized(String pathFromRoot, String[] extn) {
+        return Arrays.stream(extn).anyMatch(entry -> pathFromRoot.toLowerCase().indexOf(entry)>0);
     }
 
     public ObservableList<String> getlistofpathFromRoottoprocess() throws SQLException {
@@ -681,28 +707,30 @@ public class AgLibraryRootFolder {
     public void setsszCat(String sszCat) {
         String[] tmpssz = sszCat.split(",");
         ssz = new boolean[tmpssz.length];
-        for(int i = 0 ; i < tmpssz.length ; i++)
-        {
-            if(tmpssz[i].compareTo("Close")==0){
-                ssz[i]=false;
-            };
-            if(tmpssz[i].compareTo("Open")==0){
-                ssz[i]=true;
-            };
+        for (int i = 0; i < tmpssz.length; i++) {
+            if (tmpssz[i].compareTo("Close") == 0) {
+                ssz[i] = false;
+            }
+            ;
+            if (tmpssz[i].compareTo("Open") == 0) {
+                ssz[i] = true;
+            }
+            ;
         }
     }
 
     public void setsszCatVal(String sszCatVal) {
         String[] tmpsszval = sszCatVal.split(",");
         sszVal = new boolean[tmpsszval.length];
-        for(int i = 0 ; i < tmpsszval.length ; i++)
-        {
-            if(tmpsszval[i].compareTo("Facul")==0){
-                sszVal[i]=false;
-            };
-            if(tmpsszval[i].compareTo("Oblig")==0){
-                sszVal[i]=true;
-            };
+        for (int i = 0; i < tmpsszval.length; i++) {
+            if (tmpsszval[i].compareTo("Facul") == 0) {
+                sszVal[i] = false;
+            }
+            ;
+            if (tmpsszval[i].compareTo("Oblig") == 0) {
+                sszVal[i] = true;
+            }
+            ;
         }
     }
 
@@ -711,7 +739,7 @@ public class AgLibraryRootFolder {
         String source = normalizePath(file.getAbsolutePath() + file.getPathFromRoot() + file.getLcIdxFilename());
         LOGGER.debug("deleteEle " + source);
 
-        sqldeletefile(source,  file.getFileIdLocal());
+        sqldeletefile(source, file.getFileIdLocal());
 
     }
 }
