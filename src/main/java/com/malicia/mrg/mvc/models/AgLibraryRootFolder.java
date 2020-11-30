@@ -35,7 +35,7 @@ public class AgLibraryRootFolder {
     public double nbmaxCat;
     public int nbjouCat;
     public boolean[] IsZoneFacultative;
-    public boolean[] IsZoneDefaultSpace;
+    public String[] IsZoneDefault;
     public boolean[] IsZoneEditable;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
@@ -121,21 +121,21 @@ public class AgLibraryRootFolder {
                         "inner join AgLibraryFolder b   " +
                         " on a.folder = b.id_local  " +
                         "Where b.rootFolder =  " + rootfolderidlocal + " " +
-                        getConditionLike_ssrepRejet("b.pathFromRoot", Context.appParam.getString("ssrepRejet").split(";")) +
-                        getConditionLike_ssrepRejet("a.lc_idx_filename", Context.appParam.getString("ssfilerepRejet").split(";")) +
+                        getConditionLike_ssrepRejet("b.pathFromRoot", Context.appParam.getString("ssrepRejet").split(";"), "%", "%") +
+                        getConditionLike_ssrepRejet("a.lc_idx_filename", Context.appParam.getString("ssfilerepRejet").split(";"), "%", "") +
                         " ;");
     }
 
-    private String getConditionLike_ssrepRejet(String variable_name, String[] listEle) {
+    private String getConditionLike_ssrepRejet(String variable_name, String[] listEle, String likeav, String likeap) {
         String condi = "";
         if (listEle.length > 0) {
             condi += " and ( ";
-            condi += "       " + variable_name + " like \"%" + listEle[0] + "%\" ";
+            condi += "       " + variable_name + " like \""+ likeav + listEle[0] + likeap +"\" ";
             if (listEle.length > 1) {
                 int size = listEle.length;
                 for (int i = 1; i < size; i++) {
                     condi += "    or ";
-                    condi += "       " + variable_name + " like \"%" + listEle[i] + "%\" ";
+                    condi += "       " + variable_name + " like \""+ likeav + listEle[i] + likeap +"\" ";
                 }
             }
             condi += "     ) ";
@@ -720,13 +720,14 @@ public class AgLibraryRootFolder {
     }
     public void setIsZoneDefaultCat(String IsZoneDefaultCat) {
         String[] tmpIsZoneDefaultCat = IsZoneDefaultCat.split(",");
-        IsZoneDefaultSpace = new boolean[tmpIsZoneDefaultCat.length];
+        IsZoneDefault = new String[tmpIsZoneDefaultCat.length];
         for (int i = 0; i < tmpIsZoneDefaultCat.length; i++) {
             if (tmpIsZoneDefaultCat[i].compareTo("*") == 0) {
-                IsZoneDefaultSpace[i] = false;
-            }
-            if (tmpIsZoneDefaultCat[i].compareTo("Space") == 0) {
-                IsZoneDefaultSpace[i] = true;
+                IsZoneDefault[i] = "*";
+            } else if (tmpIsZoneDefaultCat[i].compareTo("Space") == 0) {
+                IsZoneDefault[i] = "";
+            } else {
+                IsZoneDefault[i] = tmpIsZoneDefaultCat[i];
             }
         }
     }
@@ -737,11 +738,9 @@ public class AgLibraryRootFolder {
             if (tmpZoneFacultativeal[i].compareTo("Facul") == 0) {
                 IsZoneFacultative[i] = true;
             }
-            ;
             if (tmpZoneFacultativeal[i].compareTo("Oblig") == 0) {
                 IsZoneFacultative[i] = false;
             }
-            ;
         }
     }
 

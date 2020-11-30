@@ -136,8 +136,8 @@ public class AgLibrarySubFolder {
     }
 
     public String getRepformatZ(int i) {
-        if (agLibraryRootFolder.IsZoneDefaultSpace[i]){
-            return "";
+        if (agLibraryRootFolder.IsZoneDefault[i].compareTo("*")!=0){
+            return agLibraryRootFolder.IsZoneDefault[i];
         }
         return subFolderFormatZ.get(i).getLocalValue();
     }
@@ -369,7 +369,7 @@ public class AgLibrarySubFolder {
         statusRep = OK;
         int i;
         for (i = 0; i < subFolderFormatZ.size(); i++) {
-            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
+            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0 && !agLibraryRootFolder.IsZoneFacultative[i]) {
                 statusRep = KO;
                 break;
             }
@@ -614,10 +614,10 @@ public class AgLibrarySubFolder {
     }
 
     public void execmodification(AgLibrarySubFolder activeRepDest, AgLibrarySubFolder activeRepDestSplit) throws IOException, SQLException {
-        if (activeRepDestSplit.nbelerep>0) {
-            LOGGER.info("Split de " + activeRepDestSplit.nbelerep );
-            activeRepDestSplit.getAgLibraryRootFolder().moveListEle(activeRepDestSplit.listFileSubFolder);
-        }
+//        if (activeRepDestSplit.nbelerep>0) {
+//            LOGGER.info("Split de " + activeRepDestSplit.nbelerep );
+//            activeRepDestSplit.getAgLibraryRootFolder().moveListEle(activeRepDestSplit.listFileSubFolder);
+//        }
 
         activeRepDest.calculpathFromRoot();
 
