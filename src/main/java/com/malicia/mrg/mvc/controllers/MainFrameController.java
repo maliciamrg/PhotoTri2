@@ -570,7 +570,6 @@ public class MainFrameController {
         colorlabelzonez(lbselectssrepformatZ3, selectssrepformatZ3);
         colorlabelzonez(lbselectssrepformatZ4, selectssrepformatZ4);
 
-        valid.setText("Save");
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
@@ -1060,8 +1059,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ1Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(0, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
-        refreshcompteurRepertoire();
+        actionssrepformatZone(actionEvent, 0);
     }
 
     /**
@@ -1070,9 +1068,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ2Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(1, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
-
-        refreshcompteurRepertoire();
+        actionssrepformatZone(actionEvent, 1);
     }
 
     /**
@@ -1081,9 +1077,7 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ3Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(2, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
-        refreshcompteurRepertoire();
-
+        actionssrepformatZone(actionEvent, 2);
     }
 
     /**
@@ -1092,9 +1086,20 @@ public class MainFrameController {
      * @param actionEvent the action event
      */
     public void actionssrepformatZ4Change(ActionEvent actionEvent) {
-        activeRep.setrepformatZ(3, String.valueOf(((ComboBox) actionEvent.getTarget()).getValue()));
-        refreshcompteurRepertoire();
+        actionssrepformatZone(actionEvent, 3);
+    }
 
+    public void actionssrepformatZone(ActionEvent actionEvent, int i) {
+        String val;
+        if (activeRep.getAgLibraryRootFolder().IsZoneDefault[i].startsWith("@")) {
+            val = activeRep.getAgLibraryRootFolder().IsZoneDefault[i];
+            ((ComboBox) actionEvent.getTarget()).setValue(val);
+        } else {
+            val =  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue());
+        }
+        activeRep.setrepformatZ(i,val);
+
+        refreshcompteurRepertoire();
     }
 
     public void actionChoose(ActionEvent actionEvent) {
