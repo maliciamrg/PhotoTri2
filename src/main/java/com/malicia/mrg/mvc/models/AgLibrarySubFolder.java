@@ -136,6 +136,9 @@ public class AgLibrarySubFolder {
     }
 
     public String getRepformatZ(int i) {
+        if (agLibraryRootFolder.IsZoneDefaultSpace[i]){
+            return "";
+        }
         return subFolderFormatZ.get(i).getLocalValue();
     }
 

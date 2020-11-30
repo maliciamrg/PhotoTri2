@@ -35,7 +35,8 @@ public class AgLibraryRootFolder {
     public double nbmaxCat;
     public int nbjouCat;
     public boolean[] sszVal;
-    public boolean[] ssz;
+    public boolean[] IsZoneDefaultSpace;
+    public boolean[] IsZoneEditable;
     CatalogLrcat parentLrcat;
     private int nbDelTotal;
     private String[] ratioMaxStar;
@@ -49,7 +50,7 @@ public class AgLibraryRootFolder {
         setratioMaxstarCat("0,0,0,0,0");
         nbmaxCat = 999d;
         nbjouCat = 1;
-        setsszCat("Open,Open,Open,Open");
+        setIsZoneEditableCat("Open,Open,Open,Open");
         setsszCatVal("Facul,Facul,Facul,Facul");
     }
 
@@ -704,21 +705,30 @@ public class AgLibraryRootFolder {
         ratioMaxStar = ratioMaxstarCat.split(",");
     }
 
-    public void setsszCat(String sszCat) {
-        String[] tmpssz = sszCat.split(",");
-        ssz = new boolean[tmpssz.length];
-        for (int i = 0; i < tmpssz.length; i++) {
-            if (tmpssz[i].compareTo("Close") == 0) {
-                ssz[i] = false;
+    public void setIsZoneEditableCat(String IsZoneEditableCat) {
+        String[] tmpIsZoneEditable = IsZoneEditableCat.split(",");
+        IsZoneEditable = new boolean[tmpIsZoneEditable.length];
+        for (int i = 0; i < tmpIsZoneEditable.length; i++) {
+            if (tmpIsZoneEditable[i].compareTo("Close") == 0) {
+                IsZoneEditable[i] = false;
             }
-            ;
-            if (tmpssz[i].compareTo("Open") == 0) {
-                ssz[i] = true;
+            if (tmpIsZoneEditable[i].compareTo("Open") == 0) {
+                IsZoneEditable[i] = true;
             }
-            ;
         }
     }
-
+    public void setIsZoneDefaultCat(String IsZoneDefaultCat) {
+        String[] tmpIsZoneDefaultCat = IsZoneDefaultCat.split(",");
+        IsZoneDefaultSpace = new boolean[tmpIsZoneDefaultCat.length];
+        for (int i = 0; i < tmpIsZoneDefaultCat.length; i++) {
+            if (tmpIsZoneDefaultCat[i].compareTo("*") == 0) {
+                IsZoneDefaultSpace[i] = false;
+            }
+            if (tmpIsZoneDefaultCat[i].compareTo("Space") == 0) {
+                IsZoneDefaultSpace[i] = true;
+            }
+        }
+    }
     public void setsszCatVal(String sszCatVal) {
         String[] tmpsszval = sszCatVal.split(",");
         sszVal = new boolean[tmpsszval.length];

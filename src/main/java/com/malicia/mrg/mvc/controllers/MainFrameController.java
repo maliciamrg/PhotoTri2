@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.*;
 
 import static com.malicia.mrg.app.Context.lrcat;
-import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
 import static com.malicia.mrg.view.AlertMessageUtil.popupalertConfirmeModification;
 
 import org.apache.logging.log4j.LogManager;
@@ -571,6 +570,7 @@ public class MainFrameController {
         colorlabelzonez(lbselectssrepformatZ3, selectssrepformatZ3);
         colorlabelzonez(lbselectssrepformatZ4, selectssrepformatZ4);
 
+        valid.setText("Save");
         valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
     }
 
@@ -1048,10 +1048,10 @@ public class MainFrameController {
         activeRep.refreshValue();
         refreshcomboxRepertoire();
         refreshcompteurRepertoire();
-        selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().ssz[0]);
-        selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().ssz[1]);
-        selectssrepformatZ3.setEditable(activeRep.getAgLibraryRootFolder().ssz[2]);
-        selectssrepformatZ4.setEditable(activeRep.getAgLibraryRootFolder().ssz[3]);
+        selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[0]);
+        selectssrepformatZ2.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[1]);
+        selectssrepformatZ3.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[2]);
+        selectssrepformatZ4.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[3]);
     }
 
     /**
