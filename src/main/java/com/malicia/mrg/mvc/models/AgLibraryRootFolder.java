@@ -34,7 +34,7 @@ public class AgLibraryRootFolder {
     public String name;
     public double nbmaxCat;
     public int nbjouCat;
-    public boolean[] sszVal;
+    public boolean[] IsZoneFacultative;
     public boolean[] IsZoneDefaultSpace;
     public boolean[] IsZoneEditable;
     CatalogLrcat parentLrcat;
@@ -52,7 +52,7 @@ public class AgLibraryRootFolder {
         nbjouCat = 1;
         setIsZoneEditableCat("Open,Open,Open,Open");
         setIsZoneDefaultCat("*,*,*,*");
-        setsszCatVal("Facul,Facul,Facul,Facul");
+        IsZoneFacultativeCatVal("Facul,Facul,Facul,Facul");
     }
 
     public int getRatioMaxStar(int star) {
@@ -730,16 +730,16 @@ public class AgLibraryRootFolder {
             }
         }
     }
-    public void setsszCatVal(String sszCatVal) {
-        String[] tmpsszval = sszCatVal.split(",");
-        sszVal = new boolean[tmpsszval.length];
-        for (int i = 0; i < tmpsszval.length; i++) {
-            if (tmpsszval[i].compareTo("Facul") == 0) {
-                sszVal[i] = false;
+    public void IsZoneFacultativeCatVal(String zoneFacultativeCatVal) {
+        String[] tmpZoneFacultativeal = zoneFacultativeCatVal.split(",");
+        IsZoneFacultative = new boolean[tmpZoneFacultativeal.length];
+        for (int i = 0; i < tmpZoneFacultativeal.length; i++) {
+            if (tmpZoneFacultativeal[i].compareTo("Facul") == 0) {
+                IsZoneFacultative[i] = true;
             }
             ;
-            if (tmpsszval[i].compareTo("Oblig") == 0) {
-                sszVal[i] = true;
+            if (tmpZoneFacultativeal[i].compareTo("Oblig") == 0) {
+                IsZoneFacultative[i] = false;
             }
             ;
         }

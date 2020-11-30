@@ -625,7 +625,7 @@ public class AgLibrarySubFolder {
         for (i = 0; i < activeRepDest.subFolderFormatZ.size(); i++) {
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
             if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
-                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && activeRepDest.agLibraryRootFolder.sszVal[i]) {
+                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && !activeRepDest.agLibraryRootFolder.IsZoneFacultative[i]) {
 
 
                     ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
@@ -728,7 +728,7 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || !agLibraryRootFolder.sszVal[i]) {
+            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || agLibraryRootFolder.IsZoneFacultative[i]) {
                 setrepformatZ(i, part[i]);
             }
         }
