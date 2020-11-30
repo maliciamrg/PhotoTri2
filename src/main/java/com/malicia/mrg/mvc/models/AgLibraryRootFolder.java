@@ -51,6 +51,7 @@ public class AgLibraryRootFolder {
         nbmaxCat = 999d;
         nbjouCat = 1;
         setIsZoneEditableCat("Open,Open,Open,Open");
+        setIsZoneDefaultCat("*,*,*,*");
         setsszCatVal("Facul,Facul,Facul,Facul");
     }
 
