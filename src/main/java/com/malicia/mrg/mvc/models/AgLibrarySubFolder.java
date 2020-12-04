@@ -546,7 +546,7 @@ public class AgLibrarySubFolder {
                 break;
             case 0:
 //                flag = "⚐";
-                flag = "?";
+                flag = "x";
                 break;
             case 1:
 //                flag = "\uD83C\uDFC1";
