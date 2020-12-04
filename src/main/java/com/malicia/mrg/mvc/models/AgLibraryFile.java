@@ -58,10 +58,6 @@ public class AgLibraryFile {
         return pick;
     }
 
-    public void setPick(double pick) {
-        this.pick = pick;
-    }
-
     private int translateOrientation(String orientation) {
         if (orientation == null) {
             return 0;
@@ -226,6 +222,8 @@ public class AgLibraryFile {
         if (starValue > -1) {
             starValue -= 1;
             edited = true;
+        } else {
+            unflag();
         }
     }
 
@@ -234,6 +232,7 @@ public class AgLibraryFile {
             starValue += 1;
             edited = true;
         }
+        flag();
     }
 
     public void enregistrerStarValue() throws SQLException {

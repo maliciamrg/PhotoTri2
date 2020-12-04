@@ -259,7 +259,6 @@ public class AgLibrarySubFolder {
     }
 
     public void valeuractivephotoflag(int activeNum) {
-
         listFileSubFolder.get(activeNum).flag();
     }
 
@@ -339,7 +338,7 @@ public class AgLibrarySubFolder {
             dtfin = dt;
         }
 //        calcul flag
-        if ((int) fi.getPick() == 1) {
+        if (fi.estSelectionner()) {
             nbSelectionner += 1;
         }
     }
@@ -404,6 +403,11 @@ public class AgLibrarySubFolder {
                     }
                 }
             }
+        }
+
+        txt += "\n" + "; nbSelectionner = > " + fixedLengthString(String.valueOf(nbSelectionner), 7);
+        if (nbSelectionner == 0) {
+            IsRepPosiblementValide = false;
         }
 
         txt += "\n" + "; nbphotoapurger = > " + fixedLengthString(String.valueOf(nbphotoapurger), 7);
