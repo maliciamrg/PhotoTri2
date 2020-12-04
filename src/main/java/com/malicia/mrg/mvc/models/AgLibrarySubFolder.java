@@ -56,26 +56,26 @@ public class AgLibrarySubFolder {
      *
      * @param pathFromRoot        the path from root
      * @param folderIdLocal       the folder id local
+     * @param listeZ
      * @param agLibraryRootFolder
      * @throws SQLException the sql exception
      */
-    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
+    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal, List<ZoneZ> listeZ) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
-        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal);
+        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal, listeZ);
     }
 
-    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot) throws SQLException {
+    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, List<ZoneZ> listeZ) throws SQLException {
         this.agLibraryRootFolder = agLibraryRootFolder;
         String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
         if (folderIdLocalcalc.compareTo("") == 0) {
             folderIdLocalcalc = agLibraryRootFolder.sqlMkdirRepertory(this.getpath());
         }
-        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc);
+        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc, listeZ);
     }
 
-    public AgLibrarySubFolder(AgLibrarySubFolder activeRep) throws SQLException {
-        this.agLibraryRootFolder = activeRep.agLibraryRootFolder;
-        aglibraySubFolderConstructor(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal);
+    public AgLibrarySubFolder(AgLibrarySubFolder activeRep, List<ZoneZ> listeZ) throws SQLException {
+        this(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal, listeZ);
     }
 
     public String getNbSelectionner() {
@@ -112,7 +112,7 @@ public class AgLibrarySubFolder {
         return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + temppathFromRoot);
     }
 
-    public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal) throws SQLException {
+    public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal, List<ZoneZ> listeZ) throws SQLException {
 
         this.pathFromRoot = pathFromRoot;
         this.folderIdLocal = folderIdLocal;
@@ -133,7 +133,7 @@ public class AgLibrarySubFolder {
         }
 
 
-        refreshValue();
+        refreshValue(listeZ);
 
 
     }
@@ -629,10 +629,16 @@ public class AgLibrarySubFolder {
         return listFileSubFolder.get(photonum).getAddRotate();
     }
 
-    public void setrepformatZ(int i, String valeur) {
+    public void setrepformatZ(int i, String valeur, List<ZoneZ> listeZ) {
         if (valeur.compareTo("null") == 0) {
             valeur = "";
         }
+
+        if (listeZ.get(i).typeDeListeDeZone.compareTo("£") == 0) {
+            valeur = this.getDtdebHumain();
+        }
+
+
         subFolderFormatZ.get(i).setLocalValue(valeur);
     }
 
@@ -767,7 +773,7 @@ public class AgLibrarySubFolder {
     }
 
 
-    public void refreshValue() {
+    public void refreshValue(List<ZoneZ> listeZ) {
         subFolderFormatZ = new ArrayList<ZoneZ>();
 
         int i;
@@ -779,9 +785,9 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-            if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || agLibraryRootFolder.IsZoneFacultative[i]) {
-                setrepformatZ(i, part[i]);
-            }
+      //      if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || agLibraryRootFolder.IsZoneFacultative[i] ) {
+                setrepformatZ(i, part[i], listeZ);
+      //      }
         }
 
         calculStatusRep();
@@ -815,8 +821,8 @@ public class AgLibrarySubFolder {
         );
     }
 
-    public AgLibrarySubFolder split(int activephotoNum) throws SQLException {
-        AgLibrarySubFolder splitedAgLibrarySubFolder = new AgLibrarySubFolder(this);
+    public AgLibrarySubFolder split(int activephotoNum, List<ZoneZ> listeZ) throws SQLException {
+        AgLibrarySubFolder splitedAgLibrarySubFolder = new AgLibrarySubFolder(this, listeZ);
         List<AgLibraryFile> listFileSubFolderThis = new ArrayList();
         List<AgLibraryFile> listFileSubFolderSplit = new ArrayList();
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {

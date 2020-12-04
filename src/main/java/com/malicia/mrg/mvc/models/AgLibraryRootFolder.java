@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.malicia.mrg.app.Context.lrcat;
+
 /**
  * The type Requete sql.
  */
@@ -418,7 +420,7 @@ public class AgLibraryRootFolder {
 
 
             if (!(pathFromRootPrev.equals(pathFromRoot)) || !(folder_id_localPrev.equals(folder_id_local))) {
-                subFolder = new AgLibrarySubFolder(this, pathFromRoot, folder_id_local);
+                subFolder = new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.ListeZ);
             }
             pathFromRootPrev = pathFromRoot;
             folder_id_localPrev = folder_id_local;
@@ -610,7 +612,7 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
 
             if (isRepertoryToProcess(pathFromRoot)) {
-                ret.add(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local));
+                ret.add(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.ListeZ));
             }
 
         }

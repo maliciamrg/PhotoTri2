@@ -759,7 +759,7 @@ public class MainFrameController {
                         if (result.isPresent() && result.get() == ButtonType.OK) {
                             activeRepSrc.deletePhoto(activephotoNum);
                             activeRep.listFileSubFolder.remove(activephotoNum);
-                            activeRep.refreshValue();
+                            activeRep.refreshValue(lrcat.ListeZ);
                             moveActivephotoNumTo(+1);
                             moveActivephotoNumTo(-1);
                             refreshAllPhoto();
@@ -790,9 +790,9 @@ public class MainFrameController {
                     break;
                 case S:
                     if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
-                        activeRepSplit = activeRepSrc.split(activephotoNum);
-                        activeRep.split(activephotoNum);
-                        activeRep.refreshValue();
+                        activeRepSplit = activeRepSrc.split(activephotoNum, lrcat.ListeZ);
+                        activeRep.split(activephotoNum, lrcat.ListeZ);
+                        activeRep.refreshValue(lrcat.ListeZ);
                         moveActivephotoNumTo(-1);
                         refreshAllPhoto();
                     }
@@ -805,7 +805,7 @@ public class MainFrameController {
                             eleExclu.add(activeRepSrc.listFileSubFolder.get(activephotoNum));
                             activeRepSrc.listFileSubFolder.remove(activephotoNum);
                             activeRep.listFileSubFolder.remove(activephotoNum);
-                            activeRep.refreshValue();
+                            activeRep.refreshValue(lrcat.ListeZ);
                             moveActivephotoNumTo(+1);
                             moveActivephotoNumTo(-1);
                             refreshAllPhoto();
@@ -1046,7 +1046,7 @@ public class MainFrameController {
         if (activeRep.getAgLibraryRootFolder() == null) {
             activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));
         }
-        activeRep.refreshValue();
+        activeRep.refreshValue(lrcat.ListeZ);
         refreshcomboxRepertoire();
         refreshcompteurRepertoire();
         selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[0]);
@@ -1099,7 +1099,7 @@ public class MainFrameController {
         } else {
             val =  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue());
         }
-        activeRep.setrepformatZ(i,val);
+        activeRep.setrepformatZ(i,val, lrcat.ListeZ);
 
         refreshcompteurRepertoire();
     }
@@ -1107,10 +1107,10 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
-            activeRep.refreshValue();
+            activeRep.refreshValue(lrcat.ListeZ);
             if (activeRep != null) {
-                activeRepSrc = new AgLibrarySubFolder(activeRep);
-                activeRepSplit = activeRepSrc.split(activeRepSrc.filsize());
+                activeRepSrc = new AgLibrarySubFolder(activeRep, lrcat.ListeZ);
+                activeRepSplit = activeRepSrc.split(activeRepSrc.filsize(), lrcat.ListeZ);
                 eleExclu= new ArrayList();
                 refreshcomboxRepertoire();
                 refreshcompteurRepertoire();
