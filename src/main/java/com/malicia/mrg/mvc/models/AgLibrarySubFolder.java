@@ -1,6 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
+import com.malicia.mrg.app.util.NbRatioOfValeurStar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar;
@@ -18,7 +19,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static com.malicia.mrg.app.Context.*;
 import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
@@ -29,8 +33,6 @@ import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
 public class AgLibrarySubFolder {
 
     public static final String UNEXPECTED_VALUE = "Unexpected value: ";
-    public static final String OK = "--OK--";
-    public static final String KO = "--KO--";
     private static final Logger LOGGER = LogManager.getLogger(AgLibrarySubFolder.class);
     public List<ZoneZ> subFolderFormatZ;
     public List<AgLibraryFile> listFileSubFolder;
@@ -41,7 +43,8 @@ public class AgLibrarySubFolder {
     private int[] nbetrationetoile;
     private int nbphotoapurger;
     private String ratiophotoaconserver;
-    private String statusRep;
+    private Boolean IsRepValide;
+    private Boolean IsRepPosiblementValide;
     private String folderIdLocal;
     private long nbjourfolder;
     private long dtdeb;
@@ -93,13 +96,13 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
     }
 
-    public String getPathFromRoot() {
-        return pathFromRoot;
-    }
-
 //    public void setPathFromRoot(String pathFromRoot) {
 //        this.pathFromRoot = pathFromRoot;
 //    }
+
+    public String getPathFromRoot() {
+        return pathFromRoot;
+    }
 
     private String getpath() {
         return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + pathFromRoot);
@@ -136,7 +139,7 @@ public class AgLibrarySubFolder {
     }
 
     public String getRepformatZ(int i) {
-        if (agLibraryRootFolder.IsZoneDefault[i].compareTo("*")!=0){
+        if (agLibraryRootFolder.IsZoneDefault[i].compareTo("*") != 0) {
             return agLibraryRootFolder.IsZoneDefault[i];
         }
         return subFolderFormatZ.get(i).getLocalValue();
@@ -173,7 +176,6 @@ public class AgLibrarySubFolder {
             return null;
         }
     }
-
 
     /**
      * Gets .
@@ -297,18 +299,18 @@ public class AgLibrarySubFolder {
         dtdeb = 2147483647;
         for (int ifile = 0; ifile < listFileSubFolder.size(); ifile++) {
             AgLibraryFile fi = listFileSubFolder.get(ifile);
-            if (!fi.estRejeter() ) {
-            nbelerep += 1;
-            if (fi.estPhoto()) {
-                nbphotoRep += 1;
-                calculateStarAndDate(fi);
-            }
+            if (!fi.estRejeter()) {
+                nbelerep += 1;
+                if (fi.estPhoto()) {
+                    nbphotoRep += 1;
+                    calculateStarAndDate(fi);
+                }
             }
         }
 
         calculatenbphotapurger(dtfin, dtdeb);
 
-        calculStatusRep();
+        //calculStatusRep();
 
     }
 
@@ -365,39 +367,64 @@ public class AgLibrarySubFolder {
         ratiophotoaconserver = " " + String.format("%03d", limitemaxfolder) + " ( " + df.format(percent) + " )";
     }
 
-    private void calculStatusRep() {
-        statusRep = OK;
+
+    public void calculStatusRep() {
+        String txt = "calculStatusRep";
+        txt += "\n" + "; " + fixedLengthString(this.toString(), 80);
+
+        IsRepValide = true;
+        IsRepPosiblementValide = true;
+
+        txt += "\n" + "; Type TYPE_CAT = > " + fixedLengthString(String.valueOf(this.getAgLibraryRootFolder().typeRoot == AgLibraryRootFolder.TYPE_CAT), 5);
+        if (this.getAgLibraryRootFolder().typeRoot != AgLibraryRootFolder.TYPE_CAT) {
+            IsRepValide = false;
+            IsRepPosiblementValide = false;
+        }
+
+
         int i;
         for (i = 0; i < subFolderFormatZ.size(); i++) {
-            if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0 && !agLibraryRootFolder.IsZoneFacultative[i]) {
-                statusRep = KO;
-                break;
+
+            txt += "\n" + "; " + fixedLengthString(String.valueOf(i), 5);
+            txt += "\n" + "; subFolderFormatZ = > " + fixedLengthString(subFolderFormatZ.get(i).getLocalValue(), 20);
+            txt += "\n" + "; listeEleZone.contains = > " + fixedLengthString(String.valueOf(subFolderFormatZ.get(i).listeEleZone.contains(subFolderFormatZ.get(i).getLocalValue())), 5);
+            txt += "\n" + "; isfacul => " + fixedLengthString(String.valueOf(agLibraryRootFolder.IsZoneFacultative[i]), 5);
+            txt += "\n" + "; typeDeListeDeZone = > " + fixedLengthString(subFolderFormatZ.get(i).typeDeListeDeZone, 5);
+
+            if (!agLibraryRootFolder.IsZoneFacultative[i]) {
+                if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
+                        IsRepValide = false;
+                        IsRepPosiblementValide = false;
+                } else {
+                    if (subFolderFormatZ.get(i).typeDeListeDeZone.compareTo("@") == 0) {
+                        if (!subFolderFormatZ.get(i).listeEleZone.contains(subFolderFormatZ.get(i).getLocalValue())) {
+                            IsRepValide = false;
+                            IsRepPosiblementValide = IsRepPosiblementValide && true;
+                        }
+                    }
+                }
             }
         }
+
+        txt += "\n" + "; nbphotoapurger = > " + fixedLengthString(String.valueOf(nbphotoapurger), 7);
         if (nbphotoapurger != 0) {
-            statusRep = KO;
+            IsRepValide = false;
+            IsRepPosiblementValide = false;
         }
 
+        txt += "\n" + "; nbphotoRep = > " + fixedLengthString(String.valueOf(nbphotoRep), 7);
         if (nbphotoRep > 0) {
-
-            statusRep = statuStar(statusRep, 0);
-            statusRep = statuStar(statusRep, 1);
-            statusRep = statuStar(statusRep, 2);
-            statusRep = statuStar(statusRep, 3);
-            statusRep = statuStar(statusRep, 4);
-            statusRep = statuStar(statusRep, 5);
-
+            for (i = 0; i < 6; i++) {
+                txt += "\n" + "; Star" + i + " = > " + fixedLengthString(nbetratiovaleur(i).toString(), 20);
+                if (nbetratiovaleur(i).getColor().compareTo("0") != 0) {
+                    IsRepValide = false;
+                    IsRepPosiblementValide = false;
+                }
+            }
         }
 
+        LOGGER.info(txt);
 
-    }
-
-    private String statuStar(String starstatusRep, int starnbetrationuneetoile) {
-        String[] ret = nbetratiovaleur(starnbetrationuneetoile).split("@");
-        if (ret[1].compareTo("0") != 0) {
-            return KO;
-        }
-        return starstatusRep;
     }
 
     private void calculpathFromRoot() {
@@ -424,7 +451,7 @@ public class AgLibrarySubFolder {
      * @param valeur the valeur
      * @return the string
      */
-    public String nbetratiovaleur(int valeur) {
+    public NbRatioOfValeurStar nbetratiovaleur(int valeur) {
         int nb = 0;
         int countmin;
         int countmax;
@@ -457,7 +484,7 @@ public class AgLibrarySubFolder {
         } else {
             color = "1";
         }
-        return "@" + color + "@ " + String.format("%02d", nb) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")";
+        return new NbRatioOfValeurStar(color, String.format("%02d", nb) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")");
     }
 
     /**
@@ -568,8 +595,16 @@ public class AgLibrarySubFolder {
      *
      * @return the status rep
      */
-    public String getStatusRep() {
-        return statusRep;
+    public Boolean getIsRepPosiblementValide() {
+        return IsRepPosiblementValide;
+    }
+
+    public Boolean getIsRepValide() {
+        return IsRepValide;
+    }
+
+    public String getIsRepPosiblementValideTexte() {
+        return IsRepPosiblementValide ? "--OK--" : "--KO--";
     }
 
     @Override
@@ -623,32 +658,30 @@ public class AgLibrarySubFolder {
 
         int i;
         for (i = 0; i < activeRepDest.subFolderFormatZ.size(); i++) {
+
             ZoneZ cursubFolderFormatZ = activeRepDest.subFolderFormatZ.get(i);
-            if (cursubFolderFormatZ.typeDeListeDeZone.compareTo("@") == 0) {
-                if (!cursubFolderFormatZ.listeEleZone.contains(cursubFolderFormatZ.getLocalValue()) && !activeRepDest.agLibraryRootFolder.IsZoneFacultative[i]) {
-
-
-                    ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
-                    int y;
-                    for (y = 0; y < cursubFolderFormatZ.keywordMaitrePossible.size(); y++) {
-                        buttonType[y] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(y));
-                    }
-                    buttonType[y] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-
-                    Optional<ButtonType> result = AlertChoixSubfolder(cursubFolderFormatZ, buttonType);
-
-                    int ii;
-                    for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
-                        if (result.get() == buttonType[ii]) {
-                            lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii), cursubFolderFormatZ.getLocalValue());
-                            lrcat.setListeZ();
-                        }
-                    }
-
+            if (isZoneZEcriteEstNouvelleMetadata(activeRepDest, i)) {
+                ButtonType[] buttonType = new ButtonType[cursubFolderFormatZ.keywordMaitrePossible.size() + 1];
+                int y;
+                for (y = 0; y < cursubFolderFormatZ.keywordMaitrePossible.size(); y++) {
+                    buttonType[y] = new ButtonType(cursubFolderFormatZ.keywordMaitrePossible.get(y));
                 }
+                buttonType[y] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+
+                Optional<ButtonType> result = AlertChoixSubfolder(cursubFolderFormatZ, buttonType);
+
+                int ii;
+                for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
+                    if (result.get() == buttonType[ii]) {
+                        lrcat.sqlcreateKeyword(cursubFolderFormatZ.keywordMaitrePossible.get(ii), cursubFolderFormatZ.getLocalValue());
+                        lrcat.setListeZ();
+                    }
+                }
+
             }
         }
+
 
         activeRepDest.sqlmoveRepertoryWithSubDirectory(this.getpath(),
                 activeRepDest.getpath().toLowerCase(),
@@ -684,6 +717,20 @@ public class AgLibrarySubFolder {
         }
 
 
+    }
+
+    public boolean isZoneZEcriteEstNouvelleMetadata(AgLibrarySubFolder activeRepDest, int iZoneZ) {
+        if (activeRepDest.subFolderFormatZ.get(iZoneZ).typeDeListeDeZone.compareTo("@") == 0) {
+            return !activeRepDest.subFolderFormatZ.get(iZoneZ).listeEleZone.contains(activeRepDest.subFolderFormatZ.get(iZoneZ).getLocalValue()) && !activeRepDest.agLibraryRootFolder.IsZoneFacultative[iZoneZ];
+        }
+        return false;
+    }
+
+    public boolean isZoneZEcriteEstDansMetadata(AgLibrarySubFolder activeRepDest, int iZoneZ) {
+        if (activeRepDest.subFolderFormatZ.get(iZoneZ).typeDeListeDeZone.compareTo("@") == 0) {
+            return !activeRepDest.subFolderFormatZ.get(iZoneZ).listeEleZone.contains(activeRepDest.subFolderFormatZ.get(iZoneZ).getLocalValue());
+        }
+        return false;
     }
 
     private String getpathFromRootrejet() {

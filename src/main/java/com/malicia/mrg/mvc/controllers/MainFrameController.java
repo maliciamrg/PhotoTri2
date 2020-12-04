@@ -2,6 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
+import com.malicia.mrg.app.util.NbRatioOfValeurStar;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
@@ -515,7 +516,7 @@ public class MainFrameController {
         ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT, AgLibraryRootFolder.TYPE_LEG));
         ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
         getlistofrepertorytoprocess.forEach(subFolder -> {
-            if (subFolder.getNbphotoRep() != 0 && !subFolder.getStatusRep().equals(AgLibrarySubFolder.OK)) {
+            if (subFolder.getNbphotoRep() != 0 && !subFolder.getIsRepValide()) {
                 getlistofrepertorytoprocessfiltred.add(subFolder);
             }
         });
@@ -547,6 +548,7 @@ public class MainFrameController {
 
     private void refreshcompteurRepertoire() {
         activeRep.refreshCompteur();
+        activeRep.calculStatusRep();
 
         nbeleRep.setText(activeRep.getNbelerep());
         nbphotoRep.setText(activeRep.getNbphotoRepHuman());
@@ -570,7 +572,7 @@ public class MainFrameController {
         colorlabelzonez(lbselectssrepformatZ3, selectssrepformatZ3);
         colorlabelzonez(lbselectssrepformatZ4, selectssrepformatZ4);
 
-        valid.setDisable(!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK));
+        valid.setDisable(!activeRep.getIsRepPosiblementValide());
     }
 
     private void colorlabelzonez(Label champs, ComboBox<String> selectssrepformatZ) {
@@ -586,11 +588,11 @@ public class MainFrameController {
     private void alimetcolorlabelstatus(Label champs) {
         champs.setTextFill(Color.GREEN);
         champs.setStyle("-fx-font-weight: normal;");
-        if (!activeRep.getStatusRep().equals(AgLibrarySubFolder.OK)) {
+        if (!activeRep.getIsRepPosiblementValide()) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
         }
-        champs.setText(activeRep.getStatusRep());
+        champs.setText(activeRep.getIsRepPosiblementValideTexte());
     }
 
     private void alimetcolornbSelectionner(Label champs, Label champsConnex) {
@@ -622,12 +624,12 @@ public class MainFrameController {
     private void alimetcolorlabeletoile(int n, Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
-        String[] ret = activeRep.nbetratiovaleur(n).split("@");
-        if (ret[1].compareTo("0") != 0) {
+        NbRatioOfValeurStar valStar = activeRep.nbetratiovaleur(n);
+        if (valStar.getColor().compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
         }
-        champs.setText(ret[2]);
+        champs.setText(valStar.getLibelle());
         champsConnex.setTextFill(champs.getTextFill());
         champsConnex.setStyle(champs.getStyle());
     }

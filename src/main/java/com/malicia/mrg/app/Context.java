@@ -184,6 +184,10 @@ public class Context implements Serializable {
 
     }
 
+    public static String fixedLengthString(String string, int length) {
+        return String.format("%1$-"+length+ "s", string).substring(0,length);
+    }
+
 //    public static void logecrireuserlogInfo(String msg) {
 //        Alertinfo(msg);
 //
