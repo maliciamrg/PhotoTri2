@@ -2,7 +2,7 @@ package com.malicia.mrg.mvc.controllers;
 
 import com.malicia.mrg.app.Context;
 import com.malicia.mrg.app.util.ComboboxPlus;
-import com.malicia.mrg.app.util.NbRatioOfValeurStar;
+import com.malicia.mrg.app.util.ColorEtLibelle;
 import com.malicia.mrg.mvc.models.AgLibraryFile;
 import com.malicia.mrg.mvc.models.AgLibraryRootFolder;
 import com.malicia.mrg.mvc.models.AgLibrarySubFolder;
@@ -513,13 +513,37 @@ public class MainFrameController {
 
     private void populatereChooseChoicebox() throws SQLException {
         repChoose.getItems().clear();
-        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW, AgLibraryRootFolder.TYPE_ENC, AgLibraryRootFolder.TYPE_CAT, AgLibraryRootFolder.TYPE_LEG));
+        ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocess = FXCollections.observableArrayList();
         ObservableList<AgLibrarySubFolder> getlistofrepertorytoprocessfiltred = FXCollections.observableArrayList();
+
+        getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_CAT));
         getlistofrepertorytoprocess.forEach(subFolder -> {
             if (subFolder.getNbphotoRep() != 0 && !subFolder.getIsRepValide()) {
                 getlistofrepertorytoprocessfiltred.add(subFolder);
             }
         });
+
+        getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_ENC));
+        getlistofrepertorytoprocess.forEach(subFolder -> {
+            if (subFolder.getNbphotoRep() != 0 && !subFolder.getIsRepValide()) {
+                getlistofrepertorytoprocessfiltred.add(subFolder);
+            }
+        });
+
+        getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_NEW));
+        getlistofrepertorytoprocess.forEach(subFolder -> {
+            if (subFolder.getNbphotoRep() != 0 && !subFolder.getIsRepValide()) {
+                getlistofrepertorytoprocessfiltred.add(subFolder);
+            }
+        });
+
+        getlistofrepertorytoprocess = lrcat.getlistofrepertorytoprocess(Arrays.asList(AgLibraryRootFolder.TYPE_LEG));
+        getlistofrepertorytoprocess.forEach(subFolder -> {
+            if (subFolder.getNbphotoRep() != 0 && !subFolder.getIsRepValide()) {
+                getlistofrepertorytoprocessfiltred.add(subFolder);
+            }
+        });
+
         repChoose.setItems(getlistofrepertorytoprocessfiltred);
         repChoose.getSelectionModel().selectFirst();
         try {
@@ -598,12 +622,12 @@ public class MainFrameController {
     private void alimetcolornbSelectionner(Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
-        String[] ret = activeRep.getNbSelectionner().split("@");
-        if (ret[1].compareTo("0") != 0) {
+        ColorEtLibelle ret = activeRep.getNbSelectionner();
+        if (ret.getColor().compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
         }
-        champs.setText(ret[2]);
+        champs.setText(ret.getLibelle());
         champsConnex.setTextFill(champs.getTextFill());
         champsConnex.setStyle(champs.getStyle());
     }
@@ -624,7 +648,7 @@ public class MainFrameController {
     private void alimetcolorlabeletoile(int n, Label champs, Label champsConnex) {
         champs.setTextFill(Color.BLACK);
         champs.setStyle("-fx-font-weight: normal;");
-        NbRatioOfValeurStar valStar = activeRep.nbetratiovaleur(n);
+        ColorEtLibelle valStar = activeRep.nbetratiovaleur(n);
         if (valStar.getColor().compareTo("0") != 0) {
             champs.setTextFill(Color.RED);
             champs.setStyle("-fx-font-weight: bold;");
@@ -833,12 +857,16 @@ public class MainFrameController {
                     activeRep.valeuractivephotounflag(activephotoNum);
                     refreshcompteurRepertoire();
                     displayFlagValue(imageZ0flag, activephotoNum);
+                    moveActivephotoNumTo(+1);
+                    refreshAllPhoto();
                     keyEvent.consume();
                     break;
                 case P:
                     activeRep.valeuractivephotoflag(activephotoNum);
                     refreshcompteurRepertoire();
                     displayFlagValue(imageZ0flag, activephotoNum);
+                    moveActivephotoNumTo(+1);
+                    refreshAllPhoto();
                     keyEvent.consume();
                     break;
                 default:

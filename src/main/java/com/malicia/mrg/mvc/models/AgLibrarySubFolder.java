@@ -1,7 +1,7 @@
 package com.malicia.mrg.mvc.models;
 
 import com.malicia.mrg.app.Context;
-import com.malicia.mrg.app.util.NbRatioOfValeurStar;
+import com.malicia.mrg.app.util.ColorEtLibelle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar;
@@ -65,27 +65,18 @@ public class AgLibrarySubFolder {
         aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocal, listeZ);
     }
 
-    public AgLibrarySubFolder(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, List<ZoneZ> listeZ) throws SQLException {
-        this.agLibraryRootFolder = agLibraryRootFolder;
-        String folderIdLocalcalc = String.valueOf(agLibraryRootFolder.getIdlocalforpathFromRoot(pathFromRoot));
-        if (folderIdLocalcalc.compareTo("") == 0) {
-            folderIdLocalcalc = agLibraryRootFolder.sqlMkdirRepertory(this.getpath());
-        }
-        aglibraySubFolderConstructor(agLibraryRootFolder, pathFromRoot, folderIdLocalcalc, listeZ);
-    }
-
     public AgLibrarySubFolder(AgLibrarySubFolder activeRep, List<ZoneZ> listeZ) throws SQLException {
         this(activeRep.agLibraryRootFolder, activeRep.pathFromRoot, activeRep.folderIdLocal, listeZ);
     }
 
-    public String getNbSelectionner() {
+    public ColorEtLibelle getNbSelectionner() {
         String color;
         if (nbSelectionner == 0) {
             color = "0";
         } else {
             color = "1";
         }
-        return "@" + color + "@ " + String.format("%04d", nbSelectionner);
+        return new ColorEtLibelle(color, String.format("%04d", nbSelectionner));
     }
 
     public AgLibraryRootFolder getAgLibraryRootFolder() {
@@ -96,20 +87,12 @@ public class AgLibrarySubFolder {
         this.agLibraryRootFolder = agLibraryRootFolder;
     }
 
-//    public void setPathFromRoot(String pathFromRoot) {
-//        this.pathFromRoot = pathFromRoot;
-//    }
-
     public String getPathFromRoot() {
         return pathFromRoot;
     }
 
     private String getpath() {
         return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + pathFromRoot);
-    }
-
-    private String getpath(String temppathFromRoot) {
-        return agLibraryRootFolder.normalizePath(agLibraryRootFolder.absolutePath + temppathFromRoot);
     }
 
     public void aglibraySubFolderConstructor(AgLibraryRootFolder agLibraryRootFolder, String pathFromRoot, String folderIdLocal, List<ZoneZ> listeZ) throws SQLException {
@@ -374,8 +357,8 @@ public class AgLibrarySubFolder {
         IsRepValide = true;
         IsRepPosiblementValide = true;
 
-        txt += "\n" + "; Type TYPE_CAT = > " + fixedLengthString(String.valueOf(this.getAgLibraryRootFolder().typeRoot == AgLibraryRootFolder.TYPE_CAT), 5);
-        if (this.getAgLibraryRootFolder().typeRoot != AgLibraryRootFolder.TYPE_CAT) {
+        txt += "\n" + "; Type TYPE_CAT = > " + fixedLengthString(String.valueOf(agLibraryRootFolder.typeRoot == AgLibraryRootFolder.TYPE_CAT), 5);
+        if (agLibraryRootFolder.typeRoot != AgLibraryRootFolder.TYPE_CAT) {
             IsRepValide = false;
             IsRepPosiblementValide = false;
         }
@@ -392,8 +375,8 @@ public class AgLibrarySubFolder {
 
             if (!agLibraryRootFolder.IsZoneFacultative[i]) {
                 if (subFolderFormatZ.get(i).getLocalValue().compareTo("") == 0) {
-                        IsRepValide = false;
-                        IsRepPosiblementValide = false;
+                    IsRepValide = false;
+                    IsRepPosiblementValide = false;
                 } else {
                     if (subFolderFormatZ.get(i).typeDeListeDeZone.compareTo("@") == 0) {
                         if (!subFolderFormatZ.get(i).listeEleZone.contains(subFolderFormatZ.get(i).getLocalValue())) {
@@ -455,7 +438,7 @@ public class AgLibrarySubFolder {
      * @param valeur the valeur
      * @return the string
      */
-    public NbRatioOfValeurStar nbetratiovaleur(int valeur) {
+    public ColorEtLibelle nbetratiovaleur(int valeur) {
         int nb = 0;
         int countmin;
         int countmax;
@@ -472,7 +455,6 @@ public class AgLibrarySubFolder {
             case 5:
                 nb = nbetrationetoile[valeur];
                 countmin = 0;
-//                countmin = ((nbphotoRep - nbphotoapurger) * (agLibraryRootFolder.getRatioMaxStar(valeur) / divMaxToMinstar)) / 100;
                 countmax = ((nbSelectionner - nbphotoapurger) * agLibraryRootFolder.getRatioMaxStar(valeur)) / 100;
                 break;
             default:
@@ -488,7 +470,7 @@ public class AgLibrarySubFolder {
         } else {
             color = "1";
         }
-        return new NbRatioOfValeurStar(color, String.format("%02d", nb) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")");
+        return new ColorEtLibelle(color, String.format("%02d", nb) + " (" + String.format("%02d", countmin) + "/" + String.format("%02d", countmax) + ")");
     }
 
     /**
@@ -541,15 +523,12 @@ public class AgLibrarySubFolder {
         }
         switch ((int) listFileSubFolder.get(activeNum).getPick()) {
             case -1:
-//                flag = "⚐";
                 flag = "X";
                 break;
             case 0:
-//                flag = "⚐";
                 flag = "x";
                 break;
             case 1:
-//                flag = "\uD83C\uDFC1";
                 flag = "";
                 break;
         }
@@ -785,9 +764,7 @@ public class AgLibrarySubFolder {
 
         String[] part = pathFromRoot.replace("/", "").split(appParam.getString("ssrepformatSep"));
         for (i = 0; i < part.length && i < subFolderFormatZ.size(); i++) {
-      //      if (personalizelist(subFolderFormatZ.get(i)).contains(part[i]) || agLibraryRootFolder.IsZoneFacultative[i] ) {
-                setrepformatZ(i, part[i], listeZ);
-      //      }
+            setrepformatZ(i, part[i], listeZ);
         }
 
         calculStatusRep();
@@ -840,7 +817,7 @@ public class AgLibrarySubFolder {
 
     public void deletePhoto(int activephotoNum) throws IOException, SQLException {
         LOGGER.info("deleteEle " + this.listFileSubFolder.get(activephotoNum).getAbsolutePath());
-        this.getAgLibraryRootFolder().deleteEle(this.listFileSubFolder.get(activephotoNum));
+        agLibraryRootFolder.deleteEle(this.listFileSubFolder.get(activephotoNum));
         this.listFileSubFolder.remove(activephotoNum);
 
     }

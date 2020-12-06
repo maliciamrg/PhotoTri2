@@ -1,6 +1,6 @@
 package com.malicia.mrg.app.util;
 
-public class NbRatioOfValeurStar {
+public class ColorEtLibelle {
     public String getColor() {
         return color;
     }
@@ -12,7 +12,7 @@ public class NbRatioOfValeurStar {
     private String color;
     private String libelle;
 
-    public NbRatioOfValeurStar(String color, String libelle) {
+    public ColorEtLibelle(String color, String libelle) {
 
         this.color = color;
         this.libelle = libelle;
