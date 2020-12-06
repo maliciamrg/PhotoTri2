@@ -420,7 +420,7 @@ public class AgLibraryRootFolder {
 
 
             if (!(pathFromRootPrev.equals(pathFromRoot)) || !(folder_id_localPrev.equals(folder_id_local))) {
-                subFolder = new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.ListeZ);
+                subFolder = new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.listeZ);
             }
             pathFromRootPrev = pathFromRoot;
             folder_id_localPrev = folder_id_local;
@@ -519,7 +519,6 @@ public class AgLibraryRootFolder {
      * Boucle supression repertoire physique boolean.
      */
     private int boucleSupressionRepertoire(java.io.File dir) throws IOException, SQLException {
-        boolean returnVal = false;
         if (dir.isDirectory()) {
             String[] children = dir.list();
             int success = 0;
@@ -529,11 +528,8 @@ public class AgLibraryRootFolder {
             nbDelTotal += success;
             if (success == children.length) {
                 // The directory is now empty directory free so delete it
-                returnVal = SystemFiles.deleteDir(dir);
-                if (returnVal) {
-                    return 1;
-                }
-
+                SystemFiles.deleteDir(dir);
+                return 1;
             }
 
         }
@@ -612,7 +608,7 @@ public class AgLibraryRootFolder {
             String folder_id_local = rsele.getString("folder_id_local");
 
             if (isRepertoryToProcess(pathFromRoot)) {
-                ret.add(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.ListeZ));
+                ret.add(new AgLibrarySubFolder(this, pathFromRoot, folder_id_local, lrcat.listeZ));
             }
 
         }

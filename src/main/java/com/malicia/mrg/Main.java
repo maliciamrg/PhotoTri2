@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-import static com.malicia.mrg.view.AlertMessageUtil.AlertMessage;
+import static com.malicia.mrg.view.AlertMessageUtil.alertMessage;
 
 /**
  * The type Main.
@@ -75,7 +75,7 @@ public class Main extends Application {
                 });
 
                 while (true) {
-                    AlertMessage(primaryStage);
+                    alertMessage(primaryStage);
 
                 }
             }

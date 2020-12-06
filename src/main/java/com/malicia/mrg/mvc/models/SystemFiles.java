@@ -28,11 +28,9 @@ public class SystemFiles {
      * @return the boolean
      * @throws IOException the io exception
      */
-    public static boolean deleteDir(File dir) throws IOException {
-        boolean ret = true;
+    public static void deleteDir(File dir) throws IOException {
         Files.delete(dir.toPath());
-        LOGGER.log(Level.DEBUG, "delete_dir: {0} ", new String[]{String.valueOf(dir)});
-        return ret;
+        LOGGER.log(Level.DEBUG, "delete_dir: {0} ", dir);
     }
 
 
@@ -45,7 +43,7 @@ public class SystemFiles {
      * @return the string
      */
     public static String normalizePath(String path) {
-        return path.replaceAll("\\\\", "/");
+        return path.replace("\\", "/");
     }
 
     /**

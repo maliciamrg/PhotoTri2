@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.malicia.mrg.app.Context.*;
-import static com.malicia.mrg.view.AlertMessageUtil.AlertChoixSubfolder;
+import static com.malicia.mrg.view.AlertMessageUtil.alertChoixSubfolder;
 
 /**
  * The type Ag library sub folder.
@@ -658,7 +658,7 @@ public class AgLibrarySubFolder {
                 buttonType[y] = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
 
-                Optional<ButtonType> result = AlertChoixSubfolder(cursubFolderFormatZ, buttonType);
+                Optional<ButtonType> result = alertChoixSubfolder(cursubFolderFormatZ, buttonType);
 
                 int ii;
                 for (ii = 0; ii < cursubFolderFormatZ.keywordMaitrePossible.size(); ii++) {
@@ -756,8 +756,8 @@ public class AgLibrarySubFolder {
         subFolderFormatZ = new ArrayList<ZoneZ>();
 
         int i;
-        for (i = 0; i < (agLibraryRootFolder.parentLrcat.ListeZ.size()); i++) {
-            subFolderFormatZ.add(new ZoneZ(agLibraryRootFolder.parentLrcat.ListeZ.get(i)));
+        for (i = 0; i < (agLibraryRootFolder.parentLrcat.listeZ.size()); i++) {
+            subFolderFormatZ.add(new ZoneZ(agLibraryRootFolder.parentLrcat.listeZ.get(i)));
         }
 
         refreshCompteur();

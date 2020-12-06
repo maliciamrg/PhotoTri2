@@ -3,8 +3,6 @@ package com.malicia.mrg.mvc.models;
 import com.malicia.mrg.app.Context;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,14 +17,12 @@ import java.util.*;
 
 public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
-    private static final Logger LOGGER = LogManager.getLogger(CatalogLrcat.class);
-
     public long dateFichier;
     public String dateFichierHR;
     public String nomFichier;
     public Map<String, AgLibraryRootFolder> rep = new HashMap();
     public String cheminfichierLrcat = "";
-    public List<ZoneZ> ListeZ;
+    public List<ZoneZ> listeZ;
 
     public CatalogLrcat(String catalogLrcat) throws SQLException {
         super(catalogLrcat);
@@ -40,14 +36,14 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         //array de categories
 
         int numcat = 1;
-        while (Context.appParam.containsKey("repCat" + numcat)) {
-            addrootFolder("repCat" + numcat, Context.appParam.getString("repCat" + numcat), AgLibraryRootFolder.TYPE_CAT);
-            rep.get("repCat" + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
-            rep.get("repCat" + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
-            rep.get("repCat" + numcat).setIsZoneEditableCat(Context.appParam.getString("IsZoneEditableCat" + numcat));
-            rep.get("repCat" + numcat).IsZoneFacultativeCatVal(Context.appParam.getString("IsZoneFacultativeCat" + numcat));
-            rep.get("repCat" + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
-            rep.get("repCat" + numcat).setIsZoneDefaultCat(Context.appParam.getString("IsZoneDefaultCat" + numcat));
+        while (Context.appParam.containsKey(Context.REP_CAT + numcat)) {
+            addrootFolder(Context.REP_CAT + numcat, Context.appParam.getString(Context.REP_CAT + numcat), AgLibraryRootFolder.TYPE_CAT);
+            rep.get(Context.REP_CAT + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
+            rep.get(Context.REP_CAT + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
+            rep.get(Context.REP_CAT + numcat).setIsZoneEditableCat(Context.appParam.getString("IsZoneEditableCat" + numcat));
+            rep.get(Context.REP_CAT + numcat).IsZoneFacultativeCatVal(Context.appParam.getString("IsZoneFacultativeCat" + numcat));
+            rep.get(Context.REP_CAT + numcat).setratioMaxstarCat(Context.appParam.getString("ratioMaxstarCat" + numcat));
+            rep.get(Context.REP_CAT + numcat).setIsZoneDefaultCat(Context.appParam.getString("IsZoneDefaultCat" + numcat));
             numcat++;
         }
 
@@ -70,7 +66,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
                 "where name = '" + appParamString + "' " +
                 ";");
         while (rs.next()) {
-            String rootfolderidlocal = rs.getString("id_local");
+            String rootfolderidlocal = rs.getString(Context.ID_LOCAL);
             String absolutePath = rs.getString("absolutePath");
             String name = rs.getString("name");
             AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath, typeRoot);
@@ -148,11 +144,11 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     public String spyfirst() throws SQLException {
         String sql = "select * FROM AgLibraryFolder " +
-                "ORDER by id_local desc " +
+                Context.ORDER_BY_ID_LOCAL_DESC +
                 "; ";
         select(sql);
         sql = "select * FROM AgLibraryFile " +
-                "ORDER by id_local desc " +
+                Context.ORDER_BY_ID_LOCAL_DESC +
                 "; ";
         select(sql);
         sql = "select " +
@@ -189,28 +185,28 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     public long sqlGetPrevIdlocalforFolder() throws SQLException {
         String sql = "select * FROM AgLibraryFolder " +
-                "ORDER by id_local desc " +
+                Context.ORDER_BY_ID_LOCAL_DESC +
                 "; ";
         ResultSet rs = select(sql);
         boolean first = true;
         long idLocalCalcul = 0;
-        long id_local = 0;
+        long idLocal = 0;
         while (rs.next()) {
             // Recuperer les info de l'elements
-            id_local = rs.getLong("id_local");
+            idLocal = rs.getLong(Context.ID_LOCAL);
             if (first) {
-                idLocalCalcul = id_local;
+                idLocalCalcul = idLocal;
                 first = false;
             } else {
                 idLocalCalcul -= 1;
-                if (idLocalCalcul > id_local) {
+                if (idLocalCalcul > idLocal) {
                     return idLocalCalcul;
                 }
             }
         }
         // 0 ou 1 repertoire dans AgLibraryFolder
-        if (idLocalCalcul == id_local) {
-            idLocalCalcul = (id_local / 2) + 1;
+        if (idLocalCalcul == idLocal) {
+            idLocalCalcul = (idLocal / 2) + 1;
         }
         return idLocalCalcul;
     }
@@ -222,23 +218,23 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         ResultSet rs = select(sql);
         boolean first = true;
         long idLocalCalcul = 0;
-        long id_local = 0;
+        long idLocal = 0;
         while (rs.next()) {
             // Recuperer les info de l'elements
-            id_local = rs.getLong("id_local");
+            idLocal = rs.getLong(Context.ID_LOCAL);
             if (first) {
-                idLocalCalcul = id_local;
+                idLocalCalcul = idLocal;
                 first = false;
             } else {
                 idLocalCalcul -= 1;
-                if (idLocalCalcul > id_local) {
+                if (idLocalCalcul > idLocal) {
                     return idLocalCalcul;
                 }
             }
         }
         // 0 ou 1 repertoire dans AgLibraryFolder
-        if (idLocalCalcul == id_local) {
-            idLocalCalcul = (id_local / 2) + 1;
+        if (idLocalCalcul == idLocal) {
+            idLocalCalcul = (idLocal / 2) + 1;
         }
         return idLocalCalcul;
     }
@@ -293,8 +289,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
     public void setListeZ() throws SQLException {
         //array des format de zones
-        int numformatZ = 1;
-        ListeZ = new ArrayList<ZoneZ>();
+        listeZ = new ArrayList<ZoneZ>();
         for (String ssrepformatZ : Context.appParam.getString("ssrepformatZx").split(",")) {
 
             ObservableList<String> listetmp = FXCollections.observableArrayList();
@@ -327,14 +322,14 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
                     break;
             }
 
-            ListeZ.add(new ZoneZ(typ, ssrepformatZ, listetmp, keyMaitre));
+            listeZ.add(new ZoneZ(typ, ssrepformatZ, listetmp, keyMaitre));
 
             numformatZ += 1;
         }
     }
 
     public ObservableList<String> getlistofKeyword(String racinegenealogy) throws SQLException {
-        ObservableList<String> list_lc_name = FXCollections.observableArrayList();
+        ObservableList<String> listLcName = FXCollections.observableArrayList();
         ResultSet rs = this.select("select lc_name " +
                 "from AgLibraryKeyword " +
                 "where genealogy like ( " +
@@ -343,9 +338,9 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
                 "where lc_name = '" + racinegenealogy.toLowerCase() + "' ) " +
                 ";");
         while (rs.next()) {
-            list_lc_name.add(rs.getString("lc_name"));
+            listLcName.add(rs.getString("lc_name"));
         }
-        return list_lc_name;
+        return listLcName;
     }
 
     public void sqlcreateKeyword(String keywordmaitre, String keyword) throws SQLException {
@@ -357,7 +352,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         String idlocalmaitre = "";
         while (rs.next()) {
             genealogyMaitre = rs.getString("genealogy");
-            idlocalmaitre = rs.getString("id_local");
+            idlocalmaitre = rs.getString(Context.ID_LOCAL);
         }
 
         long idlocal = sqlGetPrevIdlocalforKeyword();

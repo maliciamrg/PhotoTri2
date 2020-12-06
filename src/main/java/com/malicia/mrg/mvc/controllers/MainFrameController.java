@@ -563,10 +563,10 @@ public class MainFrameController {
         selectssrepformatZ3.setValue(activeRep.getRepformatZ(2));
         selectssrepformatZ4.setValue(activeRep.getRepformatZ(3));
 
-        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.ListeZ.get(0)));
-        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.ListeZ.get(1)));
-        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.ListeZ.get(2)));
-        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.ListeZ.get(3)));
+        selectssrepformatZ1.setItems(activeRep.personalizelist(lrcat.listeZ.get(0)));
+        selectssrepformatZ2.setItems(activeRep.personalizelist(lrcat.listeZ.get(1)));
+        selectssrepformatZ3.setItems(activeRep.personalizelist(lrcat.listeZ.get(2)));
+        selectssrepformatZ4.setItems(activeRep.personalizelist(lrcat.listeZ.get(3)));
 
     }
 
@@ -783,7 +783,7 @@ public class MainFrameController {
                         if (result.isPresent() && result.get() == ButtonType.OK) {
                             activeRepSrc.deletePhoto(activephotoNum);
                             activeRep.listFileSubFolder.remove(activephotoNum);
-                            activeRep.refreshValue(lrcat.ListeZ);
+                            activeRep.refreshValue(lrcat.listeZ);
                             moveActivephotoNumTo(+1);
                             moveActivephotoNumTo(-1);
                             refreshAllPhoto();
@@ -814,9 +814,9 @@ public class MainFrameController {
                     break;
                 case S:
                     if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
-                        activeRepSplit = activeRepSrc.split(activephotoNum, lrcat.ListeZ);
-                        activeRep.split(activephotoNum, lrcat.ListeZ);
-                        activeRep.refreshValue(lrcat.ListeZ);
+                        activeRepSplit = activeRepSrc.split(activephotoNum, lrcat.listeZ);
+                        activeRep.split(activephotoNum, lrcat.listeZ);
+                        activeRep.refreshValue(lrcat.listeZ);
                         moveActivephotoNumTo(-1);
                         refreshAllPhoto();
                     }
@@ -829,7 +829,7 @@ public class MainFrameController {
                             eleExclu.add(activeRepSrc.listFileSubFolder.get(activephotoNum));
                             activeRepSrc.listFileSubFolder.remove(activephotoNum);
                             activeRep.listFileSubFolder.remove(activephotoNum);
-                            activeRep.refreshValue(lrcat.ListeZ);
+                            activeRep.refreshValue(lrcat.listeZ);
                             moveActivephotoNumTo(+1);
                             moveActivephotoNumTo(-1);
                             refreshAllPhoto();
@@ -1027,14 +1027,14 @@ public class MainFrameController {
 
         lrcat.setListeZ();
 
-        lbselectssrepformatZ1.setText(lrcat.ListeZ.get(0).titreZone);
-        selectssrepformatZ1.setItems(lrcat.ListeZ.get(0).listeEleZone);
-        lbselectssrepformatZ2.setText(lrcat.ListeZ.get(1).titreZone);
-        selectssrepformatZ2.setItems(lrcat.ListeZ.get(1).listeEleZone);
-        lbselectssrepformatZ3.setText(lrcat.ListeZ.get(2).titreZone);
-        selectssrepformatZ3.setItems(lrcat.ListeZ.get(2).listeEleZone);
-        lbselectssrepformatZ4.setText(lrcat.ListeZ.get(3).titreZone);
-        selectssrepformatZ4.setItems(lrcat.ListeZ.get(3).listeEleZone);
+        lbselectssrepformatZ1.setText(lrcat.listeZ.get(0).titreZone);
+        selectssrepformatZ1.setItems(lrcat.listeZ.get(0).listeEleZone);
+        lbselectssrepformatZ2.setText(lrcat.listeZ.get(1).titreZone);
+        selectssrepformatZ2.setItems(lrcat.listeZ.get(1).listeEleZone);
+        lbselectssrepformatZ3.setText(lrcat.listeZ.get(2).titreZone);
+        selectssrepformatZ3.setItems(lrcat.listeZ.get(2).listeEleZone);
+        lbselectssrepformatZ4.setText(lrcat.listeZ.get(3).titreZone);
+        selectssrepformatZ4.setItems(lrcat.listeZ.get(3).listeEleZone);
 
 
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ1, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ1.getItems().size() > 1);
@@ -1074,7 +1074,7 @@ public class MainFrameController {
         if (activeRep.getAgLibraryRootFolder() == null) {
             activeRep.setAgLibraryRootFolder(lrcat.rep.get("repNew"));
         }
-        activeRep.refreshValue(lrcat.ListeZ);
+        activeRep.refreshValue(lrcat.listeZ);
         refreshcomboxRepertoire();
         refreshcompteurRepertoire();
         selectssrepformatZ1.setEditable(activeRep.getAgLibraryRootFolder().IsZoneEditable[0]);
@@ -1127,7 +1127,7 @@ public class MainFrameController {
         } else {
             val =  String.valueOf(((ComboBox) actionEvent.getTarget()).getValue());
         }
-        activeRep.setrepformatZ(i,val, lrcat.ListeZ);
+        activeRep.setrepformatZ(i,val, lrcat.listeZ);
 
         refreshcompteurRepertoire();
     }
@@ -1135,10 +1135,10 @@ public class MainFrameController {
     public void actionChoose(ActionEvent actionEvent) {
         try {
             activeRep = ((AgLibrarySubFolder) ((ChoiceBox) actionEvent.getTarget()).getValue());
-            activeRep.refreshValue(lrcat.ListeZ);
+            activeRep.refreshValue(lrcat.listeZ);
             if (activeRep != null) {
-                activeRepSrc = new AgLibrarySubFolder(activeRep, lrcat.ListeZ);
-                activeRepSplit = activeRepSrc.split(activeRepSrc.filsize(), lrcat.ListeZ);
+                activeRepSrc = new AgLibrarySubFolder(activeRep, lrcat.listeZ);
+                activeRepSplit = activeRepSrc.split(activeRepSrc.filsize(), lrcat.listeZ);
                 eleExclu= new ArrayList();
                 refreshcomboxRepertoire();
                 refreshcompteurRepertoire();

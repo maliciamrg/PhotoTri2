@@ -20,6 +20,9 @@ import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
  * The type Context.
  */
 public class Context implements Serializable {
+    public static final String ID_LOCAL = "id_local";
+    public static final String REP_CAT = "repCat";
+    public static final String ORDER_BY_ID_LOCAL_DESC = "ORDER by id_local desc ";
     private static final Logger LOGGER = LogManager.getLogger(Context.class);
     /**
      * The constant PATH_FROM_ROOT.

@@ -12,6 +12,10 @@ public class FileLrprev {
     private static final byte[] JPEG_Start_bytes = new byte[]{(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
     private static final byte[] JPEG_end_bytes = new byte[]{(byte) 0xFF, (byte) 0xD9};
 
+    private FileLrprev() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static InputStream getLastJpegFromLrprev(File filePreview) throws IOException {
         byte[] fileContent = Files.readAllBytes(filePreview.toPath());
 

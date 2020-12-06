@@ -7,23 +7,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 public class AlertMessageUtil {
 
-    private static final Logger logger = LogManager.getLogger(AlertMessageUtil.class);
+    private AlertMessageUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
-    public static void AlertMessage(Stage primaryStage) {
-                             // show close dialog
+    public static void alertMessage(Stage primaryStage) {
+        // show close dialog
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Close post Process");
         alert.setHeaderText("Wait until end of post process");
         alert.initOwner(primaryStage);
 
-        Optional<ButtonType> result = alert.showAndWait();
+        alert.showAndWait();
 
     }
 
@@ -42,21 +42,13 @@ public class AlertMessageUtil {
         return alert.showAndWait();
     }
 
-//    public static void Alertinfo(String msg) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Information Dialog");
-//        alert.setHeaderText("Information Dialog");
-//        alert.setContentText(msg);
-//        alert.showAndWait();
-//    }
-    public static Optional<ButtonType> AlertChoixSubfolder(ZoneZ cursubFolderFormatZ, ButtonType[] buttonType) {
+    public static Optional<ButtonType> alertChoixSubfolder(ZoneZ cursubFolderFormatZ, ButtonType[] buttonType) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog with Custom Actions");
         alert.setHeaderText("Choice KeywordMaster for #" + cursubFolderFormatZ.getLocalValue() + "#");
         alert.setContentText("Choose Keyword Master in " + cursubFolderFormatZ.titreZone);
         alert.getButtonTypes().setAll(buttonType);
-        Optional<ButtonType> result = alert.showAndWait();
-        return result;
+        return alert.showAndWait();
     }
 
     public static void popupalert(String contentText, String exceptionText) {
