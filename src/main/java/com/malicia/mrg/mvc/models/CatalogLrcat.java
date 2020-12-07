@@ -324,7 +324,6 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
             listeZ.add(new ZoneZ(typ, ssrepformatZ, listetmp, keyMaitre));
 
-            numformatZ += 1;
         }
     }
 
