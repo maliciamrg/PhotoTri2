@@ -29,7 +29,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         refreshdataLrcat(catalogLrcat);
         addrootFolder("repLegacy", Context.appParam.getString("repLegacy"), AgLibraryRootFolder.TYPE_LEG);
-        addrootFolder("repEncours", Context.appParam.getString("repEncours"), AgLibraryRootFolder.TYPE_ENC);
+//        addrootFolder("repEncours", Context.appParam.getString("repEncours"), AgLibraryRootFolder.TYPE_ENC);
         addrootFolder("repKidz", Context.appParam.getString("repKidz"), AgLibraryRootFolder.TYPE_KID);
         addrootFolder("repNew", Context.appParam.getString("repNew"), AgLibraryRootFolder.TYPE_NEW);
 
@@ -37,7 +37,7 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
 
         int numcat = 1;
         while (Context.appParam.containsKey(Context.REP_CAT + numcat)) {
-            addrootFolder(Context.REP_CAT + numcat, Context.appParam.getString(Context.REP_CAT + numcat), AgLibraryRootFolder.TYPE_CAT);
+            addrootFolder(Context.REP_CAT + numcat, Context.appParam.getString(Context.appParam.getString(Context.REP_CAT + numcat)), AgLibraryRootFolder.TYPE_CAT);
             rep.get(Context.REP_CAT + numcat).nbjouCat = Integer.parseInt(Context.appParam.getString("nbjouCat" + numcat));
             rep.get(Context.REP_CAT + numcat).nbmaxCat = Double.parseDouble(Context.appParam.getString("nbmaxCat" + numcat));
             rep.get(Context.REP_CAT + numcat).setIsZoneEditableCat(Context.appParam.getString("IsZoneEditableCat" + numcat));
@@ -63,13 +63,13 @@ public class CatalogLrcat extends SQLiteJDBCDriverConnection {
         ResultSet rs = this.select("" +
                 "select * " +
                 "from AgLibraryRootFolder " +
-                "where name = '" + appParamString + "' " +
+//                "where name = '" + appParamString + "' " +
                 ";");
         while (rs.next()) {
             String rootfolderidlocal = rs.getString(Context.ID_LOCAL);
             String absolutePath = rs.getString("absolutePath");
-            String name = rs.getString("name");
-            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, name, rootfolderidlocal, absolutePath, typeRoot);
+//        String name = rs.getString("name");
+            AgLibraryRootFolder tmpRootLib = new AgLibraryRootFolder(this, nomRep, rootfolderidlocal, absolutePath + appParamString, typeRoot);
             rep.put(nomRep, tmpRootLib);
         }
     }

@@ -1043,7 +1043,7 @@ public class MainFrameController {
         ComboboxPlus.autoCompleteComboBoxPlus(selectssrepformatZ4, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()) || itemToCompare.equals(typedText), selectssrepformatZ4.getItems().size() > 1);
 
 
-        actionCycleTraitementPhoto();
+        //actionCycleTraitementPhoto();
     }
 
     /**

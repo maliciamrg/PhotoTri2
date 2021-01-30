@@ -47,7 +47,7 @@ public class AgLibraryRootFolder {
         parentLrcat = catalogLrcat;
         name = NomRootFolder;
         this.rootfolderidlocal = rootfolderidlocal;
-        this.absolutePath = absolutePath;
+        this.absolutePath = normalizePath(absolutePath);
         this.typeRoot = typeRoot;
         setratioMaxstarCat("0,0,0,0,0");
         nbmaxCat = 999d;
@@ -528,7 +528,9 @@ public class AgLibraryRootFolder {
             nbDelTotal += success;
             if (success == children.length) {
                 // The directory is now empty directory free so delete it
-                SystemFiles.deleteDir(dir);
+                if (normalizePath(dir.toString()).compareTo(normalizePath(absolutePath)) != 0  ) {
+                    SystemFiles.deleteDir(dir);
+                }
                 return 1;
             }
 
@@ -662,7 +664,8 @@ public class AgLibraryRootFolder {
                         "b.pathFromRoot , " +
                         "b.rootFolder " +
                         "from AgLibraryFolder b   " +
-                        "Where b.rootFolder =  " + rootfolderidlocal + " " +
+//                        "Where b.rootFolder =  " + rootfolderidlocal + " " +
+                        "where pathFromRoot like  '" + normalizePath(absolutePath) + "/%'" +
                         " ;");
     }
 
