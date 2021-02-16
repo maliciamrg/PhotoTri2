@@ -88,9 +88,9 @@ public class repertoirePhoto {
         String[] arrisValditationFacultativeVirgule = isValditationFacultativeVirgule.split(",");
         for (int i = 0; i < arrEditableVirgule.length; i++) {
             pZone.add(new paramZone(
-                    arrEditableVirgule[i] == "Close" ? false : true,
+                    arrEditableVirgule[i].compareTo("Close")==0 ? false : true,
                     arrvaleurParDefautVirgule[i],
-                    arrisValditationFacultativeVirgule[i] == "Facul" ? false : true));
+                    arrisValditationFacultativeVirgule[i].compareTo("Facul")==0 ? false : true));
         }
 
     }

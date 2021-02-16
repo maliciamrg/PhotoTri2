@@ -3,6 +3,7 @@ package com.malicia.mrg.app;
 import com.malicia.mrg.app.util.Serialize;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,9 @@ import static com.malicia.mrg.view.AlertMessageUtil.popupalert;
  * The type Context.
  */
 public class Context implements Serializable {
+
+    public static List<repertoirePhoto> listRepertoirePhoto = FXCollections.observableArrayList();
+
     public static final String ID_LOCAL = "id_local";
     public static final String REP_CAT = "repCat";
     public static final String ORDER_BY_ID_LOCAL_DESC = "ORDER by id_local desc ";
@@ -139,30 +143,20 @@ public class Context implements Serializable {
         Properties appProps = new Properties();
         appProps.load(new FileInputStream(iconConfigPath));
 
-        String newAppConfigPropertiesFile = rootPath + "newApp.properties";
-        appProps.store(new FileWriter(newAppConfigPropertiesFile), "store to properties file");
-        String newAppConfigXmlFile = rootPath + "newApp.xml";
-        appProps.storeToXML(new FileOutputStream(newAppConfigXmlFile), "store to xml file");
-
-
-        Object ObjToSerialize = lrcat;
-        String FileName = rootPath + "repCat1.json";
-        String FileNameb = rootPath + "repCat1b.json";
-
-        repertoirePhoto a = new repertoirePhoto(appParam.getString("repEvent"),
-                Integer.parseInt(appParam.getString("nbjouCat1")),
-                Integer.parseInt(appParam.getString("nbmaxCat1")));
-
-        a.addMaxStar(appParam.getString("ratioMaxstarCat1"));
-        a.addParamZone( appParam.getString("IsZoneEditableCat1"),
-                appParam.getString("IsZoneDefaultCat1"),
-                appParam.getString("IsZoneFacultativeCat1"));
-
-        Serialize.writeJSON(a, FileName);
-        repertoirePhoto b = (repertoirePhoto) Serialize.readJSON(repertoirePhoto.class, FileName);
-        Serialize.writeJSON(b, FileNameb);
+        File f = new File(rootPath + "objJson\\");
+        FilenameFilter filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File f, String name) {
+                return (name.startsWith("repertoirePhoto") && name.endsWith(".json"));
+            }
+        };
+        File[] files = f.listFiles(filter);
+        for (int i = 0; i < files.length; i++) {
+            listRepertoirePhoto.add((repertoirePhoto) Serialize.readJSON(repertoirePhoto.class,  files[i].toString()));
+        }
 
     }
+
 
     /**
      * Init properties parameters.
