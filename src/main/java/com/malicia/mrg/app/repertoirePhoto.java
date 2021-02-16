@@ -9,47 +9,88 @@ import java.util.List;
 
 public class repertoirePhoto {
 
-    public String repertoire;
-
-    public int uniteDeJour;
-    public int nbMaxParUniteDeJour;
-    public List<Integer> maxStar;
-
-    public List<paramZone> pZone;
-
+    private String repertoire;
+    private int uniteDeJour;
+    private int nbMaxParUniteDeJour;
+    private List<Integer> maxStar;
+    private List<paramZone> pZone;
 
     public repertoirePhoto() {
         super();
     }
 
-    public repertoirePhoto(String repertoireIn , int uniteDeJourIn , int nbMaxParUniteDeJourIn) {
+    public repertoirePhoto(String repertoireIn, int uniteDeJourIn, int nbMaxParUniteDeJourIn) {
         repertoire = repertoireIn;
-        uniteDeJour=uniteDeJourIn;
-        nbMaxParUniteDeJour=nbMaxParUniteDeJourIn;
+        uniteDeJour = uniteDeJourIn;
+        nbMaxParUniteDeJour = nbMaxParUniteDeJourIn;
         maxStar = FXCollections.observableArrayList();
         pZone = FXCollections.observableArrayList();
     }
-    public void addMaxStar (int maxStarIn){
+
+    public int getUniteDeJour() {
+        return uniteDeJour;
+    }
+
+    public void setUniteDeJour(int uniteDeJour) {
+        this.uniteDeJour = uniteDeJour;
+    }
+
+    public int getNbMaxParUniteDeJour() {
+        return nbMaxParUniteDeJour;
+    }
+
+    public void setNbMaxParUniteDeJour(int nbMaxParUniteDeJour) {
+        this.nbMaxParUniteDeJour = nbMaxParUniteDeJour;
+    }
+
+    public List<Integer> getMaxStar() {
+        return maxStar;
+    }
+
+    public void setMaxStar(List<Integer> maxStar) {
+        this.maxStar = maxStar;
+    }
+
+    public List<paramZone> getpZone() {
+        return pZone;
+    }
+
+    public void setpZone(List<paramZone> pZone) {
+        this.pZone = pZone;
+    }
+
+    public String getRepertoire() {
+        return repertoire;
+    }
+
+    public void setRepertoire(String repertoire) {
+        this.repertoire = repertoire;
+    }
+
+    public void addMaxStar(int maxStarIn) {
         maxStar.add(maxStarIn);
     }
-    public void addMaxStar (String maxStarInVirgule){
+
+    public void addMaxStar(String maxStarInVirgule) {
         String[] ratioMaxStar = maxStarInVirgule.split(",");
         for (int i = 0; i < ratioMaxStar.length; i++) {
             maxStar.add(Integer.parseInt(ratioMaxStar[i]));
         }
     }
-    public void addParamZone (Boolean isEditable, String valeurParDefaut, Boolean isValditationFacultative){
-        pZone.add(new paramZone( isEditable,  valeurParDefaut,  isValditationFacultative));
+
+    public void addParamZone(Boolean isEditable, String valeurParDefaut, Boolean isValditationFacultative) {
+        pZone.add(new paramZone(isEditable, valeurParDefaut, isValditationFacultative));
     }
-    public void addParamZone (String isEditableVirgule, String valeurParDefautVirgule, String isValditationFacultativeVirgule){
+
+    public void addParamZone(String isEditableVirgule, String valeurParDefautVirgule, String isValditationFacultativeVirgule) {
         String[] arrEditableVirgule = isEditableVirgule.split(",");
         String[] arrvaleurParDefautVirgule = valeurParDefautVirgule.split(",");
         String[] arrisValditationFacultativeVirgule = isValditationFacultativeVirgule.split(",");
         for (int i = 0; i < arrEditableVirgule.length; i++) {
             pZone.add(new paramZone(
-                    arrEditableVirgule[i]=="Close"?false:true ,
+                    arrEditableVirgule[i] == "Close" ? false : true,
                     arrvaleurParDefautVirgule[i],
-                    arrisValditationFacultativeVirgule[i]=="Facul"?false:true));
+                    arrisValditationFacultativeVirgule[i] == "Facul" ? false : true));
         }
 
     }
