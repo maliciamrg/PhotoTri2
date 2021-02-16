@@ -1,20 +1,15 @@
 package com.malicia.mrg.app;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.malicia.mrg.app.util.Serialize;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -32,7 +27,6 @@ public class Context implements Serializable {
     public static final String ID_LOCAL = "id_local";
     public static final String REP_CAT = "repCat";
     public static final String ORDER_BY_ID_LOCAL_DESC = "ORDER by id_local desc ";
-    private static final Logger LOGGER = LogManager.getLogger(Context.class);
     /**
      * The constant PATH_FROM_ROOT.
      */
@@ -46,11 +40,12 @@ public class Context implements Serializable {
      */
     public static final String LC_IDX_FILENAME = "lc_idx_filename";
     public static final String FILE_ID_LOCAL = "file_id_local";
+    private static final Logger LOGGER = LogManager.getLogger(Context.class);
     private static final long serialVersionUID = 1L;
     public static ResourceBundle appParam;
     public static CatalogLrcat lrcat;
     public static Integer divMaxToMinstar;
-
+    public static CatalogPreviews Previews;
     /**
      * The constant currentContext.
      */
@@ -58,13 +53,11 @@ public class Context implements Serializable {
     private static String localVoidPhotoUrl;
     private static String localErr404PhotoUrl;
     private static String localErrPhotoUrl;
-    public static CatalogPreviews Previews;
+    private static String PostTraitement;
 
     public static String getPostTraitement() {
         return PostTraitement;
     }
-
-    private static String PostTraitement;
 
     public static String getLocalErrPhotoUrl() {
         return localErrPhotoUrl;
@@ -136,7 +129,7 @@ public class Context implements Serializable {
 
         lrcat = new CatalogLrcat(appParam.getString("RepCatalog") + File.separator + appParam.getString("CatalogLrcat"));
         Previews = new CatalogPreviews(appParam.getString("RepCatalog") + File.separator + appParam.getString("RepPreviews") + File.separator + appParam.getString("CatalogPreviews"));
-        PostTraitement = new String(appParam.getString("PostTraitement") );
+        PostTraitement = new String(appParam.getString("PostTraitement"));
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 
@@ -153,23 +146,24 @@ public class Context implements Serializable {
 
 
         Object ObjToSerialize = lrcat;
-        String FileName = rootPath + "lrcat.json";
+        String FileName = rootPath + "repCat1.json";
+        String FileNameb = rootPath + "repCat1b.json";
 
-        writeJSON(lrcat,FileName);
-       // lrcat = (CatalogLrcat) readJSON(CatalogLrcat.class ,FileName);
+        repertoirePhoto a = new repertoirePhoto(appParam.getString("repEvent"),
+                Integer.parseInt(appParam.getString("nbjouCat1")),
+                Integer.parseInt(appParam.getString("nbmaxCat1")));
+
+        a.addMaxStar(appParam.getString("ratioMaxstarCat1"));
+        a.addParamZone( appParam.getString("IsZoneEditableCat1"),
+                appParam.getString("IsZoneDefaultCat1"),
+                appParam.getString("IsZoneFacultativeCat1"));
+
+        Serialize.writeJSON(a, FileName);
+        repertoirePhoto b = (repertoirePhoto) Serialize.readJSON(repertoirePhoto.class, FileName);
+        Serialize.writeJSON(b, FileNameb);
 
     }
 
-    private static void writeJSON(Object o, String FileName) throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FileName), o);
-    }
-
-    private static Object readJSON(Class aClass,String FileName) throws IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(FileName), aClass);
-
-    }
     /**
      * Init properties parameters.
      */
@@ -208,7 +202,7 @@ public class Context implements Serializable {
         theException.printStackTrace(printWritter);
         printWritter.flush();
         stringWritter.flush();
-        loggerori.fatal( "theException = " + "\n" + stringWritter.toString());
+        loggerori.fatal("theException = " + "\n" + stringWritter.toString());
     }
 
     public static void popupalertException(Exception ex) {
@@ -225,7 +219,7 @@ public class Context implements Serializable {
     }
 
     public static String fixedLengthString(String string, int length) {
-        return String.format("%1$-"+length+ "s", string).substring(0,length);
+        return String.format("%1$-" + length + "s", string).substring(0, length);
     }
 
 //    public static void logecrireuserlogInfo(String msg) {
