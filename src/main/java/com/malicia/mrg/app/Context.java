@@ -1,11 +1,20 @@
 package com.malicia.mrg.app;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -94,7 +103,7 @@ public class Context implements Serializable {
      * @throws IOException  the io exception
      * @throws SQLException the sql exception
      */
-    public static void setup() throws IOException, SQLException, URISyntaxException {
+    public static void setup() throws IOException, SQLException, URISyntaxException, TransformerException, ParserConfigurationException, SAXException {
 
         InputStream stream = Context.class.getClassLoader().getResourceAsStream("log4j2.properties");
 //        LogManager.getLogManager().readConfiguration(stream);
@@ -131,8 +140,36 @@ public class Context implements Serializable {
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 
+
+        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String iconConfigPath = rootPath + "config.properties";
+        Properties appProps = new Properties();
+        appProps.load(new FileInputStream(iconConfigPath));
+
+        String newAppConfigPropertiesFile = rootPath + "newApp.properties";
+        appProps.store(new FileWriter(newAppConfigPropertiesFile), "store to properties file");
+        String newAppConfigXmlFile = rootPath + "newApp.xml";
+        appProps.storeToXML(new FileOutputStream(newAppConfigXmlFile), "store to xml file");
+
+
+        Object ObjToSerialize = lrcat;
+        String FileName = rootPath + "lrcat.json";
+
+        writeJSON(lrcat,FileName);
+       // lrcat = (CatalogLrcat) readJSON(CatalogLrcat.class ,FileName);
+
     }
 
+    private static void writeJSON(Object o, String FileName) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FileName), o);
+    }
+
+    private static Object readJSON(Class aClass,String FileName) throws IOException{
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(new File(FileName), aClass);
+
+    }
     /**
      * Init properties parameters.
      */

@@ -36,7 +36,7 @@ public class Main extends Application {
         try {
             Context.setup();
             launch(args);
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
 //            LOGGER.info("sqlite acces error :" + e.getMessage());
 //            Context.popupalertException(e);
