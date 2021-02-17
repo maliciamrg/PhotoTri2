@@ -1,6 +1,5 @@
 package com.malicia.mrg.app;
 
-import com.malicia.mrg.app.util.Serialize;
 import com.malicia.mrg.mvc.models.CatalogLrcat;
 import com.malicia.mrg.mvc.models.CatalogPreviews;
 import javafx.collections.FXCollections;
@@ -137,12 +136,16 @@ public class Context implements Serializable {
 
         divMaxToMinstar = Integer.parseInt(Context.appParam.getString("divMaxToMinstar"));
 
-
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         String iconConfigPath = rootPath + "config.properties";
         Properties appProps = new Properties();
         appProps.load(new FileInputStream(iconConfigPath));
 
+        chargelistRepertoirePhoto(rootPath);
+
+    }
+
+    private static void chargelistRepertoirePhoto(String rootPath) throws IOException {
         File f = new File(rootPath + "objJson\\");
         FilenameFilter filter = new FilenameFilter() {
             @Override
@@ -152,9 +155,9 @@ public class Context implements Serializable {
         };
         File[] files = f.listFiles(filter);
         for (int i = 0; i < files.length; i++) {
-            listRepertoirePhoto.add((repertoirePhoto) Serialize.readJSON(repertoirePhoto.class,  files[i].toString()));
+            listRepertoirePhoto.add((repertoirePhoto) repertoirePhoto.readJSON(repertoirePhoto.class ,files[i].toString()));
+  //          repertoirePhoto.reWriteJSON(listRepertoirePhoto.get(i));
         }
-
     }
 
 

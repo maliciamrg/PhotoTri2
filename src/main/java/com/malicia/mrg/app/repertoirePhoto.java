@@ -1,13 +1,14 @@
 package com.malicia.mrg.app;
 
 
+import com.malicia.mrg.app.util.Serialize;
 import javafx.collections.FXCollections;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-public class repertoirePhoto {
+public class repertoirePhoto extends Serialize {
 
     private String repertoire;
     private int uniteDeJour;
@@ -88,9 +89,9 @@ public class repertoirePhoto {
         String[] arrisValditationFacultativeVirgule = isValditationFacultativeVirgule.split(",");
         for (int i = 0; i < arrEditableVirgule.length; i++) {
             pZone.add(new paramZone(
-                    arrEditableVirgule[i].compareTo("Close")==0 ? false : true,
+                    arrEditableVirgule[i].compareTo("Close") == 0 ? false : true,
                     arrvaleurParDefautVirgule[i],
-                    arrisValditationFacultativeVirgule[i].compareTo("Facul")==0 ? false : true));
+                    arrisValditationFacultativeVirgule[i].compareTo("Facul") == 0 ? false : true));
         }
 
     }
